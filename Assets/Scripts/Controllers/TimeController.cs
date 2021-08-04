@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CustomGameNamespace
+namespace ComboSystem
 {
     public class TimeController
     {

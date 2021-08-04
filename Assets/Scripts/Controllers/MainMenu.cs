@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-namespace CustomGameNamespace
+namespace ComboSystem
 {
     public class MainMenu : MonoBehaviour
     {

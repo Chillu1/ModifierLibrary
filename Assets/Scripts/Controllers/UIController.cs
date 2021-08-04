@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace CustomGameNamespace
+namespace ComboSystem
 {
     public class UIController : MonoBehaviour
     {

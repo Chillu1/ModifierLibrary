@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace CustomGameNamespace
+namespace ComboSystem
 {
     public class SceneController
     {

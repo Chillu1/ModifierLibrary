@@ -25,7 +25,7 @@
 using System;
 using UnityEngine;
 
-namespace CustomGameNamespace.Utils
+namespace ComboSystem.Utils
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {

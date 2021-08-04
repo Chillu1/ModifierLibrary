@@ -12,7 +12,7 @@ namespace CommandTerminal
         OpenFull
     }
 
-    public class Terminal : CustomGameNamespace.Utils.Singleton<Terminal>
+    public class Terminal : ComboSystem.Utils.Singleton<Terminal>
     {
         [Header("Window")]
         [Range(0, 1)]

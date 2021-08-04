@@ -1,9 +1,9 @@
-using CustomGameNamespace.Utils;
+using ComboSystem.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CustomGameNamespace
+namespace ComboSystem
 {
     public class GameController : Singleton<GameController>
     {
