@@ -31,9 +31,9 @@ namespace ComboSystem
     // {
     //     public TDataType data;
     //
-    //     public Modifier GetModifier(ICharacter target)
+    //     public Modifier GetModifier(ICharacter Target)
     //     {
-    //         return new TModifierType {Data = this.data, Target = target};
+    //         return new TModifierType {Data = this.data, Target = Target};
     //     }
     // }
 }

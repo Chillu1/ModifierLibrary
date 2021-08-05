@@ -2,11 +2,12 @@ namespace ComboSystem
 {
     public class DamageOverTimeData : EffectOverTimeData
     {
-        public int Damage { get; protected set; }
+        public DamageData[] DamageData { get; protected set; }
 
-        public DamageOverTimeData(int damage, float everyXSecond, float duration) : base(EffectType.Damage, everyXSecond, duration)
+        public DamageOverTimeData(DamageData[] damageData, float everyXSecond, float duration)
+            : base(EffectType.Damage, everyXSecond, duration)
         {
-            Damage = damage;
+            DamageData = damageData;
         }
     }
 }

@@ -28,10 +28,13 @@ namespace ComboSystem
 
         private void SetupModifierPrototypes()
         {
-            EffectOverTimeData effectOverTimeData = new EffectOverTimeData(EffectType.StatChange, 1f, 5f);
-            EffectOverTimeModifier effectOverTimeModifier = new EffectOverTimeModifier(effectOverTimeData);
+            //EffectOverTimeData effectOverTimeData = new EffectOverTimeData(EffectType.StatChange, 1f, 5f);
+            //EffectOverTimeModifier<EffectOverTimeData> effectOverTimeModifier = new EffectOverTimeModifier<EffectOverTimeData>(effectOverTimeData);
+            DamageOverTimeData slimePoisonData =
+                new DamageOverTimeData(new[] {new DamageData() {Damage = 5, DamageType = DamageType.Poison}}, 1f, 5f);
+            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier(slimePoisonData);
 
-            DamageOverTimeData slimePoisonData = new DamageOverTimeData(2, 1f, 5f);
+
         }
     }
 }
