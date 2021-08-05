@@ -2,7 +2,8 @@ namespace ComboSystem
 {
     public class EffectOverTimeModifier<TEffectOverTimeData> : Modifier<TEffectOverTimeData> where TEffectOverTimeData : EffectOverTimeData
     {
-        private float _timer;
+        protected float timer;
+        protected float durationTimer;
 
         public EffectOverTimeModifier(TEffectOverTimeData damageOverTimeData)
         {
@@ -16,19 +17,20 @@ namespace ComboSystem
 
         public override void Update(float deltaTime)
         {
-            _timer += deltaTime;
+            timer += deltaTime;
+            durationTimer += deltaTime;
             base.Update(deltaTime);
 
-            if (_timer >= Data.Duration)
+            if (durationTimer >= Data.Duration)
             {
                 Remove();
                 return;
             }
 
-            if (_timer >= Data.EveryXSecond)
+            if (timer >= Data.EveryXSecond)
             {
                 Apply();
-                _timer = 0;
+                timer = 0;
             }
         }
     }

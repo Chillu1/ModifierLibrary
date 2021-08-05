@@ -2,20 +2,19 @@ namespace ComboSystem
 {
     public class MovementSpeedModifier : Modifier<MovementSpeedModifierData>
     {
+        public MovementSpeedModifier(MovementSpeedModifierData speedBuffPlayerData)
+        {
+            Data = speedBuffPlayerData;
+        }
+
         protected override void Apply()
         {
-            //Target.AddStat(StatTypes.MovementSpeed, data.movementSpeed);
+            Target.ChangeStat(StatType.MovementSpeed, Data.MovementSpeed);
         }
 
         protected override void Remove()
         {
-            //Target.RemoveStat(StatTypes.MovementSpeed, data.movementSpeed);
+            Target.ChangeStat(StatType.MovementSpeed, -Data.MovementSpeed);
         }
-
-        //public IEnumerator UnapplicationCoroutine()
-        //{
-        //    yield return new WaitForSeconds(data.duration);
-        //    Target.RemoveStrength(data.strengthToAdd);
-        //}
     }
 }

@@ -1,5 +1,14 @@
+using System;
+
 namespace ComboSystem
 {
+    //TODO list:
+    //A buff that applies a debuff
+    //Single use buff, duration
+    //DoT debuff
+    //DoT buff that applies a DoT debuff
+    //Combo prototyping
+
     //Design:
     //Clean interaction between applied buffs on unit
     //All buffs in a single collection, ticking
@@ -10,10 +19,13 @@ namespace ComboSystem
     //Effect stacks+max effect stacks. IsEffectStackable. IsDurationStackable. IsDurationRefreshable?. IsForever.
     public abstract class Modifier
     {
+        public event Action<Modifier> Removed;
+
         protected abstract void Apply();
 
         protected virtual void Remove()
         {
+            Removed?.Invoke(this);
         }
 
         public virtual void Update(float deltaTime)

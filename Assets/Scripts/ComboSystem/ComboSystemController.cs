@@ -20,8 +20,9 @@ namespace ComboSystem
 
         public void Update(float deltaTime)
         {
-            foreach (var modifier in _modifiers)
+            for (int index = 0; index < _modifiers.Count; index++)
             {
+                var modifier = _modifiers[index];
                 modifier.Update(deltaTime);
             }
         }
@@ -33,8 +34,17 @@ namespace ComboSystem
             DamageOverTimeData slimePoisonData =
                 new DamageOverTimeData(new[] {new DamageData() {Damage = 5, DamageType = DamageType.Poison}}, 1f, 5f);
             DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier(slimePoisonData);
+            SetupModifier("SlimePoison", slimePoisonModifier);
 
+            var speedBuffPlayerData = new MovementSpeedModifierData(2f, 10f);
+            var speedBuffPlayer = new MovementSpeedModifier(speedBuffPlayerData);
+            SetupModifier("PlayerSpeedBuff", speedBuffPlayer);
 
+            void SetupModifier(string modifierName, Modifier modifier)
+            {
+                modifier.Removed += modifierEventItem => _modifiers.Remove(modifierEventItem);
+                _modifierPrototypes.Add(modifierName, modifier);
+            }
         }
     }
 }

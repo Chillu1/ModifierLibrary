@@ -2,12 +2,13 @@ using System;
 
 namespace ComboSystem
 {
-    public enum StatTypes
+    public enum StatType
     {
         None = 0,
         Attack = 1,
         Defense = 2,
         MovementSpeed = 3,
+        Health = 4,
     }
 
     [Flags]
