@@ -18,11 +18,9 @@ namespace ComboSystem
             return true;
         }
 
-        /// <summary>
-        ///     Special (TEMP?) function for ModifierApplier to be able to apply modifiers on demand
-        /// </summary>
-        public void ApplyModifier()
+        public void ApplyModifierToTarget(Character target)
         {
+            SetTarget(target);
             Apply();
         }
     }

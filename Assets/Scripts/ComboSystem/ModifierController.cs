@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ComboSystem
 {
@@ -33,7 +34,13 @@ namespace ComboSystem
         {
             return Modifiers.Remove(modifier);
         }
-        
+
+        public IEnumerable<ModifierApplier<ModifierApplierData>> GetModifierAppliers()
+        {
+            return (IEnumerable<ModifierApplier<ModifierApplierData>>)Modifiers.Where(mod =>
+                mod.GetType() == typeof(ModifierApplier<ModifierApplierData>));
+        }
+
         private void RegisterModifier(Modifier modifier)
         {
             modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);

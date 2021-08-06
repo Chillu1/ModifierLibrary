@@ -37,8 +37,7 @@ namespace ComboSystem
             slime.AddModifier(slimePoisonBuff, false);
 
             //SetTarget, add debuff modifier to Player
-            slimePoisonBuff.SetTarget(player);
-            slimePoisonBuff.ApplyModifier();
+            slimePoisonBuff.ApplyModifierToTarget(player);
         }
 
         public void GameplaySceneStarted()//Move to scene controller?

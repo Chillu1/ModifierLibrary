@@ -9,19 +9,5 @@ namespace ComboSystem
             Health = 10;
             MovementSpeed = 5;
         }
-
-        public override void RecalculateStats()
-        {
-        }
-
-        public override void DealDamage(DamageData[] damageData)
-        {
-            Health -= damageData[0].Damage;
-        }
-
-        public override bool IsValidTarget(Modifier modifier)
-        {
-            return true;
-        }
     }
 }

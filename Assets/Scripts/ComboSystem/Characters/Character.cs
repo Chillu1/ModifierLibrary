@@ -65,8 +65,28 @@ namespace ComboSystem
             }
         }
 
-        public abstract void RecalculateStats();
-        public abstract void DealDamage(DamageData[] damageData);
+        public virtual void RecalculateStats(){}
+
+        /// <summary>
+        ///     Deal damage to this character
+        /// </summary>
+        public virtual void DealDamage(DamageData[] damageData)
+        {
+            Health -= damageData[0].Damage;
+        }
+
+        public virtual void Attack(Character target)
+        {
+            ApplyModifiers(target);
+            //target.DealDamage();//TODO
+        }
+
+        public virtual void ApplyModifiers(Character target)
+        {
+            var modifierAppliers = ModifierController.GetModifierAppliers();
+            foreach (var modifierApplier in modifierAppliers)
+                modifierApplier.ApplyModifierToTarget(target);
+        }
         public virtual void AddModifier(Modifier modifier, bool ownerIsTarget = true)
         {
             if(ownerIsTarget)
@@ -74,6 +94,9 @@ namespace ComboSystem
             ModifierController.AddModifier(modifier);
         }
 
-        public abstract bool IsValidTarget(Modifier modifier);
+        public virtual bool IsValidTarget(Modifier modifier)
+        {
+            return true;
+        }
     }
 }

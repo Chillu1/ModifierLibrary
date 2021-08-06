@@ -17,6 +17,7 @@ namespace ComboSystem
 
     //Design:
     //How to apply debuffs from a character?
+    //How do I differentiate between attack, cast, ally, etc modifiers for ModifierApplier?
     //Clean interaction between applied buffs on unit
     //All buffs in a single collection, ticking
     //Calculate base stats, then add percentages, every time our stats change, recalculate
