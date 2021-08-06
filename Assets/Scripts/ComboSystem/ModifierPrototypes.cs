@@ -40,7 +40,6 @@ namespace ComboSystem
             if (_modifierPrototypes.TryGetValue(modifierName, out Modifier modifier))
             {
                 modifier = (Modifier)modifier.Clone();
-                RegisterModifier(modifier, modifierController);
                 return modifier;
             }
             else
@@ -54,11 +53,6 @@ namespace ComboSystem
         public Modifier<TDataType> GetModifier<TDataType>(string modifierName, ModifierController modifierController)
         {
             return (Modifier<TDataType>)GetModifier(modifierName, modifierController);
-        }
-
-        private void RegisterModifier(Modifier modifier, ModifierController modifierController)
-        {
-            modifier.Removed += modifierEventItem => modifierController.RemoveModifier(modifierEventItem);
         }
     }
 }

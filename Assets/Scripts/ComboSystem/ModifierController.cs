@@ -23,6 +23,7 @@ namespace ComboSystem
 
         public void AddModifier(Modifier modifier)
         {
+            RegisterModifier(modifier);
             Modifiers.Add(modifier);
             modifier.Init();
             Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.Target?.Name);
@@ -31,6 +32,12 @@ namespace ComboSystem
         public bool RemoveModifier(Modifier modifier)
         {
             return Modifiers.Remove(modifier);
+        }
+        
+        private void RegisterModifier(Modifier modifier)
+        {
+            modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);
+            modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.GetType().Name + " removed");
         }
     }
 }
