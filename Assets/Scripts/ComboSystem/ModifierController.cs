@@ -13,6 +13,7 @@ namespace ComboSystem
 
         public void Update(float deltaTime)
         {
+            //Log.Info(Modifiers.Count);
             for (int index = 0; index < Modifiers.Count; index++)
             {
                 var modifier = Modifiers[index];
@@ -24,6 +25,7 @@ namespace ComboSystem
         {
             Modifiers.Add(modifier);
             modifier.Init();
+            Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.Target?.Name);
         }
 
         public bool RemoveModifier(Modifier modifier)

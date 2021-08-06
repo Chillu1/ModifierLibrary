@@ -10,9 +10,10 @@ namespace ComboSystem
             Data = damageOverTimeData;
         }
 
-        protected override void Apply()
+        protected override bool Apply()
         {
             //Target.ApplyEffect(data.effectType, data.value);
+            return base.Apply();
         }
 
         public override void Update(float deltaTime)

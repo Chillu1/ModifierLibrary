@@ -4,6 +4,8 @@ namespace ComboSystem
 {
     public abstract class Character
     {
+        public string Name { get; protected set; }
+
         //TODO Make stats classes instead? Have them sort out their calculations instead of here...
         public float Health { get; protected set; }
         public float MaxHealth { get; protected set; }
@@ -65,43 +67,13 @@ namespace ComboSystem
 
         public abstract void RecalculateStats();
         public abstract void DealDamage(DamageData[] damageData);
-        public virtual void AddModifier(Modifier modifier)
+        public virtual void AddModifier(Modifier modifier, bool ownerIsTarget = true)
         {
+            if(ownerIsTarget)
+                modifier.SetTarget(this);
             ModifierController.AddModifier(modifier);
         }
 
         public abstract bool IsValidTarget(Modifier modifier);
-    }
-
-    public class Player : Character
-    {
-        public override void RecalculateStats()
-        {
-        }
-
-        public override void DealDamage(DamageData[] damageData)
-        {
-        }
-
-        public override bool IsValidTarget(Modifier modifier)
-        {
-            return true;
-        }
-    }
-
-    public class Slime : Character
-    {
-        public override void RecalculateStats()
-        {
-        }
-
-        public override void DealDamage(DamageData[] damageData)
-        {
-        }
-
-        public override bool IsValidTarget(Modifier modifier)
-        {
-            return true;
-        }
     }
 }

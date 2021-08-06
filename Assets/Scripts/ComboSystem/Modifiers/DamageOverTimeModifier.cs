@@ -7,9 +7,12 @@ namespace ComboSystem
             Data = damageOverTimeData;
         }
 
-        protected override void Apply()
+        protected override bool Apply()
         {
-            Target.DealDamage(Data.DamageData);
+            if (!base.Apply())
+                return false;
+            Target!.DealDamage(Data.DamageData);
+            return true;
         }
     }
 }

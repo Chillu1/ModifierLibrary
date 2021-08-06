@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace ComboSystem
 {
@@ -8,6 +9,11 @@ namespace ComboSystem
     //DoT debuff
     //DoT buff that applies a DoT debuff
     //Combo prototyping
+
+    //Types of modifiers:
+    //  Base mods: Duration, EffectEveryX, Applier,
+    //OneUseBuff permanent, OneUseBuff duration
+    //EffectOverTimeEveryXSecond (Duration)
 
     //Design:
     //How to apply debuffs from a character?
@@ -21,6 +27,7 @@ namespace ComboSystem
     public abstract class Modifier : ICloneable
     {
         public event Action<Modifier> Removed;
+        [CanBeNull] public Character Target { get; protected set; }
 
         /// <summary>
         ///     Called once, when modifier is added to the collection
@@ -32,7 +39,16 @@ namespace ComboSystem
         /// <summary>
         ///     Called when modifier is applied
         /// </summary>
-        protected abstract void Apply();// { }
+        protected virtual bool Apply()
+        {
+            if (Target == null)
+            {
+                Log.Error("We tried to apply modifier without a target");
+                return false;
+            }
+
+            return true;
+        }
 
         protected virtual void Remove()
         {
@@ -47,16 +63,10 @@ namespace ComboSystem
         {
             return MemberwiseClone();
         }
-    }
-
-    public abstract class Modifier<TDataType> : Modifier
-    {
-        public TDataType Data { get; protected set; }
-        public Character Target { get; protected set; }
 
         public bool SetTarget(Character target)
         {
-            if (!Target.IsValidTarget(this))
+            if (!target.IsValidTarget(this))
                 return false;
 
             if (Target != null)
@@ -68,6 +78,11 @@ namespace ComboSystem
             Target = target;
             return true;
         }
+    }
+
+    public abstract class Modifier<TDataType> : Modifier
+    {
+        public TDataType Data { get; protected set; }
     }
 
     // public class ModifierFactory<TDataType, TModifierType> where TModifierType : Modifier<TDataType>, new()

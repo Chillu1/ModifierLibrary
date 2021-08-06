@@ -7,7 +7,7 @@ namespace ComboSystem
     {
         public static LogLevel Level { get; private set; }
 #if UNITY_EDITOR
-            = LogLevel.Info;
+            = LogLevel.Verbose;
 #else
             = LogLevel.Warning;
 #endif

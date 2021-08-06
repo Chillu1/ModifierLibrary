@@ -20,8 +20,8 @@ namespace ComboSystem
             DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier(slimePoisonData);
             SetupModifier("SlimePoison", slimePoisonModifier);
 
-            var speedBuffPlayerData = new MovementSpeedModifierData(2f, 10f);
-            var speedBuffPlayer = new MovementSpeedModifier(speedBuffPlayerData);
+            var speedBuffPlayerData = new MovementSpeedDurationModifierData(2f, 10f);
+            var speedBuffPlayer = new MovementSpeedDurationModifier(speedBuffPlayerData);
             SetupModifier("PlayerSpeedBuff", speedBuffPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
@@ -48,6 +48,12 @@ namespace ComboSystem
                 Log.Error("Could not find modifier of name " + modifierName);
                 return null;
             }
+        }
+
+        [CanBeNull]
+        public Modifier<TDataType> GetModifier<TDataType>(string modifierName, ModifierController modifierController)
+        {
+            return (Modifier<TDataType>)GetModifier(modifierName, modifierController);
         }
 
         private void RegisterModifier(Modifier modifier, ModifierController modifierController)

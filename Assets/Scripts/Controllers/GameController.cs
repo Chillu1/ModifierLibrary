@@ -7,6 +7,8 @@ namespace ComboSystem
 {
     public class GameController : Singleton<GameController>
     {
+        private Player player;//TEMP
+
         /// <summary>
         /// Actual game speed (dev/testing purposes)
         /// </summary>
@@ -25,15 +27,18 @@ namespace ComboSystem
 
             ModifierPrototypes = new ModifierPrototypes();
 
-            Player player = new Player();
-            var playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerSpeedBuff", player.ModifierController);
+            player = new Player();
+            Modifier playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerSpeedBuff", player.ModifierController);
             player.AddModifier(playerSpeedBuff);
 
             Slime slime = new Slime();
-            var slimePoisonBuff = ModifierPrototypes.GetModifier("PlayerSpeedBuff", slime.ModifierController);
-            player.AddModifier(slimePoisonBuff);
+            var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff", slime.ModifierController);
+            //Add buff modifier to Slime, init.
+            slime.AddModifier(slimePoisonBuff, false);
 
-
+            //SetTarget, add debuff modifier to Player
+            slimePoisonBuff.SetTarget(player);
+            slimePoisonBuff.ApplyModifier();
         }
 
         public void GameplaySceneStarted()//Move to scene controller?
@@ -50,6 +55,7 @@ namespace ComboSystem
                 TimeController.Update();
             }
             CommandsController.Update(Time.deltaTime);
+            player.ModifierController.Update(Time.deltaTime);
         }
     }
 
