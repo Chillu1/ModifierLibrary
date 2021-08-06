@@ -1,6 +1,6 @@
 namespace ComboSystem
 {
-    public class EffectOverTimeModifier<TEffectOverTimeData> : Modifier<TEffectOverTimeData> where TEffectOverTimeData : EffectOverTimeData
+    public abstract class EffectOverTimeModifier<TEffectOverTimeData> : Modifier<TEffectOverTimeData> where TEffectOverTimeData : EffectOverTimeData
     {
         protected float timer;
         protected float durationTimer;

@@ -12,6 +12,7 @@ namespace ComboSystem
         /// </summary>
         public static float GameSpeed { get { return Time.timeScale; } set { Time.timeScale = value; } }//We could limit the gamespeed at which mechanics (might) break
 
+        public ModifierPrototypes ModifierPrototypes { get; private set; }
         public static UIController UIController { get; private set; }
         public static TimeController TimeController { get; private set; }
 
@@ -21,6 +22,18 @@ namespace ComboSystem
             GameplaySceneStarted();
 
             CommandsController.Init();
+
+            ModifierPrototypes = new ModifierPrototypes();
+
+            Player player = new Player();
+            var playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerSpeedBuff", player.ModifierController);
+            player.AddModifier(playerSpeedBuff);
+
+            Slime slime = new Slime();
+            var slimePoisonBuff = ModifierPrototypes.GetModifier("PlayerSpeedBuff", slime.ModifierController);
+            player.AddModifier(slimePoisonBuff);
+
+
         }
 
         public void GameplaySceneStarted()//Move to scene controller?

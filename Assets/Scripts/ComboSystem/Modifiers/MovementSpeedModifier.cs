@@ -1,6 +1,6 @@
 namespace ComboSystem
 {
-    public class MovementSpeedModifier : Modifier<MovementSpeedModifierData>
+    public class MovementSpeedModifier : SingleUseModifier<MovementSpeedModifierData>
     {
         public MovementSpeedModifier(MovementSpeedModifierData speedBuffPlayerData)
         {

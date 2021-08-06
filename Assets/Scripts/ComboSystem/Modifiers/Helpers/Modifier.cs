@@ -10,6 +10,7 @@ namespace ComboSystem
     //Combo prototyping
 
     //Design:
+    //How to apply debuffs from a character?
     //Clean interaction between applied buffs on unit
     //All buffs in a single collection, ticking
     //Calculate base stats, then add percentages, every time our stats change, recalculate
@@ -17,11 +18,21 @@ namespace ComboSystem
 
     //TODO:
     //Effect stacks+max effect stacks. IsEffectStackable. IsDurationStackable. IsDurationRefreshable?. IsForever.
-    public abstract class Modifier
+    public abstract class Modifier : ICloneable
     {
         public event Action<Modifier> Removed;
 
-        protected abstract void Apply();
+        /// <summary>
+        ///     Called once, when modifier is added to the collection
+        /// </summary>
+        public virtual void Init()
+        {
+        }
+
+        /// <summary>
+        ///     Called when modifier is applied
+        /// </summary>
+        protected abstract void Apply();// { }
 
         protected virtual void Remove()
         {
@@ -31,12 +42,32 @@ namespace ComboSystem
         public virtual void Update(float deltaTime)
         {
         }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 
     public abstract class Modifier<TDataType> : Modifier
     {
         public TDataType Data { get; protected set; }
-        public ICharacter Target { get; protected set; }
+        public Character Target { get; protected set; }
+
+        public bool SetTarget(Character target)
+        {
+            if (!Target.IsValidTarget(this))
+                return false;
+
+            if (Target != null)
+            {
+                Log.Error("Target isn't null");
+                return false;
+            }
+
+            Target = target;
+            return true;
+        }
     }
 
     // public class ModifierFactory<TDataType, TModifierType> where TModifierType : Modifier<TDataType>, new()
