@@ -2,9 +2,9 @@ using System;
 
 namespace ComboSystem
 {
-    public class MovementSpeedModifier : SingleUseModifier<MovementSpeedModifierData>//, IEquatable<MovementSpeedModifier>
+    public class StatChangeModifier : SingleUseModifier<StatChangeModifierData>//, IEquatable<MovementSpeedModifier>
     {
-        public MovementSpeedModifier(string id, MovementSpeedModifierData data, ModifierProperties properties = default) : base(id, data, properties)
+        public StatChangeModifier(string id, StatChangeModifierData data, ModifierProperties properties = default) : base(id, data, properties)
         {
         }
 
@@ -12,13 +12,13 @@ namespace ComboSystem
         {
             if (!ApplyIsValid())
                 return false;
-            Target!.ChangeStat(StatType.MovementSpeed, Data.MovementSpeed);
+            Target!.ChangeStat(Data.StatType, Data.Value);
             return true;
         }
 
         protected override void Remove()
         {
-            Target.ChangeStat(StatType.MovementSpeed, -Data.MovementSpeed);
+            Target.ChangeStat(Data.StatType, -Data.Value);
             base.Remove();
         }
 

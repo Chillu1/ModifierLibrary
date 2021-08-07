@@ -20,20 +20,20 @@ namespace ComboSystem
             DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData, ModifierProperties.Stackable);
             SetupModifier(slimePoisonModifier);
 
-            var speedBuffDurationPlayerData = new MovementSpeedDurationModifierData(2f, 3f);
-            var speedBuffDurationPlayer = new MovementSpeedDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
+            var speedBuffDurationPlayerData = new StatChangeDurationModifierData(StatType.MovementSpeed, 2f, 3f);
+            var speedBuffDurationPlayer = new StatChangeDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
             SetupModifier(speedBuffDurationPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
             var poisonModifierBuff = new ModifierApplier<ModifierApplierData>("SlimePoisonBuff", poisonModifierBuffData);
             SetupModifier(poisonModifierBuff);
 
-            var speedBuffData = new MovementSpeedModifierData(3f);
-            var speedBuff = new MovementSpeedModifier("MovementSpeedBuff", speedBuffData);
+            var speedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
+            var speedBuff = new StatChangeModifier("MovementSpeedBuff", speedBuffData);
             SetupModifier(speedBuff);
 
-            var refreshableSpeedBuffData = new MovementSpeedModifierData(3f);
-            var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData);
+            var refreshableSpeedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
+            var refreshableSpeedBuff = new StatChangeModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData);
             SetupModifier(refreshableSpeedBuff);
 
             var stackableSpeedBuffData = new StatChangeStacksModifierData(StatType.MovementSpeed, 7f, 3);
