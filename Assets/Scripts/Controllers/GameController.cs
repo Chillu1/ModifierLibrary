@@ -31,8 +31,13 @@ namespace ComboSystem
             //Modifier playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerMovementSpeedDurationBuff");
             //player.AddModifier(playerSpeedBuff);
             player.AddModifier(ModifierPrototypes.GetModifier("MovementSpeedBuff"));
-            player.AddModifier(ModifierPrototypes.GetModifier("RefreshableMovementSpeedBuff"));
-            player.AddModifier(ModifierPrototypes.GetModifier("RefreshableMovementSpeedBuff2"));
+            Modifier<MovementSpeedModifierData> mod1 = ModifierPrototypes.GetModifier<MovementSpeedModifierData>("RefreshableMovementSpeedBuff");
+            player.AddModifier(mod1);
+            Modifier<MovementSpeedModifierData> mod2 = ModifierPrototypes.GetModifier<MovementSpeedModifierData>("RefreshableMovementSpeedBuff");
+            player.AddModifier(mod2);
+            Log.Info(ReferenceEquals(mod1, mod2));
+            Log.Info(ReferenceEquals(mod1.Data, mod2.Data));
+            Log.Info(Equals(mod1.Data.MovementSpeed, mod2.Data.MovementSpeed));
 
             Slime slime = new Slime();
             var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");

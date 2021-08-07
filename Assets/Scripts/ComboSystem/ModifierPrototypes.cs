@@ -36,10 +36,6 @@ namespace ComboSystem
             var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData, ModifierProperties.Refreshable);
             SetupModifier(refreshableSpeedBuff);
 
-            var refreshableSpeedBuffData2 = new MovementSpeedModifierData(3f);
-            var refreshableSpeedBuff2 = new MovementSpeedModifier("RefreshableMovementSpeedBuff2", refreshableSpeedBuffData2, ModifierProperties.Refreshable);
-            SetupModifier(refreshableSpeedBuff2);
-
             void SetupModifier(Modifier modifier)
             {
                 _modifierPrototypes.Add(modifier.Id, modifier);

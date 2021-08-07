@@ -1,18 +1,12 @@
 using System;
+using ComboSystem.Utils;
 using JetBrains.Annotations;
 
 namespace ComboSystem
 {
     //TODO list:
-    /*
-     *
-Constructor for id, with optional modpriperties
-     *
-     */
-    //
-    //Data should be structs that arent inherited, but composed instead?
-    //Refreshable modifier
-    //Stackable modifier
+    //Refreshable modifier (speedbuff)
+    //A stackable DoT modifier
     //Combo prototyping
     //Stats
     //Damage
@@ -43,6 +37,13 @@ Constructor for id, with optional modpriperties
         {
             Id = id;
             ModifierProperties = modifierProperties;
+        }
+
+        protected Modifier(Modifier other)
+        {
+            Id = other.Id;
+            ModifierProperties = other.ModifierProperties;
+            //Prob cont copy target, it shouldn't have one when we copy (from prototypes), but dont do it anyway
         }
 
         /// <summary>
@@ -106,9 +107,14 @@ Constructor for id, with optional modpriperties
         {
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
-            return MemberwiseClone();
+            return this.Copy();
+        }
+
+        public Modifier ShallowCopy()
+        {
+            return (Modifier)MemberwiseClone();
         }
 
         public bool SetTarget(Character target)
@@ -139,22 +145,17 @@ Constructor for id, with optional modpriperties
         // }
     }
 
-    public abstract class Modifier<TDataType> : Modifier
+    public abstract class Modifier<TDataType> : Modifier// where TDataType : ICloneable
     {
         public TDataType Data { get; protected set; }
 
         protected Modifier(string id, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
         {
         }
-    }
 
-    // public class ModifierFactory<TDataType, TModifierType> where TModifierType : Modifier<TDataType>, new()
-    // {
-    //     public TDataType data;
-    //
-    //     public Modifier GetModifier(ICharacter Target)
-    //     {
-    //         return new TModifierType {Data = this.data, Target = Target};
-    //     }
-    // }
+        protected Modifier(Modifier<TDataType> other) : base(other)
+        {
+            Data = other.Data;
+        }
+    }
 }
