@@ -21,7 +21,7 @@ namespace ComboSystem
             SetupModifier(slimePoisonModifier);
 
             var speedBuffDurationPlayerData = new MovementSpeedDurationModifierData(2f, 3f);
-            var speedBuffDurationPlayer = new MovementSpeedDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData);
+            var speedBuffDurationPlayer = new MovementSpeedDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
             SetupModifier(speedBuffDurationPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
@@ -33,7 +33,7 @@ namespace ComboSystem
             SetupModifier(speedBuff);
 
             var refreshableSpeedBuffData = new MovementSpeedModifierData(3f);
-            var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData, ModifierProperties.Refreshable);
+            var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData);
             SetupModifier(refreshableSpeedBuff);
 
             void SetupModifier(Modifier modifier)

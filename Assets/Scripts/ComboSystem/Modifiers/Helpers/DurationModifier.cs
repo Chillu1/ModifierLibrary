@@ -11,7 +11,6 @@ namespace ComboSystem
         public override void Update(float deltaTime)
         {
             timer += deltaTime;
-
             if (timer >= Data.Duration)
             {
                 Remove();
@@ -19,6 +18,16 @@ namespace ComboSystem
             }
 
             base.Update(deltaTime);
+        }
+
+        public override void Refresh()
+        {
+            base.Refresh();
+            if (ModifierProperties.HasFlag(ModifierProperties.Refreshable))
+            {
+                timer = 0f;
+                Log.Info("Refreshed timer");
+            }
         }
     }
 }

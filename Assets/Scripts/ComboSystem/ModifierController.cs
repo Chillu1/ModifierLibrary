@@ -24,19 +24,18 @@ namespace ComboSystem
 
         public void TryAddModifier(Modifier modifier)
         {
-            if (HasModifier(modifier))
+            if (HasModifier(modifier, out Modifier internalModifier))
             {
-                //var test = Modifiers.Find()
-                Log.Info("HasModifier " + modifier.GetType().Name);
+                Log.Verbose("HasModifier " + modifier.Id);
                 switch (modifier.ModifierProperties)
                 {
                     case ModifierProperties.None:
                         return;
                     case ModifierProperties.Stackable:
-                        modifier.Stack();
+                        internalModifier.Stack();
                         break;
                     case ModifierProperties.Refreshable:
-                        modifier.Refresh();
+                        internalModifier.Refresh();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -65,6 +64,12 @@ namespace ComboSystem
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
         }
 
+        public bool HasModifier(Modifier modifier, out Modifier internalModifier)
+        {
+            return Modifiers.TryGetValue(modifier.Id, out internalModifier);
+            //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
+        }
+
         public IEnumerable<ModifierApplier<ModifierApplierData>> GetModifierAppliers()
         {
             return (IEnumerable<ModifierApplier<ModifierApplierData>>)Modifiers.Values.Where(mod =>
@@ -74,7 +79,7 @@ namespace ComboSystem
         private void RegisterModifier(Modifier modifier)
         {
             modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);
-            modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.GetType().Name + " removed");
+            modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed");
         }
     }
 }
