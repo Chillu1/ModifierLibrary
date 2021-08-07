@@ -5,8 +5,12 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Refreshable modifier (speedbuff)
+    //What kind of stackable behaviours do we want?:
+    //  Stacks increases value/power
+    //  Stacks increase speed/interval of DoT/effect,
+    //Redesign movementSpeedModifier to ChangeStat generic one
     //A stackable DoT modifier
+    //Sort directories by behaviour
     //Combo prototyping
     //Stats
     //Damage
@@ -39,12 +43,12 @@ namespace ComboSystem
             ModifierProperties = modifierProperties;
         }
 
-        protected Modifier(Modifier other)
-        {
-            Id = other.Id;
-            ModifierProperties = other.ModifierProperties;
-            //Prob cont copy target, it shouldn't have one when we copy (from prototypes), but dont do it anyway
-        }
+        // protected Modifier(Modifier other)
+        // {
+        //     Id = other.Id;
+        //     ModifierProperties = other.ModifierProperties;
+        //     //Prob cont copy target, it shouldn't have one when we copy (from prototypes), but dont do it anyway
+        // }
 
         /// <summary>
         ///     Called once, when modifier is added to the collection
@@ -58,11 +62,8 @@ namespace ComboSystem
         /// </summary>
         protected virtual bool Apply()
         {
-            if (Target == null)
-            {
-                Log.Error("We tried to apply modifier without a target");
+            if (!ApplyIsValid())
                 return false;
-            }
 
             //Dont Refresh/Stack on apply? But on adding the modifier instead?
             /*bool targetHasModifier = Target.ModifierController.HasModifier(this);
@@ -88,6 +89,17 @@ namespace ComboSystem
             return true;
         }
 
+        protected virtual bool ApplyIsValid()
+        {
+            if (Target == null)
+            {
+                Log.Error("We tried to apply modifier without a target");
+                return false;
+            }
+
+            return true;
+        }
+
         protected virtual void Remove()
         {
             Removed?.Invoke(this);
@@ -95,12 +107,12 @@ namespace ComboSystem
 
         public virtual void Stack()
         {
-            Log.Verbose("Stacking: " + this);
+            Log.Verbose("Stacked: " + this);
         }
 
         public virtual void Refresh()
         {
-            Log.Verbose("Refreshing: " + this);
+            Log.Verbose("Refreshed: " + this);
         }
 
         public virtual void Update(float deltaTime)
@@ -145,17 +157,18 @@ namespace ComboSystem
         // }
     }
 
-    public abstract class Modifier<TDataType> : Modifier// where TDataType : ICloneable
+    public abstract class Modifier<TDataType> : Modifier
     {
-        public TDataType Data { get; protected set; }
+        public TDataType Data { get; }
 
-        protected Modifier(string id, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
+        protected Modifier(string id, TDataType data, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
         {
+            Data = data;
         }
 
-        protected Modifier(Modifier<TDataType> other) : base(other)
-        {
-            Data = other.Data;
-        }
+        // protected Modifier(Modifier<TDataType> other) : base(other)
+        // {
+        //     Data = other.Data;
+        // }
     }
 }

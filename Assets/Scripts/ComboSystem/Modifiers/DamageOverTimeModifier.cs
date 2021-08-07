@@ -2,17 +2,25 @@ namespace ComboSystem
 {
     public class DamageOverTimeModifier : EffectOverTimeModifier<DamageOverTimeData>
     {
-        public DamageOverTimeModifier(string id, DamageOverTimeData damageOverTimeData, ModifierProperties properties = default) : base(id, damageOverTimeData, properties)
+        public DamageOverTimeModifier(string id, DamageOverTimeData data, ModifierProperties properties = default) : base(id, data, properties)
         {
-            Data = damageOverTimeData;
         }
 
         protected override bool Apply()
         {
-            if (!base.Apply())
+            if (!ApplyIsValid())
                 return false;
             Target!.DealDamage(Data.DamageData);
             return true;
+        }
+
+        public override void Stack()
+        {
+            base.Stack();
+            if (ModifierProperties.HasFlag(ModifierProperties.Stackable))
+            {
+
+            }
         }
     }
 }

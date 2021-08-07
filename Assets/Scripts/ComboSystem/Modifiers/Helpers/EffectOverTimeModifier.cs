@@ -5,9 +5,8 @@ namespace ComboSystem
         protected float timer;
         protected float durationTimer;
 
-        public EffectOverTimeModifier(string id, TEffectOverTimeData damageOverTimeData, ModifierProperties properties = default) : base(id, properties)
+        public EffectOverTimeModifier(string id, TEffectOverTimeData data, ModifierProperties properties = default) : base(id, data, properties)
         {
-            Data = damageOverTimeData;
         }
 
         public override void Update(float deltaTime)

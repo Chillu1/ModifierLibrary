@@ -4,7 +4,7 @@ namespace ComboSystem
     {
         protected float timer;
 
-        protected DurationModifier(string id, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
+        protected DurationModifier(string id, TDurationDataType data, ModifierProperties modifierProperties = default) : base(id, data, modifierProperties)
         {
         }
 
@@ -22,12 +22,13 @@ namespace ComboSystem
 
         public override void Refresh()
         {
-            base.Refresh();
-            if (ModifierProperties.HasFlag(ModifierProperties.Refreshable))
+            if (ModifierProperties.HasFlag(ModifierProperties.Refreshable))//Not ideal hardcoding, if we want a duration modifier that doesn't refresh the timer but something else?
             {
                 timer = 0f;
                 Log.Info("Refreshed timer");
             }
+
+            base.Refresh();
         }
     }
 }

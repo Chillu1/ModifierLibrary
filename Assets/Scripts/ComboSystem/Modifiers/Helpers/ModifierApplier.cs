@@ -5,14 +5,13 @@ namespace ComboSystem
     /// </summary>
     public class ModifierApplier<TModifierApplierData> : Modifier<TModifierApplierData> where TModifierApplierData : ModifierApplierData
     {
-        public ModifierApplier(string id, TModifierApplierData poisonModifierBuffData, ModifierProperties properties = default) : base(id, properties)
+        public ModifierApplier(string id, TModifierApplierData data, ModifierProperties properties = default) : base(id, data, properties)
         {
-            Data = poisonModifierBuffData;
         }
 
         protected override bool Apply()
         {
-            if (!base.Apply())
+            if (!ApplyIsValid())
                 return false;
             Target!.AddModifier(Data.Modifier);
             return true;

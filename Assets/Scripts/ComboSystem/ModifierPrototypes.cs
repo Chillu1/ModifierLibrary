@@ -17,7 +17,7 @@ namespace ComboSystem
         {
             DamageOverTimeData slimePoisonData =
                 new DamageOverTimeData(new[] { new DamageData() { Damage = 5, DamageType = DamageType.Poison } }, 1f, 5f);
-            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData);
+            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData, ModifierProperties.Stackable);
             SetupModifier(slimePoisonModifier);
 
             var speedBuffDurationPlayerData = new MovementSpeedDurationModifierData(2f, 3f);
@@ -35,6 +35,10 @@ namespace ComboSystem
             var refreshableSpeedBuffData = new MovementSpeedModifierData(3f);
             var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData);
             SetupModifier(refreshableSpeedBuff);
+
+            var stackableSpeedBuffData = new StatChangeStacksModifierData(StatType.MovementSpeed, 7f, 3);
+            var stackableSpeedBuff = new StatChangeStacksModifier("StackableMovementSpeedBuff", stackableSpeedBuffData);
+            SetupModifier(stackableSpeedBuff);
 
             void SetupModifier(Modifier modifier)
             {

@@ -2,14 +2,14 @@ namespace ComboSystem
 {
     public class MovementSpeedDurationModifier : SingleUseDurationModifier<MovementSpeedDurationModifierData>
     {
-        public MovementSpeedDurationModifier(string id, MovementSpeedDurationModifierData speedDurationBuffPlayerData, ModifierProperties properties = default) : base(id, properties)
+        public MovementSpeedDurationModifier(string id, MovementSpeedDurationModifierData data, ModifierProperties properties = default) :
+            base(id, data, properties)
         {
-            Data = speedDurationBuffPlayerData;
         }
 
         protected override bool Apply()
         {
-            if (!base.Apply())
+            if (!ApplyIsValid())
                 return false;
             Target!.ChangeStat(StatType.MovementSpeed, Data.MovementSpeed);
             return true;

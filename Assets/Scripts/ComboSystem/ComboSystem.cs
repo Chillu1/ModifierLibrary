@@ -2,6 +2,7 @@ using System;
 
 namespace ComboSystem
 {
+    //TODO Make a class for statType that takes statType & value (probably in an array to have multiple stat changes)
     public enum StatType
     {
         None = 0,
