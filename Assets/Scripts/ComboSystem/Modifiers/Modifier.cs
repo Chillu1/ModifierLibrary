@@ -5,13 +5,12 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Redesign movementSpeedModifier to ChangeStat generic one
+    //Sort directories by behaviour
     //Combo prototyping
     //What kind of stackable behaviours do we want?:
     //  Stacks increases value/power
     //  Stacks increase speed/interval of DoT/effect,
     //A stackable DoT modifier
-    //Sort directories by behaviour
     //Stats
     //Damage
 
