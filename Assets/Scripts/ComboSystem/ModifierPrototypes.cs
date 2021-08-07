@@ -17,32 +17,32 @@ namespace ComboSystem
         {
             DamageOverTimeData slimePoisonData =
                 new DamageOverTimeData(new[] { new DamageData() { Damage = 5, DamageType = DamageType.Poison } }, 1f, 5f);
-            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier(slimePoisonData);
-            SetupModifier("SlimePoison", slimePoisonModifier);
+            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData);
+            SetupModifier(slimePoisonModifier);
 
             var speedBuffDurationPlayerData = new MovementSpeedDurationModifierData(2f, 3f);
-            var speedBuffDurationPlayer = new MovementSpeedDurationModifier(speedBuffDurationPlayerData);
-            SetupModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayer);
+            var speedBuffDurationPlayer = new MovementSpeedDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData);
+            SetupModifier(speedBuffDurationPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
-            var poisonModifierBuff = new ModifierApplier<ModifierApplierData>(poisonModifierBuffData);
-            SetupModifier("SlimePoisonBuff", poisonModifierBuff);
+            var poisonModifierBuff = new ModifierApplier<ModifierApplierData>("SlimePoisonBuff", poisonModifierBuffData);
+            SetupModifier(poisonModifierBuff);
 
             var speedBuffData = new MovementSpeedModifierData(3f);
-            var speedBuff = new MovementSpeedModifier(speedBuffData);
-            SetupModifier("MovementSpeedBuff", speedBuff);
+            var speedBuff = new MovementSpeedModifier("MovementSpeedBuff", speedBuffData);
+            SetupModifier(speedBuff);
 
-            var refreshableSpeedBuffData = new MovementSpeedModifierData(3f, ModifierProperties.Refreshable);
-            var refreshableSpeedBuff = new MovementSpeedModifier(refreshableSpeedBuffData);
-            SetupModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuff);
+            var refreshableSpeedBuffData = new MovementSpeedModifierData(3f);
+            var refreshableSpeedBuff = new MovementSpeedModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuffData, ModifierProperties.Refreshable);
+            SetupModifier(refreshableSpeedBuff);
 
-            var refreshableSpeedBuffData2 = new MovementSpeedModifierData(2f, ModifierProperties.Refreshable);
-            var refreshableSpeedBuff2 = new MovementSpeedModifier(refreshableSpeedBuffData2);
-            SetupModifier("RefreshableMovementSpeedBuff2", refreshableSpeedBuff2);
+            var refreshableSpeedBuffData2 = new MovementSpeedModifierData(3f);
+            var refreshableSpeedBuff2 = new MovementSpeedModifier("RefreshableMovementSpeedBuff2", refreshableSpeedBuffData2, ModifierProperties.Refreshable);
+            SetupModifier(refreshableSpeedBuff2);
 
-            void SetupModifier(string modifierName, Modifier modifier)
+            void SetupModifier(Modifier modifier)
             {
-                _modifierPrototypes.Add(modifierName, modifier);
+                _modifierPrototypes.Add(modifier.Id, modifier);
             }
         }
 

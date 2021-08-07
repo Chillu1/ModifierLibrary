@@ -5,7 +5,7 @@ namespace ComboSystem
         protected float timer;
         protected float durationTimer;
 
-        public EffectOverTimeModifier(TEffectOverTimeData damageOverTimeData)
+        public EffectOverTimeModifier(string id, TEffectOverTimeData damageOverTimeData, ModifierProperties properties = default) : base(id, properties)
         {
             Data = damageOverTimeData;
         }

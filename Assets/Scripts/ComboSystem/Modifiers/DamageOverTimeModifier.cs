@@ -2,7 +2,7 @@ namespace ComboSystem
 {
     public class DamageOverTimeModifier : EffectOverTimeModifier<DamageOverTimeData>
     {
-        public DamageOverTimeModifier(DamageOverTimeData damageOverTimeData) : base(damageOverTimeData)
+        public DamageOverTimeModifier(string id, DamageOverTimeData damageOverTimeData, ModifierProperties properties = default) : base(id, damageOverTimeData, properties)
         {
             Data = damageOverTimeData;
         }

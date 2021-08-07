@@ -9,7 +9,7 @@ namespace ComboSystem
 Constructor for id, with optional modpriperties
      *
      */
-    //Equality of memberwise clone/list contains
+    //
     //Data should be structs that arent inherited, but composed instead?
     //Refreshable modifier
     //Stackable modifier
@@ -32,12 +32,18 @@ Constructor for id, with optional modpriperties
 
     //TODO:
     //Effect stacks+max effect stacks. IsEffectStackable. IsDurationStackable. IsDurationRefreshable?. IsForever.
-    public abstract class Modifier : ICloneable, IEquatable<Modifier>
+    public abstract class Modifier : ICloneable//, IEquatable<Modifier>
     {
         public event Action<Modifier> Removed;
         public string Id { get; protected set; }
         public ModifierProperties ModifierProperties { get; protected set; }
         [CanBeNull] public Character Target { get; protected set; }
+
+        protected Modifier(string id, ModifierProperties modifierProperties = default)
+        {
+            Id = id;
+            ModifierProperties = modifierProperties;
+        }
 
         /// <summary>
         ///     Called once, when modifier is added to the collection
@@ -57,7 +63,8 @@ Constructor for id, with optional modpriperties
                 return false;
             }
 
-            bool targetHasModifier = Target.ModifierController.HasModifier(this);
+            //Dont Refresh/Stack on apply? But on adding the modifier instead?
+            /*bool targetHasModifier = Target.ModifierController.HasModifier(this);
             if (!targetHasModifier)
                 return true;
 
@@ -75,7 +82,7 @@ Constructor for id, with optional modpriperties
                 default:
                     Log.Error("ModifierProperty " + ModifierProperties + " isn't implemented");
                     return false;
-            }
+            }*/
 
             return true;
         }
@@ -85,12 +92,14 @@ Constructor for id, with optional modpriperties
             Removed?.Invoke(this);
         }
 
-        protected virtual void Stack()
+        public virtual void Stack()
         {
+            Log.Verbose("Stacking: " + this);
         }
 
-        protected virtual void Refresh()
+        public virtual void Refresh()
         {
+            Log.Verbose("Refreshing: " + this);
         }
 
         public virtual void Update(float deltaTime)
@@ -117,10 +126,11 @@ Constructor for id, with optional modpriperties
             return true;
         }
 
-        public bool Equals(Modifier other)
+        public override string ToString()
         {
-            return Equals(this, other);
+            return $"{Id}. Target: {(Target != null ? Target : null)}";
         }
+
         // public virtual bool Equals(Modifier other)
         // {
         //     if (ReferenceEquals(null, other)) return false;
@@ -132,6 +142,10 @@ Constructor for id, with optional modpriperties
     public abstract class Modifier<TDataType> : Modifier
     {
         public TDataType Data { get; protected set; }
+
+        protected Modifier(string id, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
+        {
+        }
     }
 
     // public class ModifierFactory<TDataType, TModifierType> where TModifierType : Modifier<TDataType>, new()

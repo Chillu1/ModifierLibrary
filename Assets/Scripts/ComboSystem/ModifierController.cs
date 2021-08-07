@@ -33,9 +33,10 @@ namespace ComboSystem
                     case ModifierProperties.None:
                         return;
                     case ModifierProperties.Stackable:
-
+                        modifier.Stack();
                         break;
                     case ModifierProperties.Refreshable:
+                        modifier.Refresh();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

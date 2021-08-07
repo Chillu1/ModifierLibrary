@@ -4,7 +4,7 @@ namespace ComboSystem
 {
     public class MovementSpeedModifier : SingleUseModifier<MovementSpeedModifierData>//, IEquatable<MovementSpeedModifier>
     {
-        public MovementSpeedModifier(MovementSpeedModifierData speedBuffPlayerData)
+        public MovementSpeedModifier(string id, MovementSpeedModifierData speedBuffPlayerData, ModifierProperties properties = default) : base(id, properties)
         {
             Data = speedBuffPlayerData;
         }

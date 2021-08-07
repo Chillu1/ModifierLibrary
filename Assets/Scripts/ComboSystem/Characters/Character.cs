@@ -98,5 +98,10 @@ namespace ComboSystem
         {
             return true;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

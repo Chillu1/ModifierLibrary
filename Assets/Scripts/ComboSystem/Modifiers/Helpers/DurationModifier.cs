@@ -4,6 +4,10 @@ namespace ComboSystem
     {
         protected float timer;
 
+        protected DurationModifier(string id, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
+        {
+        }
+
         public override void Update(float deltaTime)
         {
             timer += deltaTime;

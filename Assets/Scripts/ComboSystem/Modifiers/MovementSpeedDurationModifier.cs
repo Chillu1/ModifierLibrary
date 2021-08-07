@@ -2,7 +2,7 @@ namespace ComboSystem
 {
     public class MovementSpeedDurationModifier : SingleUseDurationModifier<MovementSpeedDurationModifierData>
     {
-        public MovementSpeedDurationModifier(MovementSpeedDurationModifierData speedDurationBuffPlayerData)
+        public MovementSpeedDurationModifier(string id, MovementSpeedDurationModifierData speedDurationBuffPlayerData, ModifierProperties properties = default) : base(id, properties)
         {
             Data = speedDurationBuffPlayerData;
         }

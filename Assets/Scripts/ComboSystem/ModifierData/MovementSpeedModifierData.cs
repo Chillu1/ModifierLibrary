@@ -1,20 +1,21 @@
 namespace ComboSystem
 {
-    public class MovementSpeedModifierData : BaseModifierData
+    public class MovementSpeedModifierData
     {
         public float MovementSpeed { get; protected set; }
 
-        public MovementSpeedModifierData(float movementSpeed, ModifierProperties modifierProperties = ModifierProperties.None) : base(modifierProperties)
+        public MovementSpeedModifierData(float movementSpeed)
         {
             MovementSpeed = movementSpeed;
         }
     }
 
+    //Maybe not the best design?
     public class BaseModifierData
     {
         public ModifierProperties ModifierProperties { get; protected set; }
 
-        public BaseModifierData(ModifierProperties modifierProperties = ModifierProperties.None)
+        public BaseModifierData(ModifierProperties modifierProperties = default)
         {
             ModifierProperties = modifierProperties;
         }

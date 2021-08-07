@@ -5,7 +5,7 @@ namespace ComboSystem
     /// </summary>
     public class ModifierApplier<TModifierApplierData> : Modifier<TModifierApplierData> where TModifierApplierData : ModifierApplierData
     {
-        public ModifierApplier(TModifierApplierData poisonModifierBuffData)
+        public ModifierApplier(string id, TModifierApplierData poisonModifierBuffData, ModifierProperties properties = default) : base(id, properties)
         {
             Data = poisonModifierBuffData;
         }
