@@ -91,7 +91,7 @@ namespace ComboSystem
         {
             if(ownerIsTarget)
                 modifier.SetTarget(this);
-            ModifierController.AddModifier(modifier);
+            ModifierController.TryAddModifier(modifier);
         }
 
         public virtual bool IsValidTarget(Modifier modifier)

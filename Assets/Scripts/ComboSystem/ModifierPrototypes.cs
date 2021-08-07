@@ -20,13 +20,25 @@ namespace ComboSystem
             DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier(slimePoisonData);
             SetupModifier("SlimePoison", slimePoisonModifier);
 
-            var speedBuffPlayerData = new MovementSpeedDurationModifierData(2f, 10f);
-            var speedBuffPlayer = new MovementSpeedDurationModifier(speedBuffPlayerData);
-            SetupModifier("PlayerSpeedBuff", speedBuffPlayer);
+            var speedBuffDurationPlayerData = new MovementSpeedDurationModifierData(2f, 3f);
+            var speedBuffDurationPlayer = new MovementSpeedDurationModifier(speedBuffDurationPlayerData);
+            SetupModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
             var poisonModifierBuff = new ModifierApplier<ModifierApplierData>(poisonModifierBuffData);
             SetupModifier("SlimePoisonBuff", poisonModifierBuff);
+
+            var speedBuffData = new MovementSpeedModifierData(3f);
+            var speedBuff = new MovementSpeedModifier(speedBuffData);
+            SetupModifier("MovementSpeedBuff", speedBuff);
+
+            var refreshableSpeedBuffData = new MovementSpeedModifierData(3f, ModifierProperties.Refreshable);
+            var refreshableSpeedBuff = new MovementSpeedModifier(refreshableSpeedBuffData);
+            SetupModifier("RefreshableMovementSpeedBuff", refreshableSpeedBuff);
+
+            var refreshableSpeedBuffData2 = new MovementSpeedModifierData(2f, ModifierProperties.Refreshable);
+            var refreshableSpeedBuff2 = new MovementSpeedModifier(refreshableSpeedBuffData2);
+            SetupModifier("RefreshableMovementSpeedBuff2", refreshableSpeedBuff2);
 
             void SetupModifier(string modifierName, Modifier modifier)
             {
@@ -35,7 +47,7 @@ namespace ComboSystem
         }
 
         [CanBeNull]
-        public Modifier GetModifier(string modifierName, ModifierController modifierController)
+        public Modifier GetModifier(string modifierName)
         {
             if (_modifierPrototypes.TryGetValue(modifierName, out Modifier modifier))
             {
@@ -50,9 +62,9 @@ namespace ComboSystem
         }
 
         [CanBeNull]
-        public Modifier<TDataType> GetModifier<TDataType>(string modifierName, ModifierController modifierController)
+        public Modifier<TDataType> GetModifier<TDataType>(string modifierName)
         {
-            return (Modifier<TDataType>)GetModifier(modifierName, modifierController);
+            return (Modifier<TDataType>)GetModifier(modifierName);
         }
     }
 }

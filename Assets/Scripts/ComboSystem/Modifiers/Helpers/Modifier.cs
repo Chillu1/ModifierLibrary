@@ -4,11 +4,18 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //A buff that applies a debuff
-    //Single use buff, duration
-    //DoT debuff
-    //DoT buff that applies a DoT debuff
+    /*
+     *
+Constructor for id, with optional modpriperties
+     *
+     */
+    //Equality of memberwise clone/list contains
+    //Data should be structs that arent inherited, but composed instead?
+    //Refreshable modifier
+    //Stackable modifier
     //Combo prototyping
+    //Stats
+    //Damage
 
     //Types of modifiers:
     //  Base mods: Duration, EffectEveryX, Applier,
@@ -25,9 +32,11 @@ namespace ComboSystem
 
     //TODO:
     //Effect stacks+max effect stacks. IsEffectStackable. IsDurationStackable. IsDurationRefreshable?. IsForever.
-    public abstract class Modifier : ICloneable
+    public abstract class Modifier : ICloneable, IEquatable<Modifier>
     {
         public event Action<Modifier> Removed;
+        public string Id { get; protected set; }
+        public ModifierProperties ModifierProperties { get; protected set; }
         [CanBeNull] public Character Target { get; protected set; }
 
         /// <summary>
@@ -48,12 +57,40 @@ namespace ComboSystem
                 return false;
             }
 
+            bool targetHasModifier = Target.ModifierController.HasModifier(this);
+            if (!targetHasModifier)
+                return true;
+
+            switch (ModifierProperties)
+            {
+                //If not stackable or refreshable, and Target already has the modifier, don't apply
+                case ModifierProperties.None:
+                    return false;
+                case ModifierProperties.Stackable:
+                    Stack();
+                    break;
+                case ModifierProperties.Refreshable:
+                    Refresh();
+                    break;
+                default:
+                    Log.Error("ModifierProperty " + ModifierProperties + " isn't implemented");
+                    return false;
+            }
+
             return true;
         }
 
         protected virtual void Remove()
         {
             Removed?.Invoke(this);
+        }
+
+        protected virtual void Stack()
+        {
+        }
+
+        protected virtual void Refresh()
+        {
         }
 
         public virtual void Update(float deltaTime)
@@ -79,6 +116,17 @@ namespace ComboSystem
             Target = target;
             return true;
         }
+
+        public bool Equals(Modifier other)
+        {
+            return Equals(this, other);
+        }
+        // public virtual bool Equals(Modifier other)
+        // {
+        //     if (ReferenceEquals(null, other)) return false;
+        //     if (ReferenceEquals(this, other)) return true;
+        //     return ModifierProperties == other.ModifierProperties && this.GetType() == other.GetType();
+        // }
     }
 
     public abstract class Modifier<TDataType> : Modifier

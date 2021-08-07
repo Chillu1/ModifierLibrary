@@ -9,7 +9,10 @@ namespace ComboSystem
             timer += deltaTime;
 
             if (timer >= Data.Duration)
+            {
                 Remove();
+                return;
+            }
 
             base.Update(deltaTime);
         }

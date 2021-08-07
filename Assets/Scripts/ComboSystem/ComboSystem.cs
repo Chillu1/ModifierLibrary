@@ -22,6 +22,14 @@ namespace ComboSystem
         Acid = 16,
     }
 
+    [Flags]
+    public enum ModifierProperties
+    {
+        None = 0,
+        Stackable = 1,
+        Refreshable = 2,
+    }
+
     public enum EffectType
     {
         None = 0,

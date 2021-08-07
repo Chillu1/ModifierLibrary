@@ -18,6 +18,7 @@ namespace ComboSystem
         protected override void Remove()
         {
             Target.ChangeStat(StatType.MovementSpeed, -Data.MovementSpeed);
+            base.Remove();
         }
     }
 }

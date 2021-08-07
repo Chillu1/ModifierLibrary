@@ -11,6 +11,7 @@ namespace ComboSystem
             base.Init();
         }
     }
+
     public abstract class SingleUseDurationModifier<TDataType> : DurationModifier<TDataType> where TDataType : DurationModifierData
     {
         public override void Init()
