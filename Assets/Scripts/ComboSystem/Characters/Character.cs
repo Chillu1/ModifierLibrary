@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ComboSystem
 {
@@ -12,9 +13,9 @@ namespace ComboSystem
         public float MovementSpeed { get; protected set; }
         public ModifierController ModifierController { get; }
 
-        protected Character()
+        protected Character(Func<Dictionary<string, Modifier>, List<ComboModifier>> checkForRecipes)
         {
-            ModifierController = new ModifierController();
+            ModifierController = new ModifierController(this, checkForRecipes);
         }
 
         public virtual void ChangeStat(StatType statType, float value)
@@ -34,6 +35,8 @@ namespace ComboSystem
                     float percentageHealth = Health / MaxHealth;
                     MaxHealth += value;
                     RecalculateHealth(percentageHealth);
+                    break;
+                case StatType.AttackSpeed:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(statType), statType, null);
@@ -59,6 +62,8 @@ namespace ComboSystem
                     MovementSpeed += MovementSpeed * percentage;
                     break;
                 case StatType.Health:
+                    break;
+                case StatType.AttackSpeed:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(statType), statType, null);
@@ -87,11 +92,9 @@ namespace ComboSystem
             foreach (var modifierApplier in modifierAppliers)
                 modifierApplier.ApplyModifierToTarget(target);
         }
-        public virtual void AddModifier(Modifier modifier, bool ownerIsTarget = true)
+        public virtual void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
-            if(ownerIsTarget)
-                modifier.SetTarget(this);
-            ModifierController.TryAddModifier(modifier);
+            ModifierController.TryAddModifier(modifier, parameters);
         }
 
         public virtual bool IsValidTarget(Modifier modifier)

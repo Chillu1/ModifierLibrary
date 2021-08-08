@@ -1,5 +1,4 @@
 using ComboSystem.Utils;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +14,7 @@ namespace ComboSystem
         public static float GameSpeed { get { return Time.timeScale; } set { Time.timeScale = value; } }//We could limit the gamespeed at which mechanics (might) break
 
         public ModifierPrototypes ModifierPrototypes { get; private set; }
+        public ComboModifierPrototypes ComboModifierPrototypes { get; private set; }
         public static UIController UIController { get; private set; }
         public static TimeController TimeController { get; private set; }
 
@@ -26,21 +26,21 @@ namespace ComboSystem
             CommandsController.Init();
 
             ModifierPrototypes = new ModifierPrototypes();
+            ComboModifierPrototypes = new ComboModifierPrototypes();
 
-            player = new Player();
+            player = new Player(ComboModifierPrototypes.CheckForRecipes);
             //Modifier playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerMovementSpeedDurationBuff");
             //player.AddModifier(playerSpeedBuff);
             //player.AddModifier(ModifierPrototypes.GetModifier("MovementSpeedBuff"));
-            Modifier mod1 = ModifierPrototypes.GetModifier("StackableMovementSpeedBuff");
+            Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
             player.AddModifier(mod1);
-            Modifier mod2 = ModifierPrototypes.GetModifier("StackableMovementSpeedBuff");
+            Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
             player.AddModifier(mod2);
-            Modifier mod3 = ModifierPrototypes.GetModifier("StackableMovementSpeedBuff");
-            player.AddModifier(mod3);
+            player.ModifierController.ListModifiers();
 
-            Slime slime = new Slime();
+            Slime slime = new Slime(ComboModifierPrototypes.CheckForRecipes);
             var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");
-            slime.AddModifier(slimePoisonBuff, false);
+            slime.AddModifier(slimePoisonBuff, AddModifierParameters.NullStartTarget);
             //slimePoisonBuff.ApplyModifierToTarget(player);
         }
 

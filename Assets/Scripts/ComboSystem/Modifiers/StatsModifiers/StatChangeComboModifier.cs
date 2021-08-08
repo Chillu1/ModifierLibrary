@@ -1,8 +1,9 @@
 namespace ComboSystem
 {
-    public class StatChangeModifier : SingleUseModifier<StatChangeModifierData>
+    public class StatChangeComboModifier : SingleUseComboModifier<StatChangeModifierData>
     {
-        public StatChangeModifier(string id, StatChangeModifierData data, ModifierProperties properties = default) : base(id, data, properties)
+        public StatChangeComboModifier(string id, StatChangeModifierData data, ComboRecipe recipe, ModifierProperties properties = default) :
+            base(id, data, recipe, properties)
         {
         }
 

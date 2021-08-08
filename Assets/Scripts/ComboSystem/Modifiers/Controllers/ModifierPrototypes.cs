@@ -1,19 +1,13 @@
-using System.Collections.Generic;
-using JetBrains.Annotations;
-
 namespace ComboSystem
 {
-    public class ModifierPrototypes
+    public sealed class ModifierPrototypes : ModifierPrototypesBase<Modifier>
     {
-        private readonly Dictionary<string, Modifier> _modifierPrototypes;
-
         public ModifierPrototypes()
         {
-            _modifierPrototypes = new Dictionary<string, Modifier>();
             SetupModifierPrototypes();
         }
 
-        private void SetupModifierPrototypes()
+        protected override void SetupModifierPrototypes()
         {
             DamageOverTimeData slimePoisonData =
                 new DamageOverTimeData(new[] { new DamageData() { Damage = 5, DamageType = DamageType.Poison } }, 1f, 5f);
@@ -40,31 +34,13 @@ namespace ComboSystem
             var stackableSpeedBuff = new StatChangeStacksModifier("StackableMovementSpeedBuff", stackableSpeedBuffData);
             SetupModifier(stackableSpeedBuff);
 
-            void SetupModifier(Modifier modifier)
-            {
-                _modifierPrototypes.Add(modifier.Id, modifier);
-            }
-        }
-
-        [CanBeNull]
-        public Modifier GetModifier(string modifierName)
-        {
-            if (_modifierPrototypes.TryGetValue(modifierName, out Modifier modifier))
-            {
-                modifier = (Modifier)modifier.Clone();
-                return modifier;
-            }
-            else
-            {
-                Log.Error("Could not find modifier of name " + modifierName);
-                return null;
-            }
-        }
-
-        [CanBeNull]
-        public Modifier<TDataType> GetModifier<TDataType>(string modifierName)
-        {
-            return (Modifier<TDataType>)GetModifier(modifierName);
+            //Aspect of the cat base mods
+            var catMovementSpeedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
+            var catMovementSpeedBuff = new StatChangeModifier("MovementSpeedOfCat", catMovementSpeedBuffData);
+            SetupModifier(catMovementSpeedBuff);
+            var catAttackSpeedBuffData = new StatChangeModifierData(StatType.AttackSpeed, 3f);
+            var catAttackSpeedBuff = new StatChangeModifier("AttackSpeedOfCat", catAttackSpeedBuffData);
+            SetupModifier(catAttackSpeedBuff);
         }
     }
 }

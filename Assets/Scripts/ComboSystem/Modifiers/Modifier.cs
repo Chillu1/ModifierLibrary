@@ -5,8 +5,12 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Sort directories by behaviour
-    //Combo prototyping
+    //Combo prototyping, how do we want to store the combo "recipes"? With ModifierProtoypes/NewProtoypeclass? Should they have their own data who they combo with? Maybe better not?
+    //Adds a buff to collection, after adding we check for any recipes, if there is one that fits the criteria & its not already active, add & apply it
+        //Combo buffs:
+            //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
+            //X specific buffs together
+            //Elemental combos
     //What kind of stackable behaviours do we want?:
     //  Stacks increases value/power
     //  Stacks increase speed/interval of DoT/effect,
@@ -145,7 +149,7 @@ namespace ComboSystem
 
         public override string ToString()
         {
-            return $"{Id}. Target: {(Target != null ? Target : null)}";
+            return $"{Id}, target: {(Target != null ? Target : null)}";
         }
 
         // public virtual bool Equals(Modifier other)

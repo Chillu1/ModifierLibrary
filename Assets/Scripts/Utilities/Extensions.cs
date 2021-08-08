@@ -4,6 +4,15 @@ using System.Reflection;
 
 namespace ComboSystem.Utils
 {
+    public static class TypeExtensions
+    {
+        public static bool IsSameOrSubclass(this Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase)
+                   || potentialDescendant == potentialBase;
+        }
+    }
+
     public static class ObjectExtensions
     {
         private static readonly MethodInfo CloneMethod =

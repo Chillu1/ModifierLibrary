@@ -1,16 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ComboSystem.Utils;
 
 namespace ComboSystem
 {
     public class ModifierController
     {
+        private readonly Character _ownerTarget;
         private Dictionary<string, Modifier> Modifiers { get; }
+        private readonly Func<Dictionary<string, Modifier>, List<ComboModifier>> _checkForRecipes;
 
-        public ModifierController()
+        public ModifierController(Character ownerTarget, Func<Dictionary<string, Modifier>, List<ComboModifier>> checkForRecipes)
         {
             Modifiers = new Dictionary<string, Modifier>();
+            _ownerTarget = ownerTarget;
+            _checkForRecipes = checkForRecipes;
         }
 
         public void Update(float deltaTime)
@@ -22,8 +27,10 @@ namespace ComboSystem
             }
         }
 
-        public void TryAddModifier(Modifier modifier)
+        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
+            CheckTarget(modifier, parameters);
+
             if (HasModifier(modifier, out Modifier internalModifier))
             {
                 Log.Verbose("HasModifier " + modifier.Id);
@@ -43,9 +50,29 @@ namespace ComboSystem
             }
             else
                 AddModifier(modifier);
+
+            if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
+            {
+                var comboModifierToAdd = _checkForRecipes.Invoke(Modifiers);
+                if (comboModifierToAdd.Count > 0)
+                    AddComboModifier(comboModifierToAdd);
+                //Log.Verbose(comboModifierToAdd.Count);
+            }
         }
 
-        public void AddModifier(Modifier modifier)
+        private void AddComboModifier(IEnumerable<ComboModifier> modifiers)
+        {
+            foreach (var modifier in modifiers)
+            {
+                TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
+            }
+            //Check for recipes after adding all modifiers
+            var comboModifierToAdd = _checkForRecipes.Invoke(Modifiers);
+            if(comboModifierToAdd.Count > 0)
+                AddComboModifier(comboModifierToAdd);
+        }
+
+        private void AddModifier(Modifier modifier)
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
@@ -74,6 +101,35 @@ namespace ComboSystem
         {
             return (IEnumerable<ModifierApplier<ModifierApplierData>>)Modifiers.Values.Where(mod =>
                 mod.GetType() == typeof(ModifierApplier<ModifierApplierData>));
+        }
+
+        public void ListModifiers()
+        {
+            Log.Info(string.Join(". ", Modifiers.Values) + ". Modifiers count: " + Modifiers.Count, true);
+        }
+
+        private void CheckTarget(Modifier modifier, AddModifierParameters parameters)
+        {
+            if (parameters.HasFlag(AddModifierParameters.OwnerIsTarget))
+            {
+                if (modifier.Target == null)
+                {
+                    modifier.SetTarget(_ownerTarget);
+                }
+                else if (modifier.Target != _ownerTarget)
+                {
+                    Log.Error("Owner should be the target, but isn't. Target is: " + modifier.Target +". Reverting to owner");
+                    modifier.SetTarget(_ownerTarget);
+                }
+            }
+            else
+            {
+                //Modifier appliers dont need a target at ctor. Extra check, for good measure
+                if (modifier.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+                {
+                    Log.Error("Owner isn't the target, and target is null");
+                }
+            }
         }
 
         private void RegisterModifier(Modifier modifier)

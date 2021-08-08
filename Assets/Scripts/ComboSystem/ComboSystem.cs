@@ -10,6 +10,7 @@ namespace ComboSystem
         Defense = 2,
         MovementSpeed = 3,
         Health = 4,
+        AttackSpeed = 5,
     }
 
     [Flags]
@@ -39,6 +40,17 @@ namespace ComboSystem
         /// </summary>
         Damage = 1,
         StatChange = 2,
+    }
+
+    [Flags]
+    public enum AddModifierParameters
+    {
+        None = 0,
+        OwnerIsTarget = 1,
+        CheckRecipes = 2,
+        NullStartTarget = 4,
+        
+        Default = OwnerIsTarget | CheckRecipes
     }
 
     public enum LogLevel
