@@ -6,12 +6,9 @@ namespace ComboSystem
         {
         }
 
-        protected override bool Apply()
+        protected override void Effect()
         {
-            if (!ApplyIsValid())
-                return false;
             Target!.DealDamage(Data.DamageData);
-            return true;
         }
 
         public override void Stack()
@@ -19,7 +16,7 @@ namespace ComboSystem
             base.Stack();
             if (ModifierProperties.HasFlag(ModifierProperties.Stackable))
             {
-
+                //TODO
             }
         }
     }

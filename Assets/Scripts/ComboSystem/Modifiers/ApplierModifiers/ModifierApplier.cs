@@ -9,12 +9,9 @@ namespace ComboSystem
         {
         }
 
-        protected override bool Apply()
+        protected override void Effect()
         {
-            if (!ApplyIsValid())
-                return false;
             Target!.AddModifier(Data.Modifier);
-            return true;
         }
 
         public void ApplyModifierToTarget(Character target)

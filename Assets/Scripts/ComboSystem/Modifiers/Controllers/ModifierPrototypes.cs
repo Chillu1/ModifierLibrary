@@ -41,6 +41,13 @@ namespace ComboSystem
             var catAttackSpeedBuffData = new StatChangeModifierData(StatType.AttackSpeed, 3f);
             var catAttackSpeedBuff = new StatChangeModifier("AttackSpeedOfCat", catAttackSpeedBuffData);
             SetupModifier(catAttackSpeedBuff);
+
+            var fireAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Fire });
+            var fireAttack = new DamageAttackModifier("FireDamage", fireAttackData);
+            SetupModifier(fireAttack);
+            var coldAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Cold });
+            var coldAttack = new DamageAttackModifier("ColdDamage", coldAttackData);
+            SetupModifier(coldAttack);
         }
     }
 }

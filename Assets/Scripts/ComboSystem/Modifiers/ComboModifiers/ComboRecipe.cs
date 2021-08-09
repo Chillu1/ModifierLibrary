@@ -1,3 +1,5 @@
+using System;
+
 namespace ComboSystem
 {
     public class ComboRecipe
@@ -10,6 +12,10 @@ namespace ComboSystem
         {
             Ids = properties.Ids;
             DamageTypes = properties.DamageTypes;
+            if (Ids == null)
+                Ids = Array.Empty<string>();
+            if (DamageTypes == null)
+                DamageTypes = Array.Empty<DamageType>();
         }
     }
 

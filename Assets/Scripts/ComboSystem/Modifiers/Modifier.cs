@@ -5,18 +5,16 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Combo prototyping, how do we want to store the combo "recipes"? With ModifierProtoypes/NewProtoypeclass? Should they have their own data who they combo with? Maybe better not?
-    //Adds a buff to collection, after adding we check for any recipes, if there is one that fits the criteria & its not already active, add & apply it
         //Combo buffs:
             //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
             //X specific buffs together
-            //Elemental combos
     //What kind of stackable behaviours do we want?:
     //  Stacks increases value/power
     //  Stacks increase speed/interval of DoT/effect,
     //A stackable DoT modifier
     //Stats
     //Damage
+    //Resistances
 
     //Types of modifiers:
     //  Base mods: Duration, EffectEveryX, Applier,
@@ -61,33 +59,14 @@ namespace ComboSystem
         }
 
         /// <summary>
-        ///     Called when modifier is applied
+        ///     Called when modifier is applied to target
         /// </summary>
         protected virtual bool Apply()
         {
             if (!ApplyIsValid())
                 return false;
 
-            //Dont Refresh/Stack on apply? But on adding the modifier instead?
-            /*bool targetHasModifier = Target.ModifierController.HasModifier(this);
-            if (!targetHasModifier)
-                return true;
-
-            switch (ModifierProperties)
-            {
-                //If not stackable or refreshable, and Target already has the modifier, don't apply
-                case ModifierProperties.None:
-                    return false;
-                case ModifierProperties.Stackable:
-                    Stack();
-                    break;
-                case ModifierProperties.Refreshable:
-                    Refresh();
-                    break;
-                default:
-                    Log.Error("ModifierProperty " + ModifierProperties + " isn't implemented");
-                    return false;
-            }*/
+            Effect();
 
             return true;
         }
@@ -102,6 +81,11 @@ namespace ComboSystem
 
             return true;
         }
+
+        /// <summary>
+        ///     Does the actual effect of the modifier
+        /// </summary>
+        protected abstract void Effect();
 
         protected virtual void Remove()
         {

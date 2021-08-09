@@ -77,7 +77,7 @@ namespace ComboSystem
         /// </summary>
         public virtual void DealDamage(DamageData[] damageData)
         {
-            Health -= damageData[0].Damage;
+            Health -= damageData[0].Damage;//TODO TEMP
         }
 
         public virtual void Attack(Character target)

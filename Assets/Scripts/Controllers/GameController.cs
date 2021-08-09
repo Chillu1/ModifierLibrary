@@ -29,18 +29,20 @@ namespace ComboSystem
             ComboModifierPrototypes = new ComboModifierPrototypes();
 
             player = new Player(ComboModifierPrototypes.CheckForRecipes);
-            //Modifier playerSpeedBuff = ModifierPrototypes.GetModifier("PlayerMovementSpeedDurationBuff");
-            //player.AddModifier(playerSpeedBuff);
-            //player.AddModifier(ModifierPrototypes.GetModifier("MovementSpeedBuff"));
-            Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
-            player.AddModifier(mod1);
-            Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
-            player.AddModifier(mod2);
-            player.ModifierController.ListModifiers();
+            //Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
+            //player.AddModifier(mod1);
+            //Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
+            //player.AddModifier(mod2);
+            //player.ModifierController.ListModifiers();
+
+            Modifier fireDamage = ModifierPrototypes.GetModifier("FireDamage");
+            Modifier coldDamage = ModifierPrototypes.GetModifier("ColdDamage");
+            player.AddModifier(fireDamage);
+            player.AddModifier(coldDamage);
 
             Slime slime = new Slime(ComboModifierPrototypes.CheckForRecipes);
-            var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");
-            slime.AddModifier(slimePoisonBuff, AddModifierParameters.NullStartTarget);
+            //var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");
+            //slime.AddModifier(slimePoisonBuff, AddModifierParameters.NullStartTarget);
             //slimePoisonBuff.ApplyModifierToTarget(player);
         }
 

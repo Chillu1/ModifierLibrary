@@ -14,14 +14,21 @@ namespace ComboSystem
     }
 
     [Flags]
-    public enum DamageType
+    public enum DamageType//Might be smart to separate: Physical, Magical, Pure, etc. From elementalTypes?
     {
         None = 0,
         Physical = 1,
         Magical = 2,
-        Poison = 4,
-        Fire = 8,
-        Acid = 16,
+        Pure = 4,
+
+        Explosion = 8,
+
+        Poison = 128,//TEMP Bigger numbers to have space for more of these^
+        Fire = 256,
+        Cold = 512,
+        Acid = 1024,
+        Toxic = 2048,
+        Bleed = 4096,
     }
 
     [Flags]

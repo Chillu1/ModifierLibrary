@@ -7,12 +7,9 @@ namespace ComboSystem
         {
         }
 
-        protected override bool Apply()
+        protected override void Effect()
         {
-            if (!ApplyIsValid())
-                return false;
             Target!.ChangeStat(Data.StatType, Data.Value);
-            return true;
         }
 
         protected override void Remove()

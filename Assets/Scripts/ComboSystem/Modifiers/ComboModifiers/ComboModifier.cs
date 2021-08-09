@@ -3,6 +3,7 @@ namespace ComboSystem
     public abstract class ComboModifier : Modifier
     {
         public ComboRecipe Recipe { get; }
+        public float Cooldown { get; protected set; }//TODO? Cooldown that the modifier can be applied again?
         protected ComboModifier(string id, ComboRecipe recipe, ModifierProperties modifierProperties = default) : base(id, modifierProperties)
         {
             Recipe = recipe;

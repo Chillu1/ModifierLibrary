@@ -1,6 +1,6 @@
 namespace ComboSystem
 {
-    public class DamageOverTimeData : EffectOverTimeData
+    public class DamageOverTimeData : EffectOverTimeData, IDamageData
     {
         public DamageData[] DamageData { get; protected set; }
 

@@ -109,6 +109,11 @@ namespace ComboSystem.Utils
             do action(array, walker.Position);
             while (walker.Step());
         }
+
+        public static bool IsNullOrEmpty(this Array array)
+        {
+            return array == null || array.Length == 0;
+        }
     }
 
     internal class ArrayTraverse

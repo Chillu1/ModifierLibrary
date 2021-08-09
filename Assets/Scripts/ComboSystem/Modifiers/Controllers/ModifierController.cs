@@ -100,7 +100,7 @@ namespace ComboSystem
         public IEnumerable<ModifierApplier<ModifierApplierData>> GetModifierAppliers()
         {
             return (IEnumerable<ModifierApplier<ModifierApplierData>>)Modifiers.Values.Where(mod =>
-                mod.GetType() == typeof(ModifierApplier<ModifierApplierData>));
+                mod.GetType().IsSameOrSubclass(typeof(ModifierApplier<ModifierApplierData>)));
         }
 
         public void ListModifiers()
