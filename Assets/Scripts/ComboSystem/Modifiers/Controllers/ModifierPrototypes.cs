@@ -16,6 +16,10 @@ namespace ComboSystem
             DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData, ModifierProperties.Stackable);
             SetupModifier(slimePoisonModifier);
 
+            var fireAttackDoTData = new DamageOverTimeData(new[] { new DamageData() { Damage = 2, DamageType = DamageType.Fire } }, 1f, 5f);
+            var fireAttackDoT = new DamageOverTimeModifier("FireDoTAttack", fireAttackDoTData, ModifierProperties.Refreshable);
+            SetupModifier(fireAttackDoT);
+
             var speedBuffDurationPlayerData = new StatChangeDurationModifierData(StatType.MovementSpeed, 2f, 3f);
             var speedBuffDurationPlayer = new StatChangeDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
             SetupModifier(speedBuffDurationPlayer);

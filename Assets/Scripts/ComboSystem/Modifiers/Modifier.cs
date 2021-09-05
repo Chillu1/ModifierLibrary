@@ -34,7 +34,7 @@ namespace ComboSystem
 
     //TODO:
     //Effect stacks+max effect stacks. IsEffectStackable. IsDurationStackable. IsDurationRefreshable?. IsForever.
-    public abstract class Modifier : ICloneable//, IEquatable<Modifier>
+    public abstract class Modifier : IEntity<string>, IEventCopy<Modifier>, ICloneable
     {
         public event Action<Modifier> Removed;
         public string Id { get; protected set; }
@@ -162,6 +162,11 @@ namespace ComboSystem
 
             Target = target;
             return true;
+        }
+
+        public virtual void CopyEvents(Modifier prototype)
+        {
+            Removed = prototype.Removed;
         }
 
         public override string ToString()

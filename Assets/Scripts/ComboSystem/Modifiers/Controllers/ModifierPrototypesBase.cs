@@ -1,49 +1,27 @@
-using System.Collections.Generic;
 using BaseProject;
 using JetBrains.Annotations;
 
 namespace ComboSystem
 {
-    public abstract class ModifierPrototypesBase<TModifierType> where TModifierType : Modifier
+    public abstract class ModifierPrototypesBase<TModifierType> : BasePrototypeController<string, TModifierType>
+        where TModifierType : Modifier, IEventCopy<TModifierType>
     {
-        protected readonly Dictionary<string, TModifierType> modifierPrototypes;
-
-        protected ModifierPrototypesBase()
-        {
-            modifierPrototypes = new Dictionary<string, TModifierType>();
-        }
-
         protected abstract void SetupModifierPrototypes();
 
         protected void SetupModifier(TModifierType modifier)
         {
-            if (modifierPrototypes.ContainsKey(modifier.Id))
+            if (prototypes.ContainsKey(modifier.Id))
             {
                 Log.Error("A modifier with id: "+modifier.Id+" already exists");
                 return;
             }
-            modifierPrototypes.Add(modifier.Id, modifier);
+            prototypes.Add(modifier.Id, modifier);
         }
 
         [CanBeNull]
-        public TModifierType GetModifier(string modifierName)
+        public Modifier<TDataType> GetItem<TDataType>(string modifierName)
         {
-            if (modifierPrototypes.TryGetValue(modifierName, out TModifierType modifier))
-            {
-                modifier = (TModifierType)modifier.Clone();
-                return modifier;
-            }
-            else
-            {
-                Log.Error("Could not find modifier of name " + modifierName);
-                return null;
-            }
-        }
-
-        [CanBeNull]
-        public Modifier<TDataType> GetModifier<TDataType>(string modifierName)
-        {
-            return GetModifier(modifierName) as Modifier<TDataType>;
+            return GetItem(modifierName) as Modifier<TDataType>;
         }
     }
 }

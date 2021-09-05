@@ -42,9 +42,9 @@ namespace ComboSystem
         {
             var comboModifiersToAdd = new List<ComboModifier>();
 
-            Assert.IsTrue(Instance.modifierPrototypes.Count > 0, "0 combo modifiers in collection");
+            Assert.IsTrue(Instance.prototypes.Count > 0, "0 combo modifiers in collection");
             //Iterate through all combos, check if any match
-            foreach (var comboModifier in Instance.modifierPrototypes.Values)
+            foreach (var comboModifier in Instance.prototypes.Values)
             {
                 //If comboMod can't stack or refresh, and we have it in the collection, skip it before we check for it.
                 if (comboModifier.ModifierProperties == ModifierProperties.None && modifiers.ContainsKey(comboModifier.Id))
