@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     public abstract class DurationModifier<TDurationDataType> : Modifier<TDurationDataType> where TDurationDataType : DurationModifierData

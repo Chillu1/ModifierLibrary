@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using ComboSystem.Utils;
+using BaseProject;
+using BaseProject.Utils;
 using UnityEngine.Assertions;
 
 namespace ComboSystem
 {
     public sealed class ComboModifierPrototypes : ModifierPrototypesBase<ComboModifier>
     {
+        public static ComboModifierPrototypes Instance;
+        
         public ComboModifierPrototypes()
         {
+            Instance = this;
             SetupModifierPrototypes();
         }
 
@@ -34,13 +38,13 @@ namespace ComboSystem
         /// <summary>
         ///     Checks for all possible recipes in collection, and return them back
         /// </summary>
-        public List<ComboModifier> CheckForRecipes(Dictionary<string, Modifier> modifiers)
+        public static List<ComboModifier> CheckForRecipes(Dictionary<string, Modifier> modifiers)
         {
             var comboModifiersToAdd = new List<ComboModifier>();
 
-            Assert.IsTrue(modifierPrototypes.Count > 0, "0 combo modifiers in collection");
+            Assert.IsTrue(Instance.modifierPrototypes.Count > 0, "0 combo modifiers in collection");
             //Iterate through all combos, check if any match
-            foreach (var comboModifier in modifierPrototypes.Values)
+            foreach (var comboModifier in Instance.modifierPrototypes.Values)
             {
                 //If comboMod can't stack or refresh, and we have it in the collection, skip it before we check for it.
                 if (comboModifier.ModifierProperties == ModifierProperties.None && modifiers.ContainsKey(comboModifier.Id))
@@ -50,15 +54,15 @@ namespace ComboSystem
                 }
 
                 //First check for ID's
-                if (CheckForIds(comboModifier, modifiers)) //Try to add a combo modifier if controller has all modifiers needed
+                if (Instance.CheckForIds(comboModifier, modifiers)) //Try to add a combo modifier if controller has all modifiers needed
                 {
-                    HandleComboModifierFound(comboModifier, modifiers, comboModifiersToAdd);
+                    Instance.HandleComboModifierFound(comboModifier, modifiers, comboModifiersToAdd);
                 }
 
                 //Check for damageTypes+elementalTypes
-                if (CheckForDamageTypes(comboModifier, modifiers))
+                if (Instance.CheckForDamageTypes(comboModifier, modifiers))
                 {
-                    HandleComboModifierFound(comboModifier, modifiers, comboModifiersToAdd);
+                    Instance.HandleComboModifierFound(comboModifier, modifiers, comboModifiersToAdd);
                 }
 
                 //Check for Etc

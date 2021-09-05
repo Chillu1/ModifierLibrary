@@ -1,4 +1,5 @@
-using ComboSystem.Utils;
+using BaseProject;
+using BaseProject.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,7 +7,7 @@ namespace ComboSystem
 {
     public class GameController : Singleton<GameController>
     {
-        private Player player;//TEMP
+        private Character player;//TEMP
 
         /// <summary>
         /// Actual game speed (dev/testing purposes)
@@ -28,7 +29,7 @@ namespace ComboSystem
             ModifierPrototypes = new ModifierPrototypes();
             ComboModifierPrototypes = new ComboModifierPrototypes();
 
-            player = new Player(ComboModifierPrototypes.CheckForRecipes);
+            player = new Character("Player", 5, 50);
             //Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
             //player.AddModifier(mod1);
             //Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
@@ -44,7 +45,7 @@ namespace ComboSystem
             player.AddModifier(fireDamage);
             player.AddModifier(coldDamage);
 
-            Slime slime = new Slime(ComboModifierPrototypes.CheckForRecipes);
+            Character slime = new Character("Slime", 3, 20);
             //var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");
             //slime.AddModifier(slimePoisonBuff, AddModifierParameters.NullStartTarget);
             //slimePoisonBuff.ApplyModifierToTarget(player);

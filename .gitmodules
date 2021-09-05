@@ -1,0 +1,3 @@
+[submodule "BaseProject"]
+	path = BaseProject
+	url = git@github.com:Chillu1/BaseProject.git

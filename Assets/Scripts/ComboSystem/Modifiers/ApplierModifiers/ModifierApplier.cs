@@ -14,7 +14,7 @@ namespace ComboSystem
             Target!.AddModifier(Data.Modifier);
         }
 
-        public void ApplyModifierToTarget(Character target)
+        public void ApplyModifierToTarget(Being target)
         {
             SetTarget(target);
             Apply();

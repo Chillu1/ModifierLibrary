@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     public sealed class ModifierPrototypes : ModifierPrototypesBase<Modifier>

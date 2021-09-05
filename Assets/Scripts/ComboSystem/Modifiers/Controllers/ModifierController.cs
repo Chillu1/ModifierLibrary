@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ComboSystem.Utils;
+using BaseProject;
+using BaseProject.Utils;
 
 namespace ComboSystem
 {
     public class ModifierController
     {
-        private readonly Character _ownerTarget;
+        private readonly Being _ownerTarget;
         private Dictionary<string, Modifier> Modifiers { get; }
-        private readonly Func<Dictionary<string, Modifier>, List<ComboModifier>> _checkForRecipes;
 
-        public ModifierController(Character ownerTarget, Func<Dictionary<string, Modifier>, List<ComboModifier>> checkForRecipes)
+        public ModifierController(Being ownerTarget)
         {
             Modifiers = new Dictionary<string, Modifier>();
             _ownerTarget = ownerTarget;
-            _checkForRecipes = checkForRecipes;
         }
 
         public void Update(float deltaTime)
@@ -53,7 +52,7 @@ namespace ComboSystem
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
-                var comboModifierToAdd = _checkForRecipes.Invoke(Modifiers);
+                var comboModifierToAdd = ComboModifierPrototypes.CheckForRecipes(Modifiers);
                 if (comboModifierToAdd.Count > 0)
                     AddComboModifier(comboModifierToAdd);
                 //Log.Verbose(comboModifierToAdd.Count);
@@ -67,7 +66,7 @@ namespace ComboSystem
                 TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
             }
             //Check for recipes after adding all modifiers
-            var comboModifierToAdd = _checkForRecipes.Invoke(Modifiers);
+            var comboModifierToAdd = ComboModifierPrototypes.CheckForRecipes(Modifiers);
             if(comboModifierToAdd.Count > 0)
                 AddComboModifier(comboModifierToAdd);
         }
@@ -136,6 +135,11 @@ namespace ComboSystem
         {
             modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);
             modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed");
+        }
+
+        public override string ToString()
+        {
+            return "Modifiers: ";//TODO List all modifiers
         }
     }
 }

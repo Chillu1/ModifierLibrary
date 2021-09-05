@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     public class StatChangeDurationModifierData : DurationModifierData

@@ -1,5 +1,6 @@
 using System;
-using ComboSystem.Utils;
+using BaseProject;
+using BaseProject.Utils;
 using JetBrains.Annotations;
 
 namespace ComboSystem
@@ -38,7 +39,7 @@ namespace ComboSystem
         public event Action<Modifier> Removed;
         public string Id { get; protected set; }
         public ModifierProperties ModifierProperties { get; protected set; }
-        [CanBeNull] public Character Target { get; protected set; }
+        [CanBeNull] public Being Target { get; protected set; }
 
         protected Func<Modifier, bool> Condition { get; set; } = arg => true;
 
@@ -50,6 +51,8 @@ namespace ComboSystem
 
         public void AddCondition(Func<Modifier, bool> condition)//TODO Test & mby think of another way
         {
+            if (condition == null)
+                return;
             if (Condition == condition)
                 return;
 
@@ -106,6 +109,9 @@ namespace ComboSystem
 
         protected virtual bool ConditionIsMet()
         {
+            if (Condition == null)
+                return true;
+
             return Condition(this);
         }
 
@@ -143,7 +149,7 @@ namespace ComboSystem
             return (Modifier)MemberwiseClone();
         }
 
-        public bool SetTarget(Character target)
+        public bool SetTarget(Being target)
         {
             if (!target.IsValidTarget(this))
                 return false;

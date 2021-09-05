@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     public class AoeDamageModifier : SingleUseModifier<IDamageData>
@@ -8,7 +10,7 @@ namespace ComboSystem
 
         protected override void Effect()
         {
-            Target!.DealDamage(Data.DamageData);
+            Target!.DealDamage(Data);
             //TODO Deal the same damage around the target
         }
     }
