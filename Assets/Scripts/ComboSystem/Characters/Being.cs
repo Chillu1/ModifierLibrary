@@ -7,7 +7,7 @@ namespace ComboSystem
     {
         public ModifierController ModifierController { get; }
 
-        protected Being(string id, float damage, float maxHealth) : base(id, damage, maxHealth)
+        protected Being(string id, float maxHealth, float damage) : base(id, maxHealth, damage)
         {
             ModifierController = new ModifierController(this);
         }
