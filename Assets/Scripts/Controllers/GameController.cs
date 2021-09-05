@@ -36,6 +36,10 @@ namespace ComboSystem
             //player.ModifierController.ListModifiers();
 
             Modifier fireDamage = ModifierPrototypes.GetModifier("FireDamage");
+            fireDamage.AddCondition(delegate(Modifier modifier)
+            {
+                return modifier.Target?.StatusEffects.HasFlag(StatusEffect.Stunned) == true;//TODO Test
+            });
             Modifier coldDamage = ModifierPrototypes.GetModifier("ColdDamage");
             player.AddModifier(fireDamage);
             player.AddModifier(coldDamage);

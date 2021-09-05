@@ -5,13 +5,15 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-        //Combo buffs:
-            //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
-            //X specific buffs together
+    //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
+    //Combo buffs:
+        //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
+        //X specific buffs together
     //What kind of stackable behaviours do we want?:
     //  Stacks increases value/power
     //  Stacks increase speed/interval of DoT/effect,
     //A stackable DoT modifier
+    //"Vaal" skill, aka getting X amount of kills to activate an effect
     //Stats
     //Damage
     //Resistances
@@ -38,10 +40,27 @@ namespace ComboSystem
         public ModifierProperties ModifierProperties { get; protected set; }
         [CanBeNull] public Character Target { get; protected set; }
 
+        protected Func<Modifier, bool> Condition { get; set; } = arg => true;
+
         protected Modifier(string id, ModifierProperties modifierProperties = default)
         {
             Id = id;
             ModifierProperties = modifierProperties;
+        }
+
+        public void AddCondition(Func<Modifier, bool> condition)//TODO Test & mby think of another way
+        {
+            if (Condition == condition)
+                return;
+
+            var trueDelegate = new Func<Modifier, bool>(delegate { return true; });
+            if (condition == trueDelegate)
+            {
+                Log.Error("Tried to set a true delegate");
+                return;
+            }
+
+            Condition = condition;
         }
 
         // protected Modifier(Modifier other)
@@ -66,6 +85,9 @@ namespace ComboSystem
             if (!ApplyIsValid())
                 return false;
 
+            if (!ConditionIsMet())
+                return false;
+
             Effect();
 
             return true;
@@ -80,6 +102,11 @@ namespace ComboSystem
             }
 
             return true;
+        }
+
+        protected virtual bool ConditionIsMet()
+        {
+            return Condition(this);
         }
 
         /// <summary>

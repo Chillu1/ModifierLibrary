@@ -12,6 +12,7 @@ namespace ComboSystem
         public float MaxHealth { get; protected set; }
         public float MovementSpeed { get; protected set; }
         public ModifierController ModifierController { get; }
+        public StatusEffect StatusEffects { get; }
 
         protected Character(Func<Dictionary<string, Modifier>, List<ComboModifier>> checkForRecipes)
         {

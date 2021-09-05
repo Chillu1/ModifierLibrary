@@ -32,6 +32,16 @@ namespace ComboSystem
     }
 
     [Flags]
+    public enum StatusEffect
+    {
+        None = 0,
+        Stunned = 1,
+        Slowed = 2,
+        Feared = 4,
+        Frozen = 8,
+    }
+
+    [Flags]
     public enum ModifierProperties
     {
         None = 0,
