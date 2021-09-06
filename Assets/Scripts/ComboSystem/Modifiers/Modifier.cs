@@ -59,7 +59,7 @@ namespace ComboSystem
             var trueDelegate = new Func<Modifier, bool>(delegate { return true; });
             if (condition == trueDelegate)
             {
-                Log.Error("Tried to set a true delegate");
+                Log.Error("Tried to set a true delegate", "modifiers");
                 return;
             }
 
@@ -100,7 +100,7 @@ namespace ComboSystem
         {
             if (Target == null)
             {
-                Log.Error("We tried to apply modifier without a target");
+                Log.Error("We tried to apply modifier without a target", "modifiers");
                 return false;
             }
 
@@ -127,12 +127,12 @@ namespace ComboSystem
 
         public virtual void Stack()
         {
-            Log.Verbose("Stacked: " + this);
+            Log.Verbose("Stacked: " + this, "modifiers");
         }
 
         public virtual void Refresh()
         {
-            Log.Verbose("Refreshed: " + this);
+            Log.Verbose("Refreshed: " + this, "modifiers");
         }
 
         public virtual void Update(float deltaTime)
@@ -156,7 +156,7 @@ namespace ComboSystem
 
             if (Target != null)
             {
-                Log.Error("Target isn't null");
+                Log.Error("Target isn't null", "modifiers");
                 return false;
             }
 

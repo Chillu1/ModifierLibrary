@@ -5,11 +5,12 @@ namespace ComboSystem
     /// </summary>
     public abstract class Being : BaseProject.Being
     {
-        public ModifierController ModifierController { get; }
+        protected ModifierController ModifierController { get; }
 
-        protected Being(string id, float maxHealth, float damage) : base(id, maxHealth, damage)
+        protected Being(ComboBeingProperties properties) : base(properties)
         {
             ModifierController = new ModifierController(this);
+            AddModifier(properties.ModifierHolder);
         }
 
         public override void Attack(BaseProject.Being target)
@@ -21,10 +22,21 @@ namespace ComboSystem
         public virtual void ApplyModifiers(Being target)
         {
             var modifierAppliers = ModifierController.GetModifierAppliers();
+            ModifierController.ListModifiers(modifierAppliers);
             foreach (var modifierApplier in modifierAppliers)
                 modifierApplier.ApplyModifierToTarget(target);
         }
-        public virtual void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
+
+        public void AddModifier(ModifierHolder modifierHolder)
+        {
+            if (modifierHolder == null)
+                return;
+
+            foreach (var modifierParams in modifierHolder.modifiers)
+                AddModifier(modifierParams.modifier, modifierParams.addModifierProperties);
+        }
+
+        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
             ModifierController.TryAddModifier(modifier, parameters);
         }

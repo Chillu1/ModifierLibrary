@@ -12,7 +12,7 @@ namespace ComboSystem
         {
             if (prototypes.ContainsKey(modifier.Id))
             {
-                Log.Error("A modifier with id: "+modifier.Id+" already exists");
+                Log.Error("A modifier with id: "+modifier.Id+" already exists", "modifiers");
                 return;
             }
             prototypes.Add(modifier.Id, modifier);

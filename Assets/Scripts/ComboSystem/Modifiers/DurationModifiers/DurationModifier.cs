@@ -27,7 +27,7 @@ namespace ComboSystem
             if (ModifierProperties.HasFlag(ModifierProperties.Refreshable))//Not ideal hardcoding, if we want a duration modifier that doesn't refresh the timer but something else?
             {
                 timer = 0f;
-                Log.Info("Refreshed timer");
+                Log.Info("Refreshed timer", "modifiers");
             }
 
             base.Refresh();

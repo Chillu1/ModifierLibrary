@@ -49,7 +49,7 @@ namespace ComboSystem
                 //If comboMod can't stack or refresh, and we have it in the collection, skip it before we check for it.
                 if (comboModifier.ModifierProperties == ModifierProperties.None && modifiers.ContainsKey(comboModifier.Id))
                 {
-                    Log.Info("Skipped combo modifier with Id (in collection): " + comboModifier.Id);
+                    Log.Info("Skipped combo modifier with Id (in collection): " + comboModifier.Id, "modifiers");
                     continue;
                 }
 
@@ -107,7 +107,7 @@ namespace ComboSystem
                 //Check each modifier in controller for damageTypes
                 foreach (var pair in modifiers)
                 {
-                    var value = pair.Value as Modifier<IDamageData>;
+                    var value = pair.Value as Modifier<Damages>;
                     if(value == null)//If it's not a damageData modifier, bail (for now)
                         continue;
                     //Log.Info(value.Data.DamageData[0].DamageType+"_"+neededDamageType);
@@ -134,12 +134,12 @@ namespace ComboSystem
         {
             if (!CheckForComboModifier(comboModifier, modifiers))//Dont add a comboMod if its already added
             {
-                Log.Info("Added combo modifier: " + comboModifier.Id);
+                Log.Info("Added combo modifier: " + comboModifier.Id, "modifiers");
                 comboModifiersToAdd.Add(comboModifier);
             }
             else
             {
-                Log.Info("Already has a combo modifier with Id: " + comboModifier.Id +". Skipping.");
+                Log.Info("Already has a combo modifier with Id: " + comboModifier.Id +". Skipping.", "modifiers");
             }
         }
 

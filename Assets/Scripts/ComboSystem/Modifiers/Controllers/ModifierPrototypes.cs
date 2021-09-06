@@ -11,12 +11,12 @@ namespace ComboSystem
 
         protected override void SetupModifierPrototypes()
         {
-            DamageOverTimeData slimePoisonData =
-                new DamageOverTimeData(new[] { new DamageData() { Damage = 5, DamageType = DamageType.Poison } }, 1f, 5f);
-            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SlimePoison", slimePoisonData, ModifierProperties.Stackable);
+            DamageOverTimeData slimePoisonData = new DamageOverTimeData(new Damages(5, DamageType.Poison), 1f, 5f);
+
+            DamageOverTimeModifier slimePoisonModifier = new DamageOverTimeModifier("SpiderPoison", slimePoisonData, ModifierProperties.Stackable);
             SetupModifier(slimePoisonModifier);
 
-            var fireAttackDoTData = new DamageOverTimeData(new[] { new DamageData() { Damage = 2, DamageType = DamageType.Fire } }, 1f, 5f);
+            var fireAttackDoTData = new DamageOverTimeData(new Damages(2, DamageType.Fire), 1f, 5f);
             var fireAttackDoT = new DamageOverTimeModifier("FireDoTAttack", fireAttackDoTData, ModifierProperties.Refreshable);
             SetupModifier(fireAttackDoT);
 
@@ -25,7 +25,7 @@ namespace ComboSystem
             SetupModifier(speedBuffDurationPlayer);
 
             var poisonModifierBuffData = new ModifierApplierData(slimePoisonModifier);
-            var poisonModifierBuff = new ModifierApplier<ModifierApplierData>("SlimePoisonBuff", poisonModifierBuffData);
+            var poisonModifierBuff = new ModifierApplier<ModifierApplierData>("SpiderPoisonBuff", poisonModifierBuffData);
             SetupModifier(poisonModifierBuff);
 
             var speedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);

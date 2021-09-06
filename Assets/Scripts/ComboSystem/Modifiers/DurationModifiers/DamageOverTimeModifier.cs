@@ -8,7 +8,7 @@ namespace ComboSystem
 
         protected override void Effect()
         {
-            Target!.DealDamage(Data);
+            Target!.DealDamage(Data.DamageData);
         }
 
         public override void Stack()

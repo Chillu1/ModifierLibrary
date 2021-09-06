@@ -32,7 +32,7 @@ namespace ComboSystem
 
             if (HasModifier(modifier, out Modifier internalModifier))
             {
-                Log.Verbose("HasModifier " + modifier.Id);
+                Log.Verbose("HasModifier " + modifier.Id, "modifiers");
                 switch (modifier.ModifierProperties)
                 {
                     case ModifierProperties.None:
@@ -76,7 +76,7 @@ namespace ComboSystem
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
-            //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.Target?.Name);
+            Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.Target?.Id, "modifiers");
         }
 
         public bool RemoveModifier(Modifier modifier)
@@ -104,7 +104,11 @@ namespace ComboSystem
 
         public void ListModifiers()
         {
-            Log.Info(string.Join(". ", Modifiers.Values) + ". Modifiers count: " + Modifiers.Count, true);
+            ListModifiers(Modifiers.Values);
+        }
+        public void ListModifiers(IEnumerable<Modifier> modifiers)
+        {
+            Log.Info(string.Join(". ", modifiers) + ". Modifiers count: " + Modifiers.Count, "modifiers", true);
         }
 
         private void CheckTarget(Modifier modifier, AddModifierParameters parameters)
@@ -117,7 +121,7 @@ namespace ComboSystem
                 }
                 else if (modifier.Target != _ownerTarget)
                 {
-                    Log.Error("Owner should be the target, but isn't. Target is: " + modifier.Target +". Reverting to owner");
+                    Log.Error("Owner should be the target, but isn't. Target is: " + modifier.Target +". Reverting to owner", "modifiers");
                     modifier.SetTarget(_ownerTarget);
                 }
             }
@@ -126,7 +130,7 @@ namespace ComboSystem
                 //Modifier appliers dont need a target at ctor. Extra check, for good measure
                 if (modifier.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
                 {
-                    Log.Error("Owner isn't the target, and target is null");
+                    Log.Error("Owner isn't the target, and target is null", "modifiers");
                 }
             }
         }
@@ -134,7 +138,7 @@ namespace ComboSystem
         private void RegisterModifier(Modifier modifier)
         {
             modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);
-            modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed");
+            modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed", "modifiers");
         }
 
         public override string ToString()
