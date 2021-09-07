@@ -6,6 +6,8 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
+    //Resurrection
+    //Maybe we shouldnt setup base modifiers (that are being used by modifier appliers), so they don't get used in the wrong way?
     //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
     //Combo buffs:
         //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
@@ -18,6 +20,9 @@ namespace ComboSystem
     //Stats
     //Damage
     //Resistances
+
+    //Important Info:
+    //Every modifier that doesn't go directly on it's owner, should go through the "ModifierApplier", to get the correct target
 
     //Types of modifiers:
     //  Base mods: Duration, EffectEveryX, Applier,
@@ -154,9 +159,12 @@ namespace ComboSystem
             if (!target.IsValidTarget(this))
                 return false;
 
+            if (Target == target)
+                return true;
+
             if (Target != null)
             {
-                Log.Error("Target isn't null", "modifiers");
+                Log.Error($"Info:{this}. Target {Target.Id} isn't null, tried to set to {target.Id}", "modifiers");
                 return false;
             }
 

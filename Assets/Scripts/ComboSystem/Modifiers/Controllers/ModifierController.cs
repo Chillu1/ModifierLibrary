@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
+using JetBrains.Annotations;
 
 namespace ComboSystem
 {
@@ -90,25 +91,31 @@ namespace ComboSystem
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
         }
 
+        /// <summary>
+        ///     Used for refreshing, stacking ,etc
+        /// </summary>
         public bool HasModifier(Modifier modifier, out Modifier internalModifier)
         {
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
         }
 
+        [CanBeNull]
         public IEnumerable<ModifierApplier<ModifierApplierData>> GetModifierAppliers()
         {
-            return (IEnumerable<ModifierApplier<ModifierApplierData>>)Modifiers.Values.Where(mod =>
-                mod.GetType().IsSameOrSubclass(typeof(ModifierApplier<ModifierApplierData>)));
+            //Log.Verbose(_ownerTarget?.Id, "modifiers");
+            return Modifiers.Values.Where(mod => mod.GetType().IsSameOrSubclass(typeof(ModifierApplier<ModifierApplierData>)))
+                .Cast<ModifierApplier<ModifierApplierData>>();
         }
 
         public void ListModifiers()
         {
             ListModifiers(Modifiers.Values);
         }
-        public void ListModifiers(IEnumerable<Modifier> modifiers)
+        public void ListModifiers([CanBeNull] IEnumerable<Modifier> modifiers)
         {
-            Log.Info(string.Join(". ", modifiers) + ". Modifiers count: " + Modifiers.Count, "modifiers", true);
+            if (modifiers != null)
+                Log.Info(string.Join(". ", modifiers) + ". Modifiers count: " + Modifiers.Count, "modifiers", true);
         }
 
         private void CheckTarget(Modifier modifier, AddModifierParameters parameters)

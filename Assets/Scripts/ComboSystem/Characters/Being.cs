@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     /// <summary>
@@ -22,7 +24,12 @@ namespace ComboSystem
         public virtual void ApplyModifiers(Being target)
         {
             var modifierAppliers = ModifierController.GetModifierAppliers();
-            ModifierController.ListModifiers(modifierAppliers);
+            if (modifierAppliers == null)
+            {
+                Log.Verbose(Id+" has no applier modifiers", "modifiers");
+                return;
+            }
+
             foreach (var modifierApplier in modifierAppliers)
                 modifierApplier.ApplyModifierToTarget(target);
         }
@@ -30,15 +37,24 @@ namespace ComboSystem
         public void AddModifier(ModifierHolder modifierHolder)
         {
             if (modifierHolder == null)
+            {
+                Log.Verbose("ModifierHolder is null on: "+ Id, "modifiers");
                 return;
+            }
 
             foreach (var modifierParams in modifierHolder.modifiers)
                 AddModifier(modifierParams.modifier, modifierParams.addModifierProperties);
+            //ModifierController.ListModifiers();
         }
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
             ModifierController.TryAddModifier(modifier, parameters);
+        }
+
+        public void ListModifiers()
+        {
+            ModifierController.ListModifiers();
         }
 
         public virtual bool IsValidTarget(Modifier modifier)

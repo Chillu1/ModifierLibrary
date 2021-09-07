@@ -1,7 +1,7 @@
 namespace ComboSystem
 {
     /// <summary>
-    ///     Applies & removes on same frame, one time use
+    ///     Applies & gets removed after linger time, one time use
     /// </summary>
     /// <typeparam name="TDataType"></typeparam>
     public abstract class SingleUseModifier<TDataType> : InitUseModifier<TDataType>

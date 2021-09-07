@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     /// <summary>
@@ -17,6 +19,7 @@ namespace ComboSystem
         public void ApplyModifierToTarget(Being target)
         {
             SetTarget(target);
+            Log.Verbose("Applying "+Data.Modifier);
             Apply();
         }
     }
