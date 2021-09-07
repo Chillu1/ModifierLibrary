@@ -45,9 +45,9 @@ namespace ComboSystem
             //player.AddModifier(fireDamage);
             //player.AddModifier(coldDamage);
 
-            //Character slime = new Character("Slime", 3, 20);
-            //var slimePoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetModifier<ModifierApplierData>("SlimePoisonBuff");
-            //slime.AddModifier(slimePoisonBuff, AddModifierParameters.NullStartTarget);
+            Character spider = new Character(new ComboBeingProperties() { Id = "Spider", Health = 20, Damage = 3 });
+            var spiderPoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetItem<ModifierApplierData>("SpiderPoisonBuff");
+            spider.AddModifierApplier(spiderPoisonBuff);
             //slimePoisonBuff.ApplyModifierToTarget(player);
         }
 

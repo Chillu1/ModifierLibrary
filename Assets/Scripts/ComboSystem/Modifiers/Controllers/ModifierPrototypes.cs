@@ -49,6 +49,8 @@ namespace ComboSystem
             var coldAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Cold });
             var coldAttack = new DamageAttackModifier("ColdDamage", coldAttackData);
             SetupModifierApplier(coldAttack);
+
+            //var resurrectionData =
         }
 
         private void SetupModifierApplier(Modifier modifier)

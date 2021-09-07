@@ -7,7 +7,7 @@ namespace ComboSystem
 {
     //TODO list:
     //Resurrection
-    //Maybe we shouldnt setup base modifiers (that are being used by modifier appliers), so they don't get used in the wrong way?
+        //Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
     //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
     //Combo buffs:
         //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)

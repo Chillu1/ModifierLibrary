@@ -52,6 +52,11 @@ namespace ComboSystem
             ModifierController.TryAddModifier(modifier, parameters);
         }
 
+        public void AddModifierApplier(ModifierApplier<ModifierApplierData> modifier, AddModifierParameters parameters = AddModifierParameters.DefaultOffensive)
+        {
+            ModifierController.TryAddModifier(modifier, parameters);
+        }
+
         public void ListModifiers()
         {
             ModifierController.ListModifiers();
