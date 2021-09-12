@@ -29,7 +29,7 @@ namespace ComboSystem
             ModifierPrototypes = new ModifierPrototypes();
             ComboModifierPrototypes = new ComboModifierPrototypes();
 
-            //player = new Character("Player", 5, 50);
+            player = new Character(new ComboBeingProperties() { Id = "player", Health = 50, Damage = 5, MovementSpeed = 3});
             //Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
             //player.AddModifier(mod1);
             //Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
@@ -45,10 +45,21 @@ namespace ComboSystem
             //player.AddModifier(fireDamage);
             //player.AddModifier(coldDamage);
 
-            Character spider = new Character(new ComboBeingProperties() { Id = "Spider", Health = 20, Damage = 3 });
-            var spiderPoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetItem<ModifierApplierData>("SpiderPoisonBuff");
-            spider.AddModifierApplier(spiderPoisonBuff);
+            player.AddModifier(ModifierPrototypes.GetItem("PlayerMovementSpeedDurationOnKillBuff"), AddModifierParameters.Default, ActivationCondition.Kill);
+
+            Character spider = new Character(new ComboBeingProperties() { Id = "Spider", Health = 20, Damage = 3, MovementSpeed = 2});
+            //var spiderPoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetItem<ModifierApplierData>("SpiderPoisonBuff");
+            //spider.AddModifierApplier(spiderPoisonBuff);
             //slimePoisonBuff.ApplyModifierToTarget(player);
+            player.Attack(spider);
+            player.Attack(spider);
+            Log.Info(player.MovementSpeed.Value);
+            Log.Info(spider.Health.ToString());
+            player.Attack(spider);
+            player.Attack(spider);
+            player.Attack(spider);
+            Log.Info(player.MovementSpeed.Value);
+            Log.Info(spider.Health.ToString());
         }
 
         public void GameplaySceneStarted()//Move to scene controller?

@@ -540,15 +540,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1844714926}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfe260cf68410d861aaad75a111569ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 7160d5fa305fbf77a9bdf28e524ac090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Persistent: 0
   MaxHeight: 0.7
   SmallTerminalRatio: 0.33
   ToggleSpeed: 360
-  ToggleHotkey: f1
-  ToggleFullHotkey: f2
+  ToggleHotkey: '`'
+  ToggleFullHotkey: '#`'
   BufferSize: 512
   ConsoleFont: {fileID: 0}
   InputCaret: '>'

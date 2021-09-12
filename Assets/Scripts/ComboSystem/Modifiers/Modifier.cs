@@ -6,8 +6,12 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Resurrection
-        //Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
+    //Move OnDeath event to BaseProject?
+    //Death, Kill, Cast, events (to subscribe to) (X uses & cooldown functionality)
+        //On kill get 10 more damage for 10 seconds
+        //Negative effects on events on enemies?
+        //(Resurrection) Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
+    //Unit tests
     //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
     //Combo buffs:
         //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
@@ -19,7 +23,7 @@ namespace ComboSystem
     //"Vaal" skill, aka getting X amount of kills to activate an effect
     //Stats
     //Damage
-    //Resistances
+    //Resistances (take a look at Resistance.cs from Surv Terra, but for the love of god, don't copy that code, it's prob not that well thought out)
 
     //Important Info:
     //Every modifier that doesn't go directly on it's owner, should go through the "ModifierApplier", to get the correct target
@@ -54,7 +58,7 @@ namespace ComboSystem
             ModifierProperties = modifierProperties;
         }
 
-        public void AddCondition(Func<Modifier, bool> condition)//TODO Test & mby think of another way
+        public void AddCondition(Func<Modifier, bool> condition)//TODO Test & mby think of another way, maybe another enum? OnStunned, OnFrozen, etc
         {
             if (condition == null)
                 return;
@@ -69,6 +73,21 @@ namespace ComboSystem
             }
 
             Condition = condition;
+        }
+
+        public void SetActivationCondition(ActivationCondition condition)
+        {
+            if (condition == ActivationCondition.None)
+                return;
+
+            if (condition.HasFlag(ActivationCondition.Attack))
+                Target.AttackEvent += delegate { Apply(); };
+            if (condition.HasFlag(ActivationCondition.Kill))
+                Target.KillEvent += delegate { Apply(); };
+            if (condition.HasFlag(ActivationCondition.Cast))
+                Target.CastEvent += delegate { Apply(); };
+            if (condition.HasFlag(ActivationCondition.Death))
+                Target.DeathEvent += delegate { Apply(); };
         }
 
         // protected Modifier(Modifier other)

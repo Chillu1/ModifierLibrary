@@ -3,14 +3,14 @@ using System;
 namespace ComboSystem
 {
     [Flags]
-    public enum ModifierProperties
+    public enum ModifierProperties : byte
     {
         None = 0,
         Stackable = 1,
         Refreshable = 2,
     }
 
-    public enum EffectType
+    public enum EffectType//TODO Redundant?
     {
         None = 0,
         /// <summary>
@@ -21,7 +21,7 @@ namespace ComboSystem
     }
 
     [Flags]
-    public enum AddModifierParameters
+    public enum AddModifierParameters : byte
     {
         None = 0,
         OwnerIsTarget = 1,
@@ -38,7 +38,17 @@ namespace ComboSystem
         Default = OwnerIsTarget | CheckRecipes
     }
 
-    public enum Targets//Not needed?
+    [Flags]
+    public enum ActivationCondition
+    {
+        None = 0,
+        Attack = 1,
+        Kill = 2,
+        Cast = 4,
+        Death = 8
+    }
+
+    public enum Targets : byte//Not needed?
     {
         None = 0,
         Owner = 1,

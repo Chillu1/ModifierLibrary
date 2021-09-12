@@ -23,6 +23,10 @@ namespace ComboSystem
             var speedBuffDurationPlayer = new StatChangeDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
             SetupModifier(speedBuffDurationPlayer);
 
+            var speedBuffDurationOnKillPlayerData = new StatChangeDurationModifierData(StatType.MovementSpeed, 2f, 5f);
+            var speedBuffDurationOnKillPlayer = new StatChangeDurationModifier("PlayerMovementSpeedDurationOnKillBuff", speedBuffDurationOnKillPlayerData, ModifierProperties.Refreshable);
+            SetupModifier(speedBuffDurationOnKillPlayer);
+
             var speedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
             var speedBuff = new StatChangeModifier("MovementSpeedBuff", speedBuffData);
             SetupModifier(speedBuff);

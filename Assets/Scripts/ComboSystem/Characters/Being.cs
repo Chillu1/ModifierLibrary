@@ -1,3 +1,4 @@
+using System;
 using BaseProject;
 
 namespace ComboSystem
@@ -7,6 +8,15 @@ namespace ComboSystem
     /// </summary>
     public abstract class Being : BaseProject.Being
     {
+        //Owner, target
+        public event Action<Being, Being> AttackEvent;
+        public event Action<Being, Being> KillEvent;
+        public event Action<Being, Being> CastEvent;
+        public event Action<Being> DeathEvent;
+        /// <summary>
+        ///     On getting a combo
+        /// </summary>
+        public event Action<Being> ComboEvent;
         protected ModifierController ModifierController { get; }
 
         protected Being(ComboBeingProperties properties) : base(properties)
@@ -19,6 +29,14 @@ namespace ComboSystem
         {
             ApplyModifiers((Being)target);
             base.Attack(target);
+            AttackEvent?.Invoke(this, (Being)target);
+            if(target.IsDead)
+                KillEvent?.Invoke(this, (Being)target);
+        }
+
+        protected override void OnDeath()
+        {
+            DeathEvent?.Invoke(this);
         }
 
         public virtual void ApplyModifiers(Being target)
@@ -47,14 +65,15 @@ namespace ComboSystem
             //ModifierController.ListModifiers();
         }
 
-        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
+        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, ActivationCondition condition = default)
         {
-            ModifierController.TryAddModifier(modifier, parameters);
+            ModifierController.TryAddModifier(modifier, parameters, condition);
         }
 
-        public void AddModifierApplier(ModifierApplier<ModifierApplierData> modifier, AddModifierParameters parameters = AddModifierParameters.DefaultOffensive)
+        public void AddModifierApplier(ModifierApplier<ModifierApplierData> modifier,
+            AddModifierParameters parameters = AddModifierParameters.DefaultOffensive, ActivationCondition condition = default)
         {
-            ModifierController.TryAddModifier(modifier, parameters);
+            ModifierController.TryAddModifier(modifier, parameters, condition);
         }
 
         public void ListModifiers()

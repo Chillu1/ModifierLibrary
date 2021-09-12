@@ -27,7 +27,8 @@ namespace ComboSystem
             }
         }
 
-        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
+        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default,
+            ActivationCondition condition = default)
         {
             CheckTarget(modifier, parameters);
 
@@ -49,7 +50,7 @@ namespace ComboSystem
                 }
             }
             else
-                AddModifier(modifier);
+                AddModifier(modifier, condition);
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
@@ -72,11 +73,12 @@ namespace ComboSystem
                 AddComboModifier(comboModifierToAdd);
         }
 
-        private void AddModifier(Modifier modifier)
+        private void AddModifier(Modifier modifier, ActivationCondition condition = default)
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
+            modifier.SetActivationCondition(condition);
             Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.Target?.Id, "modifiers");
         }
 

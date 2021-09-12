@@ -2,11 +2,11 @@ using System;
 
 namespace ComboSystem
 {
-    //TODO, make one for generic conditions, OnDeath, OnKill, etc
+    //Better to use already defined modifiers, and just change their logic inside there, instead of having this condition thingy?
     public abstract class ConditionalOneTimeUseModifier<TDataType> : Modifier<TDataType>
     {
-        public ConditionalOneTimeUseModifier(string id, TDataType data, Func<Modifier, bool> condition, ModifierProperties modifierProperties = default)
-            : base(id, data, modifierProperties)
+        public ConditionalOneTimeUseModifier(string id, TDataType data, Func<Modifier, bool> condition,
+            ModifierProperties modifierProperties = default) : base(id, data, modifierProperties)
         {
             Condition = condition;
         }
