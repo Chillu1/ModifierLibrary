@@ -6,14 +6,4 @@ namespace ComboSystem.Tests
         //Modifier applier?
 
     }
-
-    public class ModifierTest
-    {
-        //ModifierApplier
-        //DoT
-        //Stack
-        //Refresh
-        //Combo
-
-    }
 }

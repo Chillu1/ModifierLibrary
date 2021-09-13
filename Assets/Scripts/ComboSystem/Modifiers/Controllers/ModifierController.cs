@@ -32,7 +32,7 @@ namespace ComboSystem
         {
             CheckTarget(modifier, parameters);
 
-            if (HasModifier(modifier, out Modifier internalModifier))
+            if (ContainsModifier(modifier, out Modifier internalModifier))
             {
                 Log.Verbose("HasModifier " + modifier.Id, "modifiers");
                 switch (modifier.ModifierProperties)
@@ -87,7 +87,7 @@ namespace ComboSystem
             return Modifiers.Remove(modifier.Id);
         }
 
-        public bool HasModifier(Modifier modifier)
+        public bool ContainsModifier(Modifier modifier)
         {
             return Modifiers.ContainsKey(modifier.Id);
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
@@ -96,7 +96,7 @@ namespace ComboSystem
         /// <summary>
         ///     Used for refreshing, stacking ,etc
         /// </summary>
-        public bool HasModifier(Modifier modifier, out Modifier internalModifier)
+        public bool ContainsModifier(Modifier modifier, out Modifier internalModifier)
         {
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
@@ -106,7 +106,7 @@ namespace ComboSystem
         public IEnumerable<ModifierApplier<ModifierApplierData>> GetModifierAppliers()
         {
             //Log.Verbose(_ownerTarget?.Id, "modifiers");
-            return Modifiers.Values.Where(mod => mod.GetType().IsSameOrSubclass(typeof(ModifierApplier<ModifierApplierData>)))
+            return Modifiers.Values.Where(mod => typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(mod.GetType()))
                 .Cast<ModifierApplier<ModifierApplierData>>();
         }
 

@@ -1,5 +1,6 @@
 using System;
 using BaseProject;
+using BaseProject.Utils;
 
 namespace ComboSystem
 {
@@ -39,6 +40,9 @@ namespace ComboSystem
             DeathEvent?.Invoke(this);
         }
 
+        /// <summary>
+        ///     Apply modifier appliers to target
+        /// </summary>
         public virtual void ApplyModifiers(Being target)
         {
             var modifierAppliers = ModifierController.GetModifierAppliers();
@@ -67,6 +71,9 @@ namespace ComboSystem
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, ActivationCondition condition = default)
         {
+            if (typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+                Log.Error("Adding ApplierModifier through 'AddModifier' function", "modifiers");
+
             ModifierController.TryAddModifier(modifier, parameters, condition);
         }
 
@@ -74,6 +81,11 @@ namespace ComboSystem
             AddModifierParameters parameters = AddModifierParameters.DefaultOffensive, ActivationCondition condition = default)
         {
             ModifierController.TryAddModifier(modifier, parameters, condition);
+        }
+
+        public bool ContainsModifier(Modifier modifier)
+        {
+            return ModifierController.ContainsModifier(modifier);
         }
 
         public void ListModifiers()

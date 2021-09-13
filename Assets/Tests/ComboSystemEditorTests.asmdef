@@ -1,5 +1,5 @@
 {
-    "name": "ComboSystemTests",
+    "name": "ComboSystemEditorTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
@@ -7,7 +7,9 @@
         "BaseProject",
         "ComboSystem"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

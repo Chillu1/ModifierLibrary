@@ -1,3 +1,4 @@
+using System.Globalization;
 using BaseProject;
 using JetBrains.Annotations;
 
@@ -22,6 +23,25 @@ namespace ComboSystem
         public Modifier<TDataType> GetItem<TDataType>(string modifierName)
         {
             return GetItem(modifierName) as Modifier<TDataType>;
+        }
+        
+        [CanBeNull]
+        public ModifierApplier<ModifierApplierData> GetModifierApplier(string modifierName)
+        {
+            if (!modifierName.EndsWith("Applier", true, CultureInfo.InvariantCulture))
+            {
+                if (modifierName.EndsWith("Buff", true, CultureInfo.InvariantCulture) ||
+                    modifierName.EndsWith("Debuff", true, CultureInfo.InvariantCulture))
+                    Log.Error(
+                        "Getting a modifier applier that either has a wrong name, or that isn't a modifierApplier. Name: " + modifierName +
+                        ". You should probably remove Buff/Debuff, and have 'Applier'", "modifiers");
+                else
+                    Log.Error(
+                        "Getting a modifier applier that either has a wrong name, or that isn't a modifierApplier. Name: " + modifierName +
+                        ". Did you mean: " + modifierName + "Applier", "modifiers");
+            }
+
+            return GetItem<ModifierApplierData>(modifierName) as ModifierApplier<ModifierApplierData>;
         }
     }
 }

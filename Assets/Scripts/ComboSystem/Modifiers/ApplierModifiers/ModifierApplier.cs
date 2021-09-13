@@ -13,7 +13,7 @@ namespace ComboSystem
 
         protected override void Effect()
         {
-            Target!.AddModifier(Data.Modifier);
+            Target!.AddModifier((Modifier)Data.Modifier.Clone());
         }
 
         public void ApplyModifierToTarget(Being target)

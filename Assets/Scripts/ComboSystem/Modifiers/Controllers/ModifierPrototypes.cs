@@ -2,14 +2,14 @@ using BaseProject;
 
 namespace ComboSystem
 {
-    public sealed class ModifierPrototypes : ModifierPrototypesBase<Modifier>
+    public class ModifierPrototypes : ModifierPrototypesBase<Modifier>
     {
         public ModifierPrototypes()
         {
             SetupModifierPrototypes();
         }
 
-        protected override void SetupModifierPrototypes()
+        protected sealed override void SetupModifierPrototypes()
         {
             DamageOverTimeData spiderPoisonData = new DamageOverTimeData(new Damages(5, DamageType.Poison), 1f, 5f);
             DamageOverTimeModifier spiderPoisonModifier = new DamageOverTimeModifier("SpiderPoison", spiderPoisonData, ModifierProperties.Stackable);
@@ -57,10 +57,10 @@ namespace ComboSystem
             //var resurrectionData =
         }
 
-        private void SetupModifierApplier(Modifier modifier)
+        protected void SetupModifierApplier(Modifier modifier)
         {
             var modifierApplierData = new ModifierApplierData(modifier);
-            var modifierApplier = new ModifierApplier<ModifierApplierData>(modifier.Id+"Buff", modifierApplierData);
+            var modifierApplier = new ModifierApplier<ModifierApplierData>(modifier.Id+"Applier", modifierApplierData);
             SetupModifier(modifierApplier);
         }
     }

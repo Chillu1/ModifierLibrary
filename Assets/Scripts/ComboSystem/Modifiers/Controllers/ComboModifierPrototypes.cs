@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace ComboSystem
 {
-    public sealed class ComboModifierPrototypes : ModifierPrototypesBase<ComboModifier>
+    public class ComboModifierPrototypes : ModifierPrototypesBase<ComboModifier>
     {
         public static ComboModifierPrototypes Instance;
         
@@ -17,7 +17,7 @@ namespace ComboSystem
         }
 
 
-        protected override void SetupModifierPrototypes()
+        protected sealed override void SetupModifierPrototypes()
         {
             //ComboModifier aspectOfTheCatModifier = new ComboModifier();
             var aspectOfTheCatData = new StatChangeModifierData(StatType.Attack, 10);

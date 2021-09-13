@@ -80,6 +80,12 @@ namespace ComboSystem
             if (condition == ActivationCondition.None)
                 return;
 
+            if (Target == null)
+            {
+                Log.Error("Tried to set an ActivationCondition " + condition + "  to null target", "modifiers");
+                return;
+            }
+
             if (condition.HasFlag(ActivationCondition.Attack))
                 Target.AttackEvent += delegate { Apply(); };
             if (condition.HasFlag(ActivationCondition.Kill))
