@@ -17,6 +17,7 @@ namespace ComboSystem.Tests
             modifierPrototypes = new ModifierPrototypesTest();
             modifierPrototypes.AddTestModifiers();
             comboModifierPrototypes = new ComboModifierPrototypesTest();
+            comboModifierPrototypes.AddTestModifiers();
         }
 
         [SetUp]
@@ -41,9 +42,19 @@ namespace ComboSystem.Tests
                 var physicalAttackDoT = new DamageOverTimeModifier("PhysicalDoTAttack", physicalAttackDoTData, ModifierProperties.Refreshable);
                 SetupModifierApplier(physicalAttackDoT);
 
-                //var speedBuffDurationPlayerData = new StatChangeDurationModifierData(StatType.MovementSpeed, 2f, 3f);
-                //var speedBuffDurationPlayer = new StatChangeDurationModifier("PlayerMovementSpeedDurationBuff", speedBuffDurationPlayerData, ModifierProperties.Refreshable);
-                //SetupModifier(speedBuffDurationPlayer);
+                var fireAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Fire });
+                var fireAttack = new DamageAttackModifier("TestFireDamage", fireAttackData);
+                SetupModifierApplier(fireAttack);
+                var coldAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Cold });
+                var coldAttack = new DamageAttackModifier("TestColdDamage", coldAttackData);
+                SetupModifierApplier(coldAttack);
+
+                var catMovementSpeedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
+                var catMovementSpeedBuff = new StatChangeModifier("TestMovementSpeedOfCat", catMovementSpeedBuffData);
+                SetupModifier(catMovementSpeedBuff);
+                var catAttackSpeedBuffData = new StatChangeModifierData(StatType.AttackSpeed, 3f);
+                var catAttackSpeedBuff = new StatChangeModifier("TestAttackSpeedOfCat", catAttackSpeedBuffData);
+                SetupModifier(catAttackSpeedBuff);
             }
         }
 
@@ -51,6 +62,19 @@ namespace ComboSystem.Tests
         {
             public void AddTestModifiers()
             {
+                var aspectOfTheCatData = new StatChangeModifierData(StatType.Attack, 10);
+                var aspectOfTheCatRecipe = new ComboRecipe(new ComboRecipeProperties()
+                    { Ids = new[] { "TestMovementSpeedOfCat", "TestAttackSpeedOfCat" } });
+                StatChangeComboModifier aspectOfTheCat =
+                    new StatChangeComboModifier("TestAspectOfTheCat", aspectOfTheCatData, aspectOfTheCatRecipe);
+                SetupModifier(aspectOfTheCat);
+
+                Damages explosionData = new Damages(new DamageData() { DamageType = DamageType.Explosion, Damage = 10f });
+                var explosionRecipe = new ComboRecipe(new ComboRecipeProperties()
+                    { DamageTypes = new [] { DamageType.Fire | DamageType.Cold}});
+                DamageAttackComboModifier explosion =
+                    new DamageAttackComboModifier("TestExplosion", explosionData, explosionRecipe);
+                SetupModifier(explosion);
             }
         }
     }
