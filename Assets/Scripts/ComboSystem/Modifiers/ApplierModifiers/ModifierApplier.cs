@@ -18,7 +18,11 @@ namespace ComboSystem
 
         public void ApplyModifierToTarget(Being target)
         {
-            SetTarget(target);
+            if(SetTarget(target))
+            {
+                //Reset target if applier if the target has been killed
+                target.DeathEvent += obj => Target = null;
+            }
             Log.Verbose("Applying "+Data.Modifier);
             Apply();
         }

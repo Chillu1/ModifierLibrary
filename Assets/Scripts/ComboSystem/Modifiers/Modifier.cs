@@ -179,13 +179,18 @@ namespace ComboSystem
             return (Modifier)MemberwiseClone();
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>Successfully set a NEW target</returns>
         public bool SetTarget(Being target)
         {
             if (!target.IsValidTarget(this))
                 return false;
 
             if (Target == target)
-                return true;
+                return false;
 
             if (Target != null)
             {

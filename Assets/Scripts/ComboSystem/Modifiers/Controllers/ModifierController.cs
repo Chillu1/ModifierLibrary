@@ -117,7 +117,7 @@ namespace ComboSystem
         public void ListModifiers([CanBeNull] IEnumerable<Modifier> modifiers)
         {
             if (modifiers != null)
-                Log.Info(string.Join(". ", modifiers) + ". Modifiers count: " + Modifiers.Count, "modifiers", true);
+                Log.Info(string.Join(". ", modifiers) + " Modifiers count: " + Modifiers.Count, "modifiers", true);
         }
 
         private void CheckTarget(Modifier modifier, AddModifierParameters parameters)

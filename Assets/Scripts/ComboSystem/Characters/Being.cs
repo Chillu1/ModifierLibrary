@@ -7,13 +7,14 @@ namespace ComboSystem
     /// <summary>
     ///     Base class for all beings that can have modifiers
     /// </summary>
-    public abstract class Being : BaseProject.Being
+    public abstract class Being : BaseProject.Being, IEventCopy<Being>
     {
         //Owner, target
         public event Action<Being, Being> AttackEvent;
         public event Action<Being, Being> KillEvent;
         public event Action<Being, Being> CastEvent;
         public event Action<Being> DeathEvent;
+
         /// <summary>
         ///     On getting a combo
         /// </summary>
@@ -37,6 +38,7 @@ namespace ComboSystem
 
         protected override void OnDeath()
         {
+            Log.Info("OnDeath, "+DeathEvent?.GetInvocationList().Length, "modifiers");
             DeathEvent?.Invoke(this);
         }
 
@@ -65,14 +67,19 @@ namespace ComboSystem
             }
 
             foreach (var modifierParams in modifierHolder.modifiers)
+            {
                 AddModifier(modifierParams.modifier, modifierParams.addModifierProperties);
+            }
             //ModifierController.ListModifiers();
         }
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, ActivationCondition condition = default)
         {
-            if (typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+            if ((!parameters.HasFlag(AddModifierParameters.NullStartTarget) || parameters == AddModifierParameters.Default) &&
+                typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+            {
                 Log.Error("Adding ApplierModifier through 'AddModifier' function", "modifiers");
+            }
 
             ModifierController.TryAddModifier(modifier, parameters, condition);
         }
@@ -96,6 +103,15 @@ namespace ComboSystem
         public virtual bool IsValidTarget(Modifier modifier)
         {
             return true;
+        }
+
+        public virtual void CopyEvents(Being prototype)
+        {
+            AttackEvent = prototype.AttackEvent;
+            KillEvent = prototype.KillEvent;
+            CastEvent = prototype.CastEvent;
+            DeathEvent = prototype.DeathEvent;
+            ComboEvent = prototype.ComboEvent;
         }
 
         public override string ToString()
