@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystem
 {
     public abstract class EffectOverTimeModifier<TEffectOverTimeData> : Modifier<TEffectOverTimeData> where TEffectOverTimeData : EffectOverTimeData
@@ -15,16 +17,18 @@ namespace ComboSystem
             durationTimer += deltaTime;
             base.Update(deltaTime);
 
-            if (durationTimer >= Data.Duration)
-            {
-                Remove();
-                return;
-            }
-
             if (timer >= Data.EveryXSecond)
             {
+                //Log.Verbose($"Applying {Id}, timer: {timer}", "modifiers");
                 Apply();
                 timer = 0;
+            }
+
+            if (durationTimer >= Data.Duration)
+            {
+                //Log.Verbose($"Removing {Id}, timer: {timer}", "modifiers");
+                Remove();
+                return;
             }
         }
     }

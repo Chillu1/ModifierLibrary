@@ -11,11 +11,11 @@ namespace ComboSystem
 
         protected sealed override void SetupModifierPrototypes()
         {
-            DamageOverTimeData spiderPoisonData = new DamageOverTimeData(new Damages(5, DamageType.Poison), 1f, 5f);
+            DamageOverTimeData spiderPoisonData = new DamageOverTimeData(new []{new DamageData(1, DamageType.Poison)}, 1f, 10f);
             DamageOverTimeModifier spiderPoisonModifier = new DamageOverTimeModifier("SpiderPoison", spiderPoisonData, ModifierProperties.Stackable);
             SetupModifierApplier(spiderPoisonModifier);
 
-            var fireAttackDoTData = new DamageOverTimeData(new Damages(2, DamageType.Fire), 1f, 5f);
+            var fireAttackDoTData = new DamageOverTimeData(new []{new DamageData(2, DamageType.Fire)}, 1f, 5f);
             var fireAttackDoT = new DamageOverTimeModifier("FireDoTAttack", fireAttackDoTData, ModifierProperties.Refreshable);
             SetupModifierApplier(fireAttackDoT);
 
@@ -47,10 +47,10 @@ namespace ComboSystem
             var catAttackSpeedBuff = new StatChangeModifier("AttackSpeedOfCat", catAttackSpeedBuffData);
             SetupModifier(catAttackSpeedBuff);
 
-            var fireAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Fire });
+            var fireAttackData = new []{new DamageData(3, DamageType.Fire)};
             var fireAttack = new DamageAttackModifier("FireDamage", fireAttackData);
             SetupModifierApplier(fireAttack);
-            var coldAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Cold });
+            var coldAttackData = new []{new DamageData(3, DamageType.Cold)};
             var coldAttack = new DamageAttackModifier("ColdDamage", coldAttackData);
             SetupModifierApplier(coldAttack);
 

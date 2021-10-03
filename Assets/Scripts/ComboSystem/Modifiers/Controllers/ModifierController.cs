@@ -54,7 +54,7 @@ namespace ComboSystem
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
-                var comboModifierToAdd = ComboModifierPrototypes.CheckForRecipes(Modifiers);
+                var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
                 if (comboModifierToAdd.Count > 0)
                     AddComboModifier(comboModifierToAdd);
                 //Log.Verbose(comboModifierToAdd.Count);
@@ -68,7 +68,7 @@ namespace ComboSystem
                 TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
             }
             //Check for recipes after adding all modifiers
-            var comboModifierToAdd = ComboModifierPrototypes.CheckForRecipes(Modifiers);
+            var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
             if(comboModifierToAdd.Count > 0)
                 AddComboModifier(comboModifierToAdd);
         }
@@ -117,7 +117,8 @@ namespace ComboSystem
         public void ListModifiers([CanBeNull] IEnumerable<Modifier> modifiers)
         {
             if (modifiers != null)
-                Log.Info(string.Join(". ", modifiers) + " Modifiers count: " + Modifiers.Count, "modifiers", true);
+                Log.Info("OwnerTarget: " + _ownerTarget + ". " + string.Join(". ", modifiers) + " Modifiers count: " + Modifiers.Count,
+                    "modifiers", true);
         }
 
         private void CheckTarget(Modifier modifier, AddModifierParameters parameters)

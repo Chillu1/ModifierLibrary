@@ -27,6 +27,11 @@ namespace ComboSystem
             AddModifier(properties.ModifierHolder);
         }
 
+        public virtual void Update(float deltaTime)
+        {
+            ModifierController.Update(deltaTime);
+        }
+
         public override void Attack(BaseProject.Being target)
         {
             ApplyModifiers((Being)target);
@@ -38,7 +43,7 @@ namespace ComboSystem
 
         protected override void OnDeath()
         {
-            Log.Info("OnDeath, "+DeathEvent?.GetInvocationList().Length, "modifiers");
+            //Log.Verbose("OnDeath, "+DeathEvent?.GetInvocationList().Length, "modifiers");
             DeathEvent?.Invoke(this);
         }
 
@@ -75,10 +80,15 @@ namespace ComboSystem
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, ActivationCondition condition = default)
         {
-            if ((!parameters.HasFlag(AddModifierParameters.NullStartTarget) || parameters == AddModifierParameters.Default) &&
-                typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+            if (typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
             {
-                Log.Error("Adding ApplierModifier through 'AddModifier' function", "modifiers");
+                //A special applier modifier
+                if (!parameters.HasFlag(AddModifierParameters.NullStartTarget) || parameters == AddModifierParameters.Default)//Wrong? Can owner be target in applier mods?
+                {
+                    Log.Error("Wrong parameters for adding a modifier applier: "+parameters.ToString(), "modifiers");
+                    ModifierController.TryAddModifier(modifier, AddModifierParameters.DefaultOffensive, condition);
+                    return;
+                }
             }
 
             ModifierController.TryAddModifier(modifier, parameters, condition);
@@ -87,7 +97,7 @@ namespace ComboSystem
         public void AddModifierApplier(ModifierApplier<ModifierApplierData> modifier,
             AddModifierParameters parameters = AddModifierParameters.DefaultOffensive, ActivationCondition condition = default)
         {
-            ModifierController.TryAddModifier(modifier, parameters, condition);
+            AddModifier(modifier, parameters, condition);
         }
 
         public bool ContainsModifier(Modifier modifier)

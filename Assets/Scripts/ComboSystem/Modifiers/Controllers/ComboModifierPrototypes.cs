@@ -27,7 +27,7 @@ namespace ComboSystem
                 new StatChangeComboModifier("AspectOfTheCat", aspectOfTheCatData, aspectOfTheCatRecipe);
             SetupModifier(aspectOfTheCat);
 
-            Damages explosionData = new Damages(new DamageData() { DamageType = DamageType.Explosion, Damage = 10f });
+            DamageData[] explosionData = new DamageData[]{new DamageData() { DamageType = DamageType.Explosion, BaseDamage = 10f }};
             var explosionRecipe = new ComboRecipe(new ComboRecipeProperties()
                 { DamageTypes = new [] { DamageType.Fire | DamageType.Cold}});
             DamageAttackComboModifier explosion =
@@ -38,7 +38,7 @@ namespace ComboSystem
         /// <summary>
         ///     Checks for all possible recipes in collection, and return them back
         /// </summary>
-        public static List<ComboModifier> CheckForRecipes(Dictionary<string, Modifier> modifiers)
+        public static List<ComboModifier> CheckForComboRecipes(Dictionary<string, Modifier> modifiers)
         {
             var comboModifiersToAdd = new List<ComboModifier>();
 
@@ -107,14 +107,14 @@ namespace ComboSystem
                 //Check each modifier in controller for damageTypes
                 foreach (var pair in modifiers)
                 {
-                    var value = pair.Value as Modifier<Damages>;
+                    var value = pair.Value as Modifier<DamageData[]>;
                     if(value == null)//If it's not a damageData modifier, bail (for now)
                         continue;
                     //Log.Info(value.Data.DamageData[0].DamageType+"_"+neededDamageType);
-                    if (value.Data.DamageData.Any(data => (data.DamageType & neededDamageType) != 0))//A flag has been found
+                    if (value.Data.Any(data => (data.DamageType & neededDamageType) != 0))//A flag has been found
                     {
                         var commonFlags = neededDamageType &
-                                          value.Data.DamageData.First(data => (data.DamageType & neededDamageType) != 0).DamageType;
+                                          value.Data.First(data => (data.DamageType & neededDamageType) != 0).DamageType;
                         //Remove common flags that we found
                         neededDamageType &= ~commonFlags;
                     }

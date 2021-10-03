@@ -2,9 +2,9 @@ using BaseProject;
 
 namespace ComboSystem
 {
-    public class DamageAttackComboModifier : SingleUseComboModifier<Damages>
+    public class DamageAttackComboModifier : SingleUseComboModifier<DamageData[]>
     {
-        public DamageAttackComboModifier(string id, Damages data, ComboRecipe recipe, ModifierProperties modifierProperties = default) :
+        public DamageAttackComboModifier(string id, DamageData[] data, ComboRecipe recipe, ModifierProperties modifierProperties = default) :
             base(id, data, recipe, modifierProperties)
         {
         }

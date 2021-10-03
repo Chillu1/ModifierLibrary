@@ -12,6 +12,11 @@ namespace ComboSystem
         [NotNull]
         public ModifierParams[] modifiers;
 
+        /// <summary>
+        ///     Single modifier constructor
+        /// </summary>
+        /// <param name="modifier"></param>
+        /// <param name="properties"></param>
         public ModifierHolder(Modifier modifier, AddModifierParameters properties = AddModifierParameters.Default)
         {
             modifiers = new[] { new ModifierParams() { modifier = modifier, addModifierProperties = properties } };
