@@ -122,6 +122,9 @@ namespace ComboSystem
             CastEvent = prototype.CastEvent;
             DeathEvent = prototype.DeathEvent;
             ComboEvent = prototype.ComboEvent;
+            //Copy modifierEvents
+            //problem, we copy the event, but the target is wrong modifierController (old)
+            ModifierController.CopyEvents(prototype.ModifierController);
         }
 
         public override string ToString()

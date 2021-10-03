@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace ComboSystem
 {
-    public class ModifierController
+    public class ModifierController : IEventCopy<ModifierController>
     {
         private readonly Being _ownerTarget;
         private Dictionary<string, Modifier> Modifiers { get; }
@@ -84,7 +84,10 @@ namespace ComboSystem
 
         public bool RemoveModifier(Modifier modifier)
         {
-            return Modifiers.Remove(modifier.Id);
+            bool success = Modifiers.Remove(modifier.Id);
+            if(!success)
+                Log.Error("Couldn't remove modifier " + modifier.Id, "modifiers");
+            return success;
         }
 
         public bool ContainsModifier(Modifier modifier)
@@ -149,6 +152,13 @@ namespace ComboSystem
         {
             modifier.Removed += modifierEventItem => RemoveModifier(modifierEventItem);
             modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed", "modifiers");
+        }
+
+        public void CopyEvents(ModifierController modifierController)
+        {
+            foreach (var modifier in modifierController.Modifiers.Values)
+                RegisterModifier(Modifiers[modifier.Id]);
+                //Modifiers[modifier.Id].CopyEvents(modifier);
         }
 
         public override string ToString()

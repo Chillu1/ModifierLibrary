@@ -20,7 +20,7 @@ namespace ComboSystem
         }
 
         [CanBeNull]
-        public Modifier<TDataType> GetItem<TDataType>(string modifierName)
+        public Modifier<TDataType> GetModifier<TDataType>(string modifierName)
         {
             return GetItem(modifierName) as Modifier<TDataType>;
         }
@@ -41,7 +41,7 @@ namespace ComboSystem
                         ". Did you mean: " + modifierName + "Applier", "modifiers");
             }
 
-            return GetItem<ModifierApplierData>(modifierName) as ModifierApplier<ModifierApplierData>;
+            return GetModifier<ModifierApplierData>(modifierName) as ModifierApplier<ModifierApplierData>;
         }
     }
 }

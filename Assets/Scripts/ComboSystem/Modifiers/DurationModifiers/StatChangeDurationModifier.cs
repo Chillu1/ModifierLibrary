@@ -16,7 +16,7 @@ namespace ComboSystem
 
         protected override void Remove()
         {
-            Target.ChangeStat(Data.StatType, Data.Value);
+            Target.ChangeStat(Data.StatType, -Data.Value);
             base.Remove();
         }
     }

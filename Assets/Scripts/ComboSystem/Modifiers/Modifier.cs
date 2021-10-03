@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
-    //Move OnDeath event to BaseProject?
     //Death, Kill, Cast, events (to subscribe to) (X uses & cooldown functionality)
         //On kill get 10 more damage for 10 seconds
         //Negative effects on events on enemies?
@@ -24,6 +23,8 @@ namespace ComboSystem
     //Stats
     //Damage
     //Resistances (take a look at Resistance.cs from Surv Terra, but for the love of god, don't copy that code, it's prob not that well thought out)
+        //Nullify resistances
+        //Nullify resistances for X duration
 
     //Important Info:
     //Every modifier that doesn't go directly on it's owner, should go through the "ModifierApplier", to get the correct target
@@ -51,6 +52,7 @@ namespace ComboSystem
         [CanBeNull] public Being Target { get; protected set; }
 
         protected Func<Modifier, bool> Condition { get; set; } = arg => true;
+        protected bool IsRemoved { get; private set; }
 
         protected Modifier(string id, ModifierProperties modifierProperties = default)
         {
@@ -152,7 +154,12 @@ namespace ComboSystem
 
         protected virtual void Remove()
         {
+            if (IsRemoved)
+                Log.Error("Called Remove after modifier was supposed to be already removed", "modifiers");
             Removed?.Invoke(this);
+            IsRemoved = true;
+            //Log.Info(Removed?.GetInvocationList().Length);
+            //Log.Info("Remove: "+this.GetHashCode());
         }
 
         public virtual void Stack()
@@ -204,6 +211,7 @@ namespace ComboSystem
 
         public virtual void CopyEvents(Modifier prototype)
         {
+            //TODO, copies wrong target when copied
             Removed = prototype.Removed;
         }
 

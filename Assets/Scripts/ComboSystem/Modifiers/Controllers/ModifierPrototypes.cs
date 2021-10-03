@@ -54,6 +54,10 @@ namespace ComboSystem
             var coldAttack = new DamageAttackModifier("ColdDamage", coldAttackData);
             SetupModifierApplier(coldAttack);
 
+            var coldResistanceBuffData = new ResistanceChangeDurationModifierData(5f, DamageType.Cold, 10d, 3d);
+            var coldResistanceBuff = new ResistanceChangeDurationModifier("ColdResistance", coldResistanceBuffData);
+            SetupModifier(coldResistanceBuff);
+
             //var resurrectionData =
         }
 
