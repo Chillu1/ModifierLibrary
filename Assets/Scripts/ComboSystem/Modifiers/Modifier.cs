@@ -6,11 +6,20 @@ using JetBrains.Annotations;
 namespace ComboSystem
 {
     //TODO list:
+    //Try composition over inheritence, durationClass, stackClas
+    //Not attack modifiers not triggered on Attack
+    //Cast(Target t, Mode (offensive/defensive? or Modifier mod?) (casts spells, applies modifier appliers)
+    //Move OnDeath event to BaseProject?
     //Death, Kill, Cast, events (to subscribe to) (X uses & cooldown functionality)
-        //On kill get 10 more damage for 10 seconds
-        //Negative effects on events on enemies?
-        //(Resurrection) Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
+    //On kill get 10 more damage for 10 seconds
+    //Negative effects on events on enemies?
+    //(Resurrection) Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
     //Unit tests
+    //Disoriented status effect
+    //  Has a small chace to target allies with attacks, and offensive spells
+    //  Confused. Attacks, heals, at random
+    //Value of elementaltype on creature. Ex 100water needed so eletrcity jumps. 1fire needed to blow up gas
+    //Elemental immunities. Fire golem immune/empowered to/by fire damage
     //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
     //Combo buffs:
         //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
@@ -33,6 +42,11 @@ namespace ComboSystem
     //  Base mods: Duration, EffectEveryX, Applier,
     //OneUseBuff permanent, OneUseBuff duration
     //EffectOverTimeEveryXSecond (Duration)
+
+    //Build/modifier/other ideas:
+    //Modifidr/build idea. Gear mod/skill/mod causes your elemntal hits to heal instead of dealing damage. Now hypnotize or disorient on target so he attacks and healls allies instead
+    //Gear/skill/node. Your resistance ratings are reversed. Should also have a downside like no armor. So its not ez strong choice for minus res buids.
+    //  Maybe enemies around you also have reversed (upgraded node)
 
     //Design:
     //How to apply debuffs from a character?
