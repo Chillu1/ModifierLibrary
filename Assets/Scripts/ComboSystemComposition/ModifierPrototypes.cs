@@ -13,18 +13,24 @@ namespace ComboSystemComposition
             //Single 100 damage ability on target, (lingers 0.5s, but no actual duration)
             //On Init, Apply It (deal damage), remove 0.5 seconds after from manager
 
-            //IceBoltDamage
+            //IceBoltDebuff
             //TODO Linger, Targeting
             var iceBoltModifier = new Modifier("IceBolt");
-            var iceBoltDamage = new DamageComponent(100/*, ElementalType.Ice*/);
-            var iceBoltApply = new ApplyComponent(iceBoltDamage, new TargetComponent(TargetType.Self));
-            iceBoltModifier.AddComponent(new RemoveComponent(iceBoltModifier));
+            var iceBoltTarget = new TargetComponent(TargetType.Self);
+            var iceBoltEffect = new DamageComponent(100/*, ElementalType.Ice*/, iceBoltTarget);
+            var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
+            iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
             iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
 
+            //Forever buff (applier), not refreshable or stackable (for now)
+            //Apply on attack
+
             //IceBoltApplier
-            //var iceBoltApplier = new Modifier("IceBoltApplier");
-            //iceBoltApplier.AddModifier(iceBoltModifier);
-            //iceBoltModifier.AddComponent(new TargetComponent());//Targeting, legal targets, aoe?, allies?, enemies?, self? Etc
+            var iceBoltApplier = new Modifier("IceBoltApplier", true);
+            var iceBoltApplierTarget = new TargetComponent(TargetType.DefaultOffensive);
+            var iceBoltApplierEffect = new ApplierComponent(iceBoltModifier, iceBoltApplierTarget);
+            var iceBoltApplierApply = new ApplyComponent(iceBoltApplierEffect, iceBoltApplierTarget);
+            iceBoltApplier.AddComponent(iceBoltApplierApply);//TODO Apply component on attack
 
 
             //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.

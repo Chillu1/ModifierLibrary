@@ -1,5 +1,4 @@
 using System;
-using BaseProject;
 using JetBrains.Annotations;
 
 namespace ComboSystemComposition
@@ -9,12 +8,12 @@ namespace ComboSystemComposition
     /// </summary>
     public class ApplyComponent : Component, IApplyComponent
     {
-        public EffectComponent EffectComponent { get; }
+        public IEffectComponent EffectComponent { get; }
         private readonly TargetComponent _targetComponent;
         [CanBeNull] private readonly Func<object, bool> _conditionCheck;//TODO object
         private readonly IValidatorComponent<object>[] _validatorComponents;
 
-        public ApplyComponent(EffectComponent effectComponent, TargetComponent targetComponent,
+        public ApplyComponent(IEffectComponent effectComponent, TargetComponent targetComponent,
             Func<object, bool> applyCheck = null) //params IValidatorComponent<object>[] validatorComponents)
         {
             EffectComponent = effectComponent;

@@ -1,11 +1,12 @@
 using System;
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ComboSystemComposition
 {
-    public class TargetComponent : Component, IValidatorComponent<Being>
+    public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent
     {
-        public Being Target;
+        [CanBeNull] public Being Target { get; private set; }
         public TargetType TargetType { get; }
         private Being _owner;
 
@@ -43,6 +44,22 @@ namespace ComboSystemComposition
             Target = target;
             return true;
         }
+
+        [CanBeNull]
+        public Being GetTarget()
+        {
+            return Target;
+        }
+
+        public void SetTarget(Being target)
+        {
+            if (Target != null)
+            {
+                Log.Error("Already has a target");
+                return;
+            }
+            Target = target;
+        }
     }
 
     [Flags]
@@ -57,6 +74,7 @@ namespace ComboSystemComposition
         DefaultFriendly = Self | Ally,
         DefaultOffensive = Enemy,
         DefaultFriendlyEnemy = Self | Enemy,
+        Beings = Self | Ally | Enemy,
         All = Self | Ally | Enemy | Ground
     }
 }

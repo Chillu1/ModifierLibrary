@@ -1,28 +1,22 @@
-using System;
-using ComboSystem;
-
 namespace ComboSystemComposition
 {
-    public class RemoveComponent : EffectComponent, IRemoveComponent
+    public class RemoveComponent : IEffectComponent
     {
         private ModifierController _modifierController;//TODO TEMP
-        private readonly double _lingerTime;//TODO Linger
-        private Modifier _modifier;
+        private IModifier _modifier;
 
-        public RemoveComponent(Modifier modifier, double lingerTime = 0.5d) : base(null)
+        public RemoveComponent(IModifier modifier)
         {
             _modifier = modifier;
-            _lingerTime = lingerTime;
         }
 
-        public void Remove()
+        public void Effect()
         {
             //_modifierController.RemoveModifier(_modifier);
         }
 
         public void CleanUp()
         {
-
         }
     }
 }

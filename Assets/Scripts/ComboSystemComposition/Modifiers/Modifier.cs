@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using BaseProject;
-using BaseProject.Utils;
+using ComboSystem;
 using JetBrains.Annotations;
 
 namespace ComboSystemComposition
@@ -34,18 +33,22 @@ namespace ComboSystemComposition
 
     */
 
-    public class Modifier : IEntity<string>, IEventCopy<Modifier>, ICloneable
+    public class Modifier : IModifier, IEntity<string>, IEventCopy<Modifier>, ICloneable
     {
         public string Id { get; protected set; }
+        public bool ApplierModifier { get; }
+        public TargetComponent TargetComponent { get; private set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
+        [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private ITimeComponent[] TimeComponents { get; set; }
-        //StackComponent
-        //RefreshComponent
+        [CanBeNull] private IStackComponent StackComponent { get; set; }
+        [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
 
 
-        public Modifier(string id)
+        public Modifier(string id, bool applierModifier = false)
         {
             Id = id;
+            ApplierModifier = applierModifier;
         }
 
         public void Init()
@@ -70,15 +73,15 @@ namespace ComboSystemComposition
             InitComponent = initComponent;
         }
 
-        public void AddComponent(IRemoveComponent removeComponent)
+        public void AddComponent(IApplyComponent applyComponent)
         {
-            //if (RemoveComponent != null)
-            //{
-            //    //logerror
-            //    return;
-            //}
+            if (ApplyComponent != null)
+            {
+                //logerror
+                return;
+            }
 
-            //RemoveComponent = removeComponent;
+            ApplyComponent = applyComponent;
         }
 
         public void AddComponent(ITimeComponent timeComponent)
@@ -101,6 +104,28 @@ namespace ComboSystemComposition
             }
 
             TimeComponents = timeComponents;
+        }
+
+        public void Stack()
+        {
+            if (StackComponent == null)
+            {
+                Log.Error("No stack component");
+                return;
+            }
+
+            StackComponent.Stack();
+        }
+
+        public void Refresh()
+        {
+            if (RefreshComponent == null)
+            {
+                Log.Error("No refresh component");
+                return;
+            }
+
+            RefreshComponent.Refresh();
         }
 
         public void CopyEvents(Modifier prototype)

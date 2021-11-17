@@ -1,41 +1,41 @@
 namespace ComboSystemComposition
 {
+    /// <summary>
+    ///     Responsible for everything timing related, interval, duration, etc
+    /// </summary>
     public class TimeComponent : Component, ITimeComponent
     {
-        public double Duration { get; protected set; }
-        public bool ResetOnFinished { get;  }
         public IEffectComponent EffectComponent { get; }
+        public double Duration { get; private set; }
+        private bool ResetOnFinished { get; }
         private double _timer;
 
-        public TimeComponent(double duration, bool resetOnFinished, IEffectComponent effectComponent)
+        public TimeComponent(IEffectComponent effectComponent, double duration, bool resetOnFinished = false)
         {
             Duration = duration;
             ResetOnFinished = resetOnFinished;
             EffectComponent = effectComponent;
         }
 
-        public TimeComponent(double duration, RemoveComponent removeComponent)
+        /// <summary>
+        ///     Constructor for remove timer
+        /// </summary>
+        public TimeComponent(RemoveComponent removeComponent, double lingerDuration = 0.5d)
         {
-            Duration = duration;
+            Duration = lingerDuration;
+            ResetOnFinished = false;
             EffectComponent = removeComponent;
         }
 
-        public virtual void Update(float deltaTime)
+        public void Update(float deltaTime)
         {
             _timer += deltaTime;
             if (_timer >= Duration)
             {
-                //Remove, Effect, whatever
-                //Elapsed();
                 EffectComponent.Effect();
                 if(ResetOnFinished)
                     _timer = 0;
             }
-        }
-
-        protected virtual void Elapsed()
-        {
-            EffectComponent.Effect();
         }
     }
 }

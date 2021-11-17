@@ -27,7 +27,7 @@ namespace ComboSystemComposition
 
     InitComponent -> ApplyComponent -> EffectComponent
     TimeComponent -> ApplyComponent -> EffectComponent
-    RemoveComponent
+    TimeComponent -> RemoveComponent
 
      Structure
             Dump components not knowing what they do (time(duration), single use, time(interval))
@@ -63,6 +63,12 @@ namespace ComboSystemComposition
         public void Start()
         {
             ModifierPrototypes = new ModifierPrototypes();
+
+            var player = new Being("Player", 5, TargetType.Ally);
+            var enemy = new Being("Enemy", 2, TargetType.Enemy);
+
+            player.AddModifier(ModifierPrototypes.GetItem("IceBoltApplier"));
+            player.Attack(enemy);
         }
     }
 }
