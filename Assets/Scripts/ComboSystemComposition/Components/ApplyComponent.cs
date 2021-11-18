@@ -10,15 +10,14 @@ namespace ComboSystemComposition
     {
         public IEffectComponent EffectComponent { get; }
         private readonly TargetComponent _targetComponent;
-        [CanBeNull] private readonly Func<object, bool> _conditionCheck;//TODO object
+        //[CanBeNull] private readonly Func<object, bool> _conditionCheck;//TODO object
         private readonly IValidatorComponent<object>[] _validatorComponents;
 
-        public ApplyComponent(IEffectComponent effectComponent, TargetComponent targetComponent,
-            Func<object, bool> applyCheck = null) //params IValidatorComponent<object>[] validatorComponents)
+        public ApplyComponent(IEffectComponent effectComponent, TargetComponent targetComponent) //params IValidatorComponent<object>[] validatorComponents)
         {
             EffectComponent = effectComponent;
             _targetComponent = targetComponent;
-            _conditionCheck = applyCheck;
+            //_conditionCheck = applyCheck;
             //_validatorComponents = validatorComponents;
         }
 
@@ -30,8 +29,8 @@ namespace ComboSystemComposition
             //}
             //_targetComponent.Validate()
 
-            if (_conditionCheck?.Invoke(this) == false)
-                return;
+            //if (_conditionCheck?.Invoke(this) == false)
+            //    return;
             
             EffectComponent.Effect();
         }

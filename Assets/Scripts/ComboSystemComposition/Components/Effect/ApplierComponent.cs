@@ -13,6 +13,7 @@ namespace ComboSystemComposition
 
         public void Effect()
         {
+            //TODO If Modifier is applier, then AddModifier param cant be always OwnerIsTarget
             TargetComponent.GetTarget().AddModifier((Modifier)Modifier.Clone());
         }
 

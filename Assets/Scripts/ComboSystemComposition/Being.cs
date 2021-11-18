@@ -59,12 +59,16 @@ namespace ComboSystemComposition
             }
 
             foreach (var modifierApplier in modifierAppliers)
-                modifierApplier.ApplyModifierToTarget(target);
+            {
+                modifierApplier.TargetComponent.SetTarget(target);
+                modifierApplier.Apply();
+                //modifierApplier.ApplyModifierToTarget(target);
+            }
         }
 
-        public void AddModifier(Modifier modifier)
+        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
-            ModifierController.TryAddModifier(modifier);
+            ModifierController.TryAddModifier(modifier, parameters);
         }
 
         public bool ContainsModifier(Modifier modifier)

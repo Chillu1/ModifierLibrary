@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
-using ComboSystem;
 using JetBrains.Annotations;
 
 namespace ComboSystemComposition
@@ -29,36 +28,29 @@ namespace ComboSystemComposition
             }
         }
 
-        public void TryAddModifier(Modifier modifier)
+        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters)
         {
-            //CheckTarget(modifier, parameters);
+            modifier.TargetComponent.SetupOwner(_owner);
+            HandleTarget(modifier, parameters);
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
             {
                 Log.Verbose("HasModifier " + modifier.Id, "modifiers");
-                /*switch (modifier.ModifierProperties)
-                {
-                    case ModifierProperties.None:
-                        return;
-                    case ModifierProperties.Stackable:
-                        internalModifier.Stack();
-                        break;
-                    case ModifierProperties.Refreshable:
-                        internalModifier.Refresh();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }*/
+                //Run stack & refresh in case it has those components
+                internalModifier.Stack();
+                internalModifier.Refresh();
             }
             else
+            {
                 AddModifier(modifier);
+            }
 
-            //if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
-            //{
-            //    var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
-            //    if (comboModifierToAdd.Count > 0)
-            //        AddComboModifier(comboModifierToAdd);
-            //}
+            if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
+            {
+                //var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
+                //if (comboModifierToAdd.Count > 0)
+                //    AddComboModifier(comboModifierToAdd);
+            }
         }
 
         //private void AddComboModifier(IEnumerable<ComboModifier> modifiers)
@@ -114,24 +106,24 @@ namespace ComboSystemComposition
                     "modifiers", true);
         }
 
-        private void CheckTarget(Modifier modifier, AddModifierParameters parameters)
+        private void HandleTarget(Modifier modifier, AddModifierParameters parameters)
         {
             if (parameters.HasFlag(AddModifierParameters.OwnerIsTarget))
             {
                 if (modifier.TargetComponent.Target == null)
                 {
-                    modifier.SetTarget(_owner);
+                    modifier.TargetComponent.SetTarget(_owner);
                 }
                 else if (modifier.TargetComponent.Target != _owner)
                 {
                     Log.Error("Owner should be the target, but isn't. Target is: " + modifier.TargetComponent.Target +". Reverting to owner", "modifiers");
-                    modifier.SetTarget(_owner);
+                    modifier.TargetComponent.SetTarget(_owner);
                 }
             }
             else
             {
                 //Modifier appliers dont need a target at ctor. Extra check, for good measure
-                if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !typeof(ModifierApplier<ModifierApplierData>).IsSameOrSubclass(modifier.GetType()))
+                if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !modifier.ApplierModifier)
                 {
                     Log.Error("Owner isn't the target, and target is null", "modifiers");
                 }

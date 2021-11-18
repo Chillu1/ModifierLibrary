@@ -44,7 +44,6 @@ namespace ComboSystemComposition
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
 
-
         public Modifier(string id, bool applierModifier = false)
         {
             Id = id;
@@ -106,11 +105,22 @@ namespace ComboSystemComposition
             TimeComponents = timeComponents;
         }
 
+        public void Apply()
+        {
+            if (ApplyComponent == null)
+            {
+                Log.Error("No stack component");
+                return;
+            }
+
+            ApplyComponent.Apply();
+        }
+
         public void Stack()
         {
             if (StackComponent == null)
             {
-                Log.Error("No stack component");
+                //Log.Error("No stack component");
                 return;
             }
 
@@ -121,7 +131,7 @@ namespace ComboSystemComposition
         {
             if (RefreshComponent == null)
             {
-                Log.Error("No refresh component");
+                //Log.Error("No refresh component");
                 return;
             }
 
