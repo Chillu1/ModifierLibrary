@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ComboSystem
 {
-    public class AoeDamageModifier : SingleUseModifier<DamageData[]>
+    public class AoeDamageModifier : SingleUseInitModifier<DamageData[]>
     {
         public AoeDamageModifier(string id, DamageData[] data, ModifierProperties modifierProperties = default) : base(id, data, modifierProperties)
         {

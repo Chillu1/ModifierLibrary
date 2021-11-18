@@ -13,6 +13,7 @@ namespace ComboSystem
 
         protected override void Effect()
         {
+            //TODO Condition
             Target!.AddModifier((Modifier)Data.Modifier.Clone());
         }
 

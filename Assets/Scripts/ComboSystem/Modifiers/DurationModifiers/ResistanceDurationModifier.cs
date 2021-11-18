@@ -1,10 +1,8 @@
-using BaseProject;
-
 namespace ComboSystem
 {
-    public class ResistanceChangeDurationModifier : SingleUseDurationModifier<ResistanceChangeDurationModifierData>
+    public class ResistanceDurationModifier : SingleUseDurationModifier<ResistanceDurationModifierData>
     {
-        public ResistanceChangeDurationModifier(string id, ResistanceChangeDurationModifierData data, ModifierProperties properties = default) : base(id, data, properties)
+        public ResistanceDurationModifier(string id, ResistanceDurationModifierData data, ModifierProperties properties = default) : base(id, data, properties)
         {
         }
 

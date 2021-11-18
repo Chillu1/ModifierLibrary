@@ -6,6 +6,7 @@ namespace ComboSystem
     {
         public Modifier modifier;
         public AddModifierParameters addModifierProperties = AddModifierParameters.Default;
+        public ActivationCondition activateCondition = default;
     }
     public sealed class ModifierHolder
     {

@@ -11,6 +11,8 @@ namespace ComboSystem
         //Negative effects on events on enemies?
         //(Resurrection) Single use, conditional cast on death, either makes new being, or removed all modifiers & resets health & stats
     //Unit tests
+	//Passive return damage modifier (physical, magical, etc) & thorns (flat physical damage back)
+	//Aura return damage modifier (aoe around character)
     //Conditional: on cast, on kill, on death. While life leach, while life leach over x %, While stunned, frozen, on fire
     //Combo buffs:
         //X specific stat buffs (movement speed buff, attack speed, evasion = special "cat" buff)
@@ -89,13 +91,20 @@ namespace ComboSystem
             }
 
             if (condition.HasFlag(ActivationCondition.Attack))
-                Target.AttackEvent += delegate { Apply(); };
+                Target!.AttackEvent += delegate { Apply(); };
             if (condition.HasFlag(ActivationCondition.Kill))
-                Target.KillEvent += delegate { Apply(); };
+                Target!.KillEvent += delegate { Apply(); };
             if (condition.HasFlag(ActivationCondition.Cast))
-                Target.CastEvent += delegate { Apply(); };
+                Target!.CastEvent += delegate { Apply(); };
             if (condition.HasFlag(ActivationCondition.Death))
-                Target.DeathEvent += delegate { Apply(); };
+                Target!.DeathEvent += delegate { Apply(); };
+            if (condition.HasFlag(ActivationCondition.Hit))
+                Target!.HitEvent += obj =>
+                {
+                    SetTarget(obj);
+                    Apply();
+                    //Log.Info(this.Target?.Health);
+                };
         }
 
         // protected Modifier(Modifier other)
@@ -120,8 +129,8 @@ namespace ComboSystem
             if (!ApplyIsValid())
                 return false;
 
-            if (!ConditionIsMet())
-                return false;
+            //if (!ConditionIsMet())
+            //    return false;
 
             Effect();
 
@@ -202,7 +211,7 @@ namespace ComboSystem
             if (Target != null)
             {
                 Log.Error($"Info:{this}. Target {Target.Id} isn't null, tried to set to {target.Id}", "modifiers");
-                return false;
+                //return false;//TODO
             }
 
             Target = target;

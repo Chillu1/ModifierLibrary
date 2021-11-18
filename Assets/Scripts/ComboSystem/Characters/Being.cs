@@ -14,6 +14,7 @@ namespace ComboSystem
         public event Action<Being, Being> KillEvent;
         public event Action<Being, Being> CastEvent;
         public event Action<Being> DeathEvent;
+        public event Action<Being> HitEvent;
 
         /// <summary>
         ///     On getting a combo
@@ -39,6 +40,12 @@ namespace ComboSystem
             AttackEvent?.Invoke(this, (Being)target);
             if(target.IsDead)
                 KillEvent?.Invoke(this, (Being)target);
+        }
+
+        public override void DealDamage(DamageData[] data)
+        {
+            HitEvent?.Invoke(this);
+            base.DealDamage(data);
         }
 
         protected override void OnDeath()
@@ -73,7 +80,7 @@ namespace ComboSystem
 
             foreach (var modifierParams in modifierHolder.modifiers)
             {
-                AddModifier(modifierParams.modifier, modifierParams.addModifierProperties);
+                AddModifier(modifierParams.modifier, modifierParams.addModifierProperties, modifierParams.activateCondition);
             }
             //ModifierController.ListModifiers();
         }
@@ -121,6 +128,7 @@ namespace ComboSystem
             KillEvent = prototype.KillEvent;
             CastEvent = prototype.CastEvent;
             DeathEvent = prototype.DeathEvent;
+            HitEvent = prototype.HitEvent;
             ComboEvent = prototype.ComboEvent;
             //Copy modifierEvents
             //problem, we copy the event, but the target is wrong modifierController (old)

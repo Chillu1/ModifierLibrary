@@ -45,7 +45,10 @@ namespace ComboSystem
         Attack = 1,
         Kill = 2,
         Cast = 4,
-        Death = 8
+        Death = 8,
+        Hit = 16,
+        //Attacked? Hit or missed?
+        //SavageHit? % of Hp?
     }
 
     public enum Targets : byte//Not needed?
