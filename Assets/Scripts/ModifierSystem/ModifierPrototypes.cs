@@ -23,7 +23,7 @@ namespace ModifierSystem
             iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
             iceBoltModifier.AddComponent(iceBoltTarget);
             iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
-            SetupModifier(iceBoltModifier);
+            AddModifier(iceBoltModifier);
 
             //Forever buff (applier), not refreshable or stackable (for now)
             //Apply on attack
@@ -50,7 +50,7 @@ namespace ModifierSystem
             spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
             spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
             spiderPoisonModifier.AddComponent(spiderPoisonStack);
-            SetupModifier(spiderPoisonModifier);
+            AddModifier(spiderPoisonModifier);
 
             SetupModifierApplier(spiderPoisonModifier, UnitType.DefaultOffensive);
 
@@ -62,18 +62,6 @@ namespace ModifierSystem
 
 
             //Graphics-, Audio-, Component, etc, whatever
-        }
-
-        //Generic non-removable applier, for now
-        private void SetupModifierApplier(Modifier appliedModifier, UnitType unitType = UnitType.DefaultOffensive)
-        {
-            var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
-            var modifierApplierTarget = new TargetComponent(unitType, true);
-            var modifierApplierEffect = new ApplierComponent(appliedModifier, modifierApplierTarget);
-            var modifierApplierApply = new ApplyComponent(modifierApplierEffect, modifierApplierTarget);
-            modifierApplier.AddComponent(modifierApplierApply);
-            modifierApplier.AddComponent(modifierApplierTarget);
-            SetupModifier(modifierApplier);
         }
     }
 }

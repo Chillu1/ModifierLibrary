@@ -8,7 +8,7 @@ namespace ModifierSystem
     {
         protected abstract void SetupModifierPrototypes();
 
-        protected void SetupModifier(TModifierType modifier)
+        protected void AddModifier(TModifierType modifier)
         {
             if (!modifier.ValidatePrototypeSetup())
                 return;
@@ -19,6 +19,18 @@ namespace ModifierSystem
                 return;
             }
             prototypes.Add(modifier.Id, modifier);
+        }
+
+        //Generic non-removable applier, for now
+        protected void SetupModifierApplier(TModifierType appliedModifier, UnitType unitType = UnitType.DefaultOffensive)
+        {
+            var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
+            var modifierApplierTarget = new TargetComponent(unitType, true);
+            var modifierApplierEffect = new ApplierComponent(appliedModifier, modifierApplierTarget);
+            var modifierApplierApply = new ApplyComponent(modifierApplierEffect, modifierApplierTarget);
+            modifierApplier.AddComponent(modifierApplierApply);
+            modifierApplier.AddComponent(modifierApplierTarget);
+            AddModifier((TModifierType)modifierApplier);
         }
     }
 }
