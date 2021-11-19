@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace ComboSystem.Tests
+namespace ModifierSystem.Tests
 {
     //ModifierApplier
     //Stack

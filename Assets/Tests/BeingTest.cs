@@ -1,4 +1,4 @@
-namespace ComboSystem.Tests
+namespace ModifierSystem.Tests
 {
     public class BeingTest
     {

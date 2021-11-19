@@ -1,12 +1,13 @@
 using BaseProject;
+using ModifierSystem;
 using NUnit.Framework;
 
-namespace ComboSystem.Tests
+namespace ModifierSystem.Tests
 {
     public abstract class ModifierBaseTest
     {
-        /*protected ComboBeing character;
-        protected ComboBeing enemy;
+        /*protected Being character;
+        protected Being enemy;
 
         protected ModifierPrototypesTest modifierPrototypes;
         protected ComboModifierPrototypesTest comboModifierPrototypes;
