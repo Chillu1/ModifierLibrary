@@ -70,7 +70,7 @@ namespace ComboSystemComposition
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
-            Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.Id, "modifiers");
+            Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
         public bool RemoveModifier(Modifier modifier)

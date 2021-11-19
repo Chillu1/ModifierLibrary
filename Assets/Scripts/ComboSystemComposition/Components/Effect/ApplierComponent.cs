@@ -3,18 +3,21 @@ namespace ComboSystemComposition
     public class ApplierComponent : IEffectComponent
     {
         private IModifier Modifier { get; }
+        private AddModifierParameters Parameters { get; }
         private ITargetComponent TargetComponent { get; }
 
-        public ApplierComponent(Modifier modifier, ITargetComponent targetComponent)
+
+        public ApplierComponent(Modifier modifier, ITargetComponent targetComponent,
+            AddModifierParameters parameters = AddModifierParameters.Default)
         {
             Modifier = modifier;
+            Parameters = parameters;
             TargetComponent = targetComponent;
         }
 
         public void Effect()
         {
-            //TODO If Modifier is applier, then AddModifier param cant be always OwnerIsTarget
-            TargetComponent.GetTarget().AddModifier((Modifier)Modifier.Clone());
+            TargetComponent.GetTarget().AddModifier((Modifier)Modifier.Clone(), Parameters);
         }
 
         public void ApplyModifierToTarget(Being target)

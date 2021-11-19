@@ -6,7 +6,7 @@ namespace ComboSystemComposition
 {
     public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent
     {
-        [CanBeNull] public Being Target { get; private set; }
+        [CanBeNull] public IBeing Target { get; private set; }
         public UnitType UnitType { get; }
         private Being _owner;
 
@@ -46,12 +46,17 @@ namespace ComboSystemComposition
         }
 
         [CanBeNull]
-        public Being GetTarget()
+        public IBeing GetTarget()
         {
             return Target;
         }
 
-        public void SetTarget(Being target)
+        public IBeing GetOwner()
+        {
+            return _owner;
+        }
+
+        public void SetTarget(IBeing target)
         {
             if (Target != null)
             {

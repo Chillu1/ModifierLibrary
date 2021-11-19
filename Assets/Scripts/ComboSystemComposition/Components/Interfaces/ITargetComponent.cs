@@ -2,7 +2,8 @@ namespace ComboSystemComposition
 {
     public interface ITargetComponent
     {
-        Being GetTarget();
-        void SetTarget(Being target);
+        IBeing GetTarget();
+        void SetTarget(IBeing target);
+        IBeing GetOwner();
     }
 }

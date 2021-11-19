@@ -16,7 +16,6 @@ namespace ComboSystemComposition
             //On Init, Apply It (deal damage), remove 0.5 seconds after from manager
 
             //IceBoltDebuff
-            //TODO Linger, Targeting
             var iceBoltModifier = new Modifier("IceBolt");
             var iceBoltTarget = new TargetComponent(UnitType.Self);
             var iceBoltEffect = new DamageComponent(new []{new DamageData(100, DamageType.Cold)}, iceBoltTarget);

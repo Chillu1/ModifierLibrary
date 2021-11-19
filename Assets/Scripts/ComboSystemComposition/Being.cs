@@ -5,7 +5,6 @@ namespace ComboSystemComposition
 {
     public sealed class Being : IBeing
     {
-        public string Id => BaseBeing.Id;
         public BaseBeing BaseBeing { get; }
 
         /// <summary>
@@ -25,15 +24,21 @@ namespace ComboSystemComposition
             ModifierController.Update(deltaTime);
         }
 
+        /// <summary>
+        ///     Manual attack, NOT a modifier attack
+        /// </summary>
         public void Attack(Being target)
         {
             ApplyModifiers(target);
             BaseBeing.Attack(target.BaseBeing);
         }
 
-        public void DealDamage(DamageData[] data)
+        /// <summary>
+        ///     Used for dealing damage with modifiers
+        /// </summary>
+        public DamageData[] DealDamage(DamageData[] data)
         {
-            BaseBeing.DealDamage(data);
+            return BaseBeing.DealDamage(data);
         }
 
         /// <summary>
@@ -44,7 +49,7 @@ namespace ComboSystemComposition
             var modifierAppliers = ModifierController.GetModifierAppliers();
             if (modifierAppliers == null)
             {
-                Log.Verbose(Id+" has no applier modifiers", "modifiers");
+                Log.Verbose(BaseBeing.Id+" has no applier modifiers", "modifiers");
                 return;
             }
 

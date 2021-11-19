@@ -5,7 +5,6 @@ namespace ComboSystemComposition
 {
     public class DamageComponent : IEffectComponent
     {
-        //TODO Damage type to proper, elementalType, etc
         public DamageData[] Damage { get; private set; }
         private Func<IBeing> _getTarget;
 
@@ -17,7 +16,7 @@ namespace ComboSystemComposition
 
         public void Effect()
         {
-            _getTarget.Invoke().DealDamage(Damage);
+            _getTarget().DealDamage(Damage);
         }
     }
 }
