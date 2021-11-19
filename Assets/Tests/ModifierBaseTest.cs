@@ -5,8 +5,8 @@ namespace ComboSystem.Tests
 {
     public abstract class ModifierBaseTest
     {
-        protected Character character;
-        protected Character enemy;
+        protected ComboBeing character;
+        protected ComboBeing enemy;
 
         protected ModifierPrototypesTest modifierPrototypes;
         protected ComboModifierPrototypesTest comboModifierPrototypes;
@@ -23,8 +23,8 @@ namespace ComboSystem.Tests
         [SetUp]
         public void Init()
         {
-            character = new Character(new ComboBeingProperties() { Id = "player", Health = 50, Damage = 5, MovementSpeed = 3 });
-            enemy = new Character(new ComboBeingProperties() { Id = "enemy", Health = 30, Damage = 3, MovementSpeed = 2 });
+            character = new ComboBeing(new ComboBeingProperties() { Id = "player", Health = 50, Damage = 5, MovementSpeed = 3 });
+            enemy = new ComboBeing(new ComboBeingProperties() { Id = "enemy", Health = 30, Damage = 3, MovementSpeed = 2 });
         }
 
         [TearDown]
@@ -38,14 +38,14 @@ namespace ComboSystem.Tests
         {
             public void AddTestModifiers()
             {
-                var physicalAttackDoTData = new DamageOverTimeData(new Damages(2, DamageType.Physical), 1f, 5f);
+                var physicalAttackDoTData = new DamageOverTimeData(new[]{new DamageData(2, DamageType.Physical)}, 1f, 5f);
                 var physicalAttackDoT = new DamageOverTimeModifier("PhysicalDoTAttack", physicalAttackDoTData, ModifierProperties.Refreshable);
                 SetupModifierApplier(physicalAttackDoT);
 
-                var fireAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Fire });
+                var fireAttackData = new[]{new DamageData(3, DamageType.Fire)};
                 var fireAttack = new DamageAttackModifier("TestFireDamage", fireAttackData);
                 SetupModifierApplier(fireAttack);
-                var coldAttackData = new Damages(new DamageData() { Damage = 3f, DamageType = DamageType.Cold });
+                var coldAttackData = new[] { new DamageData(3, DamageType.Cold) };
                 var coldAttack = new DamageAttackModifier("TestColdDamage", coldAttackData);
                 SetupModifierApplier(coldAttack);
 
@@ -69,7 +69,7 @@ namespace ComboSystem.Tests
                     new StatChangeComboModifier("TestAspectOfTheCat", aspectOfTheCatData, aspectOfTheCatRecipe);
                 SetupModifier(aspectOfTheCat);
 
-                Damages explosionData = new Damages(new DamageData() { DamageType = DamageType.Explosion, Damage = 10f });
+                DamageData[] explosionData = new DamageData[]{new DamageData(10, DamageType.Explosion)};
                 var explosionRecipe = new ComboRecipe(new ComboRecipeProperties()
                     { DamageTypes = new [] { DamageType.Fire | DamageType.Cold}});
                 DamageAttackComboModifier explosion =

@@ -1,4 +1,5 @@
 using System.Globalization;
+using BaseProject;
 using ComboSystem;
 using JetBrains.Annotations;
 
@@ -64,8 +65,8 @@ namespace ComboSystemComposition
         {
             ModifierPrototypes = new ModifierPrototypes();
 
-            var player = new Being("Player", 5, TargetType.Ally);
-            var enemy = new Being("Enemy", 2, TargetType.Enemy);
+            var player = new Being(new BeingProperties(){Id = "Player", Damage = 5, Health = 30, UnitType = UnitType.Ally});
+            var enemy = new Being(new BeingProperties(){Id = "Enemy", Damage = 2, Health = 20, UnitType = UnitType.Enemy});
 
             player.AddModifier(ModifierPrototypes.GetItem("IceBoltApplier"));
             player.Attack(enemy);

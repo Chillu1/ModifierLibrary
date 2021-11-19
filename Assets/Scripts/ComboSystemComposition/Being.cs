@@ -1,29 +1,23 @@
+using System;
 using BaseProject;
 
 namespace ComboSystemComposition
 {
-    public class Being : IBeing
+    public sealed class Being : IBeing
     {
-        public string Id { get; }
-        public TargetType TargetType { get; }
-        private double _damage;
+        public string Id => BaseBeing.Id;
+        public BaseBeing BaseBeing { get; }
+
+        /// <summary>
+        ///     On getting a combo
+        /// </summary>
+        public event Action<Being> ComboEvent;
         private ModifierController ModifierController { get; }
 
-        public Being(string id, double damage, TargetType targetType)
+        public Being(BeingProperties beingProperties)
         {
-            Id = id;
-            TargetType = targetType;
-            _damage = damage;
+            BaseBeing = new BaseBeing(beingProperties);
             ModifierController = new ModifierController(this);
-        }
-
-        public void DealDamage(double damage)
-        {
-
-        }
-
-        public void ChangeStat(double health)
-        {
         }
 
         public void Update(float deltaTime)
@@ -34,16 +28,12 @@ namespace ComboSystemComposition
         public void Attack(Being target)
         {
             ApplyModifiers(target);
-            target.DealDamage(_damage);
-            //AttackEvent?.Invoke(this, (Being)target);
-            //if(target.IsDead)
-            //    KillEvent?.Invoke(this, (Being)target);
+            BaseBeing.Attack(target.BaseBeing);
         }
 
-        protected void OnDeath()
+        public void DealDamage(DamageData[] data)
         {
-            //Log.Verbose("OnDeath, "+DeathEvent?.GetInvocationList().Length, "modifiers");
-            //DeathEvent?.Invoke(this);
+            BaseBeing.DealDamage(data);
         }
 
         /// <summary>
@@ -74,6 +64,20 @@ namespace ComboSystemComposition
         public bool ContainsModifier(Modifier modifier)
         {
             return ModifierController.ContainsModifier(modifier);
+        }
+
+        public void CopyEvents(Being prototype)
+        {
+            BaseBeing.CopyEvents(prototype.BaseBeing);
+            ComboEvent = prototype.ComboEvent;
+            //Copy modifierEvents
+            //problem, we copy the event, but the target is wrong modifierController (old)
+            ModifierController.CopyEvents(prototype.ModifierController);
+        }
+
+        public override string ToString()
+        {
+            return BaseBeing.ToString() + ModifierController;
         }
     }
 }

@@ -1,14 +1,15 @@
 using System;
+using BaseProject;
 
 namespace ComboSystemComposition
 {
     public class DamageComponent : IEffectComponent
     {
         //TODO Damage type to proper, elementalType, etc
-        public double Damage { get; private set; }
+        public DamageData[] Damage { get; private set; }
         private Func<IBeing> _getTarget;
 
-        public DamageComponent(double damage, ITargetComponent targetComponent)
+        public DamageComponent(DamageData[] damage, ITargetComponent targetComponent)
         {
             Damage = damage;
             _getTarget = () => targetComponent.GetTarget();

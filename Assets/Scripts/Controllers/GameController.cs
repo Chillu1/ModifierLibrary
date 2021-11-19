@@ -7,7 +7,7 @@ namespace ComboSystem
 {
     public class GameController : Singleton<GameController>
     {
-        private Character player;//TEMP
+        private ComboBeing player;//TEMP
 
         /// <summary>
         /// Actual game speed (dev/testing purposes)
@@ -29,7 +29,7 @@ namespace ComboSystem
             ModifierPrototypes = new ModifierPrototypes();
             ComboModifierPrototypes = new ComboModifierPrototypes();
 
-            player = new Character(new ComboBeingProperties() { Id = "player", Health = 50, Damage = 5, MovementSpeed = 3});
+            player = new ComboBeing(new ComboBeingProperties() { Id = "player", Health = 50, Damage = 5, MovementSpeed = 3});
             //Modifier mod1 = ModifierPrototypes.GetModifier("MovementSpeedOfCat");
             //player.AddModifier(mod1);
             //Modifier mod2 = ModifierPrototypes.GetModifier("AttackSpeedOfCat");
@@ -47,7 +47,7 @@ namespace ComboSystem
 
             player.AddModifier(ModifierPrototypes.GetItem("PlayerMovementSpeedDurationOnKillBuff"), AddModifierParameters.Default, ActivationCondition.Kill);
 
-            Character spider = new Character(new ComboBeingProperties() { Id = "Spider", Health = 20, Damage = 3, MovementSpeed = 2});
+            ComboBeing spider = new ComboBeing(new ComboBeingProperties() { Id = "Spider", Health = 20, Damage = 3, MovementSpeed = 2});
             //var spiderPoisonBuff = (ModifierApplier<ModifierApplierData>)ModifierPrototypes.GetItem<ModifierApplierData>("SpiderPoisonBuff");
             //spider.AddModifierApplier(spiderPoisonBuff);
             //slimePoisonBuff.ApplyModifierToTarget(player);

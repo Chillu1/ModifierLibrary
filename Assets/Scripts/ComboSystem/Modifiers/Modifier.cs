@@ -65,7 +65,7 @@ namespace ComboSystem
         public event Action<Modifier> Removed;
         public string Id { get; protected set; }
         public ModifierProperties ModifierProperties { get; protected set; }
-        [CanBeNull] public Being Target { get; protected set; }
+        [CanBeNull] public ComboBeing Target { get; protected set; }
 
         protected Func<Modifier, bool> Condition { get; set; } = arg => true;
         protected bool IsRemoved { get; private set; }
@@ -207,7 +207,7 @@ namespace ComboSystem
         /// </summary>
         /// <param name="target"></param>
         /// <returns>Successfully set a NEW target</returns>
-        public bool SetTarget(Being target)
+        public bool SetTarget(ComboBeing target)
         {
             if (!target.IsValidTarget(this))
                 return false;

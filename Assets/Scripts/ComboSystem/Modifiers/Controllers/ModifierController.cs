@@ -9,10 +9,10 @@ namespace ComboSystem
 {
     public class ModifierController : IEventCopy<ModifierController>
     {
-        private readonly Being _ownerTarget;
+        private readonly ComboBeing _ownerTarget;
         private Dictionary<string, Modifier> Modifiers { get; }
 
-        public ModifierController(Being ownerTarget)
+        public ModifierController(ComboBeing ownerTarget)
         {
             Modifiers = new Dictionary<string, Modifier>();
             _ownerTarget = ownerTarget;

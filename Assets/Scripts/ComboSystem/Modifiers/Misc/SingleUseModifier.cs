@@ -33,7 +33,6 @@ namespace ComboSystem
 
         protected override void Effect()
         {
-            somehow this triggers on different "mage" than the proper one
             Log.Info("Effect");
             IsOn = true;
         }

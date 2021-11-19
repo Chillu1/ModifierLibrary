@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ComboSystemComposition
 {
     public class ModifierPrototypes : ModifierPrototypesBase<Modifier>
@@ -16,8 +18,8 @@ namespace ComboSystemComposition
             //IceBoltDebuff
             //TODO Linger, Targeting
             var iceBoltModifier = new Modifier("IceBolt");
-            var iceBoltTarget = new TargetComponent(TargetType.Self);
-            var iceBoltEffect = new DamageComponent(100/*, ElementalType.Ice*/, iceBoltTarget);
+            var iceBoltTarget = new TargetComponent(UnitType.Self);
+            var iceBoltEffect = new DamageComponent(new []{new DamageData(100, DamageType.Cold)}, iceBoltTarget);
             var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
             iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
             iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
@@ -27,7 +29,7 @@ namespace ComboSystemComposition
 
             //IceBoltApplier
             var iceBoltApplier = new Modifier("IceBoltApplier", true);
-            var iceBoltApplierTarget = new TargetComponent(TargetType.DefaultOffensive);
+            var iceBoltApplierTarget = new TargetComponent(UnitType.DefaultOffensive);
             var iceBoltApplierEffect = new ApplierComponent(iceBoltModifier, iceBoltApplierTarget);
             var iceBoltApplierApply = new ApplyComponent(iceBoltApplierEffect, iceBoltApplierTarget);
             iceBoltApplier.AddComponent(iceBoltApplierApply);//TODO Apply component on attack

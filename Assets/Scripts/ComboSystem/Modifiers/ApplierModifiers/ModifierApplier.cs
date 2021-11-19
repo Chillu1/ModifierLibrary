@@ -17,7 +17,7 @@ namespace ComboSystem
             Target!.AddModifier((Modifier)Data.Modifier.Clone());
         }
 
-        public void ApplyModifierToTarget(Being target)
+        public void ApplyModifierToTarget(ComboBeing target)
         {
             if(SetTarget(target))
             {

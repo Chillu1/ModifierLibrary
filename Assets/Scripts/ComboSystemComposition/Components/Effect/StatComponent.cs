@@ -1,4 +1,5 @@
 using System;
+using BaseProject;
 
 namespace ComboSystemComposition
 {
@@ -16,7 +17,7 @@ namespace ComboSystemComposition
 
         public void Effect()
         {
-            _getTarget.Invoke().ChangeStat(Health);
+            _getTarget.Invoke().BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
         }
     }
 }
