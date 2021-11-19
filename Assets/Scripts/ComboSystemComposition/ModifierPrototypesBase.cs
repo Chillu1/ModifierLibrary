@@ -10,6 +10,9 @@ namespace ComboSystemComposition
 
         protected void SetupModifier(TModifierType modifier)
         {
+            if (!modifier.ValidatePrototypeSetup())
+                return;
+
             if (prototypes.ContainsKey(modifier.Id))
             {
                 Log.Error("A modifier with id: "+modifier.Id+" already exists", "modifiers");

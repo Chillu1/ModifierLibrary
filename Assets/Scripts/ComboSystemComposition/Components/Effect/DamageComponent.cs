@@ -16,7 +16,13 @@ namespace ComboSystemComposition
 
         public void Effect()
         {
+            //Log.Info(_getTarget().BaseBeing.Id);
             _getTarget().DealDamage(Damage);
+        }
+
+        public void IncreaseDamage(double damage)
+        {
+            Damage[0].BaseDamage+= damage;
         }
     }
 }

@@ -1,74 +1,39 @@
-using System.Globalization;
 using BaseProject;
-using JetBrains.Annotations;
+using UnityEngine;
 
 namespace ComboSystemComposition
 {
-    /*
-     Process (lifecycle):
-        Modifier tries to be added to entity collection
-            We check for duplicates, refresh, stack, etc.
-        When added, apply may be called (ex. on init buff)
-        Update all updatable components in collection (ex. TimeComponent)
-        Apply components check for validity of apply
-            if passed: Trigger EffectComponents
-                Either triggers an effect, or removes modifier after duration passed
-
-    Technical lifecycle:
-        ModifierManager.AddModifier(modifier)
-            ModifierManager.CheckDuplicate(modifier)
-                Stack or Refresh
-        If targetself, setTarget(self)
-        modifier.Init()
-            May modifier.Apply()
-        Update TimeComponent
-            May modifier.Apply()
-        After linger/duration remove ModifierManage.RemoveModifier(modifier)
-
-    InitComponent -> ApplyComponent -> EffectComponent
-    TimeComponent -> ApplyComponent -> EffectComponent
-    TimeComponent -> RemoveComponent
-
-     Structure
-            Dump components not knowing what they do (time(duration), single use, time(interval))
-            EffectComponents
-               Have an effect: stun, statchange, deal damage
-            ApplyComponents
-               Trigger effect: after duration, on interval, condition, in apply
-            TimeComponents
-               Trigger effect: after duration/ on interval
-    */
-
-    /*
-     ModifierSet (Aspect of the cat)
-        AddStatModifier (Speed buff)
-        AddStatModifier (AttackSpeed buff)
-        DurationModifier (RemoveComponent, removed ModifierSet)
-     */
-
-    //RefreshedDoTIntervalDurationModifier
-    /*
-      Workings:
-        Added to collection/entity instantly
-        After X Interval, does Y Damage
-        After Z Duration, gets removed from collection/entity
-        if  modifier added again to collection/entity
-            refresh modifier _timer
-    */
-
-    public class GameController
+    public class GameController : MonoBehaviour
     {
+        private Being _player;
+        private Being _enemy;
         public ModifierPrototypes ModifierPrototypes { get; private set; }
+
+        private float _timer;
 
         public void Start()
         {
             ModifierPrototypes = new ModifierPrototypes();
 
-            var player = new Being(new BeingProperties(){Id = "Player", Damage = 5, Health = 30, UnitType = UnitType.Ally});
-            var enemy = new Being(new BeingProperties(){Id = "Enemy", Damage = 2, Health = 20, UnitType = UnitType.Enemy});
+            _player = new Being(new BeingProperties(){Id = "Player", Damage = 0, Health = 150, UnitType = UnitType.Ally});
+            _enemy = new Being(new BeingProperties(){Id = "Enemy", Damage = 2, Health = 100, UnitType = UnitType.Enemy});
 
-            player.AddModifier(ModifierPrototypes.GetItem("IceBoltApplier"));
-            player.Attack(enemy);
+            _player.AddModifier(ModifierPrototypes.GetItem("SpiderPoisonApplier"), AddModifierParameters.NullStartTarget);
+            _player.Attack(_enemy);
+        }
+
+        private void Update()
+        {
+            _timer+=Time.deltaTime;
+            if (_timer >= 1)
+            {
+                _player.Attack(_enemy);
+                _timer = 0;
+            }
+
+            _player.Update(Time.deltaTime);
+            _enemy.Update(Time.deltaTime);
+            Log.Info(_enemy.BaseBeing.Health);
         }
     }
 }

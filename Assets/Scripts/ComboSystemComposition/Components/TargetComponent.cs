@@ -1,4 +1,3 @@
-using System;
 using BaseProject;
 using JetBrains.Annotations;
 
@@ -8,11 +7,13 @@ namespace ComboSystemComposition
     {
         [CanBeNull] public IBeing Target { get; private set; }
         public UnitType UnitType { get; }
+        private bool Applier { get; }
         private Being _owner;
 
-        public TargetComponent(UnitType unitType)
+        public TargetComponent(UnitType unitType = UnitType.Self, bool applier = false)
         {
             UnitType = unitType;
+            Applier = applier;
         }
 
         public void SetupOwner(Being owner)
@@ -58,9 +59,9 @@ namespace ComboSystemComposition
 
         public void SetTarget(IBeing target)
         {
-            if (Target != null)
+            if (!Applier && Target != null)
             {
-                Log.Error("Already has a target");
+                Log.Error("Already has a target", "modifiers");
                 return;
             }
             Target = target;

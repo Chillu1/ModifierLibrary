@@ -5,16 +5,17 @@ namespace ComboSystemComposition
     /// </summary>
     public class TimeComponent : Component, ITimeComponent
     {
-        public IEffectComponent EffectComponent { get; }
-        public double Duration { get; private set; }
+        private IEffectComponent EffectComponent { get; }
+        private double Duration { get; set; }
         private bool ResetOnFinished { get; }
         private double _timer;
+        private bool _finished;
 
         public TimeComponent(IEffectComponent effectComponent, double duration, bool resetOnFinished = false)
         {
+            EffectComponent = effectComponent;
             Duration = duration;
             ResetOnFinished = resetOnFinished;
-            EffectComponent = effectComponent;
         }
 
         /// <summary>
@@ -29,12 +30,19 @@ namespace ComboSystemComposition
 
         public void Update(float deltaTime)
         {
+            if (_finished)
+                return;
             _timer += deltaTime;
             if (_timer >= Duration)
             {
                 EffectComponent.Effect();
+                _finished = true;
+
                 if(ResetOnFinished)
+                {
                     _timer = 0;
+                    _finished = false;
+                }
             }
         }
     }

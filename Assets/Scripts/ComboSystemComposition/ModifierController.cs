@@ -35,10 +35,10 @@ namespace ComboSystemComposition
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
             {
-                Log.Verbose("HasModifier " + modifier.Id, "modifiers");
                 //Run stack & refresh in case it has those components
                 internalModifier.Stack();
                 internalModifier.Refresh();
+                //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
             else
             {

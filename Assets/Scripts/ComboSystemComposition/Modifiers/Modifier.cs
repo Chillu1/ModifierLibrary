@@ -1,37 +1,10 @@
 using System;
+using System.Collections.Generic;
 using BaseProject;
 using JetBrains.Annotations;
 
 namespace ComboSystemComposition
 {
-    /*
-    TODO
-    SimpleStatBuff
-    StackedDoTDurationModifier
-
-    Component based system (mixing components to a new modifier, like a recipe):
-        Components needed:
-        https://www.reddit.com/r/gamedev/comments/1bm5xs/programmers_how_dowould_you_implement_a/c9848mc/
-            Effect
-            Target (makes sure Target is valid)
-        Component types:
-            ApplyComponent
-                Simple apply, no rules, just call effect
-                Conditional apply, when effect is triggered & a conditional value is true
-            DurationComponent
-                Remove after duration
-                Effect after duration?
-            StackComponent
-            RefreshComponent?
-            RemoveComponent
-
-        Component recipe:
-            DoT
-
-    Encapsulation only based system:
-
-    */
-
     public class Modifier : IModifier, IEntity<string>, IEventCopy<Modifier>, ICloneable
     {
         public string Id { get; protected set; }
@@ -39,7 +12,7 @@ namespace ComboSystemComposition
         public TargetComponent TargetComponent { get; private set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
-        [CanBeNull] private ITimeComponent[] TimeComponents { get; set; }
+        [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
 
@@ -56,7 +29,8 @@ namespace ComboSystemComposition
 
         public void Update(float deltaTime)
         {
-            for (int i = 0; i < TimeComponents?.Length; i++)
+            //Log.Info(TimeComponents?.Count +" ID: "+Id);
+            for (int i = 0; i < TimeComponents?.Count; i++)
                 TimeComponents[i].Update(deltaTime);
         }
 
@@ -82,33 +56,41 @@ namespace ComboSystemComposition
             ApplyComponent = applyComponent;
         }
 
-        public void AddComponent(ITimeComponent timeComponent)
+        public void AddComponent(TargetComponent targetComponent)
         {
-            if (TimeComponents != null)
+            if (TargetComponent != null)
             {
                 //logerror
                 return;
             }
 
-            TimeComponents = new[] { timeComponent };
+            TargetComponent = targetComponent;
         }
 
-        public void AddComponent(ITimeComponent[] timeComponents)
+        public void AddComponent(ITimeComponent timeComponent)
         {
-            if (TimeComponents != null)
+            if (TimeComponents == null)
+                TimeComponents = new List<ITimeComponent>(2);
+
+            TimeComponents.Add(timeComponent);
+        }
+
+        public void AddComponent(IStackComponent stackComponent)
+        {
+            if (StackComponent != null)
             {
                 //logerror
                 return;
             }
 
-            TimeComponents = timeComponents;
+            StackComponent = stackComponent;
         }
 
         public void Apply()
         {
             if (ApplyComponent == null)
             {
-                Log.Error("No stack component");
+                Log.Error("No apply component", "modifiers");
                 return;
             }
 
@@ -119,7 +101,7 @@ namespace ComboSystemComposition
         {
             if (StackComponent == null)
             {
-                //Log.Error("No stack component");
+                Log.Error("No stack component", "modifiers");
                 return;
             }
 
@@ -140,6 +122,45 @@ namespace ComboSystemComposition
         public void CopyEvents(Modifier prototype)
         {
             //this.event = prototype.event //or we will need to copy it over properly, with a new reference
+        }
+
+        public bool ValidatePrototypeSetup()
+        {
+            bool success = true;
+
+            if (TargetComponent == null)
+            {
+                Log.Error("Modifier needs a target component", "modifiers");
+                success = false;
+            }
+
+            if (ApplierModifier || Id.Contains("Applier"))
+            {
+                if (ApplyComponent == null)
+                {
+                    Log.Error("ModifierApplier needs an ApplyComponent", "modifiers");
+                    success = false;
+                }
+            }
+            //Not applier, check for other components
+            else if ((TimeComponents == null || TimeComponents.Count == 0) && InitComponent == null)
+            {
+                Log.Error("Modifier needs either an init or time component to work (unless maybe its a flag modifier?)", "modifiers");
+                success = false;
+            }
+
+            if (Id.Contains("Applier") && !ApplierModifier)
+            {
+                Log.Error("Id contains applier, but the flag isn't set", "modifiers");
+                success = false;
+            }
+            if (!Id.Contains("Applier") && ApplierModifier)
+            {
+                Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
+                success = false;
+            }
+
+            return success;
         }
 
         public object Clone()
