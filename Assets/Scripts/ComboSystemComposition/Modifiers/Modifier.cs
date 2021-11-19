@@ -1,6 +1,5 @@
 using System;
 using BaseProject;
-using ComboSystem;
 using JetBrains.Annotations;
 
 namespace ComboSystemComposition

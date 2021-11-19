@@ -4,7 +4,7 @@ namespace ComboSystem.Tests
 {
     public class ComboModifierTest : ModifierBaseTest
     {
-        [Test]
+        /*[Test]
         public void CheckComboModifierAspectOfCat()
         {
             var movementSpeedOfCat = modifierPrototypes.GetItem("TestMovementSpeedOfCat");
@@ -25,6 +25,6 @@ namespace ComboSystem.Tests
             character.Attack(enemy);
 
             Assert.True(enemy.ContainsModifier(comboModifierPrototypes.GetItem("TestExplosion")));
-        }
+        }*/
     }
 }

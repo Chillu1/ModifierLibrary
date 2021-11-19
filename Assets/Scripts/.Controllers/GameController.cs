@@ -53,13 +53,13 @@ namespace ComboSystem
             //slimePoisonBuff.ApplyModifierToTarget(player);
             player.Attack(spider);
             player.Attack(spider);
-            Log.Info(player.MovementSpeed.Value);
-            Log.Info(spider.Health.ToString());
+            //Log.Info(player.MovementSpeed.Value);
+            //Log.Info(spider.Health.ToString());
             player.Attack(spider);
             player.Attack(spider);
             player.Attack(spider);
-            Log.Info(player.MovementSpeed.Value);
-            Log.Info(spider.Health.ToString());
+            //Log.Info(player.MovementSpeed.Value);
+            //Log.Info(spider.Health.ToString());
         }
 
         public void GameplaySceneStarted()//Move to scene controller?

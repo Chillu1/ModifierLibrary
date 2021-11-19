@@ -5,7 +5,7 @@ namespace ComboSystem.Tests
 {
     public abstract class ModifierBaseTest
     {
-        protected ComboBeing character;
+        /*protected ComboBeing character;
         protected ComboBeing enemy;
 
         protected ModifierPrototypesTest modifierPrototypes;
@@ -76,6 +76,6 @@ namespace ComboSystem.Tests
                     new DamageAttackComboModifier("TestExplosion", explosionData, explosionRecipe);
                 SetupModifier(explosion);
             }
-        }
+        }*/
     }
 }
