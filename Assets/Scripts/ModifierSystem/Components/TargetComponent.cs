@@ -3,47 +3,46 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent
+    public class TargetComponent : Component, IValidatorComponent<IBeing>, ITargetComponent
     {
         [CanBeNull] public IBeing Target { get; private set; }
-        public UnitType UnitType { get; }
+        public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
-        private Being _owner;
+        private IBeing _owner;
 
-        public TargetComponent(UnitType unitType = UnitType.Self, bool applier = false)
+        public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
-            UnitType = unitType;
+            if(legalTarget == LegalTarget.None)
+                Log.Error("Illegal target `None`", "modifiers");
+
+            LegalTarget = legalTarget;
             Applier = applier;
         }
 
-        public void SetupOwner(Being owner)
+        public void SetupOwner(IBeing owner)
         {
             _owner = owner;
         }
 
-        public bool Validate(Being target)
+        public bool Validate(IBeing target)
         {
             if (target == null)
-            {
-                if (UnitType.HasFlag(UnitType.Ground))
-                    return true;
-                return false;
-            }
+                return LegalTarget.HasFlag(LegalTarget.Ground);
+
+            if (target.BaseBeing.UnitType == UnitType.None)
+                Log.Error("Illegal UnitType on: " + target.BaseBeing.Id, "modifiers");
 
             //Check if target is self
-            if (UnitType.HasFlag(UnitType.Self))
-                return _owner == target;
+            if (LegalTarget.HasFlag(LegalTarget.Self) && _owner == target)
+                return true;
 
-            if (UnitType.HasFlag(UnitType.Ally))
-                return target.BaseBeing.UnitType == UnitType.Ally;
+            if (LegalTarget.HasFlag(LegalTarget.Ally) && target.BaseBeing.UnitType == UnitType.Ally)
+                return true;
 
-            if (UnitType.HasFlag(UnitType.Enemy))
-                return target.BaseBeing.UnitType == UnitType.Enemy;
+            if (LegalTarget.HasFlag(LegalTarget.Enemy) && target.BaseBeing.UnitType == UnitType.Enemy)
+                return true;
 
-            //TODO rest of flags
-
-            Target = target;
-            return true;
+            return false;
         }
 
         [CanBeNull]
@@ -64,6 +63,13 @@ namespace ModifierSystem
                 Log.Error("Already has a target", "modifiers");
                 return;
             }
+
+            if (!Validate(target))
+            {
+                Log.Error("Target is not valid, id: "+target?.BaseBeing.Id, "modifiers");
+                return;
+            }
+
             Target = target;
         }
     }

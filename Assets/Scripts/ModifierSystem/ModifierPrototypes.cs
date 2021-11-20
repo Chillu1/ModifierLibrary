@@ -17,7 +17,7 @@ namespace ModifierSystem
 
             //IceBoltDebuff
             var iceBoltModifier = new Modifier("IceBolt");
-            var iceBoltTarget = new TargetComponent(UnitType.Self);
+            var iceBoltTarget = new TargetComponent(LegalTarget.Self);
             var iceBoltEffect = new DamageComponent(new []{new DamageData(15, DamageType.Cold)}, iceBoltTarget);
             var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
             iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
@@ -34,13 +34,13 @@ namespace ModifierSystem
             //var iceBoltApplierEffect = new ApplierComponent(iceBoltModifier, iceBoltApplierTarget);
             //var iceBoltApplierApply = new ApplyComponent(iceBoltApplierEffect, iceBoltApplierTarget);
             //iceBoltApplier.AddComponent(iceBoltApplierApply);//TODO Apply component on attack
-            SetupModifierApplier(iceBoltModifier, UnitType.DefaultOffensive);
+            SetupModifierApplier(iceBoltModifier, LegalTarget.DefaultOffensive);
 
             //StackableSpiderPoison, removed after 10 seconds
             //-Each stack increases DoT damage by 2
             //-Each stack increases current duration by 2, to max 10 stacks
             var spiderPoisonModifier = new Modifier("SpiderPoison");
-            var spiderPoisonTarget = new TargetComponent(UnitType.Self);
+            var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
             var damageData = new[] { new DamageData(5, DamageType.Poison) };
             var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
             var spiderPoisonStack = new StackComponent(() => damageData[0].BaseDamage += 2, 10);
@@ -52,7 +52,7 @@ namespace ModifierSystem
             spiderPoisonModifier.AddComponent(spiderPoisonStack);
             AddModifier(spiderPoisonModifier);
 
-            SetupModifierApplier(spiderPoisonModifier, UnitType.DefaultOffensive);
+            SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
 
             //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
             //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");

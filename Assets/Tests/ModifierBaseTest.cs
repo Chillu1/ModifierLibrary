@@ -22,8 +22,8 @@ namespace ModifierSystem.Tests
         [SetUp]
         public void Init()
         {
-            character = new Being(new BeingProperties() { Id = "player", Health = 50, Damage = 1, MovementSpeed = 3 });
-            enemy = new Being(new BeingProperties() { Id = "enemy", Health = 30, Damage = 1, MovementSpeed = 2 });
+            character = new Being(new BeingProperties() { Id = "player", Health = 50, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
+            enemy = new Being(new BeingProperties() { Id = "enemy", Health = 30, Damage = 1, MovementSpeed = 2, UnitType = UnitType.Enemy});
         }
 
         [TearDown]
@@ -42,10 +42,19 @@ namespace ModifierSystem.Tests
 
             protected override void SetupModifierPrototypes()
             {
+                var iceBoltModifier = new Modifier("IceBolt");
+                var iceBoltTarget = new TargetComponent(LegalTarget.Self);
+                var iceBoltEffect = new DamageComponent(new []{new DamageData(10, DamageType.Physical)}, iceBoltTarget);
+                var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
+                iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
+                iceBoltModifier.AddComponent(iceBoltTarget);
+                AddModifier(iceBoltModifier);
+                SetupModifierApplier(iceBoltModifier, LegalTarget.DefaultOffensive);
+
                 //StackableSpiderPoison, removed after 10 seconds
                 //-Each stack increases DoT damage by 2
                 var spiderPoisonModifier = new Modifier("SpiderPoison");
-                var spiderPoisonTarget = new TargetComponent(UnitType.Self);
+                var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
                 var damageData = new[] { new DamageData(5, DamageType.Poison) };
                 var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
                 var spiderPoisonStack = new StackComponent(() => damageData[0].BaseDamage += 2, 10);
@@ -56,8 +65,7 @@ namespace ModifierSystem.Tests
                 spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
                 spiderPoisonModifier.AddComponent(spiderPoisonStack);
                 AddModifier(spiderPoisonModifier);
-
-                SetupModifierApplier(spiderPoisonModifier, UnitType.DefaultOffensive);
+                SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
                 
                 /*var physicalAttackDoTData = new DamageOverTimeData(new[]{new DamageData(2, DamageType.Physical)}, 1f, 5f);
                 var physicalAttackDoT = new DamageOverTimeModifier("PhysicalDoTAttack", physicalAttackDoTData, ModifierProperties.Refreshable);

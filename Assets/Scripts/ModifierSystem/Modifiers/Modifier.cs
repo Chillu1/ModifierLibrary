@@ -97,26 +97,22 @@ namespace ModifierSystem
             ApplyComponent.Apply();
         }
 
-        public void Stack()
+        public bool Stack()
         {
             if (StackComponent == null)
-            {
-                Log.Error("No stack component", "modifiers");
-                return;
-            }
+                return false;
 
             StackComponent.Stack();
+            return true;
         }
 
-        public void Refresh()
+        public bool Refresh()
         {
             if (RefreshComponent == null)
-            {
-                //Log.Error("No refresh component");
-                return;
-            }
+                return false;
 
             RefreshComponent.Refresh();
+            return true;
         }
 
         public void CopyEvents(Modifier prototype)

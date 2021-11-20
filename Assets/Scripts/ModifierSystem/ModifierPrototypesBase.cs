@@ -22,10 +22,10 @@ namespace ModifierSystem
         }
 
         //Generic non-removable applier, for now
-        protected void SetupModifierApplier(TModifierType appliedModifier, UnitType unitType = UnitType.DefaultOffensive)
+        protected void SetupModifierApplier(TModifierType appliedModifier, LegalTarget legalTarget = LegalTarget.DefaultOffensive)
         {
             var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
-            var modifierApplierTarget = new TargetComponent(unitType, true);
+            var modifierApplierTarget = new TargetComponent(legalTarget, true);
             var modifierApplierEffect = new ApplierComponent(appliedModifier, modifierApplierTarget);
             var modifierApplierApply = new ApplyComponent(modifierApplierEffect, modifierApplierTarget);
             modifierApplier.AddComponent(modifierApplierApply);

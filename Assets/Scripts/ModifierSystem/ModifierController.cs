@@ -35,9 +35,14 @@ namespace ModifierSystem
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
             {
+                bool stacked, refreshed;
                 //Run stack & refresh in case it has those components
-                internalModifier.Stack();
-                internalModifier.Refresh();
+                stacked = internalModifier.Stack();
+                refreshed = internalModifier.Refresh();
+                //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
+                if(!stacked && !refreshed)
+                    internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
+
                 //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
             else
@@ -70,7 +75,7 @@ namespace ModifierSystem
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
-            Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
+            //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
         public bool RemoveModifier(Modifier modifier)
