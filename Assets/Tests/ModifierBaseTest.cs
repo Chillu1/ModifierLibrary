@@ -6,6 +6,7 @@ namespace ModifierSystem.Tests
     public abstract class ModifierBaseTest
     {
         protected Being character;
+        protected Being ally;
         protected Being enemy;
 
         protected ModifierPrototypesTest modifierPrototypes;
@@ -23,6 +24,7 @@ namespace ModifierSystem.Tests
         public void Init()
         {
             character = new Being(new BeingProperties() { Id = "player", Health = 50, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
+            ally = new Being(new BeingProperties() { Id = "ally", Health = 25, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
             enemy = new Being(new BeingProperties() { Id = "enemy", Health = 30, Damage = 1, MovementSpeed = 2, UnitType = UnitType.Enemy});
         }
 
@@ -30,6 +32,7 @@ namespace ModifierSystem.Tests
         public void CleanUp()
         {
             character = null;
+            ally = null;
             enemy = null;
         }
 
@@ -66,6 +69,26 @@ namespace ModifierSystem.Tests
                 spiderPoisonModifier.AddComponent(spiderPoisonStack);
                 AddModifier(spiderPoisonModifier);
                 SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
+
+                var selfHealModifier = new Modifier("PassiveSelfHeal");
+                var selfHealTarget = new TargetComponent(LegalTarget.Self);
+                var selfHealEffect = new HealComponent(10, selfHealTarget);
+                var selfHealApply = new ApplyComponent(selfHealEffect, selfHealTarget);
+                selfHealModifier.AddComponent(new TimeComponent(selfHealEffect, 1, true));//Every 2 seconds, deal 5 damage
+                selfHealModifier.AddComponent(new InitComponent(selfHealApply));
+                selfHealModifier.AddComponent(selfHealTarget);
+                AddModifier(selfHealModifier);
+
+                var allyHealModifier = new Modifier("AllyHeal");
+                var allyHealTarget = new TargetComponent(LegalTarget.Self);
+                var allyHealEffect = new HealComponent(10, allyHealTarget);
+                var allyHealApply = new ApplyComponent(allyHealEffect, allyHealTarget);
+                allyHealModifier.AddComponent(new InitComponent(allyHealApply));
+                allyHealModifier.AddComponent(allyHealTarget);
+                allyHealModifier.AddComponent(new TimeComponent(new RemoveComponent(allyHealModifier)));
+                AddModifier(allyHealModifier);
+                //Forever buff (applier), not refreshable or stackable (for now)
+                SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
                 
                 /*var physicalAttackDoTData = new DamageOverTimeData(new[]{new DamageData(2, DamageType.Physical)}, 1f, 5f);
                 var physicalAttackDoT = new DamageOverTimeModifier("PhysicalDoTAttack", physicalAttackDoTData, ModifierProperties.Refreshable);

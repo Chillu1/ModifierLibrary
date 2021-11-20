@@ -24,16 +24,8 @@ namespace ModifierSystem
             iceBoltModifier.AddComponent(iceBoltTarget);
             iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
             AddModifier(iceBoltModifier);
-
             //Forever buff (applier), not refreshable or stackable (for now)
             //Apply on attack
-
-            //IceBoltApplier
-            //var iceBoltApplier = new Modifier("IceBoltApplier", true);
-            //var iceBoltApplierTarget = new TargetComponent(UnitType.DefaultOffensive);
-            //var iceBoltApplierEffect = new ApplierComponent(iceBoltModifier, iceBoltApplierTarget);
-            //var iceBoltApplierApply = new ApplyComponent(iceBoltApplierEffect, iceBoltApplierTarget);
-            //iceBoltApplier.AddComponent(iceBoltApplierApply);//TODO Apply component on attack
             SetupModifierApplier(iceBoltModifier, LegalTarget.DefaultOffensive);
 
             //StackableSpiderPoison, removed after 10 seconds
@@ -51,8 +43,29 @@ namespace ModifierSystem
             spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
             spiderPoisonModifier.AddComponent(spiderPoisonStack);
             AddModifier(spiderPoisonModifier);
-
             SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
+
+            //PassiveSelfHeal
+            var selfHealModifier = new Modifier("PassiveSelfHeal");
+            var selfHealTarget = new TargetComponent(LegalTarget.Self);
+            var selfHealEffect = new HealComponent(10, selfHealTarget);
+            var selfHealApply = new ApplyComponent(selfHealEffect, selfHealTarget);
+            selfHealModifier.AddComponent(new InitComponent(selfHealApply));
+            selfHealModifier.AddComponent(selfHealTarget);
+            AddModifier(selfHealModifier);
+            //Forever buff (applier), not refreshable or stackable (for now)
+            //SetupModifierApplier(selfHealModifier, LegalTarget.Self);
+            
+            var allyHealModifier = new Modifier("AllyHeal");
+            var allyHealTarget = new TargetComponent(LegalTarget.Self);
+            var allyHealEffect = new HealComponent(10, allyHealTarget);
+            var allyHealApply = new ApplyComponent(allyHealEffect, allyHealTarget);
+            allyHealModifier.AddComponent(new InitComponent(allyHealApply));
+            allyHealModifier.AddComponent(allyHealTarget);
+            allyHealModifier.AddComponent(new TimeComponent(new RemoveComponent(allyHealModifier)));
+            AddModifier(allyHealModifier);
+            //Forever buff (applier), not refreshable or stackable (for now)
+            SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
 
             //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
             //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");

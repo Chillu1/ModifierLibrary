@@ -56,21 +56,22 @@ namespace ModifierSystem
             return _owner;
         }
 
-        public void SetTarget(IBeing target)
+        public bool SetTarget(IBeing target)
         {
             if (!Applier && Target != null)
             {
                 Log.Error("Already has a target", "modifiers");
-                return;
+                return false;
             }
 
             if (!Validate(target))
             {
                 Log.Error("Target is not valid, id: "+target?.BaseBeing.Id, "modifiers");
-                return;
+                return false;
             }
 
             Target = target;
+            return true;
         }
     }
 }

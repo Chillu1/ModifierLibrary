@@ -24,6 +24,26 @@ namespace ModifierSystem
             ModifierController.Update(deltaTime);
         }
 
+        public bool CastModifier(Being target, string modifierId)
+        {
+            if (!ModifierController.ContainsModifier(modifierId, out var modifier))
+            {
+                Log.Error("Modifier " + modifierId + " not present in collection", "modifiers");
+                return false;
+            }
+
+            if (!modifier.ApplierModifier)
+            {
+                //TODO Not sure, about this one, but probably true
+                Log.Error("Can't cast a non-applier modifier: "+modifierId, "modifiers");
+                return false;
+            }
+
+            modifier.TryApply(target);
+
+            return true;
+        }
+
         /// <summary>
         ///     Manual attack, NOT a modifier attack
         /// </summary>
@@ -54,11 +74,7 @@ namespace ModifierSystem
             }
 
             foreach (var modifierApplier in modifierAppliers)
-            {
-                modifierApplier.TargetComponent.SetTarget(target);
-                modifierApplier.Apply();
-                //modifierApplier.ApplyModifierToTarget(target);
-            }
+                modifierApplier.TryApply(target);
         }
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)

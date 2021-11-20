@@ -17,6 +17,10 @@ namespace ModifierSystem
 
         public void Effect()
         {
+            //Log.Info(TargetComponent);
+            //Log.Info(TargetComponent.GetTarget());
+            //Log.Info(Modifier);
+            //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
             TargetComponent.GetTarget().AddModifier((Modifier)Modifier.Clone(), Parameters);
         }
 

@@ -38,7 +38,7 @@ namespace ModifierSystem
         {
             if (InitComponent != null)
             {
-                //logerror
+                Log.Error(Id+ " already has a init component", "modifiers");
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace ModifierSystem
         {
             if (ApplyComponent != null)
             {
-                //logerror
+                Log.Error(Id+ " already has a apply component", "modifiers");
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace ModifierSystem
         {
             if (TargetComponent != null)
             {
-                //logerror
+                Log.Error(Id+ " already has a target component", "modifiers");
                 return;
             }
 
@@ -79,14 +79,21 @@ namespace ModifierSystem
         {
             if (StackComponent != null)
             {
-                //logerror
+                Log.Error(Id+ " already has a stack component", "modifiers");
                 return;
             }
 
             StackComponent = stackComponent;
         }
 
-        public void Apply()
+        public void TryApply(Being target)
+        {
+            bool validTarget = TargetComponent.SetTarget(target);
+            if(validTarget)
+                Apply();
+        }
+
+        private void Apply()
         {
             if (ApplyComponent == null)
             {

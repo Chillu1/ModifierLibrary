@@ -86,6 +86,16 @@ namespace ModifierSystem
             return success;
         }
 
+        public bool ContainsModifier(string modifierId)
+        {
+            return ContainsModifier(modifierId, out _);
+        }
+
+        public bool ContainsModifier(string modifierId, out Modifier modifier)
+        {
+            return Modifiers.TryGetValue(modifierId, out modifier);
+        }
+
         public bool ContainsModifier(Modifier modifier)
         {
             return Modifiers.ContainsKey(modifier.Id);

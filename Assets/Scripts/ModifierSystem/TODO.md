@@ -8,7 +8,10 @@ TODO RN:
  
 _Refactor "unitType"_  
     Self, Ally, Enemy.  Dynamically added based on what unit type you are?
+_SelfHeal modifier_
+    Cast specific applier (by name), on ally/enemy
 Basic Unit tests of components 
+ConditionalApply (OnAttack, OnDeath, etc)
 
 Heal -> Lifesteal (heal based on damage dealt)    
 Unit test of all mechanics & components  
