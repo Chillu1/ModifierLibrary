@@ -4,15 +4,26 @@ namespace ModifierSystem
 {
     public class StackComponent : Component, IStackComponent
     {
-        private int Stacks { get; set; }
+        private int Stacks { get; set; } = 1;
         private int MaxStacks { get; set; }
 
         private Action StackAction { get; }
 
-        public StackComponent(Action stackAction, int maxStacks)
+        public StackComponent(object temp, int maxStacks)
         {
+            StackAction = delegate
+            {
+                //damageData[0].BaseDamage += amount;
+                //Log.Info("1: "+_damageData[0].BaseDamage);
+                //Log.Info(damageData.GetHashCode() + "_"+damageData[0].BaseDamage);
+            };
+            //StackAction = stackAction;
             MaxStacks = maxStacks;
-            StackAction = stackAction;
+        }
+
+        public StackComponent(StackComponent prototypeStackComponent)
+        {
+            MaxStacks = prototypeStackComponent.MaxStacks;
         }
 
         public void Stack()
@@ -30,7 +41,7 @@ namespace ModifierSystem
         /// </summary>
         public void RemoveStack()
         {
-            if (Stacks + -1 < 0)
+            if (Stacks - 1 < 1)
                 return;
 
             Stacks--;

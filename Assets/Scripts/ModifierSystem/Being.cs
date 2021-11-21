@@ -11,6 +11,7 @@ namespace ModifierSystem
         ///     On getting a combo
         /// </summary>
         public event Action<Being> ComboEvent;
+        public double CurrentHealth => BaseBeing.Health.PoolStat.BaseStat.Value;
         private ModifierController ModifierController { get; }
 
         public Being(BeingProperties beingProperties)

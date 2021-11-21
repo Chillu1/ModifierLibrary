@@ -9,6 +9,10 @@ namespace ModifierSystem.Tests
         protected Being ally;
         protected Being enemy;
 
+        protected double initialHealthCharacters, initialHealthAlly, initialHealthEnemy;
+
+        protected const double Delta = 0.01d;
+
         protected ModifierPrototypesTest modifierPrototypes;
         //protected ComboModifierPrototypesTest comboModifierPrototypes;
 
@@ -26,6 +30,9 @@ namespace ModifierSystem.Tests
             character = new Being(new BeingProperties() { Id = "player", Health = 50, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
             ally = new Being(new BeingProperties() { Id = "ally", Health = 25, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
             enemy = new Being(new BeingProperties() { Id = "enemy", Health = 30, Damage = 1, MovementSpeed = 2, UnitType = UnitType.Enemy});
+            initialHealthCharacters = character.CurrentHealth;
+            initialHealthAlly = ally.CurrentHealth;
+            initialHealthEnemy = enemy.CurrentHealth;
         }
 
         [TearDown]
@@ -54,21 +61,33 @@ namespace ModifierSystem.Tests
                 AddModifier(iceBoltModifier);
                 SetupModifierApplier(iceBoltModifier, LegalTarget.DefaultOffensive);
 
-                //StackableSpiderPoison, removed after 10 seconds
-                //-Each stack increases DoT damage by 2
                 var spiderPoisonModifier = new Modifier("SpiderPoison");
                 var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
                 var damageData = new[] { new DamageData(5, DamageType.Poison) };
                 var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
-                var spiderPoisonStack = new StackComponent(() => damageData[0].BaseDamage += 2, 10);
                 var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
                 spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply));//Apply first stack/damage on init
                 spiderPoisonModifier.AddComponent(spiderPoisonTarget);
                 spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
                 spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
-                spiderPoisonModifier.AddComponent(spiderPoisonStack);
                 AddModifier(spiderPoisonModifier);
                 SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
+                
+                //StackableSpiderPoison, removed after 10 seconds
+                //-Each stack increases DoT damage by 2
+                var stackingSpiderPoisonModifier = new Modifier("StackingSpiderPoison");
+                var stackingSpiderPoisonTarget = new TargetComponent(LegalTarget.Self);
+                var stackingSpiderPoisonDamageData = new[] { new DamageData(5, DamageType.Poison) };
+                var stackingSpiderPoisonEffect = new DamageComponent(stackingSpiderPoisonDamageData, stackingSpiderPoisonTarget);
+                var stackingSpiderPoisonStack = new StackComponent(stackingSpiderPoisonDamageData, 10);
+                var stackingSpiderPoisonApply = new ApplyComponent(stackingSpiderPoisonEffect, stackingSpiderPoisonTarget);
+                stackingSpiderPoisonModifier.AddComponent(new InitComponent(stackingSpiderPoisonApply));//Apply first stack/damage on init
+                stackingSpiderPoisonModifier.AddComponent(stackingSpiderPoisonTarget);
+                stackingSpiderPoisonModifier.AddComponent(new TimeComponent(stackingSpiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
+                stackingSpiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(stackingSpiderPoisonModifier), 10));//Remove after 10 secs
+                stackingSpiderPoisonModifier.AddComponent(stackingSpiderPoisonStack);
+                AddModifier(stackingSpiderPoisonModifier);
+                SetupModifierApplier(stackingSpiderPoisonModifier, LegalTarget.DefaultOffensive);
 
                 var selfHealModifier = new Modifier("PassiveSelfHeal");
                 var selfHealTarget = new TargetComponent(LegalTarget.Self);

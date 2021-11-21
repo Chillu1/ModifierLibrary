@@ -1,21 +1,19 @@
-using System;
-
 namespace ModifierSystem
 {
     public class HealComponent : IEffectComponent
     {
         public double Heal { get; private set; }
-        private Func<IBeing> _getTarget;
+        private ITargetComponent TargetComponent { get; }
 
         public HealComponent(double heal, ITargetComponent targetComponent)
         {
             Heal = heal;
-            _getTarget = () => targetComponent.GetTarget();
+            TargetComponent = targetComponent;
         }
 
         public void Effect()
         {
-            _getTarget().BaseBeing.Heal(Heal);
+            TargetComponent.GetTarget().BaseBeing.Heal(Heal);
         }
     }
 }

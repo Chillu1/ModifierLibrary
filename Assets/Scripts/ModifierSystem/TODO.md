@@ -6,11 +6,32 @@ TODO RN:
                 if(!stacked && !refreshed)
                     internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
  
+StackComponent:
+What can a stack do?
+    Increase numbers (damage, speed, TimeComponent.duration)
+    Trigger an effect on X stacks
+
+THIS
+Hey everyone, design problem here.
+
+I want a very "generic"/open delegate like "Action". So it can be used in a lot of ways, like incrementing X and Y.
+But also doing X effect on Y count. So limiting the behaviour is very not ideal, aka hardcoding the cases.
+Now, the problem is, the prototype pattern. Im using it with deep cloning the entire object.
+This is fine, until we try to clone the "Action", we can clone it to be the same. But then:
+1. Our target will be wrong (old).
+2. I don't want to hardcore the Action data in the class, since it can be a lot of different things.
+
+Another possibility is that.
+I might be going about this the wrong way. Maybe there's an elegant way of doing this open-ended behaviour.
+Without using delegates, and a lot of hard-coding the behaviours in the class.
+
+
 _Refactor "unitType"_  
     Self, Ally, Enemy.  Dynamically added based on what unit type you are?
-_SelfHeal modifier_
-    Cast specific applier (by name), on ally/enemy
-Basic Unit tests of components 
+Basic Unit tests of components & mechanics
+    _damageData[0].BaseDamage is not being used to damage enemy
+    Generic methods? Increase damage on stack, etc
+UniqueId per new component?
 ConditionalApply (OnAttack, OnDeath, etc)
 
 Heal -> Lifesteal (heal based on damage dealt)    

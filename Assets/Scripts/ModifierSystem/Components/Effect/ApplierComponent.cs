@@ -21,7 +21,9 @@ namespace ModifierSystem
             //Log.Info(TargetComponent.GetTarget());
             //Log.Info(Modifier);
             //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
-            TargetComponent.GetTarget().AddModifier((Modifier)Modifier.Clone(), Parameters);
+            var clonedModifier = (Modifier)Modifier.Clone();
+            clonedModifier.CopyEvents((Modifier)Modifier);
+            TargetComponent.GetTarget().AddModifier(clonedModifier, Parameters);
         }
 
         public void ApplyModifierToTarget(Being target)

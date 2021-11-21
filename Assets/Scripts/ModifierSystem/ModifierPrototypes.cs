@@ -35,7 +35,7 @@ namespace ModifierSystem
             var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
             var damageData = new[] { new DamageData(5, DamageType.Poison) };
             var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
-            var spiderPoisonStack = new StackComponent(() => damageData[0].BaseDamage += 2, 10);
+            var spiderPoisonStack = new StackComponent(damageData, 10);
             var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
             spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply));//Apply first stack/damage on init
             spiderPoisonModifier.AddComponent(spiderPoisonTarget);
