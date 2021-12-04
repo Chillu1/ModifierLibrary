@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageComponent : IEffectComponent
+    public class DamageComponent : IEffectComponent, IMetaEffect
     {
         public DamageData[] Damage { get; private set; }
         private ITargetComponent TargetComponent { get; }
@@ -19,9 +19,22 @@ namespace ModifierSystem
             TargetComponent.GetTarget().DealDamage(Damage);
         }
 
-        public void IncreaseDamage(double damage)
+        public void MetaEffect(ChangeType changeType, double value)
         {
-            Damage[0].BaseDamage+= damage;
+            switch (changeType)
+            {
+                case ChangeType.None:
+                    Log.Error("Wrong ChangeType");
+                    break;
+                case ChangeType.AdditiveIncrease:
+                    Damage[0].BaseDamage += value;
+                    break;
+                case ChangeType.Multiply:
+                    Damage[0].Multiplier += value;
+                    break;
+                case ChangeType.EveryXStack:
+                    break;
+            }
         }
     }
 }

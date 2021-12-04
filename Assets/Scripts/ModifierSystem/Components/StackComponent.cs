@@ -1,28 +1,36 @@
 using System;
+using BaseProject;
 
 namespace ModifierSystem
 {
     public class StackComponent : Component, IStackComponent
     {
+        private Action<DamageData[], double> PrototypeStackComponent { get; }
+        private IMetaEffect MetaEffect{ get; set; }
+        private ChangeType ChangeType { get; }
+        private double Value { get; }
+
         private int Stacks { get; set; } = 1;
         private int MaxStacks { get; set; }
 
-        private Action StackAction { get; }
-
-        public StackComponent(object temp, int maxStacks)
+        public StackComponent(Action<DamageData[], double> prototypeStackComponent, int maxStacks)
         {
-            StackAction = delegate
-            {
-                //damageData[0].BaseDamage += amount;
-                //Log.Info("1: "+_damageData[0].BaseDamage);
-                //Log.Info(damageData.GetHashCode() + "_"+damageData[0].BaseDamage);
-            };
-            //StackAction = stackAction;
+            PrototypeStackComponent = prototypeStackComponent;
             MaxStacks = maxStacks;
         }
 
+        //public StackComponent(IMetaEffect metaEffect, int maxStacks, ChangeType changeType, double value)
+        //{
+        //    MetaEffect = metaEffect;
+        //    MaxStacks = maxStacks;
+        //    ChangeType = changeType;
+        //    Value = value;
+        //}
+
         public StackComponent(StackComponent prototypeStackComponent)
         {
+            ChangeType = prototypeStackComponent.ChangeType;
+            Value = prototypeStackComponent.Value;
             MaxStacks = prototypeStackComponent.MaxStacks;
         }
 
@@ -33,7 +41,11 @@ namespace ModifierSystem
             //Log.Verbose($"Stacks: {Stacks}/{MaxStacks}", "modifiers");
 
             Stacks++;
-            StackAction();
+            if (ChangeType == ChangeType.EveryXStack)
+            {
+
+            }
+            MetaEffect.MetaEffect(ChangeType, Value);
         }
 
         /// <summary>
@@ -51,5 +63,42 @@ namespace ModifierSystem
         {
             Stacks = 0;
         }
+    }
+    public interface IMetaEffect
+    {
+        void MetaEffect(ChangeType changeType, double value);
+    }
+
+    class MetaEffect //: IMetaEffect
+    {
+        private IEffectComponent _effectComponent;
+
+        public MetaEffect(IEffectComponent effectComponent)
+        {
+            _effectComponent = effectComponent;
+        }
+
+        public void Change(ChangeType changeType)
+        {
+            switch (changeType)
+            {
+                case ChangeType.None:
+                    break;
+                case ChangeType.AdditiveIncrease:
+                    break;
+                case ChangeType.Multiply:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(changeType), changeType, null);
+            }
+        }
+    }
+
+    public enum ChangeType
+    {
+        None = 0,
+        AdditiveIncrease = 1,
+        Multiply = 2,
+        EveryXStack = 3,
     }
 }

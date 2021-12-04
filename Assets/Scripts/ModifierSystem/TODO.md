@@ -11,6 +11,18 @@ What can a stack do?
     Increase numbers (damage, speed, TimeComponent.duration)
     Trigger an effect on X stacks
 
+Whats the issue?
+We're using the prototype pattern, so we need to clone every element of the modifier & being.
+We also need to clone StackComponent, and the behaviour it should have on stack.
+That cloned behaviour should now point to the new cloned effect, we can't use delegates, unless we pass the object directly into them & don't ref anything "new"
+So, save behaviour, but without inheritance & delegates.
+
+Now, how does one define complex behaviour? We have to hardcode it in the class
+
+Pass in the reference, and use it as action
+
+MetaEffect, that changes an IEffectComponent
+
 THIS
 Hey everyone, design problem here.
 
