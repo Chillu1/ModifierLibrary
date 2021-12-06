@@ -33,7 +33,7 @@ namespace ModifierSystem.Tests
         {
             var healModifierApplier = modifierPrototypes.GetItem("AllyHealApplier");
             character.AddModifier(healModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.BaseBeing.ChangeDamageStat(new DamageData(9, DamageType.Physical));//10 dmg
+            enemy.BaseBeing.ChangeDamageStat(new DamageData(9, DamageType.Physical, null));//10 dmg
             enemy.Attack(ally);
             character.CastModifier(ally, "AllyHealApplier");
             var healModifier = modifierPrototypes.GetItem("AllyHeal");

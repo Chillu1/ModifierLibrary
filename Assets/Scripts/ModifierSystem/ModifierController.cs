@@ -12,11 +12,13 @@ namespace ModifierSystem
     {
         private readonly Being _owner;
         private Dictionary<string, Modifier> Modifiers { get; }
+        private ElementController ElementController { get; }
 
-        public ModifierController(Being owner)
+        public ModifierController(Being owner, ElementController elementController)
         {
-            Modifiers = new Dictionary<string, Modifier>();
             _owner = owner;
+            ElementController = elementController;
+            Modifiers = new Dictionary<string, Modifier>();
         }
 
         public void Update(float deltaTime)

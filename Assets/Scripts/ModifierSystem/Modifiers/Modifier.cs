@@ -8,7 +8,7 @@ namespace ModifierSystem
 {
     public class Modifier : IModifier, IEntity<string>, IEventCopy<Modifier>, ICloneable
     {
-        public string Id { get; protected set; }
+        public string Id { get; private set; }
         public bool ApplierModifier { get; }
         public TargetComponent TargetComponent { get; private set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
@@ -85,6 +85,17 @@ namespace ModifierSystem
             }
 
             StackComponent = stackComponent;
+        }
+
+        public void AddComponent(IRefreshComponent refreshComponent)
+        {
+            if (StackComponent != null)
+            {
+                Log.Error(Id+ " already has a refresh component", "modifiers");
+                return;
+            }
+
+            RefreshComponent = refreshComponent;
         }
 
         public void TryApply(Being target)
@@ -176,20 +187,5 @@ namespace ModifierSystem
         {
             return this.Copy(); // MemberwiseClone();
         }
-    }
-
-    public abstract class Modifier<TDataType> : Modifier
-    {
-        public TDataType Data { get; }
-
-        protected Modifier(string id, TDataType data) : base(id)
-        {
-            Data = data;
-        }
-
-        // protected Modifier(Modifier<TDataType> other) : base(other)
-        // {
-        //     Data = other.Data;
-        // }
     }
 }

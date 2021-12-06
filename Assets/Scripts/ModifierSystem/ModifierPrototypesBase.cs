@@ -1,28 +1,33 @@
 using System;
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public abstract class ModifierPrototypesBase<TModifierType> : BasePrototypeController<string, TModifierType>
-        where TModifierType : Modifier, IEventCopy<TModifierType>, ICloneable
+    public sealed class ModifierPrototypesBase<TModifierType> where TModifierType : class, IModifier, IEntity<string>, ICloneable, IEventCopy<TModifierType>
     {
-        protected abstract void SetupModifierPrototypes();
+        private readonly BasePrototypeController<string, TModifierType> _prototypeController;
 
-        protected void AddModifier(TModifierType modifier)
+        public ModifierPrototypesBase()
+        {
+            _prototypeController = new BasePrototypeController<string, TModifierType>();
+        }
+
+        public void AddModifier(TModifierType modifier)
         {
             if (!modifier.ValidatePrototypeSetup())
                 return;
 
-            if (prototypes.ContainsKey(modifier.Id))
+            if (_prototypeController.ContainsKey(modifier.Id))
             {
                 Log.Error("A modifier with id: "+modifier.Id+" already exists", "modifiers");
                 return;
             }
-            prototypes.Add(modifier.Id, modifier);
+            _prototypeController.AddItem(modifier.Id, modifier);
         }
 
-        //Generic non-removable applier, for now
-        protected void SetupModifierApplier(TModifierType appliedModifier, LegalTarget legalTarget = LegalTarget.DefaultOffensive)
+        //Generic non-removable (permanent) applier, for now
+        public void SetupModifierApplier(TModifierType appliedModifier, LegalTarget legalTarget = LegalTarget.DefaultOffensive)
         {
             var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
             var modifierApplierTarget = new TargetComponent(legalTarget, true);
@@ -30,7 +35,13 @@ namespace ModifierSystem
             var modifierApplierApply = new ApplyComponent(modifierApplierEffect, modifierApplierTarget);
             modifierApplier.AddComponent(modifierApplierApply);
             modifierApplier.AddComponent(modifierApplierTarget);
-            AddModifier((TModifierType)modifierApplier);
+            AddModifier((TModifierType)(IModifier)modifierApplier);
+        }
+
+        [CanBeNull]
+        public TModifierType GetItem(string key)
+        {
+            return _prototypeController.GetItem(key);
         }
     }
 }

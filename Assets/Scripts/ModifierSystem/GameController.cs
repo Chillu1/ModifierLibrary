@@ -15,8 +15,8 @@ namespace ModifierSystem
         {
             ModifierPrototypes = new ModifierPrototypes();
 
-            _player = new Being(new BeingProperties(){Id = "Player", Damage = 0, Health = 150, UnitType = UnitType.Ally});
-            _enemy = new Being(new BeingProperties(){Id = "Enemy", Damage = 2, Health = 100, UnitType = UnitType.Enemy});
+            _player = new Being(new BeingProperties(){Id = "Player", DamageData = new DamageData(0, DamageType.Physical, null), Health = 150, UnitType = UnitType.Ally});
+            _enemy = new Being(new BeingProperties(){Id = "Enemy", DamageData = new DamageData(2, DamageType.Physical, null), Health = 100, UnitType = UnitType.Enemy});
 
             _player.AddModifier(ModifierPrototypes.GetItem("SpiderPoisonApplier"), AddModifierParameters.NullStartTarget);
             _player.Attack(_enemy);

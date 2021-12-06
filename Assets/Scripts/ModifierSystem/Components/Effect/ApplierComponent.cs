@@ -7,7 +7,7 @@ namespace ModifierSystem
         private ITargetComponent TargetComponent { get; }
 
 
-        public ApplierComponent(Modifier modifier, ITargetComponent targetComponent,
+        public ApplierComponent(IModifier modifier, ITargetComponent targetComponent,
             AddModifierParameters parameters = AddModifierParameters.Default)
         {
             Modifier = modifier;

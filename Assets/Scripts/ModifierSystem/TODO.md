@@ -5,7 +5,48 @@ TODO RN:
 >    Solution 2: //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
                 if(!stacked && !refreshed)
                     internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
- 
+
+THIS
+Start removing inheritance, and change to composition
+
+When should elemental damage be applied? DealDamage?
+When should elementalData be applied, that's not damage? OnAddModifier?
+
+Element example, fire:
+    effectValue = general strongness, ligeringValue = for how long it stays
+    Fireball = 20 effectValue, ligeringValue = 10  
+    Flamethrower = 10 effectValue, ligeringValue = 20
+    Firestorm = 60 effectValue, ligeringValue = 20
+    Meteor = 150 effectValue, ligeringValue = 50
+    Fire of a small star = 1000 effectValue, ligeringValue = 100
+    Fire of middle of a star = 5000 effectValue, ligeringValue = 300
+
+ComboModifiers:
+    AspectOfTheCat (IDs)
+    Intensity Burning = 5
+    Intensity X = 5, Y = 5
+    
+
+ComboModifiers concept
+    What does combomodifier need that's different from modifier?
+    Should ComboModifier be a separate class in general? Since it might not have enough of the same mechanics?
+        Activation conditions
+        Cooldown (so the combomodifier can only be triggered X often (aka damage isn't spammed by mixing fire & preasured gass to make an explosion every attack))
+    Combo examples:
+        Explosion (fire & preasured gass)
+ComboCondition backend:
+    OnAddModifier check for combinations
+    Possible things to check for:
+        Enough elemental attacks lingering/on being (elemental value that goes down over time?)
+        Specific Modifiers (IDs)
+
+RefreshComponent is also fairly complex, cuz it's still tricky on how to make it proper, should refresh only refresh timer duration? If so then it's useless
+    since we can refresh directly through timerComponent (but then we'll need to know which one to refresh, so maybe not?)
+RefreshComponent:
+    refresh duration
+    & increase duration
+    & incrase effect?
+
 StackComponent:
 What can a stack do?
     Increase numbers (damage, speed, TimeComponent.duration)
@@ -23,7 +64,6 @@ Pass in the reference, and use it as action
 
 MetaEffect, that changes an IEffectComponent
 
-THIS
 Hey everyone, design problem here.
 
 I want a very "generic"/open delegate like "Action". So it can be used in a lot of ways, like incrementing X and Y.

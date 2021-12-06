@@ -17,12 +17,13 @@ namespace ModifierSystem
         public Being(BeingProperties beingProperties)
         {
             BaseBeing = new BaseBeing(beingProperties);
-            ModifierController = new ModifierController(this);
+            ModifierController = new ModifierController(this, BaseBeing.ElementController);
         }
 
         public void Update(float deltaTime)
         {
             ModifierController.Update(deltaTime);
+            BaseBeing.Update(deltaTime);
         }
 
         public bool CastModifier(Being target, string modifierId)

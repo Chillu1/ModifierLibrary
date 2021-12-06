@@ -1,4 +1,5 @@
 using BaseProject;
+using JetBrains.Annotations;
 using NUnit.Framework;
 
 namespace ModifierSystem.Tests
@@ -13,13 +14,13 @@ namespace ModifierSystem.Tests
 
         protected const double Delta = 0.01d;
 
-        protected ModifierPrototypesTest modifierPrototypes;
+        protected ModifierPrototypes modifierPrototypes;
         //protected ComboModifierPrototypesTest comboModifierPrototypes;
 
         [OneTimeSetUp]
         public void OneTimeInit()
         {
-            modifierPrototypes = new ModifierPrototypesTest();
+            modifierPrototypes = new ModifierPrototypes();
             //comboModifierPrototypes = new ComboModifierPrototypesTest();
             //comboModifierPrototypes.AddTestModifiers();
         }
@@ -27,9 +28,9 @@ namespace ModifierSystem.Tests
         [SetUp]
         public void Init()
         {
-            character = new Being(new BeingProperties() { Id = "player", Health = 50, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
-            ally = new Being(new BeingProperties() { Id = "ally", Health = 25, Damage = 1, MovementSpeed = 3, UnitType = UnitType.Ally});
-            enemy = new Being(new BeingProperties() { Id = "enemy", Health = 30, Damage = 1, MovementSpeed = 2, UnitType = UnitType.Enemy});
+            character = new Being(new BeingProperties { Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3, UnitType = UnitType.Ally });
+            ally = new Being(new BeingProperties { Id = "ally", Health = 25, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3, UnitType = UnitType.Ally });
+            enemy = new Being(new BeingProperties { Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2, UnitType = UnitType.Enemy });
             initialHealthCharacters = character.CurrentHealth;
             initialHealthAlly = ally.CurrentHealth;
             initialHealthEnemy = enemy.CurrentHealth;
@@ -43,110 +44,108 @@ namespace ModifierSystem.Tests
             enemy = null;
         }
 
-        protected sealed class ModifierPrototypesTest : ModifierPrototypesBase<Modifier>
+        public class ModifierPrototypesTest
         {
+            private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
+
             public ModifierPrototypesTest()
             {
+                _modifierPrototypes = new ModifierPrototypesBase<Modifier>();
                 SetupModifierPrototypes();
             }
 
-            protected override void SetupModifierPrototypes()
+            private void SetupModifierPrototypes()
             {
+                //Super simple example modifier:
+                //Single 100 damage ability on target, (lingers 0.5s, but no actual duration)
+                //On Init, Apply It (deal damage), remove 0.5 seconds after from manager
+
+                //IceBoltDebuff
                 var iceBoltModifier = new Modifier("IceBolt");
-                var iceBoltTarget = new TargetComponent(LegalTarget.Self);
-                var iceBoltEffect = new DamageComponent(new []{new DamageData(10, DamageType.Physical)}, iceBoltTarget);
+                var iceBoltTarget = new TargetComponent();
+                var iceBoltEffect = new DamageComponent(new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) }, iceBoltTarget);
                 var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
                 iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
                 iceBoltModifier.AddComponent(iceBoltTarget);
-                AddModifier(iceBoltModifier);
-                SetupModifierApplier(iceBoltModifier, LegalTarget.DefaultOffensive);
+                iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
+                _modifierPrototypes.AddModifier(iceBoltModifier);
+                //Forever buff (applier), not refreshable or stackable (for now)
+                //Apply on attack
+                _modifierPrototypes.SetupModifierApplier(iceBoltModifier);
 
-                var spiderPoisonModifier = new Modifier("SpiderPoison");
-                var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
-                var damageData = new[] { new DamageData(5, DamageType.Poison) };
-                var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
-                var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
-                spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply));//Apply first stack/damage on init
-                spiderPoisonModifier.AddComponent(spiderPoisonTarget);
-                spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
-                spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
-                AddModifier(spiderPoisonModifier);
-                SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
-                
                 //StackableSpiderPoison, removed after 10 seconds
                 //-Each stack increases DoT damage by 2
-                var stackingSpiderPoisonModifier = new Modifier("StackingSpiderPoison");
-                var stackingSpiderPoisonTarget = new TargetComponent(LegalTarget.Self);
-                var stackingSpiderPoisonDamageData = new[] { new DamageData(5, DamageType.Poison) };
-                var stackingSpiderPoisonEffect = new DamageComponent(stackingSpiderPoisonDamageData, stackingSpiderPoisonTarget);
-                var stackingSpiderPoisonStack = new StackComponent(stackingSpiderPoisonDamageData, 10);
-                var stackingSpiderPoisonApply = new ApplyComponent(stackingSpiderPoisonEffect, stackingSpiderPoisonTarget);
-                stackingSpiderPoisonModifier.AddComponent(new InitComponent(stackingSpiderPoisonApply));//Apply first stack/damage on init
-                stackingSpiderPoisonModifier.AddComponent(stackingSpiderPoisonTarget);
-                stackingSpiderPoisonModifier.AddComponent(new TimeComponent(stackingSpiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
-                stackingSpiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(stackingSpiderPoisonModifier), 10));//Remove after 10 secs
-                stackingSpiderPoisonModifier.AddComponent(stackingSpiderPoisonStack);
-                AddModifier(stackingSpiderPoisonModifier);
-                SetupModifierApplier(stackingSpiderPoisonModifier, LegalTarget.DefaultOffensive);
+                //-Each stack increases current duration by 2, to max 10 stacks
+                var spiderPoisonModifier = new Modifier("SpiderPoison");
+                var spiderPoisonTarget = new TargetComponent();
+                var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
+                var spiderPoisonStack = new StackComponent((data, value) => data[0].BaseDamage += value, 10);
+                var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
+                spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply)); //Apply first stack/damage on init
+                spiderPoisonModifier.AddComponent(spiderPoisonTarget);
+                spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true)); //Every 2 seconds, deal 5 damage
+                spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10)); //Remove after 10 secs
+                spiderPoisonModifier.AddComponent(spiderPoisonStack);
+                _modifierPrototypes.AddModifier(spiderPoisonModifier);
+                _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier);
 
+                //RefreshableCobraVenom, removed after 10 seconds
+                //-Refresh = refreshes duration (timer)
+                //TODO -Refresh = refreshes duration (timer) & increased duration by flat 10%
+                //TODO -Refresh = refreshes duration (timer) & intensify effect?
+                var cobraVenomModifier = new Modifier("CobraVenom");
+                var cobraVenomTarget = new TargetComponent();
+                var cobraVenomDamageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 5, 20)) };
+                var cobraVenomEffect = new DamageComponent(cobraVenomDamageData, cobraVenomTarget);
+                var cobraVenomRemoveTime = new TimeComponent(new RemoveComponent(cobraVenomModifier), 10);
+                var cobraVenomRefresh = new RefreshComponent(cobraVenomRemoveTime);
+                var cobraVenomApply = new ApplyComponent(cobraVenomEffect, cobraVenomTarget);
+                cobraVenomModifier.AddComponent(new InitComponent(cobraVenomApply)); //Apply first stack/damage on init
+                cobraVenomModifier.AddComponent(cobraVenomTarget);
+                cobraVenomModifier.AddComponent(new TimeComponent(cobraVenomEffect, 2, true)); //Every 2 seconds, deal 5 damage
+                cobraVenomModifier.AddComponent(cobraVenomRemoveTime); //Remove after 10 secs
+                cobraVenomModifier.AddComponent(cobraVenomRefresh);
+                _modifierPrototypes.AddModifier(cobraVenomModifier);
+                _modifierPrototypes.SetupModifierApplier(cobraVenomModifier);
+
+                //PassiveSelfHeal
                 var selfHealModifier = new Modifier("PassiveSelfHeal");
-                var selfHealTarget = new TargetComponent(LegalTarget.Self);
+                var selfHealTarget = new TargetComponent();
                 var selfHealEffect = new HealComponent(10, selfHealTarget);
                 var selfHealApply = new ApplyComponent(selfHealEffect, selfHealTarget);
-                selfHealModifier.AddComponent(new TimeComponent(selfHealEffect, 1, true));//Every 2 seconds, deal 5 damage
                 selfHealModifier.AddComponent(new InitComponent(selfHealApply));
                 selfHealModifier.AddComponent(selfHealTarget);
-                AddModifier(selfHealModifier);
+                _modifierPrototypes.AddModifier(selfHealModifier);
+                //Forever buff (applier), not refreshable or stackable (for now)
+                //SetupModifierApplier(selfHealModifier, LegalTarget.Self);
 
                 var allyHealModifier = new Modifier("AllyHeal");
-                var allyHealTarget = new TargetComponent(LegalTarget.Self);
+                var allyHealTarget = new TargetComponent();
                 var allyHealEffect = new HealComponent(10, allyHealTarget);
                 var allyHealApply = new ApplyComponent(allyHealEffect, allyHealTarget);
                 allyHealModifier.AddComponent(new InitComponent(allyHealApply));
                 allyHealModifier.AddComponent(allyHealTarget);
                 allyHealModifier.AddComponent(new TimeComponent(new RemoveComponent(allyHealModifier)));
-                AddModifier(allyHealModifier);
+                _modifierPrototypes.AddModifier(allyHealModifier);
                 //Forever buff (applier), not refreshable or stackable (for now)
-                SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
-                
-                /*var physicalAttackDoTData = new DamageOverTimeData(new[]{new DamageData(2, DamageType.Physical)}, 1f, 5f);
-                var physicalAttackDoT = new DamageOverTimeModifier("PhysicalDoTAttack", physicalAttackDoTData, ModifierProperties.Refreshable);
-                SetupModifierApplier(physicalAttackDoT);
+                _modifierPrototypes.SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
 
-                var fireAttackData = new[]{new DamageData(3, DamageType.Fire)};
-                var fireAttack = new DamageAttackModifier("TestFireDamage", fireAttackData);
-                SetupModifierApplier(fireAttack);
-                var coldAttackData = new[] { new DamageData(3, DamageType.Cold) };
-                var coldAttack = new DamageAttackModifier("TestColdDamage", coldAttackData);
-                SetupModifierApplier(coldAttack);
+                //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
+                //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
+                //var aspectOfTheCatBuff = new StatComponent( /*5 speed & 5 attackSpeed*/);
+                //aspectOfTheCatModifier.AddComponent(new TimeComponent(5, new RemoveComponent(aspectOfTheCatModifier)));
+                //aspectOfTheCatModifier.AddComponent(new InitComponent(new ApplyComponent(aspectOfTheCatBuff)));
 
-                var catMovementSpeedBuffData = new StatChangeModifierData(StatType.MovementSpeed, 3f);
-                var catMovementSpeedBuff = new StatChangeModifier("TestMovementSpeedOfCat", catMovementSpeedBuffData);
-                SetupModifier(catMovementSpeedBuff);
-                var catAttackSpeedBuffData = new StatChangeModifierData(StatType.AttackSpeed, 3f);
-                var catAttackSpeedBuff = new StatChangeModifier("TestAttackSpeedOfCat", catAttackSpeedBuffData);
-                SetupModifier(catAttackSpeedBuff);*/
+
+                //Graphics-, Audio-, Component, etc, whatever
+            }
+
+            [CanBeNull]
+            public Modifier GetItem(string key)
+            {
+                return _modifierPrototypes.GetItem(key);
             }
         }
-
-        /*protected sealed class ComboModifierPrototypesTest : ComboModifierPrototypes
-        {
-            public void AddTestModifiers()
-            {
-                var aspectOfTheCatData = new StatChangeModifierData(StatType.Attack, 10);
-                var aspectOfTheCatRecipe = new ComboRecipe(new ComboRecipeProperties()
-                    { Ids = new[] { "TestMovementSpeedOfCat", "TestAttackSpeedOfCat" } });
-                StatChangeComboModifier aspectOfTheCat =
-                    new StatChangeComboModifier("TestAspectOfTheCat", aspectOfTheCatData, aspectOfTheCatRecipe);
-                SetupModifier(aspectOfTheCat);
-
-                DamageData[] explosionData = new DamageData[]{new DamageData(10, DamageType.Explosion)};
-                var explosionRecipe = new ComboRecipe(new ComboRecipeProperties()
-                    { DamageTypes = new [] { DamageType.Fire | DamageType.Cold}});
-                DamageAttackComboModifier explosion =
-                    new DamageAttackComboModifier("TestExplosion", explosionData, explosionRecipe);
-                SetupModifier(explosion);
-            }
-        }*/
     }
 }

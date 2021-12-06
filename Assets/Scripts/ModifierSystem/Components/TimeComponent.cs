@@ -45,5 +45,10 @@ namespace ModifierSystem
                 }
             }
         }
+
+        public void RefreshTimer()
+        {
+            _timer = 0;
+        }
     }
 }
