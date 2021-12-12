@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
-using JetBrains.Annotations;
+using BaseProject.Utils;
 
 namespace ModifierSystem
 {
@@ -43,7 +42,10 @@ namespace ModifierSystem
         public bool CheckRecipes(HashSet<string> modifierIds, ElementController elementController)
         {
             if (modifierIds.Contains(Id))
+            {
+                Log.Info($"Already contains {Id}, skipping", "modifiers");
                 return false;//Already contains this combo modifier, skip (try refresh & stack? Might be a problem without proper sophisticated cooldowns)
+            }
 
             foreach (var recipe in ComboRecipes.Recipes)
             {
@@ -97,6 +99,8 @@ namespace ModifierSystem
         public void CopyEvents(ComboModifier prototype)
         {
             Modifier.CopyEvents(prototype.Modifier);
+            //ComboRecipes = (ComboRecipes)prototype.ComboRecipes.Clone();
+            //Cooldown = prototype.Cooldown;
         }
 
 
@@ -109,64 +113,10 @@ namespace ModifierSystem
 
         public bool Refresh() => Modifier.Refresh();
 
-        object ICloneable.Clone()
+        public object Clone()
         {
-            return MemberwiseClone();
-        }
-    }
-
-    public class ComboRecipes
-    {
-        /// <summary>
-        ///     Possible recipes
-        /// </summary>
-        [NotNull] public ComboRecipe[] Recipes;
-
-        public ComboRecipes([NotNull] ComboRecipe recipe)
-        {
-            Recipes = new[] { recipe };
-        }
-
-        public ComboRecipes([NotNull] ComboRecipe[] recipes)
-        {
-            Recipes = recipes;
-        }
-    }
-
-    public class ComboRecipe
-    {
-        [CanBeNull]
-        public string[] Id;
-        [CanBeNull]
-        public ElementalRecipe[] ElementalRecipe;
-
-        public ComboRecipe()
-        {
-        }
-        public ComboRecipe(string[] id)
-        {
-            Id = id;
-        }
-        public ComboRecipe(ElementalRecipe[] elementalRecipe)
-        {
-            ElementalRecipe = elementalRecipe;
-        }
-        public ComboRecipe(string[] id,ElementalRecipe[] elementalRecipe)
-        {
-            Id = id;
-            ElementalRecipe = elementalRecipe;
-        }
-    }
-
-    public class ElementalRecipe
-    {
-        public ElementalType ElementalType;
-        public double Intensity;
-
-        public ElementalRecipe(ElementalType elementalType, double intensity)
-        {
-            ElementalType = elementalType;
-            Intensity = intensity;
+            //Modifier = (Modifier)Modifier.Clone();
+            return this.Copy();
         }
     }
 }

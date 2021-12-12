@@ -14,7 +14,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void TargetNotValidAlly()
         {
-            var damageModifierApplier = modifierPrototypes.GetItem("IceBoltApplier");
+            var damageModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
             character.AddModifier(damageModifierApplier, AddModifierParameters.NullStartTarget);
             LogAssert.Expect(LogType.Error, new Regex("Target is not valid*"));
             //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies

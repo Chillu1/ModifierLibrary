@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BaseProject;
 using JetBrains.Annotations;
@@ -78,7 +79,7 @@ namespace ModifierSystem.Tests
 
                 {
                     //IceBoltDebuff
-                    var iceBoltModifier = new Modifier("IceBolt");
+                    var iceBoltModifier = new Modifier("IceBoltTest");
                     var iceBoltTarget = new TargetComponent();
                     var iceBoltEffect =
                         new DamageComponent(new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) },
@@ -97,7 +98,7 @@ namespace ModifierSystem.Tests
                     //StackableSpiderPoison, removed after 10 seconds
                     //-Each stack increases DoT damage by 2
                     //-Each stack increases current duration by 2, to max 10 stacks
-                    var spiderPoisonModifier = new Modifier("SpiderPoison");
+                    var spiderPoisonModifier = new Modifier("SpiderPoisonTest");
                     var spiderPoisonTarget = new TargetComponent();
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
@@ -118,7 +119,7 @@ namespace ModifierSystem.Tests
                     //-Refresh = refreshes duration (timer)
                     //TODO -Refresh = refreshes duration (timer) & increased duration by flat 10%
                     //TODO -Refresh = refreshes duration (timer) & intensify effect?
-                    var cobraVenomModifier = new Modifier("CobraVenom");
+                    var cobraVenomModifier = new Modifier("CobraVenomTest");
                     var cobraVenomTarget = new TargetComponent();
                     var cobraVenomDamageData = new[]
                         { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 5, 20)) };
@@ -137,7 +138,7 @@ namespace ModifierSystem.Tests
 
                 {
                     //PassiveSelfHeal
-                    var selfHealModifier = new Modifier("PassiveSelfHeal");
+                    var selfHealModifier = new Modifier("PassiveSelfHealTest");
                     var selfHealTarget = new TargetComponent();
                     var selfHealEffect = new HealComponent(10, selfHealTarget);
                     var selfHealApply = new ApplyComponent(selfHealEffect, selfHealTarget);
@@ -149,7 +150,7 @@ namespace ModifierSystem.Tests
                 }
 
                 {
-                    var allyHealModifier = new Modifier("AllyHeal");
+                    var allyHealModifier = new Modifier("AllyHealTest");
                     var allyHealTarget = new TargetComponent();
                     var allyHealEffect = new HealComponent(10, allyHealTarget);
                     var allyHealApply = new ApplyComponent(allyHealEffect, allyHealTarget);
@@ -163,9 +164,9 @@ namespace ModifierSystem.Tests
 
                 {
                     //BasicPoison, removed after 10 seconds
-                    var poisonModifier = new Modifier("Poison");
+                    var poisonModifier = new Modifier("PoisonTest");
                     var poisonTarget = new TargetComponent();
-                    var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
+                    var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
                     var poisonEffect = new DamageComponent(damageData, poisonTarget);
                     var poisonApply = new ApplyComponent(poisonEffect, poisonTarget);
                     poisonModifier.AddComponent(new InitComponent(poisonApply)); //Apply damage on init
@@ -178,9 +179,9 @@ namespace ModifierSystem.Tests
                 
                 {
                     //BasicBleed, removed after 10 seconds
-                    var bleedModifier = new Modifier("Bleed");
+                    var bleedModifier = new Modifier("BleedTest");
                     var bleedTarget = new TargetComponent();
-                    var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
+                    var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
                     var bleedEffect = new DamageComponent(damageData, bleedTarget);
                     var bleedApply = new ApplyComponent(bleedEffect, bleedTarget);
                     bleedModifier.AddComponent(new InitComponent(bleedApply)); //Apply damage on init
@@ -204,6 +205,21 @@ namespace ModifierSystem.Tests
             [CanBeNull]
             public Modifier GetItem(string key)
             {
+                if (key.Contains("Applier"))
+                {
+                    string subKey = key.Substring(0, key.IndexOf("Applier", StringComparison.Ordinal));
+                    if (!subKey.EndsWith("Test"))
+                    {
+                        Log.Error("Invalid modifier Id, it has to end with 'Test' for unit tests");
+                        return null;
+                    }
+                }
+                else if (!key.EndsWith("Test"))
+                {
+                    Log.Error("Invalid modifier Id, it has to include 'Test' for unit tests");
+                    return null;
+                }
+
                 return _modifierPrototypes.GetItem(key);
             }
         }
@@ -225,7 +241,7 @@ namespace ModifierSystem.Tests
                 //Scope brackets so it's impossible to use a wrong component/modifier
                 {
                     //Aspect of the cat
-                    var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
+                    var aspectOfTheCatModifier = new Modifier("AspectOfTheCatTest");
                     var aspectOfTheCatTarget = new TargetComponent(LegalTarget.Self);
                     var aspectOfTheCatEffect = new StatComponent(12, aspectOfTheCatTarget);
                     var aspectOfTheCatApply = new ApplyComponent(aspectOfTheCatEffect, aspectOfTheCatTarget);
@@ -233,22 +249,25 @@ namespace ModifierSystem.Tests
                     aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);
                     aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
                     var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
-                        new ComboRecipes(new ComboRecipe(new[] { "Dexterity", "Speed" })),
+                        new ComboRecipes(new ComboRecipe(new[] { "DexterityTest", "SpeedTest" })),
                         1);
                     ModifierPrototypes.AddModifier(aspectOfTheCatComboModifier);
                 }
                 {
                     //Poison & bleed = infection
-                    var infectionModifier = new Modifier("Infection");
+                    var infectionModifier = new Modifier("InfectionTest");
                     var infectionTarget = new TargetComponent(LegalTarget.Self);
-                    var infectionEffect = new StatComponent(12, infectionTarget);
+                    var infectionEffect = new DamageComponent(new[]
+                            { new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) },
+                        infectionTarget);
                     var infectionApply = new ApplyComponent(infectionEffect, infectionTarget);
                     infectionModifier.AddComponent(new InitComponent(infectionApply));
                     infectionModifier.AddComponent(infectionTarget);
+                    infectionModifier.AddComponent(new TimeComponent(infectionEffect, 2, true));
                     infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
                     var infectionComboModifier = new ComboModifier(infectionModifier,
                         new ComboRecipes(new ComboRecipe(
-                            new[] { new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5) })),
+                            new[]{new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5)})),
                         1);
                     ModifierPrototypes.AddModifier(infectionComboModifier);
                 }

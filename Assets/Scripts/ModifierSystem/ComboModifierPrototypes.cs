@@ -40,12 +40,15 @@ namespace ModifierSystem
             }
             {
                 //Poison & bleed = infection
-                var infectionModifier = new Modifier("Infection");//TODO DAMAGE Instead
+                var infectionModifier = new Modifier("Infection");
                 var infectionTarget = new TargetComponent(LegalTarget.Self);
-                var infectionEffect = new StatComponent(12, infectionTarget);
+                var infectionEffect = new DamageComponent(new[]
+                        { new DamageData(20, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) },
+                        infectionTarget);
                 var infectionApply = new ApplyComponent(infectionEffect, infectionTarget);
                 infectionModifier.AddComponent(new InitComponent(infectionApply));
                 infectionModifier.AddComponent(infectionTarget);
+                infectionModifier.AddComponent(new TimeComponent(infectionEffect, 2, true));
                 infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
                 var infectionComboModifier = new ComboModifier(infectionModifier,
                     new ComboRecipes(new ComboRecipe(

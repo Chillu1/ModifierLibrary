@@ -132,7 +132,8 @@ namespace ModifierSystem
                 }
                 else if (modifier.TargetComponent.Target != _owner)
                 {
-                    Log.Error("Owner should be the target, but isn't. Target is: " + modifier.TargetComponent.Target +". Reverting to owner", "modifiers");
+                    Log.Error($"Owner id:{_owner} should be the target, but isn't. For modifier {modifier.Id} Target is: "
+                              + modifier.TargetComponent.Target + ". Reverting to owner", "modifiers");
                     modifier.TargetComponent.SetTarget(_owner);
                 }
             }
