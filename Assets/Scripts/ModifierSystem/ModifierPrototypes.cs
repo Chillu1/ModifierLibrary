@@ -106,25 +106,4 @@ namespace ModifierSystem
             return _modifierPrototypes.GetItem(key);
         }
     }
-
-    public class ComboModifierPrototypes
-    {
-        private readonly ModifierPrototypesBase<ComboModifier> _modifierPrototypes;
-
-        public ComboModifierPrototypes()
-        {
-            _modifierPrototypes = new ModifierPrototypesBase<ComboModifier>();
-            SetupModifierPrototypes();
-        }
-
-        private void SetupModifierPrototypes()
-        {
-        }
-
-        [CanBeNull]
-        public ComboModifier GetItem(string key)
-        {
-            return _modifierPrototypes.GetItem(key);
-        }
-    }
 }

@@ -7,17 +7,17 @@ namespace ModifierSystem
     {
         //TODO Stat type to proper, health, damage, etc
         public double Health { get; private set; }
-        private Func<IBeing> _getTarget;
+        private readonly ITargetComponent _targetComponent;
 
         public StatComponent(double health, ITargetComponent targetComponent)
         {
             Health = health;
-            _getTarget = () => targetComponent.GetTarget();
+            _targetComponent = targetComponent;
         }
 
         public void Effect()
         {
-            _getTarget.Invoke().BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
+            _targetComponent.GetTarget().BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
         }
     }
 }

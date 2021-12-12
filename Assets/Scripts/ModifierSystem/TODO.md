@@ -8,6 +8,23 @@ TODO RN:
 
 THIS
 Start removing inheritance, and change to composition
+Unittest:
+    Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
+    ComboModifier Id based (cat)
+    ComboModifier Intensity (infection)
+
+> AspectOfTheCat & Infection
+ComboMod ConditionalRemove, timer starts ticking down after condition isnt met anymore? (Might be better to just have a time remove, and comboMod is added again later, or we refresh the duration when it tries to be added again)
+> Cooldown
+
+Combo design choices:
+    Should ComboModifier be applied again?/What happens when there's a duplicate?
+    ComboModifier multiple recipes.
+    Statbased comboModifier, when health is bigger than 10k, "massive" comboModifier
+
+When should we check for combo modifiers to add?
+    OnAddModifier
+    & every 1 second on adding elementalData?
 
 When should elemental damage be applied? DealDamage?
 When should elementalData be applied, that's not damage? OnAddModifier?

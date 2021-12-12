@@ -6,6 +6,7 @@ namespace ModifierSystem
     public class StackComponent : Component, IStackComponent
     {
         private Action<DamageData[], double> PrototypeStackComponent { get; }
+        //Cooldown?
         private IMetaEffect MetaEffect{ get; set; }
         private ChangeType ChangeType { get; }
         private double Value { get; }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BaseProject;
 using BaseProject.Utils;
@@ -6,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class Modifier : IModifier, IEntity<string>, IEventCopy<Modifier>, ICloneable
+    public class Modifier : IModifier, IEventCopy<Modifier>
     {
         public string Id { get; private set; }
         public bool ApplierModifier { get; }
@@ -186,6 +185,11 @@ namespace ModifierSystem
         public object Clone()
         {
             return this.Copy(); // MemberwiseClone();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Id: {0}", Id);
         }
     }
 }

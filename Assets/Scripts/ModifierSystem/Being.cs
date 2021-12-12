@@ -84,6 +84,11 @@ namespace ModifierSystem
             ModifierController.TryAddModifier(modifier, parameters);
         }
 
+        public bool ContainsModifier(string id)
+        {
+            return ModifierController.ContainsModifier(id);
+        }
+
         public bool ContainsModifier(Modifier modifier)
         {
             return ModifierController.ContainsModifier(modifier);

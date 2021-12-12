@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BaseProject;
 using JetBrains.Annotations;
 
@@ -7,6 +8,8 @@ namespace ModifierSystem
     public sealed class ModifierPrototypesBase<TModifierType> where TModifierType : class, IModifier, IEntity<string>, ICloneable, IEventCopy<TModifierType>
     {
         private readonly BasePrototypeController<string, TModifierType> _prototypeController;
+
+        public Dictionary<string, TModifierType>.ValueCollection Values => _prototypeController.Values;
 
         public ModifierPrototypesBase()
         {

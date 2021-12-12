@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
-using BaseProject.Utils;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -11,14 +9,14 @@ namespace ModifierSystem
     public class ModifierController : IEventCopy<ModifierController>
     {
         private readonly Being _owner;
-        private Dictionary<string, Modifier> Modifiers { get; }
+        private Dictionary<string, IModifier> Modifiers { get; }
         private ElementController ElementController { get; }
 
         public ModifierController(Being owner, ElementController elementController)
         {
             _owner = owner;
             ElementController = elementController;
-            Modifiers = new Dictionary<string, Modifier>();
+            Modifiers = new Dictionary<string, IModifier>();
         }
 
         public void Update(float deltaTime)
@@ -30,12 +28,12 @@ namespace ModifierSystem
             }
         }
 
-        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters)
+        public void TryAddModifier(IModifier modifier, AddModifierParameters parameters)
         {
             modifier.TargetComponent.SetupOwner(_owner);
             HandleTarget(modifier, parameters);
 
-            if (ContainsModifier(modifier, out Modifier internalModifier))
+            if (ContainsModifier(modifier, out IModifier internalModifier))
             {
                 bool stacked, refreshed;
                 //Run stack & refresh in case it has those components
@@ -54,25 +52,13 @@ namespace ModifierSystem
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
-                //var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
-                //if (comboModifierToAdd.Count > 0)
-                //    AddComboModifier(comboModifierToAdd);
+                var comboModifierToAdd =  ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController);
+                if (comboModifierToAdd.Count > 0)
+                    AddComboModifiers(comboModifierToAdd);
             }
         }
 
-        //private void AddComboModifier(IEnumerable<ComboModifier> modifiers)
-        //{
-        //    foreach (var modifier in modifiers)
-        //    {
-        //        TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
-        //    }
-        //    //Check for recipes after adding all modifiers
-        //    var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(Modifiers);
-        //    if(comboModifierToAdd.Count > 0)
-        //        AddComboModifier(comboModifierToAdd);
-        //}
-
-        private void AddModifier(Modifier modifier)
+        private void AddModifier(IModifier modifier)
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
@@ -80,7 +66,20 @@ namespace ModifierSystem
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
-        public bool RemoveModifier(Modifier modifier)
+        private void AddComboModifiers(HashSet<ComboModifier> comboModifiers)
+        {
+            foreach (var modifier in comboModifiers)
+            {
+                TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
+            }
+            //Check for recipes after adding all modifiers
+            //We're recreating the set because new modifiers have been added
+            var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController);
+            if(comboModifierToAdd.Count > 0)//Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
+                AddComboModifiers(comboModifierToAdd);
+        }
+
+        public bool RemoveModifier(IModifier modifier)
         {
             bool success = Modifiers.Remove(modifier.Id);
             if(!success)
@@ -93,12 +92,12 @@ namespace ModifierSystem
             return ContainsModifier(modifierId, out _);
         }
 
-        public bool ContainsModifier(string modifierId, out Modifier modifier)
+        public bool ContainsModifier(string modifierId, out IModifier modifier)
         {
             return Modifiers.TryGetValue(modifierId, out modifier);
         }
 
-        public bool ContainsModifier(Modifier modifier)
+        public bool ContainsModifier(IModifier modifier)
         {
             return Modifiers.ContainsKey(modifier.Id);
         }
@@ -106,7 +105,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Used for refreshing, stacking ,etc
         /// </summary>
-        public bool ContainsModifier(Modifier modifier, out Modifier internalModifier)
+        public bool ContainsModifier(IModifier modifier, out IModifier internalModifier)
         {
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
@@ -116,14 +115,14 @@ namespace ModifierSystem
         {
             ListModifiers(Modifiers.Values);
         }
-        public void ListModifiers([CanBeNull] IEnumerable<Modifier> modifiers)
+        public void ListModifiers([CanBeNull] IEnumerable<IModifier> modifiers)
         {
             if (modifiers != null)
                 Log.Info("OwnerTarget: " + _owner + ". " + string.Join(". ", modifiers) + " Modifiers count: " + Modifiers.Count,
                     "modifiers", true);
         }
 
-        private void HandleTarget(Modifier modifier, AddModifierParameters parameters)
+        private void HandleTarget(IModifier modifier, AddModifierParameters parameters)
         {
             if (parameters.HasFlag(AddModifierParameters.OwnerIsTarget))
             {
@@ -139,7 +138,7 @@ namespace ModifierSystem
             }
             else
             {
-                //Modifier appliers dont need a target at ctor. Extra check, for good measure
+                //IModifier appliers dont need a target at ctor. Extra check, for good measure
                 if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !modifier.ApplierModifier)
                 {
                     Log.Error("Owner isn't the target, and target is null", "modifiers");
@@ -147,7 +146,7 @@ namespace ModifierSystem
             }
         }
 
-        private void RegisterModifier(Modifier modifier)
+        private void RegisterModifier(IModifier modifier)
         {
             //modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed", "modifiers");
         }
@@ -159,9 +158,14 @@ namespace ModifierSystem
         }
 
         [CanBeNull]
-        public IEnumerable<Modifier> GetModifierAppliers()
+        public IEnumerable<IModifier> GetModifierAppliers()
         {
             return Modifiers.Values.Where(m => m.ApplierModifier);
+        }
+
+        public override string ToString()
+        {
+            return string.Join(", ",Modifiers);
         }
     }
 }
