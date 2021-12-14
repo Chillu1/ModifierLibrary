@@ -20,7 +20,7 @@ namespace ModifierSystem
         {
             Damage = damage;
             Percentage = percentage;
-            _getTarget = () => targetComponent.GetTarget();
+            _getTarget = () => targetComponent.Target;
         }
 
         public void Effect()

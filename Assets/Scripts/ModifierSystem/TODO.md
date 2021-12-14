@@ -7,6 +7,18 @@ TODO RN:
                     internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
 
 THIS
+Unique ID system for components, so if two modifiers have same ID something went wrong:
+    TargetComponentPrototype ID = 0
+    TargetComponentClone ID = 1
+    TargetComponentClone2 ID = 2
+    
+    Counter++ on new
+    WantedCounter++ on clone
+Modifier in ComboModifier doesn't get cloned 100%? TargetComponent reference stays and f's everything, same for every component?
+Maybe something to do with comboModifier and not prototypes/modifier?
+Instead of clone pattern, use constructor pattern instead? Modifier.Clone() = new TargetComponent(oldTargetComponent)
+>TEST normal modifier Target clone
+
 Start removing inheritance, and change to composition
 Unittest:
     Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±

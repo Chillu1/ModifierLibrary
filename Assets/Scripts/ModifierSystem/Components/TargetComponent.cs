@@ -1,14 +1,17 @@
+using System;
 using BaseProject;
+using BaseProject.Utils;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class TargetComponent : Component, IValidatorComponent<IBeing>, ITargetComponent
+    public class TargetComponent : Component, IValidatorComponent<IBeing>, ITargetComponent, ICloneable
     {
         [CanBeNull] public IBeing Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
-        private IBeing _owner;
+
+        public IBeing Owner { get; private set; }
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
@@ -21,7 +24,7 @@ namespace ModifierSystem
 
         public void SetupOwner(IBeing owner)
         {
-            _owner = owner;
+            Owner = owner;
         }
 
         public bool Validate(IBeing target)
@@ -33,7 +36,7 @@ namespace ModifierSystem
                 Log.Error("Illegal UnitType on: " + target.BaseBeing.Id, "modifiers");
 
             //Check if target is self
-            if (LegalTarget.HasFlag(LegalTarget.Self) && _owner == target)
+            if (LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
                 return true;
 
             if (LegalTarget.HasFlag(LegalTarget.Ally) && target.BaseBeing.UnitType == UnitType.Ally)
@@ -43,17 +46,6 @@ namespace ModifierSystem
                 return true;
 
             return false;
-        }
-
-        [CanBeNull]
-        public IBeing GetTarget()
-        {
-            return Target;
-        }
-
-        public IBeing GetOwner()
-        {
-            return _owner;
         }
 
         public bool SetTarget(IBeing target)
@@ -72,6 +64,11 @@ namespace ModifierSystem
 
             Target = target;
             return true;
+        }
+
+        public object Clone()
+        {
+            return this.Copy();
         }
     }
 }

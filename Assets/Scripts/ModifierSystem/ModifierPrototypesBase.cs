@@ -44,7 +44,21 @@ namespace ModifierSystem
         [CanBeNull]
         public TModifierType GetItem(string key)
         {
-            return _prototypeController.GetItem(key);
+            var modifier = _prototypeController.GetItem(key);
+            ValidateModifier(modifier);
+
+            return modifier;
+        }
+
+        private bool ValidateModifier(TModifierType modifier)
+        {
+            if (modifier.TargetComponent.Target != null || modifier.TargetComponent.Owner != null)
+            {
+                Log.Error("Cloned prototype modifier has a Target or Owner");
+                return false;
+            }
+
+            return true;
         }
     }
 }

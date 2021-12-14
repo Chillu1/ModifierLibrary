@@ -23,7 +23,7 @@ namespace ModifierSystem
             //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
             var clonedModifier = (Modifier)Modifier.Clone();
             clonedModifier.CopyEvents((Modifier)Modifier);
-            TargetComponent.GetTarget().AddModifier(clonedModifier, Parameters);
+            TargetComponent.Target.AddModifier(clonedModifier, Parameters);
         }
 
         public void ApplyModifierToTarget(Being target)

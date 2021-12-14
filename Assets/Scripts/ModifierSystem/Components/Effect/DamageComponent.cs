@@ -16,7 +16,7 @@ namespace ModifierSystem
         public void Effect()
         {
             //Log.Info(_getTarget().BaseBeing.Id);
-            TargetComponent.GetTarget().DealDamage(Damage);
+            TargetComponent.Target.DealDamage(Damage);
         }
 
         public void MetaEffect(ChangeType changeType, double value)

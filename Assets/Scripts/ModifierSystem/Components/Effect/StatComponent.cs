@@ -17,7 +17,7 @@ namespace ModifierSystem
 
         public void Effect()
         {
-            _targetComponent.GetTarget().BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
+            _targetComponent.Target.BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
         }
     }
 }

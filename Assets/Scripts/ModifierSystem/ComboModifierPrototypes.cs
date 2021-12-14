@@ -76,7 +76,7 @@ namespace ModifierSystem
             foreach (var comboModifier in _instance.ModifierPrototypes.Values)
             {
                 if (comboModifier.CheckRecipes(modifierIds, elementController))
-                    modifierToAdd.Add(comboModifier);
+                    modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
             }
 
             return modifierToAdd;

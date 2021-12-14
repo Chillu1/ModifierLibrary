@@ -2,8 +2,8 @@ namespace ModifierSystem
 {
     public interface ITargetComponent
     {
-        IBeing GetTarget();
+        IBeing Target { get; }
+        IBeing Owner { get; }
         bool SetTarget(IBeing target);
-        IBeing GetOwner();
     }
 }
