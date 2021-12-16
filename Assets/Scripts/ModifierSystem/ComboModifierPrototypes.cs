@@ -28,7 +28,7 @@ namespace ModifierSystem
                 //Aspect of the cat
                 var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
                 var aspectOfTheCatTarget = new TargetComponent(LegalTarget.Self);
-                var aspectOfTheCatEffect = new StatComponent(12, aspectOfTheCatTarget);
+                var aspectOfTheCatEffect = new StatComponent(new []{new Stat(StatType.MovementSpeed){baseValue = 5}}, aspectOfTheCatTarget);
                 var aspectOfTheCatApply = new ApplyComponent(aspectOfTheCatEffect, aspectOfTheCatTarget);
                 aspectOfTheCatModifier.AddComponent(new InitComponent(aspectOfTheCatApply));
                 aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);

@@ -79,7 +79,7 @@ namespace ModifierSystem
                 modifierApplier.TryApply(target);
         }
 
-        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
+        public void AddModifier(IModifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
             ModifierController.TryAddModifier(modifier, parameters);
         }
@@ -89,7 +89,7 @@ namespace ModifierSystem
             return ModifierController.ContainsModifier(id);
         }
 
-        public bool ContainsModifier(Modifier modifier)
+        public bool ContainsModifier(IModifier modifier)
         {
             return ModifierController.ContainsModifier(modifier);
         }

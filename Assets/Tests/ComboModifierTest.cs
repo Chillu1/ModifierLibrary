@@ -5,16 +5,18 @@ namespace ModifierSystem.Tests
 {
     public class ComboModifierTest : ModifierBaseTest
     {
-        // [Test]
-        // public void CheckComboModifierAspectOfCat()
-        // {
-        //     var movementSpeedOfCat = modifierPrototypes.GetItem("TestMovementSpeedOfCat");
-        //     var attackSpeedOfCat = modifierPrototypes.GetItem("TestAttackSpeedOfCat");
-        //     character.AddModifier(movementSpeedOfCat);
-        //     character.AddModifier(attackSpeedOfCat);
-        //
-        //     Assert.True(character.ContainsModifier(comboModifierPrototypes.GetItem("TestAspectOfTheCat")));
-        // }
+        [Test]
+        public void CheckComboModifierAspectOfCat()
+        {
+            var movementSpeedOfCat = modifierPrototypes.GetItem("MovementSpeedOfCatTest");
+            var attackSpeedOfCat = modifierPrototypes.GetItem("AttackSpeedOfCatTest");
+            character.AddModifier(movementSpeedOfCat);
+            Assert.True(character.BaseBeing.CheckStat(StatType.MovementSpeed, 5));
+            character.AddModifier(attackSpeedOfCat);
+
+            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("AspectOfTheCatTest")));
+            Assert.True(character.BaseBeing.CheckStat(StatType.MovementSpeed, 15));
+        }
 
         [Test]
         public void CheckComboModifierByElements()

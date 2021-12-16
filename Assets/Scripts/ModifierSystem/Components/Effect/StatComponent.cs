@@ -5,19 +5,18 @@ namespace ModifierSystem
 {
     public class StatComponent : IEffectComponent
     {
-        //TODO Stat type to proper, health, damage, etc
-        public double Health { get; private set; }
+        private readonly Stat[] _stats;
         private readonly ITargetComponent _targetComponent;
 
-        public StatComponent(double health, ITargetComponent targetComponent)
+        public StatComponent(Stat[] stats, ITargetComponent targetComponent)
         {
-            Health = health;
+            _stats = stats;
             _targetComponent = targetComponent;
         }
 
         public void Effect()
         {
-            _targetComponent.Target.BaseBeing.ChangeStat(StatType.Health, Health);//TODO Hardcoded health
+            _targetComponent.Target.BaseBeing.ChangeStat(_stats);
         }
     }
 }

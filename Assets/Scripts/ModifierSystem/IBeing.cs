@@ -6,6 +6,6 @@ namespace ModifierSystem
     {
         BaseBeing BaseBeing { get; }
         DamageData[] DealDamage(DamageData[] data);
-        void AddModifier(Modifier modifier, AddModifierParameters parameters);
+        void AddModifier(IModifier modifier, AddModifierParameters parameters);
     }
 }

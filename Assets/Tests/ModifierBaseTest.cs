@@ -192,6 +192,30 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.SetupModifierApplier(bleedModifier);
                 }
 
+                {
+                    //MovementSpeedOfCat, removed after 10 seconds
+                    var movementSpeedOfCatModifier = new Modifier("MovementSpeedOfCatTest");
+                    var movementSpeedOfCatTarget = new TargetComponent(LegalTarget.Self);
+                    var statEffect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, movementSpeedOfCatTarget);
+                    var statApply = new ApplyComponent(statEffect, movementSpeedOfCatTarget);
+                    movementSpeedOfCatModifier.AddComponent(new InitComponent(statApply)); //Apply stat on init
+                    movementSpeedOfCatModifier.AddComponent(movementSpeedOfCatTarget);
+                    movementSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(movementSpeedOfCatModifier), 10)); //Remove after 10 secs
+                    _modifierPrototypes.AddModifier(movementSpeedOfCatModifier);
+                }
+
+                {
+                    //AttackSpeedOfCatTest, removed after 10 seconds
+                    var attackSpeedOfCatModifier = new Modifier("AttackSpeedOfCatTest");
+                    var attackSpeedOfCatTarget = new TargetComponent(LegalTarget.Self);
+                    var statEffect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, attackSpeedOfCatTarget);
+                    var statApply = new ApplyComponent(statEffect, attackSpeedOfCatTarget);
+                    attackSpeedOfCatModifier.AddComponent(new InitComponent(statApply)); //Apply stat on init
+                    attackSpeedOfCatModifier.AddComponent(attackSpeedOfCatTarget);
+                    attackSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(attackSpeedOfCatModifier), 10)); //Remove after 10 secs
+                    _modifierPrototypes.AddModifier(attackSpeedOfCatModifier);
+                }
+
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
                 //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
                 //var aspectOfTheCatBuff = new StatComponent( /*5 speed & 5 attackSpeed*/);
@@ -243,13 +267,15 @@ namespace ModifierSystem.Tests
                     //Aspect of the cat
                     var aspectOfTheCatModifier = new Modifier("AspectOfTheCatTest");
                     var aspectOfTheCatTarget = new TargetComponent(LegalTarget.Self);
-                    var aspectOfTheCatEffect = new StatComponent(12, aspectOfTheCatTarget);
+                    var aspectOfTheCatEffect = new StatComponent(
+                            new[] { new Stat(StatType.MovementSpeed) { baseValue = 10 }},
+                            aspectOfTheCatTarget);
                     var aspectOfTheCatApply = new ApplyComponent(aspectOfTheCatEffect, aspectOfTheCatTarget);
                     aspectOfTheCatModifier.AddComponent(new InitComponent(aspectOfTheCatApply));
                     aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);
                     aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
                     var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
-                        new ComboRecipes(new ComboRecipe(new[] { "DexterityTest", "SpeedTest" })),
+                        new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })),
                         1);
                     ModifierPrototypes.AddModifier(aspectOfTheCatComboModifier);
                 }
