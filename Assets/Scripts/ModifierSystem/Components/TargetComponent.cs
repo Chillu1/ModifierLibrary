@@ -5,13 +5,13 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class TargetComponent : Component, IValidatorComponent<IBeing>, ITargetComponent, ICloneable
+    public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent, ICloneable
     {
-        [CanBeNull] public IBeing Target { get; private set; }
+        [CanBeNull] public Being Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
 
-        public IBeing Owner { get; private set; }
+        public Being Owner { get; private set; }
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
@@ -22,33 +22,33 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public void SetupOwner(IBeing owner)
+        public void SetupOwner(Being owner)
         {
             Owner = owner;
         }
 
-        public bool Validate(IBeing target)
+        public bool Validate(Being target)
         {
             if (target == null)
                 return LegalTarget.HasFlag(LegalTarget.Ground);
 
-            if (target.BaseBeing.UnitType == UnitType.None)
-                Log.Error("Illegal UnitType on: " + target.BaseBeing.Id, "modifiers");
+            if (target.UnitType == UnitType.None)
+                Log.Error("Illegal UnitType on: " + target.Id, "modifiers");
 
             //Check if target is self
             if (LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
                 return true;
 
-            if (LegalTarget.HasFlag(LegalTarget.Ally) && target.BaseBeing.UnitType == UnitType.Ally)
+            if (LegalTarget.HasFlag(LegalTarget.Ally) && target.UnitType == UnitType.Ally)
                 return true;
 
-            if (LegalTarget.HasFlag(LegalTarget.Enemy) && target.BaseBeing.UnitType == UnitType.Enemy)
+            if (LegalTarget.HasFlag(LegalTarget.Enemy) && target.UnitType == UnitType.Enemy)
                 return true;
 
             return false;
         }
 
-        public bool SetTarget(IBeing target)
+        public bool SetTarget(Being target)
         {
             if (!Applier && Target != null)
             {
@@ -58,7 +58,7 @@ namespace ModifierSystem
 
             if (!Validate(target))
             {
-                Log.Error("Target is not valid, id: "+target?.BaseBeing.Id, "modifiers");
+                Log.Error("Target is not valid, id: "+target?.Id, "modifiers");
                 return false;
             }
 

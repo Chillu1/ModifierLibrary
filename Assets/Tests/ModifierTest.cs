@@ -24,7 +24,7 @@ namespace ModifierSystem.Tests
 
             var damageModifier = modifierPrototypes.GetItem("IceBoltTest");
             Assert.True(enemy.ContainsModifier(damageModifier));
-            Assert.True(enemy.BaseBeing.IsDead);
+            Assert.True(enemy.IsDead);
             //We could test for: amount of stacks, simulating the time (then damage taken)
         }
 
@@ -33,17 +33,17 @@ namespace ModifierSystem.Tests
         {
             var healModifierApplier = modifierPrototypes.GetItem("AllyHealTestApplier");
             character.AddModifier(healModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.BaseBeing.ChangeDamageStat(new DamageData(9, DamageType.Physical, null));//10 dmg
+            enemy.ChangeDamageStat(new DamageData(9, DamageType.Physical, null));//10 dmg
             enemy.Attack(ally);
             character.CastModifier(ally, "AllyHealTestApplier");
             var healModifier = modifierPrototypes.GetItem("AllyHealTest");
             Assert.True(ally.ContainsModifier(healModifier));
-            Assert.True(ally.BaseBeing.Health.PoolStat.IsFull);
+            Assert.True(ally.Health.PoolStat.IsFull);
 
             enemy.Attack(ally);
             enemy.Attack(ally);
             character.CastModifier(ally, "AllyHealTestApplier");
-            Assert.True(ally.CurrentHealth == initialHealthAlly-10d);
+            Assert.True(ally.Health.CurrentHealth == initialHealthAlly-10d);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace ModifierSystem.Tests
 
             var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
             Assert.True(enemy.ContainsModifier(doTModifier));
-            Assert.AreEqual(initialHealthEnemy-1-5-5-5, enemy.CurrentHealth, Delta);
+            Assert.AreEqual(initialHealthEnemy-1-5-5-5, enemy.Health.CurrentHealth, Delta);
         }
 
         /*[Test]

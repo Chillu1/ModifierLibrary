@@ -3,27 +3,39 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public sealed class Being : IBeing
+    public sealed class Being
     {
-        public BaseBeing BaseBeing { get; }
+        private ModifierController ModifierController { get; }
 
         /// <summary>
         ///     On getting a combo
         /// </summary>
         public event Action<Being> ComboEvent;
-        public double CurrentHealth => BaseBeing.Health.PoolStat.BaseStat.Value;
-        private ModifierController ModifierController { get; }
+
+        #region BaseBeing Members
+
+        private BaseBeing BaseBeing { get; }
+
+        public string Id => BaseBeing.Id;
+
+        public HealthStat Health => BaseBeing.Health;
+
+        public UnitType UnitType => BaseBeing.UnitType;
+
+        public bool IsDead => BaseBeing.IsDead;
+
+        public event Action<BaseBeing, BaseBeing> AttackEvent
+        {
+            add => BaseBeing.AttackEvent += value;
+            remove => BaseBeing.AttackEvent -= value;
+        }
+
+        #endregion
 
         public Being(BeingProperties beingProperties)
         {
             BaseBeing = new BaseBeing(beingProperties);
             ModifierController = new ModifierController(this, BaseBeing.ElementController);
-        }
-
-        public void Update(float deltaTime)
-        {
-            ModifierController.Update(deltaTime);
-            BaseBeing.Update(deltaTime);
         }
 
         public bool CastModifier(Being target, string modifierId)
@@ -37,30 +49,13 @@ namespace ModifierSystem
             if (!modifier.ApplierModifier)
             {
                 //TODO Not sure, about this one, but probably true
-                Log.Error("Can't cast a non-applier modifier: "+modifierId, "modifiers");
+                Log.Error("Can't cast a non-applier modifier: " + modifierId, "modifiers");
                 return false;
             }
 
             modifier.TryApply(target);
 
             return true;
-        }
-
-        /// <summary>
-        ///     Manual attack, NOT a modifier attack
-        /// </summary>
-        public void Attack(Being target)
-        {
-            ApplyModifiers(target);
-            BaseBeing.Attack(target.BaseBeing);
-        }
-
-        /// <summary>
-        ///     Used for dealing damage with modifiers
-        /// </summary>
-        public DamageData[] DealDamage(DamageData[] data)
-        {
-            return BaseBeing.DealDamage(data);
         }
 
         /// <summary>
@@ -71,7 +66,7 @@ namespace ModifierSystem
             var modifierAppliers = ModifierController.GetModifierAppliers();
             if (modifierAppliers == null)
             {
-                Log.Verbose(BaseBeing.Id+" has no applier modifiers", "modifiers");
+                Log.Verbose(BaseBeing.Id + " has no applier modifiers", "modifiers");
                 return;
             }
 
@@ -107,5 +102,47 @@ namespace ModifierSystem
         {
             return BaseBeing.ToString() + ModifierController;
         }
+
+        #region BaseBeing Methods
+
+        public void Update(float deltaTime)
+        {
+            ModifierController.Update(deltaTime);
+            BaseBeing.Update(deltaTime);
+        }
+
+        /// <summary>
+        ///     Manual attack, NOT a modifier attack
+        /// </summary>
+        public void Attack(Being target)
+        {
+            ApplyModifiers(target);
+            BaseBeing.Attack(target.BaseBeing);
+        }
+
+        /// <summary>
+        ///     Used for dealing damage with modifiers
+        /// </summary>
+        public DamageData[] DealDamage(DamageData[] data)
+        {
+            return BaseBeing.DealDamage(data);
+        }
+
+        public bool CheckStat(StatType type, double value)
+        {
+            return BaseBeing.CheckStat(type, value);
+        }
+
+        public void ChangeStat(Stat[] stats)
+        {
+            BaseBeing.ChangeStat(stats);
+        }
+
+        public void ChangeDamageStat(DamageData damageData)
+        {
+            BaseBeing.ChangeDamageStat(damageData);
+        }
+
+        #endregion
     }
 }

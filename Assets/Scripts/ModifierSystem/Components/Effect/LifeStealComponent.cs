@@ -14,23 +14,23 @@ namespace ModifierSystem
         private double Percentage { get; }
 
         //Target is the being who gets lifeSteal buff
-        private Func<IBeing> _getTarget;
+        private readonly ITargetComponent _targetComponent;
 
         public LifeStealComponent(DamageData[] damage, double percentage, ITargetComponent targetComponent)
         {
             Damage = damage;
             Percentage = percentage;
-            _getTarget = () => targetComponent.Target;
+            _targetComponent = targetComponent;
         }
 
         public void Effect()
         {
-            _getTarget().BaseBeing.AttackEvent += OnLifeStealEvent;
+            _targetComponent.Target.AttackEvent += OnLifeStealEvent;
         }
 
         public void CleanUp()
         {
-            _getTarget().BaseBeing.AttackEvent -= OnLifeStealEvent;
+            _targetComponent.Target.AttackEvent -= OnLifeStealEvent;
         }
 
         private void OnLifeStealEvent(BaseBeing target, BaseBeing attacked)

@@ -16,7 +16,7 @@ namespace ModifierSystem
 
         public void Effect()
         {
-            _targetComponent.Target.BaseBeing.ChangeStat(_stats);
+            _targetComponent.Target.ChangeStat(_stats);
         }
     }
 }

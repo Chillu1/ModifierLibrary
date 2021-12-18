@@ -48,9 +48,9 @@ namespace ModifierSystem.Tests
                 Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                 UnitType = UnitType.Enemy
             });
-            initialHealthCharacters = character.CurrentHealth;
-            initialHealthAlly = ally.CurrentHealth;
-            initialHealthEnemy = enemy.CurrentHealth;
+            initialHealthCharacters = character.Health.CurrentHealth;
+            initialHealthAlly = ally.Health.CurrentHealth;
+            initialHealthEnemy = enemy.Health.CurrentHealth;
         }
 
         [TearDown]

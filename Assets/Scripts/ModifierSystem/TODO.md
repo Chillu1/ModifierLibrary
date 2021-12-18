@@ -1,17 +1,10 @@
 TODO RN:    
-> Linger makes it so "fast spells" dont do their effect, because modifier is already present  
->    Solution: make a class for status effects in Being, instead of having a linger for combos.
->              But then we can't combo based of present modifier IDs
->    Solution 2: //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
-                if(!stacked && !refreshed)
-                    internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
-
-THIS
-Start removing inheritance, and change to composition
+Sort TODO
 Unittest:
     Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
-    First more proper Stats setup(fix inheritance/design), then: ComboModifier Stat based
     Stat change removal after duration/remove effect
+
+ComboModifier Stat based
 
 > AspectOfTheCat & Infection
 ComboMod ConditionalRemove, timer starts ticking down after condition isnt met anymore? (Might be better to just have a time remove, and comboMod is added again later, or we refresh the duration when it tries to be added again)
@@ -25,6 +18,14 @@ Combo design choices:
 When should we check for combo modifiers to add?
     OnAddModifier
     & every 1 second on adding elementalData?
+
+Linger makes it so "fast spells" dont do their effect, because modifier is already present  
+    Solution: make a class for status effects in Being, instead of having a linger for combos.
+        But then we can't combo based of present modifier IDs
+    Solution 2: //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
+        if(!stacked && !refreshed)
+        internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
+
 
 When should elemental damage be applied? DealDamage?
 When should elementalData be applied, that's not damage? OnAddModifier?
@@ -95,8 +96,6 @@ I might be going about this the wrong way. Maybe there's an elegant way of doing
 Without using delegates, and a lot of hard-coding the behaviours in the class.
 
 
-_Refactor "unitType"_  
-    Self, Ally, Enemy.  Dynamically added based on what unit type you are?
 Basic Unit tests of components & mechanics
     _damageData[0].BaseDamage is not being used to damage enemy
     Generic methods? Increase damage on stack, etc
