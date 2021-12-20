@@ -22,8 +22,6 @@ namespace ModifierSystem
 
         public UnitType UnitType => BaseBeing.UnitType;
 
-        public bool IsDead => BaseBeing.IsDead;
-
         public event Action<BaseBeing, BaseBeing> AttackEvent
         {
             add => BaseBeing.AttackEvent += value;

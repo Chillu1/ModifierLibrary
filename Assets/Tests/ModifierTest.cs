@@ -24,7 +24,7 @@ namespace ModifierSystem.Tests
 
             var damageModifier = modifierPrototypes.GetItem("IceBoltTest");
             Assert.True(enemy.ContainsModifier(damageModifier));
-            Assert.True(enemy.IsDead);
+            Assert.True(enemy.Health.IsDead);
             //We could test for: amount of stacks, simulating the time (then damage taken)
         }
 
