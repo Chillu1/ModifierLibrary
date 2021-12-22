@@ -22,16 +22,21 @@ namespace ModifierSystem
             ApplierModifier = applierModifier;
         }
 
-        public void Init()
+        public void Init(ModifierController modifierController)
         {
             InitComponent?.Init();
+            if (TimeComponents != null)
+                foreach (var timeComponent in TimeComponents)
+                {
+                    timeComponent.Init(modifierController);
+                }
         }
 
-        public void Update(float deltaTime)
+        public void Update(float deltaTime, double ownerStatusResistance)
         {
             //Log.Info(TimeComponents?.Count +" ID: "+Id);
             for (int i = 0; i < TimeComponents?.Count; i++)
-                TimeComponents[i].Update(deltaTime);
+                TimeComponents[i].Update(deltaTime, ownerStatusResistance);
         }
 
         public void AddComponent(IInitComponent initComponent)

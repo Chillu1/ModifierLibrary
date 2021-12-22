@@ -4,6 +4,10 @@ Unittest:
     Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
     Stat change removal after duration/remove effect
 
+StatusResistance for different types of mods, negative/positive, "tag"-based?
+    Rule based statuson resistance, instance list
+    Ex, negative. Basen on fire, with poison duration
+
 ComboModifier Stat based
 
 > AspectOfTheCat & Infection
@@ -201,6 +205,9 @@ Either triggers an effect, or removes modifier after duration passed
             refresh modifier _timer  
     */  
   
+Designinger a modifier: Strong direct specific upside rolled to a significant amount and a strong downside that should be always somehow related to the upside
+, ex: 1.5x attack speed, hp lowered by 30-50%.
+, bad ex: 1.1x attack speed, spell casting speed lowered by 10% (we don't care for spell cast speed if we're attacks-only build, aka straight buff)
 Modifier ideas:  
 X can be: damage, speed, stat, health, mana, etc  
   
@@ -208,7 +215,9 @@ Different types of lifesteal:
 Based on damage dealt (done)  
 Based on damage dealt before resistance reduction (done)  
 Based on enemy's current/max health %  
-  
+
+DOT res - No spellcasting or Attacking
+100% status resistance/elemental resistance - downside
   
 When lower than X health do Y  
 Heal damage instead of getting damaged for 3 seconds  

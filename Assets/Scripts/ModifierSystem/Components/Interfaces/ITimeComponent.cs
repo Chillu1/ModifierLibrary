@@ -2,6 +2,7 @@ namespace ModifierSystem
 {
     public interface ITimeComponent
     {
-        void Update(float deltaTime);
+        void Init(ModifierController modifierController);
+        void Update(float deltaTime, double statusResistance);
     }
 }

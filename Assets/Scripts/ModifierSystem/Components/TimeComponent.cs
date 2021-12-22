@@ -23,17 +23,26 @@ namespace ModifierSystem
         /// </summary>
         public TimeComponent(RemoveComponent removeComponent, double lingerDuration = 0.5d)
         {
+            EffectComponent = removeComponent;
             Duration = lingerDuration;
             ResetOnFinished = false;
-            EffectComponent = removeComponent;
         }
 
-        public void Update(float deltaTime)
+        public void Init(ModifierController modifierController)
+        {
+            if (EffectComponent is RemoveComponent)
+            {
+                var removeComponent = (RemoveComponent)EffectComponent;
+                removeComponent.Init(modifierController);
+            }
+        }
+
+        public void Update(float deltaTime, double statusResistance)
         {
             if (_finished)
                 return;
             _timer += deltaTime;
-            if (_timer >= Duration)
+            if (_timer >= Duration * statusResistance)
             {
                 EffectComponent.Effect();
                 _finished = true;

@@ -5,6 +5,8 @@ namespace ModifierSystem
 {
     public sealed class Being
     {
+        //TODO StatusResistance for different types of mods, negative/positive?
+        public double StatusResistance { get; private set; } = 1d;//Base project?
         private ModifierController ModifierController { get; }
 
         /// <summary>

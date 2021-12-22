@@ -104,10 +104,10 @@ namespace ModifierSystem
         }
 
 
-        public void Init() => Modifier.Init();
+        public void Init(ModifierController modifierController) => Modifier.Init(modifierController);
         public void TryApply(Being target) => Modifier.TryApply(target);
 
-        public void Update(float deltaTime) => Modifier.Update(deltaTime);
+        public void Update(float deltaTime, double ownerStatusResistance) => Modifier.Update(deltaTime, ownerStatusResistance);
 
         public bool Stack() => Modifier.Stack();
 

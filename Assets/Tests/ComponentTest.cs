@@ -21,5 +21,29 @@ namespace ModifierSystem.Tests
             character.Attack(ally);
             Assert.True(ally.Health.Check(24));
         }
+
+        [Test]
+        public void RemoveComponentContains()
+        {
+            var doTModifierApplier = modifierPrototypes.GetItem("SpiderPoisonTestApplier");
+            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.Attack(enemy);
+            enemy.Update(9.9f);
+
+            var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            Assert.True(enemy.ContainsModifier(doTModifier));
+        }
+
+        [Test]
+        public void RemoveComponentEffect()
+        {
+            var doTModifierApplier = modifierPrototypes.GetItem("SpiderPoisonTestApplier");
+            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.Attack(enemy);
+            enemy.Update(10.1f);
+
+            var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            Assert.False(enemy.ContainsModifier(doTModifier));
+        }
     }
 }

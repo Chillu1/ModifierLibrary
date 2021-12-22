@@ -24,7 +24,7 @@ namespace ModifierSystem
             //Log.Info(Modifiers.Count);
             foreach (var valuePair in Modifiers.ToArray())//TODO Making it into an array every frame is uncool, instead mark them as to deleted
             {
-                valuePair.Value.Update(deltaTime);
+                valuePair.Value.Update(deltaTime, _owner.StatusResistance);
             }
         }
 
@@ -41,7 +41,7 @@ namespace ModifierSystem
                 refreshed = internalModifier.Refresh();
                 //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
                 if(!stacked && !refreshed)
-                    internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
+                    internalModifier.Init(this);//Problem comes here, since the effect might not actually be in Init()
 
                 //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
@@ -62,7 +62,7 @@ namespace ModifierSystem
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
-            modifier.Init();
+            modifier.Init(this);
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 

@@ -7,9 +7,9 @@ namespace ModifierSystem
     {
         TargetComponent TargetComponent { get; }
         bool ApplierModifier { get; }
-        void Init();
+        void Init(ModifierController modifierController);
         void TryApply(Being target);
-        void Update(float deltaTime);
+        void Update(float deltaTime, double statusResistance);
         bool Stack();
         bool Refresh();
         bool ValidatePrototypeSetup();
