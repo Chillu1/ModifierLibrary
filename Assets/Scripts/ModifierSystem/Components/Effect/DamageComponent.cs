@@ -4,7 +4,7 @@ namespace ModifierSystem
 {
     public class DamageComponent : IEffectComponent, IMetaEffect
     {
-        public DamageData[] Damage { get; private set; }
+        private DamageData[] Damage { get; }
         private ITargetComponent TargetComponent { get; }
 
         public DamageComponent(DamageData[] damage, ITargetComponent targetComponent)

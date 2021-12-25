@@ -16,6 +16,14 @@ namespace ModifierController.Editor
             DrawDefaultInspector();
             if (GUILayout.Button("Test script"))
             {
+                // BaseBeing being = new BaseBeing(new BeingProperties()
+                //     { Id = "TestBeing", Health = 50, DamageData = new DamageData(5, DamageType.Physical, null) });
+                // being.ChangeStatusEffect(StatusEffect.Rooted);
+                // being.ChangeStatusEffect(StatusEffect.Stunned);
+                // Log.Info(being.StatusEffect);
+                // being.ChangeStatusEffect(StatusEffect.Rooted, true);
+                // Log.Info(being.StatusEffect);
+
                 /*var statusResistances = new StatusResistances();
                 var statusTags = new[] { new StatusTag(DamageType.Physical)};
                 var statusTagsLong = new[] { new StatusTag(DamageType.Physical), new StatusTag(ElementalType.Acid), new StatusTag(StatusType.DoT)};

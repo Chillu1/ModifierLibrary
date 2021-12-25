@@ -1,10 +1,12 @@
 using System;
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
     public sealed class Being
     {
+        public StatusResistances StatusResistances { get; }
         private ModifierController ModifierController { get; }
 
         /// <summary>
@@ -19,7 +21,7 @@ namespace ModifierSystem
         public string Id => BaseBeing.Id;
         public HealthStat Health => BaseBeing.Health;
         public UnitType UnitType => BaseBeing.UnitType;
-        public StatusResistances StatusResistances => BaseBeing.StatusResistances;
+        public LegalAction LegalActions => BaseBeing.LegalActions;
 
         public event Action<BaseBeing, BaseBeing> AttackEvent
         {
@@ -32,6 +34,7 @@ namespace ModifierSystem
         public Being(BeingProperties beingProperties)
         {
             BaseBeing = new BaseBeing(beingProperties);
+            StatusResistances = new StatusResistances();
             ModifierController = new ModifierController(this, BaseBeing.ElementController);
         }
 
@@ -49,6 +52,9 @@ namespace ModifierSystem
                 Log.Error("Can't cast a non-applier modifier: " + modifierId, "modifiers");
                 return false;
             }
+
+            if (!LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
+                return false;
 
             modifier.TryApply(target);
 
@@ -108,13 +114,22 @@ namespace ModifierSystem
             BaseBeing.Update(deltaTime);
         }
 
+        public void ChangeStatusEffect(StatusEffect effect, float amount)
+        {
+            BaseBeing.ChangeStatusEffect(effect, amount);
+        }
+
         /// <summary>
         ///     Manual attack, NOT a modifier attack
         /// </summary>
-        public void Attack(Being target)
+        [CanBeNull]
+        public DamageData[] Attack(Being target)
         {
+            if (!LegalActions.HasFlag(LegalAction.Act))//Can't attack
+                return null;
+            
             ApplyModifiers(target);
-            BaseBeing.Attack(target.BaseBeing);
+            return BaseBeing.Attack(target.BaseBeing);
         }
 
         /// <summary>

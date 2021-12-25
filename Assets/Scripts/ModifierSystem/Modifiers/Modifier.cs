@@ -36,8 +36,11 @@ namespace ModifierSystem
                 }
         }
 
-        public void FinishSetup([CanBeNull] DamageData[] damageData = null)
+        public StatusTag[] FinishSetup([CanBeNull] DamageData[] damageData = null)
         {
+            if (_setupFinished)
+                Log.Error("Setup already finished, overwriting");
+
             var tempStatusTags = new List<StatusTag>();
 
             if (damageData != null)
@@ -46,15 +49,19 @@ namespace ModifierSystem
                     if (data.DamageType != DamageType.None)
                         tempStatusTags.Add(new StatusTag(data.DamageType));
                     if (data.ElementData != null && data.ElementData.ElementalType != ElementalType.None)
+                    {
+                        if(data.ElementData.EffectValue != 0)
+                            tempStatusTags.Add(new StatusTag(StatusType.Element));
                         tempStatusTags.Add(new StatusTag(data.ElementData.ElementalType));
+                    }
                 }
 
             if (InitComponent != null)
             {
+                if (InitComponent.EffectComponentIsOfType<StatusComponent>())
+                    tempStatusTags.Add(new StatusTag(StatusType.Stun));
                 //if (InitComponent.EffectComponentIsOfType<SlowComponent>())
                 //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
-                //if (InitComponent.EffectComponentIsOfType<StunComponent>())
-                //    tempStatusTags.Add(new StatusTag(StatusType.Stun));
             }
 
             if (TimeComponents != null)
@@ -70,6 +77,7 @@ namespace ModifierSystem
 
             StatusTags = tempStatusTags.ToArray();
             _setupFinished = true;
+            return StatusTags;
         }
 
         public void Update(float deltaTime, StatusResistances ownerStatusResistances)

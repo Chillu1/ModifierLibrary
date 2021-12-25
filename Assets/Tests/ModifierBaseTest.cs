@@ -12,7 +12,7 @@ namespace ModifierSystem.Tests
         protected Being ally;
         protected Being enemy;
 
-        protected double initialHealthCharacters, initialHealthAlly, initialHealthEnemy;
+        protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
 
         protected const double Delta = 0.01d;
 
@@ -48,7 +48,7 @@ namespace ModifierSystem.Tests
                 Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                 UnitType = UnitType.Enemy
             });
-            initialHealthCharacters = character.Health.CurrentHealth;
+            initialHealthCharacter = character.Health.CurrentHealth;
             initialHealthAlly = ally.Health.CurrentHealth;
             initialHealthEnemy = enemy.Health.CurrentHealth;
         }
@@ -93,7 +93,6 @@ namespace ModifierSystem.Tests
                     //Apply on attack
                     _modifierPrototypes.SetupModifierApplier(iceBoltModifier);
                 }
-
                 {
                     //StackableSpiderPoison, removed after 10 seconds
                     //-Each stack increases DoT damage by 2
@@ -114,7 +113,6 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(spiderPoisonModifier);
                     _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier);
                 }
-
                 {
                     //RefreshableCobraVenom, removed after 10 seconds
                     //-Refresh = refreshes duration (timer)
@@ -137,7 +135,6 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(cobraVenomModifier);
                     _modifierPrototypes.SetupModifierApplier(cobraVenomModifier);
                 }
-
                 {
                     //PassiveSelfHeal
                     var selfHealModifier = new Modifier("PassiveSelfHealTest");
@@ -151,7 +148,6 @@ namespace ModifierSystem.Tests
                     //Forever buff (applier), not refreshable or stackable (for now)
                     //SetupModifierApplier(selfHealModifier, LegalTarget.Self);
                 }
-
                 {
                     var allyHealModifier = new Modifier("AllyHealTest");
                     var target = new TargetComponent();
@@ -165,7 +161,6 @@ namespace ModifierSystem.Tests
                     //Forever buff (applier), not refreshable or stackable (for now)
                     _modifierPrototypes.SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
                 }
-
                 {
                     //BasicPoison, removed after 10 seconds
                     var poisonModifier = new Modifier("PoisonTest");
@@ -181,7 +176,6 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(poisonModifier);
                     _modifierPrototypes.SetupModifierApplier(poisonModifier);
                 }
-                
                 {
                     //BasicBleed, removed after 10 seconds
                     var bleedModifier = new Modifier("BleedTest");
@@ -197,7 +191,6 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(bleedModifier);
                     _modifierPrototypes.SetupModifierApplier(bleedModifier);
                 }
-
                 {
                     //MovementSpeedOfCat, removed after 10 seconds
                     var movementSpeedOfCatModifier = new Modifier("MovementSpeedOfCatTest");
@@ -210,7 +203,6 @@ namespace ModifierSystem.Tests
                     movementSpeedOfCatModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(movementSpeedOfCatModifier);
                 }
-
                 {
                     //AttackSpeedOfCatTest, removed after 10 seconds
                     var attackSpeedOfCatModifier = new Modifier("AttackSpeedOfCatTest");
@@ -222,6 +214,32 @@ namespace ModifierSystem.Tests
                     attackSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(attackSpeedOfCatModifier), 10)); //Remove after 10 secs
                     attackSpeedOfCatModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(attackSpeedOfCatModifier);
+                }
+                {
+                    //Disarm modifier
+                    var disarmModifier = new Modifier("DisarmModifierTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatusComponent(StatusEffect.Disarm, 2f, target);
+                    var apply = new ApplyComponent(effect, target);
+                    disarmModifier.AddComponent(new InitComponent(apply));
+                    disarmModifier.AddComponent(target);
+                    disarmModifier.AddComponent(new TimeComponent(new RemoveComponent(disarmModifier)));
+                    disarmModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(disarmModifier);
+                    _modifierPrototypes.SetupModifierApplier(disarmModifier);
+                }
+                {
+                    //Cast modifier
+                    var silenceModifier = new Modifier("SilenceModifierTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatusComponent(StatusEffect.Silence, 2f, target);
+                    var apply = new ApplyComponent(effect, target);
+                    silenceModifier.AddComponent(new InitComponent(apply));
+                    silenceModifier.AddComponent(target);
+                    silenceModifier.AddComponent(new TimeComponent(new RemoveComponent(silenceModifier)));
+                    silenceModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(silenceModifier);
+                    _modifierPrototypes.SetupModifierApplier(silenceModifier);
                 }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.

@@ -1,5 +1,46 @@
 TODO RN:    
-Sort TODO
+    Sort TODO (make another .md for design purposes?)
+    StatusEffect unit tests with modifiers: disarmed
+    Modifier with all possible tags
+    Normal singular stun modifier
+    TimeComp Stun every X
+    TimeComp Slow (veno gale)
+
+Automatic tags:
+    XEffectComponent inside TimeComponent with resetOnFinished = effect
+    //DamageComponent inside TimeComponent with resetOnFinished = DoT
+    Heal
+    Stun/Slow-effect,etc. On Init = StatusType.X
+    Unit test: Correct tags
+
+Status resistances:
+    Stun, DoT, Slow, Specific Buff/Debuff (resistance, elemental, etc)
+    Elemental based: Poison DoT, Fire DoT
+    DamageType based: Physical, Magical
+    Positive/Negative based (might be redundant, since we have StatusType? So "Negative" is already there, what about positive?)
+
+Maybe a more proper "Tag based" system? To have one big enum that defines all possibilities
+Let's skip the combinations like: Fire DoT, etc. And have it be focused on only one
+Ok so, how does one do positive status resistance then? We divide instead... Ez Clap
+
+Value=>
+Percentage
+Recalculate on Add&Remove
+
+Different from resistances:
+    Negative not allowed
+
+Process:
+    Add status resistance to the collection
+    We hold Values & percentages of every statusType
+    Ex: Add FireRes 80%, Add FireDoTRes 80%  
+    => FireRes 80%, Fire DoT 64%
+    Then the timer asks/ticks whatever:
+    Im a Negative, Fire DoT modifier, what should be my length?
+    He takes multipliers of: FireRes, Negative, DoT, Fire DoT? (Maybe let's not have specific ones?)
+
+Divide status res when increasing (positive)
+
 Unittest:
     Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
     Stat change removal after duration/remove effect

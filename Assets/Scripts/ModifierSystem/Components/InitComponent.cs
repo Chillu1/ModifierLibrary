@@ -11,7 +11,7 @@ namespace ModifierSystem
 
         public void Init()
         {
-            _applyComponent?.Apply();
+            _applyComponent.Apply();
         }
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
