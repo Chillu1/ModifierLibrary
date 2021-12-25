@@ -24,7 +24,7 @@ namespace ModifierSystem
             //Log.Info(Modifiers.Count);
             foreach (var valuePair in Modifiers.ToArray())//TODO Making it into an array every frame is uncool, instead mark them as to deleted
             {
-                valuePair.Value.Update(deltaTime, _owner.StatusResistance);
+                valuePair.Value.Update(deltaTime, _owner.StatusResistances);
             }
         }
 

@@ -5,8 +5,6 @@ namespace ModifierSystem
 {
     public sealed class Being
     {
-        //TODO StatusResistance for different types of mods, negative/positive?
-        public double StatusResistance { get; private set; } = 1d;//Base project?
         private ModifierController ModifierController { get; }
 
         /// <summary>
@@ -19,10 +17,9 @@ namespace ModifierSystem
         private BaseBeing BaseBeing { get; }
 
         public string Id => BaseBeing.Id;
-
         public HealthStat Health => BaseBeing.Health;
-
         public UnitType UnitType => BaseBeing.UnitType;
+        public StatusResistances StatusResistances => BaseBeing.StatusResistances;
 
         public event Action<BaseBeing, BaseBeing> AttackEvent
         {

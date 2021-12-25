@@ -1,13 +1,10 @@
-using JetBrains.Annotations;
-
 namespace ModifierSystem
 {
     public class InitComponent : Component, IInitComponent
     {
-        [CanBeNull]
         private readonly IApplyComponent _applyComponent;
 
-        public InitComponent(IApplyComponent applyComponent = null)
+        public InitComponent(IApplyComponent applyComponent)
         {
             _applyComponent = applyComponent;
         }
@@ -15,6 +12,10 @@ namespace ModifierSystem
         public void Init()
         {
             _applyComponent?.Apply();
+        }
+        public bool EffectComponentIsOfType<T>() where T : IEffectComponent
+        {
+            return _applyComponent.GetType() == typeof(T);
         }
     }
 }

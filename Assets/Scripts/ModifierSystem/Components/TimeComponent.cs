@@ -37,7 +37,7 @@ namespace ModifierSystem
             }
         }
 
-        public void Update(float deltaTime, double statusResistance)
+        public void Update(float deltaTime, double statusResistance = 1d)
         {
             if (_finished)
                 return;
@@ -58,6 +58,14 @@ namespace ModifierSystem
         public void RefreshTimer()
         {
             _timer = 0;
+        }
+
+        public bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent
+        {
+            if(checkResetOnFinished)
+                return ResetOnFinished && EffectComponent.GetType() == typeof(T);
+
+            return EffectComponent.GetType() == typeof(T);
         }
     }
 }

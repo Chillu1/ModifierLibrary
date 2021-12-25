@@ -107,7 +107,7 @@ namespace ModifierSystem
         public void Init(ModifierController modifierController) => Modifier.Init(modifierController);
         public void TryApply(Being target) => Modifier.TryApply(target);
 
-        public void Update(float deltaTime, double ownerStatusResistance) => Modifier.Update(deltaTime, ownerStatusResistance);
+        public void Update(float deltaTime, StatusResistances ownerStatusResistances) => Modifier.Update(deltaTime, ownerStatusResistances);
 
         public bool Stack() => Modifier.Stack();
 

@@ -45,5 +45,18 @@ namespace ModifierSystem.Tests
             var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
             Assert.False(enemy.ContainsModifier(doTModifier));
         }
+
+        [Test]
+        public void RemoveComponentLingerEffect()
+        {
+            var doTModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
+            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.Attack(enemy);
+            enemy.Update(0.4f);
+            var doTModifier = modifierPrototypes.GetItem("IceBoltTest");
+            Assert.True(enemy.ContainsModifier(doTModifier));
+            enemy.Update(0.2f);
+            Assert.False(enemy.ContainsModifier(doTModifier));
+        }
     }
 }

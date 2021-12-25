@@ -33,11 +33,12 @@ namespace ModifierSystem
         public void SetupModifierApplier(TModifierType appliedModifier, LegalTarget legalTarget = LegalTarget.DefaultOffensive)
         {
             var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
-            var modifierApplierTarget = new TargetComponent(legalTarget, true);
-            var modifierApplierEffect = new ApplierComponent(appliedModifier, modifierApplierTarget);
-            var modifierApplierApply = new ApplyComponent(modifierApplierEffect, modifierApplierTarget);
-            modifierApplier.AddComponent(modifierApplierApply);
-            modifierApplier.AddComponent(modifierApplierTarget);
+            var target = new TargetComponent(legalTarget, true);
+            var effect = new ApplierComponent(appliedModifier, target);
+            var apply = new ApplyComponent(effect, target);
+            modifierApplier.AddComponent(apply);
+            modifierApplier.AddComponent(target);
+            modifierApplier.FinishSetup();//"No tags", for now?
             AddModifier((TModifierType)(IModifier)modifierApplier);
         }
 

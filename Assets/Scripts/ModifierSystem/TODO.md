@@ -4,10 +4,6 @@ Unittest:
     Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
     Stat change removal after duration/remove effect
 
-StatusResistance for different types of mods, negative/positive, "tag"-based?
-    Rule based statuson resistance, instance list
-    Ex, negative. Basen on fire, with poison duration
-
 ComboModifier Stat based
 
 > AspectOfTheCat & Infection

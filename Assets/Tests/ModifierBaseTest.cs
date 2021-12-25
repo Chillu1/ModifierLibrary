@@ -80,14 +80,14 @@ namespace ModifierSystem.Tests
                 {
                     //IceBoltDebuff
                     var iceBoltModifier = new Modifier("IceBoltTest");
-                    var iceBoltTarget = new TargetComponent();
-                    var iceBoltEffect =
-                        new DamageComponent(new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) },
-                            iceBoltTarget);
-                    var iceBoltApply = new ApplyComponent(iceBoltEffect, iceBoltTarget);
-                    iceBoltModifier.AddComponent(new InitComponent(iceBoltApply));
-                    iceBoltModifier.AddComponent(iceBoltTarget);
+                    var target = new TargetComponent();
+                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                    var effect = new DamageComponent(damageData, target);
+                    var apply = new ApplyComponent(effect, target);
+                    iceBoltModifier.AddComponent(new InitComponent(apply));
+                    iceBoltModifier.AddComponent(target);
                     iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
+                    iceBoltModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(iceBoltModifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
                     //Apply on attack
@@ -99,17 +99,18 @@ namespace ModifierSystem.Tests
                     //-Each stack increases DoT damage by 2
                     //-Each stack increases current duration by 2, to max 10 stacks
                     var spiderPoisonModifier = new Modifier("SpiderPoisonTest");
-                    var spiderPoisonTarget = new TargetComponent();
+                    var target = new TargetComponent();
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
-                    var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
-                    var spiderPoisonStack = new StackComponent((data, value) => data[0].BaseDamage += value, 10);
-                    var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
-                    spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply)); //Apply first stack/damage on init
-                    spiderPoisonModifier.AddComponent(spiderPoisonTarget);
-                    spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true)); //Every 2 seconds, deal 5 damage
+                    var effect = new DamageComponent(damageData, target);
+                    //var stack = new StackComponent((data, value) => data[0].BaseDamage += value, 10);
+                    var apply = new ApplyComponent(effect, target);
+                    spiderPoisonModifier.AddComponent(new InitComponent(apply)); //Apply first stack/damage on init
+                    spiderPoisonModifier.AddComponent(target);
+                    spiderPoisonModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
                     spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier),
                         10)); //Remove after 10 secs
-                    spiderPoisonModifier.AddComponent(spiderPoisonStack);
+                    //spiderPoisonModifier.AddComponent(stack);
+                    spiderPoisonModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(spiderPoisonModifier);
                     _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier);
                 }
@@ -120,18 +121,19 @@ namespace ModifierSystem.Tests
                     //TODO -Refresh = refreshes duration (timer) & increased duration by flat 10%
                     //TODO -Refresh = refreshes duration (timer) & intensify effect?
                     var cobraVenomModifier = new Modifier("CobraVenomTest");
-                    var cobraVenomTarget = new TargetComponent();
-                    var cobraVenomDamageData = new[]
+                    var target = new TargetComponent();
+                    var damageData = new[]
                         { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 5, 20)) };
-                    var cobraVenomEffect = new DamageComponent(cobraVenomDamageData, cobraVenomTarget);
-                    var cobraVenomRemoveTime = new TimeComponent(new RemoveComponent(cobraVenomModifier), 10);
-                    var cobraVenomRefresh = new RefreshComponent(cobraVenomRemoveTime);
-                    var cobraVenomApply = new ApplyComponent(cobraVenomEffect, cobraVenomTarget);
-                    cobraVenomModifier.AddComponent(new InitComponent(cobraVenomApply)); //Apply first stack/damage on init
-                    cobraVenomModifier.AddComponent(cobraVenomTarget);
-                    cobraVenomModifier.AddComponent(new TimeComponent(cobraVenomEffect, 2, true)); //Every 2 seconds, deal 5 damage
-                    cobraVenomModifier.AddComponent(cobraVenomRemoveTime); //Remove after 10 secs
-                    cobraVenomModifier.AddComponent(cobraVenomRefresh);
+                    var effect = new DamageComponent(damageData, target);
+                    var time = new TimeComponent(new RemoveComponent(cobraVenomModifier), 10);
+                    var refresh = new RefreshComponent(time);
+                    var apply = new ApplyComponent(effect, target);
+                    cobraVenomModifier.AddComponent(new InitComponent(apply)); //Apply first stack/damage on init
+                    cobraVenomModifier.AddComponent(target);
+                    cobraVenomModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
+                    cobraVenomModifier.AddComponent(time); //Remove after 10 secs
+                    cobraVenomModifier.AddComponent(refresh);
+                    cobraVenomModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(cobraVenomModifier);
                     _modifierPrototypes.SetupModifierApplier(cobraVenomModifier);
                 }
@@ -139,11 +141,12 @@ namespace ModifierSystem.Tests
                 {
                     //PassiveSelfHeal
                     var selfHealModifier = new Modifier("PassiveSelfHealTest");
-                    var selfHealTarget = new TargetComponent();
-                    var selfHealEffect = new HealComponent(10, selfHealTarget);
-                    var selfHealApply = new ApplyComponent(selfHealEffect, selfHealTarget);
-                    selfHealModifier.AddComponent(new InitComponent(selfHealApply));
-                    selfHealModifier.AddComponent(selfHealTarget);
+                    var target = new TargetComponent();
+                    var effect = new HealComponent(10, target);
+                    var apply = new ApplyComponent(effect, target);
+                    selfHealModifier.AddComponent(new InitComponent(apply));
+                    selfHealModifier.AddComponent(target);
+                    selfHealModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(selfHealModifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
                     //SetupModifierApplier(selfHealModifier, LegalTarget.Self);
@@ -151,12 +154,13 @@ namespace ModifierSystem.Tests
 
                 {
                     var allyHealModifier = new Modifier("AllyHealTest");
-                    var allyHealTarget = new TargetComponent();
-                    var allyHealEffect = new HealComponent(10, allyHealTarget);
-                    var allyHealApply = new ApplyComponent(allyHealEffect, allyHealTarget);
-                    allyHealModifier.AddComponent(new InitComponent(allyHealApply));
-                    allyHealModifier.AddComponent(allyHealTarget);
+                    var target = new TargetComponent();
+                    var effect = new HealComponent(10, target);
+                    var apply = new ApplyComponent(effect, target);
+                    allyHealModifier.AddComponent(new InitComponent(apply));
+                    allyHealModifier.AddComponent(target);
                     allyHealModifier.AddComponent(new TimeComponent(new RemoveComponent(allyHealModifier)));
+                    allyHealModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(allyHealModifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
                     _modifierPrototypes.SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
@@ -165,14 +169,15 @@ namespace ModifierSystem.Tests
                 {
                     //BasicPoison, removed after 10 seconds
                     var poisonModifier = new Modifier("PoisonTest");
-                    var poisonTarget = new TargetComponent();
+                    var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
-                    var poisonEffect = new DamageComponent(damageData, poisonTarget);
-                    var poisonApply = new ApplyComponent(poisonEffect, poisonTarget);
-                    poisonModifier.AddComponent(new InitComponent(poisonApply)); //Apply damage on init
-                    poisonModifier.AddComponent(poisonTarget);
-                    poisonModifier.AddComponent(new TimeComponent(poisonEffect, 2, true)); //Every 2 seconds, deal 5 damage
+                    var effect = new DamageComponent(damageData, target);
+                    var apply = new ApplyComponent(effect, target);
+                    poisonModifier.AddComponent(new InitComponent(apply)); //Apply damage on init
+                    poisonModifier.AddComponent(target);
+                    poisonModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
                     poisonModifier.AddComponent(new TimeComponent(new RemoveComponent(poisonModifier), 10)); //Remove after 10 secs
+                    poisonModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(poisonModifier);
                     _modifierPrototypes.SetupModifierApplier(poisonModifier);
                 }
@@ -180,14 +185,15 @@ namespace ModifierSystem.Tests
                 {
                     //BasicBleed, removed after 10 seconds
                     var bleedModifier = new Modifier("BleedTest");
-                    var bleedTarget = new TargetComponent();
+                    var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
-                    var bleedEffect = new DamageComponent(damageData, bleedTarget);
-                    var bleedApply = new ApplyComponent(bleedEffect, bleedTarget);
-                    bleedModifier.AddComponent(new InitComponent(bleedApply)); //Apply damage on init
-                    bleedModifier.AddComponent(bleedTarget);
-                    bleedModifier.AddComponent(new TimeComponent(bleedEffect, 2, true)); //Every 2 seconds, deal 5 damage
+                    var effect = new DamageComponent(damageData, target);
+                    var apply = new ApplyComponent(effect, target);
+                    bleedModifier.AddComponent(new InitComponent(apply)); //Apply damage on init
+                    bleedModifier.AddComponent(target);
+                    bleedModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
                     bleedModifier.AddComponent(new TimeComponent(new RemoveComponent(bleedModifier), 10)); //Remove after 10 secs
+                    bleedModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(bleedModifier);
                     _modifierPrototypes.SetupModifierApplier(bleedModifier);
                 }
@@ -195,24 +201,26 @@ namespace ModifierSystem.Tests
                 {
                     //MovementSpeedOfCat, removed after 10 seconds
                     var movementSpeedOfCatModifier = new Modifier("MovementSpeedOfCatTest");
-                    var movementSpeedOfCatTarget = new TargetComponent(LegalTarget.Self);
-                    var statEffect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, movementSpeedOfCatTarget);
-                    var statApply = new ApplyComponent(statEffect, movementSpeedOfCatTarget);
-                    movementSpeedOfCatModifier.AddComponent(new InitComponent(statApply)); //Apply stat on init
-                    movementSpeedOfCatModifier.AddComponent(movementSpeedOfCatTarget);
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    movementSpeedOfCatModifier.AddComponent(new InitComponent(apply)); //Apply stat on init
+                    movementSpeedOfCatModifier.AddComponent(target);
                     movementSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(movementSpeedOfCatModifier), 10)); //Remove after 10 secs
+                    movementSpeedOfCatModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(movementSpeedOfCatModifier);
                 }
 
                 {
                     //AttackSpeedOfCatTest, removed after 10 seconds
                     var attackSpeedOfCatModifier = new Modifier("AttackSpeedOfCatTest");
-                    var attackSpeedOfCatTarget = new TargetComponent(LegalTarget.Self);
-                    var statEffect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, attackSpeedOfCatTarget);
-                    var statApply = new ApplyComponent(statEffect, attackSpeedOfCatTarget);
-                    attackSpeedOfCatModifier.AddComponent(new InitComponent(statApply)); //Apply stat on init
-                    attackSpeedOfCatModifier.AddComponent(attackSpeedOfCatTarget);
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    attackSpeedOfCatModifier.AddComponent(new InitComponent(apply)); //Apply stat on init
+                    attackSpeedOfCatModifier.AddComponent(target);
                     attackSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(attackSpeedOfCatModifier), 10)); //Remove after 10 secs
+                    attackSpeedOfCatModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(attackSpeedOfCatModifier);
                 }
 
@@ -274,6 +282,7 @@ namespace ModifierSystem.Tests
                     aspectOfTheCatModifier.AddComponent(new InitComponent(aspectOfTheCatApply));
                     aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);
                     aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
+                    aspectOfTheCatModifier.FinishSetup();
                     var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
                         new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })),
                         1);
@@ -291,6 +300,7 @@ namespace ModifierSystem.Tests
                     infectionModifier.AddComponent(infectionTarget);
                     infectionModifier.AddComponent(new TimeComponent(infectionEffect, 2, true));
                     infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
+                    infectionModifier.FinishSetup();
                     var infectionComboModifier = new ComboModifier(infectionModifier,
                         new ComboRecipes(new ComboRecipe(
                             new[]{new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5)})),

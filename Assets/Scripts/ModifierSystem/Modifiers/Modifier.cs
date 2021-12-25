@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BaseProject;
 using BaseProject.Utils;
@@ -13,8 +14,11 @@ namespace ModifierSystem
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }
+        [CanBeNull] private StatusTag[] StatusTags { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
+
+        private bool _setupFinished;
 
         public Modifier(string id, bool applierModifier = false)
         {
@@ -32,11 +36,57 @@ namespace ModifierSystem
                 }
         }
 
-        public void Update(float deltaTime, double ownerStatusResistance)
+        public void FinishSetup([CanBeNull] DamageData[] damageData = null)
+        {
+            var tempStatusTags = new List<StatusTag>();
+
+            if (damageData != null)
+                foreach (var data in damageData)
+                {
+                    if (data.DamageType != DamageType.None)
+                        tempStatusTags.Add(new StatusTag(data.DamageType));
+                    if (data.ElementData != null && data.ElementData.ElementalType != ElementalType.None)
+                        tempStatusTags.Add(new StatusTag(data.ElementData.ElementalType));
+                }
+
+            if (InitComponent != null)
+            {
+                //if (InitComponent.EffectComponentIsOfType<SlowComponent>())
+                //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
+                //if (InitComponent.EffectComponentIsOfType<StunComponent>())
+                //    tempStatusTags.Add(new StatusTag(StatusType.Stun));
+            }
+
+            if (TimeComponents != null)
+                foreach (var timeComponent in TimeComponents)
+                {
+                    if (timeComponent.EffectComponentIsOfType<DamageComponent>(true))
+                        tempStatusTags.Add(new StatusTag(StatusType.DoT));
+                    //if (timeComponent.EffectComponentIsOfType<SlowComponent>(true))not timecomponent?
+                    //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
+                    //if (timeComponent.EffectComponentIsOfType<StunComponent>(true))
+                    //    tempStatusTags.Add(new StatusTag(StatusType.Stun));
+                }
+
+            StatusTags = tempStatusTags.ToArray();
+            _setupFinished = true;
+        }
+
+        public void Update(float deltaTime, StatusResistances ownerStatusResistances)
         {
             //Log.Info(TimeComponents?.Count +" ID: "+Id);
             for (int i = 0; i < TimeComponents?.Count; i++)
-                TimeComponents[i].Update(deltaTime, ownerStatusResistance);
+            {
+                var timeComponent = TimeComponents[i];
+                double multiplier = 1d;
+
+                //Only apply status res to buff/debuff duration, for now
+                //TODO We probably shouldn't this every frame (status)
+                if (timeComponent.EffectComponentIsOfType<RemoveComponent>(false))
+                    multiplier = ownerStatusResistances.GetStatusMultiplier(StatusTags);
+
+                timeComponent.Update(deltaTime, multiplier);
+            }
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -181,6 +231,12 @@ namespace ModifierSystem
             if (!Id.Contains("Applier") && ApplierModifier)
             {
                 Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
+                success = false;
+            }
+
+            if (!_setupFinished)
+            {
+                Log.Error("Setup has not been properly finished", "modifiers");
                 success = false;
             }
 
