@@ -34,5 +34,40 @@ namespace ModifierSystem.Tests
             Assert.True(character.LegalActions.HasFlag(LegalAction.Act));
             Assert.True(character.LegalActions.HasFlag(LegalAction.Cast));
         }
+
+        [Test]
+        public void TimedStatusEffect()
+        {
+            var rootModifierApplier = modifierPrototypes.GetItem("RootTimedModifierTestApplier");
+            character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Move));
+            enemy.Update(0.01f);
+            enemy.Update(0.01f);
+            character.Attack(enemy);//Root (init)
+            enemy.Update(0.01f);
+            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Move));
+           // Log.Info(enemy.LegalActions);
+            enemy.Update(1.01f);
+            //Log.Info(enemy.LegalActions);
+            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Move));
+            enemy.Update(0.5f);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Move));
+        }
+
+        [Test]
+        public void DelayedStatusEffect()
+        {
+            var rootModifierApplier = modifierPrototypes.GetItem("DelayedSilenceModifierTestApplier");
+            character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            character.CastModifier(enemy, "DelayedSilenceModifierTestApplier");
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            enemy.Update(0.9f);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            enemy.Update(0.11f);
+            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            enemy.Update(1);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+        }
     }
 }

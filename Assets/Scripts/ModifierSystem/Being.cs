@@ -21,7 +21,7 @@ namespace ModifierSystem
         public string Id => BaseBeing.Id;
         public HealthStat Health => BaseBeing.Health;
         public UnitType UnitType => BaseBeing.UnitType;
-        public LegalAction LegalActions => BaseBeing.LegalActions;
+        public LegalAction LegalActions => BaseBeing.StatusEffects.LegalActions;
 
         public event Action<BaseBeing, BaseBeing> AttackEvent
         {
@@ -110,8 +110,8 @@ namespace ModifierSystem
 
         public void Update(float deltaTime)
         {
-            ModifierController.Update(deltaTime);
             BaseBeing.Update(deltaTime);
+            ModifierController.Update(deltaTime);
         }
 
         public void ChangeStatusEffect(StatusEffect effect, float amount)

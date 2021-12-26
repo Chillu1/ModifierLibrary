@@ -241,6 +241,32 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(silenceModifier);
                     _modifierPrototypes.SetupModifierApplier(silenceModifier);
                 }
+                {
+                    //Root timed modifier (enigma Q)
+                    var timedRootModifier = new Modifier("RootTimedModifierTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatusComponent(StatusEffect.Root, 0.1f, target);
+                    var apply = new ApplyComponent(effect, target);
+                    timedRootModifier.AddComponent(new InitComponent(apply));
+                    timedRootModifier.AddComponent(target);
+                    timedRootModifier.AddComponent(new TimeComponent(effect, 1, true));
+                    timedRootModifier.AddComponent(new TimeComponent(new RemoveComponent(timedRootModifier), 10));
+                    timedRootModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(timedRootModifier);
+                    _modifierPrototypes.SetupModifierApplier(timedRootModifier);
+                }
+                {
+                    //Delayed silence modifier
+                    var delayedSilenceModifier = new Modifier("DelayedSilenceModifierTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatusComponent(StatusEffect.Silence, 1, target);
+                    delayedSilenceModifier.AddComponent(target);
+                    delayedSilenceModifier.AddComponent(new TimeComponent(effect, 1));
+                    delayedSilenceModifier.AddComponent(new TimeComponent(new RemoveComponent(delayedSilenceModifier), 2));
+                    delayedSilenceModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(delayedSilenceModifier);
+                    _modifierPrototypes.SetupModifierApplier(delayedSilenceModifier);
+                }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
                 //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");

@@ -139,10 +139,10 @@ namespace ModifierSystem
             }
             else
             {
-                //IModifier appliers dont need a target at ctor. Extra check, for good measure
+                //IModifier appliers dont need a target at ctor. Extra check
                 if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !modifier.ApplierModifier)
                 {
-                    Log.Error("Owner isn't the target, and target is null", "modifiers");
+                    Log.Error("Non-applier modifier doesn't have a target. Owner isn't the target", "modifiers");
                 }
             }
         }

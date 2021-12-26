@@ -44,7 +44,7 @@ namespace ModifierSystem
             _timer += deltaTime;
             if (_timer >= Duration * statusResistance)
             {
-                //Log.Info(Duration * statusResistance);
+                //Log.Info(_timer + "_"+Duration * statusResistance);
                 EffectComponent.Effect();
                 _finished = true;
 

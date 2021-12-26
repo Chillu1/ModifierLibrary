@@ -18,6 +18,7 @@ namespace ModifierSystem
 
         public void Effect()
         {
+            //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
             TargetComponent.Target.ChangeStatusEffect(StatusEffect, Duration);
         }
     }
