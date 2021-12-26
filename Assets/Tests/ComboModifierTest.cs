@@ -52,5 +52,19 @@ namespace ModifierSystem.Tests
             character.ChangeStat(new Stat(StatType.Health, 10000));
             Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("GiantTest")));
         }
+
+        [Test]
+        public void ComboModifierCooldown()
+        {
+            character.ChangeStat(new Stat(StatType.Health, 10000));
+            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            character.Update(PermanentComboModifierCooldown/2);
+            Assert.False(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            character.ChangeStat(new Stat(StatType.Health, 1));//ComboCheck (GiantTest can be added without cooldown check)
+            Assert.False(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            character.Update(PermanentComboModifierCooldown);
+            character.ChangeStat(new Stat(StatType.Health, 1));//ComboCheck
+            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+        }
     }
 }

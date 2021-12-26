@@ -8,22 +8,38 @@ namespace ModifierSystem
     public class ModifierController : IEventCopy<ModifierController>
     {
         private readonly Being _owner;
-        private Dictionary<string, IModifier> Modifiers { get; }
         private ElementController ElementController { get; }
+
+        private Dictionary<string, IModifier> Modifiers { get; }
+        private Dictionary<string, float> ComboModifierCooldowns { get; }
+        private float _timer;
 
         public ModifierController(Being owner, ElementController elementController)
         {
             _owner = owner;
             ElementController = elementController;
             Modifiers = new Dictionary<string, IModifier>();
+            ComboModifierCooldowns = new Dictionary<string, float>();
         }
 
         public void Update(float deltaTime)
         {
-            //Log.Info(Modifiers.Count);
-            foreach (var valuePair in Modifiers.ToArray())//TODO Making it into an array every frame is uncool, instead mark them as to deleted
+            _timer += deltaTime;
+            if (_timer >= 1)
             {
-                valuePair.Value.Update(deltaTime, _owner.StatusResistances);
+                foreach (string key in ComboModifierCooldowns.Keys.ToArray())//TODO Making it into an array every is prob uncool
+                {
+                    ComboModifierCooldowns[key] -= _timer;
+                    if (ComboModifierCooldowns[key] <= 0)
+                        ComboModifierCooldowns.Remove(key);
+                }
+                _timer = 0;
+            }
+
+            //Log.Info(Modifiers.Count);
+            foreach (var modifier in Modifiers.Values.ToArray())//TODO Making it into an array every frame is uncool, instead mark them as todeleted
+            {
+                modifier.Update(deltaTime, _owner.StatusResistances);
             }
         }
 
@@ -46,6 +62,8 @@ namespace ModifierSystem
             }
             else
             {
+                if (modifier.GetType() == typeof(ComboModifier) && !ComboModifierCooldowns.ContainsKey(modifier.Id))
+                    ComboModifierCooldowns.Add(modifier.Id, ((ComboModifier)modifier).Cooldown);
                 AddModifier(modifier);
             }
 
@@ -57,8 +75,8 @@ namespace ModifierSystem
 
         public void CheckForComboRecipes()
         {
-            var comboModifierToAdd =
-                ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController, _owner.Stats);
+            var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys),
+                ComboModifierCooldowns, ElementController, _owner.Stats);
             if (comboModifierToAdd.Count > 0)
                 AddComboModifiers(comboModifierToAdd);
         }

@@ -1,8 +1,8 @@
 TODO RN:  
 * Sort ideas by prio
+* >Move ModifierControl away from Being? Already one?
 * Conditional modifiers
-* >ComboModifier:
-  * Cooldown
+* ToDeleted Modifier line.40 ModifierController
 * Mutlitarget? Modifier, for AoE?
 * Modifier with all possible tags
 * TimeComp Slow (veno gale)

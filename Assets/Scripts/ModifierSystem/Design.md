@@ -1,6 +1,10 @@
 
-OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
-Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
+Design questions
+* OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
+* More efficient way of saving timer data related to enum/id (not dict? but array of some sort?)
+* Stack & Refresh
+* Removing all modifiers from ModifierController wont remove the parmanent buffs & debuffs, make a function that does the opposite for these?
 
   # Modifier
   
@@ -52,6 +56,10 @@ Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEf
   
   ## ComboModifier
   
+  How do cooldowns?
+    Dict of added comboMods in ModController, ticking downwith time (updating values every second)
+    Remove ID from dict/hashset on 0
+
   When should we check for combo modifiers to add?  
       OnAddModifier  
       & every 1 second & on adding elementalData?  

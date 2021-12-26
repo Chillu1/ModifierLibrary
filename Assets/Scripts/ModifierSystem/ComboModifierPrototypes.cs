@@ -64,7 +64,8 @@ namespace ModifierSystem
             return ModifierPrototypes.GetItem(key);
         }
 
-        public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
+        public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
+            Dictionary<string, float> comboModifierCooldowns, ElementController elementController, Stats stats)
         {
             HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
             if (_instance == null)
@@ -75,6 +76,8 @@ namespace ModifierSystem
 
             foreach (var comboModifier in _instance.ModifierPrototypes.Values)
             {
+                if(comboModifierCooldowns.ContainsKey(comboModifier.Id))//Skip if there's a cooldown on the comboModifier
+                    continue;
                 if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
                     modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
             }

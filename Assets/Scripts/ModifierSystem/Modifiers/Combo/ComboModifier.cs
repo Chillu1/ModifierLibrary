@@ -14,12 +14,12 @@ namespace ModifierSystem
 
         private Modifier Modifier { get; }
         private ComboRecipes ComboRecipes { get; }
-        private double Cooldown { get; }
+        public float Cooldown { get; }
 
         public TargetComponent TargetComponent => Modifier.TargetComponent;
         public bool ApplierModifier => Modifier.ApplierModifier;
 
-        public ComboModifier(Modifier modifier, ComboRecipes comboRecipes, double cooldown)
+        public ComboModifier(Modifier modifier, ComboRecipes comboRecipes, float cooldown)
         {
             Modifier = modifier;
             ComboRecipes = comboRecipes;

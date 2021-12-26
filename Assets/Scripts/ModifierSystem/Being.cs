@@ -64,7 +64,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Apply modifier appliers to target
         /// </summary>
-        public void ApplyModifiers(Being target)
+        private void ApplyModifiers(Being target)
         {
             var modifierAppliers = ModifierController.GetModifierAppliers();
             if (modifierAppliers == null)

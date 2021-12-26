@@ -15,7 +15,7 @@ namespace ModifierSystem.Tests
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
 
         protected const double Delta = 0.01d;
-        protected const double PermanentComboModifierCooldown = 60;//PermanentMods might be able to be stripped/removed later, does it matter?
+        protected const float PermanentComboModifierCooldown = 60;//PermanentMods might be able to be stripped/removed later, does it matter?
 
         protected ModifierPrototypesTest modifierPrototypes;
         protected ComboModifierPrototypesTest comboModifierPrototypesTest;
@@ -364,9 +364,26 @@ namespace ModifierSystem.Tests
                     giantModifier.FinishSetup();
                     var statsNeeded = new[] { new Stat(StatType.Health) };
                     statsNeeded[0].Init(10000);
-                    var infectionComboModifier = new ComboModifier(giantModifier, new ComboRecipes(new ComboRecipe(statsNeeded)),
+                    var giantComboModifier = new ComboModifier(giantModifier, new ComboRecipes(new ComboRecipe(statsNeeded)),
                         PermanentComboModifierCooldown);
-                    ModifierPrototypes.AddModifier(infectionComboModifier);
+                    ModifierPrototypes.AddModifier(giantComboModifier);
+                }
+                {
+                    //10k health = temporary giant
+                    var timedGiantModifier = new Modifier("TimedGiantTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    //Physical resistances
+                    var effect = new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    timedGiantModifier.AddComponent(new InitComponent(apply));
+                    timedGiantModifier.AddComponent(target);
+                    timedGiantModifier.AddComponent(new TimeComponent(new RemoveComponent(timedGiantModifier), 10));
+                    timedGiantModifier.FinishSetup();
+                    var statsNeeded = new[] { new Stat(StatType.Health) };
+                    statsNeeded[0].Init(10000);
+                    var timedGiantComboModifier = new ComboModifier(timedGiantModifier, new ComboRecipes(new ComboRecipe(statsNeeded)),
+                        PermanentComboModifierCooldown);
+                    ModifierPrototypes.AddModifier(timedGiantComboModifier);
                 }
             }
 
