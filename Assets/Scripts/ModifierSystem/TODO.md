@@ -1,16 +1,12 @@
-TODO RN:    
-* Remove StatusEffect (update LegalActions)
-* Mutlitarget? Modifier, for AoE?
-* Modifier with all possible tags
+TODO RN:  
 * Sort ideas by prio
 * Conditional modifiers
-* Normal singular stun modifier
-* TimeComp Stun every X
+* >ComboModifier:
+  * Cooldown
+* Mutlitarget? Modifier, for AoE?
+* Modifier with all possible tags
 * TimeComp Slow (veno gale)
 * Unity UI for controlling values, timers, etc (entitas)
-* ComboModifier:
-  * Stat based
-  * Cooldown
 * Unittest:
   * Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
   * Stat change removal after duration/remove effect

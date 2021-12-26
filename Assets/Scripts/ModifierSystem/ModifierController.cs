@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
@@ -52,10 +51,16 @@ namespace ModifierSystem
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
-                var comboModifierToAdd =  ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController);
-                if (comboModifierToAdd.Count > 0)
-                    AddComboModifiers(comboModifierToAdd);
+                CheckForComboRecipes();
             }
+        }
+
+        public void CheckForComboRecipes()
+        {
+            var comboModifierToAdd =
+                ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController, _owner.Stats);
+            if (comboModifierToAdd.Count > 0)
+                AddComboModifiers(comboModifierToAdd);
         }
 
         private void AddModifier(IModifier modifier)
@@ -74,9 +79,7 @@ namespace ModifierSystem
             }
             //Check for recipes after adding all modifiers
             //We're recreating the set because new modifiers have been added
-            var comboModifierToAdd = ComboModifierPrototypes.CheckForComboRecipes(new HashSet<string>(Modifiers.Keys), ElementController);
-            if(comboModifierToAdd.Count > 0)//Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
-                AddComboModifiers(comboModifierToAdd);
+            CheckForComboRecipes();//Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
         }
 
         public bool RemoveModifier(IModifier modifier)

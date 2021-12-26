@@ -1,4 +1,5 @@
 
+OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
 Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
 
   # Modifier
@@ -241,9 +242,11 @@ More damage based on distance
 Binds two targets, every target spell gets applied to both.  
 Warlock binds Q  
 Cooldown reduction  
+Rupture  (damage while moving/doing actions)  
 
 ## Combo mod ideas
 
 Remove all base resistances & armor  
 Stop "time" for X seconds  
-When close to dying, shadow grave, duration based on skill cooldown.
+When close to dying, shadow grave, duration based on skill cooldown.  
+Anti perma-stun  

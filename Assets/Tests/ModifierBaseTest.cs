@@ -15,6 +15,7 @@ namespace ModifierSystem.Tests
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
 
         protected const double Delta = 0.01d;
+        protected const double PermanentComboModifierCooldown = 60;//PermanentMods might be able to be stripped/removed later, does it matter?
 
         protected ModifierPrototypesTest modifierPrototypes;
         protected ComboModifierPrototypesTest comboModifierPrototypesTest;
@@ -48,9 +49,9 @@ namespace ModifierSystem.Tests
                 Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                 UnitType = UnitType.Enemy
             });
-            initialHealthCharacter = character.Health.CurrentHealth;
-            initialHealthAlly = ally.Health.CurrentHealth;
-            initialHealthEnemy = enemy.Health.CurrentHealth;
+            initialHealthCharacter = character.Stats.Health.CurrentHealth;
+            initialHealthAlly = ally.Stats.Health.CurrentHealth;
+            initialHealthEnemy = enemy.Stats.Health.CurrentHealth;
         }
 
         [TearDown]
@@ -318,13 +319,11 @@ namespace ModifierSystem.Tests
                 {
                     //Aspect of the cat
                     var aspectOfTheCatModifier = new Modifier("AspectOfTheCatTest");
-                    var aspectOfTheCatTarget = new TargetComponent(LegalTarget.Self);
-                    var aspectOfTheCatEffect = new StatComponent(
-                            new[] { new Stat(StatType.MovementSpeed) { baseValue = 10 }},
-                            aspectOfTheCatTarget);
-                    var aspectOfTheCatApply = new ApplyComponent(aspectOfTheCatEffect, aspectOfTheCatTarget);
-                    aspectOfTheCatModifier.AddComponent(new InitComponent(aspectOfTheCatApply));
-                    aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed) { baseValue = 10 }}, target);
+                    var apply = new ApplyComponent(effect, target);
+                    aspectOfTheCatModifier.AddComponent(new InitComponent(apply));
+                    aspectOfTheCatModifier.AddComponent(target);
                     aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
                     aspectOfTheCatModifier.FinishSetup();
                     var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
@@ -335,20 +334,38 @@ namespace ModifierSystem.Tests
                 {
                     //Poison & bleed = infection
                     var infectionModifier = new Modifier("InfectionTest");
-                    var infectionTarget = new TargetComponent(LegalTarget.Self);
-                    var infectionEffect = new DamageComponent(new[]
-                            { new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) },
-                        infectionTarget);
-                    var infectionApply = new ApplyComponent(infectionEffect, infectionTarget);
-                    infectionModifier.AddComponent(new InitComponent(infectionApply));
-                    infectionModifier.AddComponent(infectionTarget);
-                    infectionModifier.AddComponent(new TimeComponent(infectionEffect, 2, true));
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new DamageComponent(
+                        new[]
+                        {
+                            new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50))
+                        }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    infectionModifier.AddComponent(new InitComponent(apply));
+                    infectionModifier.AddComponent(target);
+                    infectionModifier.AddComponent(new TimeComponent(effect, 2, true));
                     infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
                     infectionModifier.FinishSetup();
                     var infectionComboModifier = new ComboModifier(infectionModifier,
                         new ComboRecipes(new ComboRecipe(
                             new[]{new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5)})),
                         1);
+                    ModifierPrototypes.AddModifier(infectionComboModifier);
+                }
+                {
+                    //10k health = giant
+                    var giantModifier = new Modifier("GiantTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    //Physical resistances
+                    var effect = new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    giantModifier.AddComponent(new InitComponent(apply));
+                    giantModifier.AddComponent(target);
+                    giantModifier.FinishSetup();
+                    var statsNeeded = new[] { new Stat(StatType.Health) };
+                    statsNeeded[0].Init(10000);
+                    var infectionComboModifier = new ComboModifier(giantModifier, new ComboRecipes(new ComboRecipe(statsNeeded)),
+                        PermanentComboModifierCooldown);
                     ModifierPrototypes.AddModifier(infectionComboModifier);
                 }
             }
@@ -359,7 +376,7 @@ namespace ModifierSystem.Tests
                 return ModifierPrototypes.GetItem(key);
             }
 
-            public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController)
+            public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
             {
                 HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
                 if (_instance == null)
@@ -370,7 +387,7 @@ namespace ModifierSystem.Tests
 
                 foreach (var comboModifier in _instance.ModifierPrototypes.Values)
                 {
-                    if (comboModifier.CheckRecipes(modifierIds, elementController))
+                    if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
                         modifierToAdd.Add(comboModifier);
                 }
 

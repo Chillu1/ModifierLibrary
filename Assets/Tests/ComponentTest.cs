@@ -19,7 +19,7 @@ namespace ModifierSystem.Tests
             LogAssert.Expect(LogType.Error, new Regex("Target is not valid*"));
             //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies
             character.Attack(ally);
-            Assert.True(ally.Health.Check(24));
+            Assert.True(ally.Stats.Health.Check(24));
         }
 
         [Test]

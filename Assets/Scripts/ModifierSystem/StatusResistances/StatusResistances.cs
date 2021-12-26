@@ -32,6 +32,7 @@ namespace ModifierSystem
             }
         }
 
+        public bool ChangeValue(StatusTag statusTag, double value) => ChangeValue(statusTag.GetTag().ToString(), value);
         public bool ChangeValue(StatusType statusType, double value) => ChangeValue(statusType.ToString(), value);
         public bool ChangeValue(PositiveNegative statusType, double value) => ChangeValue(statusType.ToString(), value);
         public bool ChangeValue(DamageType statusType, double value) => ChangeValue(statusType.ToString(), value);

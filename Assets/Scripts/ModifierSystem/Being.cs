@@ -19,7 +19,7 @@ namespace ModifierSystem
         private BaseBeing BaseBeing { get; }
 
         public string Id => BaseBeing.Id;
-        public HealthStat Health => BaseBeing.Health;
+        public Stats Stats => BaseBeing.Stats;
         public UnitType UnitType => BaseBeing.UnitType;
         public LegalAction LegalActions => BaseBeing.StatusEffects.LegalActions;
 
@@ -34,8 +34,8 @@ namespace ModifierSystem
         public Being(BeingProperties beingProperties)
         {
             BaseBeing = new BaseBeing(beingProperties);
-            StatusResistances = new StatusResistances();
             ModifierController = new ModifierController(this, BaseBeing.ElementController);
+            StatusResistances = new StatusResistances();
         }
 
         public bool CastModifier(Being target, string modifierId)
@@ -129,7 +129,11 @@ namespace ModifierSystem
                 return null;
             
             ApplyModifiers(target);
-            return BaseBeing.Attack(target.BaseBeing);
+            var damageData = BaseBeing.Attack(target.BaseBeing);
+
+            //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
+            ModifierController.CheckForComboRecipes();//Not redundant? Might lead to performance issues in super high combo counts?
+            return damageData;
         }
 
         /// <summary>
@@ -137,22 +141,21 @@ namespace ModifierSystem
         /// </summary>
         public DamageData[] DealDamage(DamageData[] data)
         {
-            return BaseBeing.DealDamage(data);
-        }
-
-        public bool CheckStat(StatType type, double value)
-        {
-            return BaseBeing.CheckStat(type, value);
+            var damageData = BaseBeing.DealDamage(data);
+            ModifierController.CheckForComboRecipes();//Elemental, so we check for combos
+            return damageData;
         }
 
         public void ChangeStat(Stat[] stats)
         {
-            BaseBeing.ChangeStat(stats);
+            Stats.ChangeStat(stats);
+            ModifierController.CheckForComboRecipes();
         }
 
-        public void ChangeDamageStat(DamageData damageData)
+        public void ChangeStat(Stat stat)
         {
-            BaseBeing.ChangeDamageStat(damageData);
+            Stats.ChangeStat(stat);
+            ModifierController.CheckForComboRecipes();
         }
 
         #endregion

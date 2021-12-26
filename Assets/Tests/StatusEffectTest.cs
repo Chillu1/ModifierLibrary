@@ -16,7 +16,7 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
 
             enemy.Attack(character);//Shouldn't deal any damage, since disarmed
-            Assert.AreEqual(initialHealthCharacter, character.Health.CurrentHealth, Delta);
+            Assert.AreEqual(initialHealthCharacter, character.Stats.Health.CurrentHealth, Delta);
         }
 
         [Test]

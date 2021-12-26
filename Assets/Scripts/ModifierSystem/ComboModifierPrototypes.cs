@@ -64,7 +64,7 @@ namespace ModifierSystem
             return ModifierPrototypes.GetItem(key);
         }
 
-        public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController)
+        public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
         {
             HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
             if (_instance == null)
@@ -75,7 +75,7 @@ namespace ModifierSystem
 
             foreach (var comboModifier in _instance.ModifierPrototypes.Values)
             {
-                if (comboModifier.CheckRecipes(modifierIds, elementController))
+                if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
                     modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
             }
 

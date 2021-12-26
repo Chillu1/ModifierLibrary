@@ -13,7 +13,7 @@ namespace ModifierSystem
 
         public void Effect()
         {
-            TargetComponent.Target.Health.Heal(Heal);
+            TargetComponent.Target.Stats.Health.Heal(Heal);
         }
     }
 }

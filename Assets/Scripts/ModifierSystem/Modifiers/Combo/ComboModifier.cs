@@ -39,7 +39,7 @@ namespace ModifierSystem
             return success;
         }
 
-        public bool CheckRecipes(HashSet<string> modifierIds, ElementController elementController)
+        public bool CheckRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
         {
             if (modifierIds.Contains(Id))
             {
@@ -50,24 +50,28 @@ namespace ModifierSystem
             foreach (var recipe in ComboRecipes.Recipes)
             {
                 //Go through all possible recipes
-                if (CheckRecipe(recipe, modifierIds, elementController))
+                if (CheckRecipe(recipe, modifierIds, elementController, stats))
                     return true;//If we found one, success
             }
 
             return false;//Didn't find a recipe
         }
 
-        private bool CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController)
+        private bool CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
         {
             if (recipe.Id != null && recipe.Id.Length != 0)
             {
                 if (!CheckForIdConditions(recipe, modifierIds))
                     return false;
             }
-
             if (recipe.ElementalRecipe != null && recipe.ElementalRecipe.Length != 0)
             {
                 if (!CheckForElementalConditions(recipe, elementController))
+                    return false;
+            }
+            if (recipe.Stat != null && recipe.Stat.Length != 0)
+            {
+                if (!CheckForStatConditions(recipe, stats))
                     return false;
             }
 
@@ -95,6 +99,17 @@ namespace ModifierSystem
 
             return true;
         }
+        private bool CheckForStatConditions(ComboRecipe recipe, Stats stats)
+        {
+            foreach (var stat in recipe.Stat!)
+            {
+                //TODO What to do with damage stat?
+                if (!stats.CheckStat(stat.StatType, stat.Value))
+                    return false;
+            }
+
+            return true;
+        }
 
         public void CopyEvents(ComboModifier prototype)
         {
@@ -102,7 +117,6 @@ namespace ModifierSystem
             //ComboRecipes = (ComboRecipes)prototype.ComboRecipes.Clone();
             //Cooldown = prototype.Cooldown;
         }
-
 
         public void Init(ModifierController modifierController) => Modifier.Init(modifierController);
         public void TryApply(Being target) => Modifier.TryApply(target);
