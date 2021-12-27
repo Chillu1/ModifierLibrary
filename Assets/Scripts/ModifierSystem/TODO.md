@@ -1,12 +1,12 @@
 TODO RN:  
 * Sort ideas by prio
-* >Move ModifierControl away from Being? Already one?
 * Conditional modifiers
 * ToDeleted Modifier line.40 ModifierController
+* >Instead of checking type with EffectComponentIsOfType, return tags from component instead?
 * Mutlitarget? Modifier, for AoE?
-* Modifier with all possible tags
 * TimeComp Slow (veno gale)
-* Unity UI for controlling values, timers, etc (entitas)
+* Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it)
+* Stats StatusTag (stats change)
 * Unittest:
   * Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
   * Stat change removal after duration/remove effect

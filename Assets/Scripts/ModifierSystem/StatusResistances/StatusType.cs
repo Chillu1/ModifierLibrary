@@ -12,20 +12,24 @@ namespace ModifierSystem
     {
         None = 0,
         /// <summary>
+        ///     All duration based (time component remove)
+        /// </summary>
+        Duration = 1,
+        /// <summary>
         ///     Stun duration
         /// </summary>
-        Stun = 1,
-        DoT = 2,
+        Stun = 2,
+        DoT = 4,
         /// <summary>
         ///     Slow duration
         /// </summary>
-        Slow = 4,
+        //Slow = 8,
         Resistance = 8,
         /// <summary>
         ///     For elementalData
         /// </summary>
         Element = 16,
-        Heal = 32,
+        //Heal = 64,
 
         /// <summary>
         ///     Everything but 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
 using JetBrains.Annotations;
@@ -11,10 +12,10 @@ namespace ModifierSystem
         public string Id { get; private set; }
         public bool ApplierModifier { get; }
         public TargetComponent TargetComponent { get; private set; }
+        public StatusTag[] StatusTags { get; private set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }
-        [CanBeNull] private StatusTag[] StatusTags { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
 
@@ -36,12 +37,12 @@ namespace ModifierSystem
                 }
         }
 
-        public StatusTag[] FinishSetup([CanBeNull] DamageData[] damageData = null)
+        public void FinishSetup([CanBeNull] DamageData[] damageData = null)
         {
             if (_setupFinished)
-                Log.Error("Setup already finished, overwriting");
+                Log.Error("Setup already finished, overwriting. Should never happen");
 
-            var tempStatusTags = new List<StatusTag>();
+            var tempStatusTags = new HashSet<StatusTag>();
 
             if (damageData != null)
                 foreach (var data in damageData)
@@ -60,6 +61,8 @@ namespace ModifierSystem
             {
                 if (InitComponent.EffectComponentIsOfType<StatusComponent>())
                     tempStatusTags.Add(new StatusTag(StatusType.Stun));
+                if (InitComponent.EffectComponentIsOfType<StatusResistanceComponent>())
+                    tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
                 //if (InitComponent.EffectComponentIsOfType<SlowComponent>())
                 //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
             }
@@ -67,17 +70,20 @@ namespace ModifierSystem
             if (TimeComponents != null)
                 foreach (var timeComponent in TimeComponents)
                 {
+                    if (timeComponent.EffectComponentIsOfType<RemoveComponent>(false))
+                        tempStatusTags.Add(new StatusTag(StatusType.Duration));
                     if (timeComponent.EffectComponentIsOfType<DamageComponent>(true))
                         tempStatusTags.Add(new StatusTag(StatusType.DoT));
+                    if (timeComponent.EffectComponentIsOfType<StatusComponent>(true))
+                        tempStatusTags.Add(new StatusTag(StatusType.Stun));
+                    if (timeComponent.EffectComponentIsOfType<StatusResistanceComponent>(true))
+                        tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
                     //if (timeComponent.EffectComponentIsOfType<SlowComponent>(true))not timecomponent?
                     //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
-                    //if (timeComponent.EffectComponentIsOfType<StunComponent>(true))
-                    //    tempStatusTags.Add(new StatusTag(StatusType.Stun));
                 }
 
             StatusTags = tempStatusTags.ToArray();
             _setupFinished = true;
-            return StatusTags;
         }
 
         public void Update(float deltaTime, StatusResistances ownerStatusResistances)
@@ -242,9 +248,10 @@ namespace ModifierSystem
                 success = false;
             }
 
-            if (!_setupFinished)
+            if (!_setupFinished || StatusTags == null)
             {
                 Log.Error("Setup has not been properly finished", "modifiers");
+                StatusTags = new StatusTag[0];
                 success = false;
             }
 

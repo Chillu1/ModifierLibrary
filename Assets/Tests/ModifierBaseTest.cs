@@ -95,21 +95,15 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.SetupModifierApplier(iceBoltModifier);
                 }
                 {
-                    //StackableSpiderPoison, removed after 10 seconds
-                    //-Each stack increases DoT damage by 2
-                    //-Each stack increases current duration by 2, to max 10 stacks
                     var spiderPoisonModifier = new Modifier("SpiderPoisonTest");
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var effect = new DamageComponent(damageData, target);
-                    //var stack = new StackComponent((data, value) => data[0].BaseDamage += value, 10);
                     var apply = new ApplyComponent(effect, target);
-                    spiderPoisonModifier.AddComponent(new InitComponent(apply)); //Apply first stack/damage on init
+                    spiderPoisonModifier.AddComponent(new InitComponent(apply));
                     spiderPoisonModifier.AddComponent(target);
-                    spiderPoisonModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
-                    spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier),
-                        10)); //Remove after 10 secs
-                    //spiderPoisonModifier.AddComponent(stack);
+                    spiderPoisonModifier.AddComponent(new TimeComponent(effect, 2, true));
+                    spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));
                     spiderPoisonModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(spiderPoisonModifier);
                     _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier);
@@ -267,6 +261,26 @@ namespace ModifierSystem.Tests
                     delayedSilenceModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(delayedSilenceModifier);
                     _modifierPrototypes.SetupModifierApplier(delayedSilenceModifier);
+                }
+                {
+                    //All possible tags modifiers
+                    var allTagsModifier = new Modifier("ManyTagsTest");
+                    var target = new TargetComponent();
+                    var damageData = new[]
+                    {
+                        new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Acid, 10, 20)),
+                        new DamageData(1, DamageType.Pure, new ElementData(ElementalType.Bleed, 10, 20)),
+                        new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Cold, 10, 20)),
+                    };
+                    var effect = new DamageComponent(damageData, target);
+                    var apply = new ApplyComponent(effect, target);
+                    allTagsModifier.AddComponent(new InitComponent(apply));
+                    allTagsModifier.AddComponent(target);
+                    allTagsModifier.AddComponent(new TimeComponent(effect, 2, true));
+                    allTagsModifier.AddComponent(new TimeComponent(new RemoveComponent(allTagsModifier), 10));
+                    allTagsModifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(allTagsModifier);
+                    _modifierPrototypes.SetupModifierApplier(allTagsModifier);
                 }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
