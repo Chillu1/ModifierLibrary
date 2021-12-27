@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
+    /// <summary>
+    ///     Recipe (condition) for a ComboModifier to be added, possible conditions: specific modifiers (ID), ElementalData or Stats
+    /// </summary>
     public class ComboRecipe
     {
         [CanBeNull]

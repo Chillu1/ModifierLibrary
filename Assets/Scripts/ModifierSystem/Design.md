@@ -1,4 +1,19 @@
 
+# Terms
+
+| Term             | Explanation                                                                                                                        |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| StatusResistance | Resistance for any kind of status: elemental damage, elemental data, DoT, duration, negative debuffs, etc.                         |
+| StatusTag        | Tag for all types of statuses: elemental damage, elemental data, DoT, duration, negative debuffs, etc.                             |
+| DamageData       | Holds damage values, DamageType, and ElementalData                                                                                 |
+| ElementData      | Holds type and effectData of elements. Ex: Fireball, Fire, 10 effect, 10 linger                                                    |
+| DamageResistance | DamageType and ElementalType resistances: Physical, Magical, Pure, and, Acid, Cold, Fire.                                          |
+| **ModifierSystem**|                                                                                                                                    |
+| Modifier         | Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect                         |
+| ModifierApplier  | A special modifier that applies another modifier on someone by either cast or attack                                               |
+| ComboModifier    | Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats |
+| ComboRecipe      | Recipe (condition) for a ComboModifier to be added, possible conditions: specific modifiers (ID), ElementalData or Stats           |
+
 Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
 * Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect

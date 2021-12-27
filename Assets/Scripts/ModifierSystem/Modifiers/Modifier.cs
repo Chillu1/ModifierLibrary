@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
@@ -7,6 +6,9 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
+    /// <summary>
+    ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
+    /// </summary>
     public class Modifier : IModifier, IEventCopy<Modifier>
     {
         public string Id { get; private set; }

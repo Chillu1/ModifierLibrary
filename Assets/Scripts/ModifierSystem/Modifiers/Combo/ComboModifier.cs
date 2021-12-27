@@ -6,7 +6,7 @@ using BaseProject.Utils;
 namespace ModifierSystem
 {
     /// <summary>
-    ///     ComboModifier does everything that normal modifier can, but is activated on specific conditions
+    ///     Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats
     /// </summary>
     public class ComboModifier : IModifier, IEventCopy<ComboModifier>
     {
