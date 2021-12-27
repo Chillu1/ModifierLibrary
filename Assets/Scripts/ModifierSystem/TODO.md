@@ -1,7 +1,6 @@
 TODO RN:  
 * Sort ideas by prio
 * Conditional modifiers
-* ToDeleted Modifier line.40 ModifierController
 * >StatusResistance immune
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)

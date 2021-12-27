@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
 
@@ -18,6 +17,7 @@ namespace ModifierSystem
 
         public TargetComponent TargetComponent => Modifier.TargetComponent;
         public bool ApplierModifier => Modifier.ApplierModifier;
+        public bool ToRemove => Modifier.ToRemove;
 
         public ComboModifier(Modifier modifier, ComboRecipes comboRecipes, float cooldown)
         {
@@ -118,7 +118,7 @@ namespace ModifierSystem
             //Cooldown = prototype.Cooldown;
         }
 
-        public void Init(ModifierController modifierController) => Modifier.Init(modifierController);
+        public void Init() => Modifier.Init();
         public void TryApply(Being target) => Modifier.TryApply(target);
 
         public void Update(float deltaTime, StatusResistances ownerStatusResistances) => Modifier.Update(deltaTime, ownerStatusResistances);
@@ -126,6 +126,11 @@ namespace ModifierSystem
         public bool Stack() => Modifier.Stack();
 
         public bool Refresh() => Modifier.Refresh();
+
+        public void SetForRemoval()
+        {
+            Modifier.SetForRemoval();
+        }
 
         public object Clone()
         {

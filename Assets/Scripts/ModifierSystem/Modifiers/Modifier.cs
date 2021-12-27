@@ -13,6 +13,7 @@ namespace ModifierSystem
     {
         public string Id { get; private set; }
         public bool ApplierModifier { get; }
+        public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
@@ -29,14 +30,9 @@ namespace ModifierSystem
             ApplierModifier = applierModifier;
         }
 
-        public void Init(ModifierController modifierController)
+        public void Init()
         {
             InitComponent?.Init();
-            if (TimeComponents != null)
-                foreach (var timeComponent in TimeComponents)
-                {
-                    timeComponent.Init(modifierController);
-                }
         }
 
         public void FinishSetup([CanBeNull] DamageData[] damageData = null)
@@ -173,6 +169,11 @@ namespace ModifierSystem
 
             RefreshComponent.Refresh();
             return true;
+        }
+
+        public void SetForRemoval()
+        {
+            ToRemove = true;
         }
 
         public void CopyEvents(Modifier prototype)

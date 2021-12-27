@@ -34,15 +34,6 @@ namespace ModifierSystem
             IsRemove = true;
         }
 
-        public void Init(ModifierController modifierController)
-        {
-            if (EffectComponent is RemoveComponent)
-            {
-                var removeComponent = (RemoveComponent)EffectComponent;
-                removeComponent.Init(modifierController);
-            }
-        }
-
         public void Update(float deltaTime, double statusResistance = 1d)
         {
             if (_finished)

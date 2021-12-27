@@ -11,6 +11,7 @@ namespace ModifierSystem
         private ElementController ElementController { get; }
 
         private Dictionary<string, IModifier> Modifiers { get; }
+        private HashSet<string> ModifiersToRemove { get; }//Can't think of any setbacks when it comes to not using IModifiers here
         private Dictionary<string, float> ComboModifierCooldowns { get; }
         private float _timer;
 
@@ -19,6 +20,7 @@ namespace ModifierSystem
             _owner = owner;
             ElementController = elementController;
             Modifiers = new Dictionary<string, IModifier>();
+            ModifiersToRemove = new HashSet<string>();
             ComboModifierCooldowns = new Dictionary<string, float>();
         }
 
@@ -37,10 +39,18 @@ namespace ModifierSystem
             }
 
             //Log.Info(Modifiers.Count);
-            foreach (var modifier in Modifiers.Values.ToArray())//TODO Making it into an array every frame is uncool, instead mark them as todeleted
+            foreach (var modifier in Modifiers.Values)
             {
                 modifier.Update(deltaTime, _owner.StatusResistances);
+                if(modifier.ToRemove)
+                    ModifiersToRemove.Add(modifier.Id);
             }
+
+            foreach (string id in ModifiersToRemove)
+                Modifiers.Remove(id);
+
+            if(ModifiersToRemove.Count > 0)
+                ModifiersToRemove.Clear();
         }
 
         public void TryAddModifier(IModifier modifier, AddModifierParameters parameters)
@@ -56,7 +66,7 @@ namespace ModifierSystem
                 refreshed = internalModifier.Refresh();
                 //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
                 if(!stacked && !refreshed)
-                    internalModifier.Init(this);//Problem comes here, since the effect might not actually be in Init()
+                    internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
 
                 //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
@@ -85,7 +95,7 @@ namespace ModifierSystem
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
-            modifier.Init(this);
+            modifier.Init();
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 

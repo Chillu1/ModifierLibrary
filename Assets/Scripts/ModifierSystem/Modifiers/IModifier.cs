@@ -7,11 +7,13 @@ namespace ModifierSystem
     {
         TargetComponent TargetComponent { get; }
         bool ApplierModifier { get; }
-        void Init(ModifierController modifierController);
+        bool ToRemove { get; }
+        void Init();
         void TryApply(Being target);
         void Update(float deltaTime, StatusResistances ownerStatusResistances);
         bool Stack();
         bool Refresh();
+        void SetForRemoval();
         bool ValidatePrototypeSetup();
     }
 }
