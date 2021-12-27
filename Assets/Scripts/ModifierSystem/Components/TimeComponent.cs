@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using BaseProject;
+
 namespace ModifierSystem
 {
     /// <summary>
@@ -5,6 +8,7 @@ namespace ModifierSystem
     /// </summary>
     public class TimeComponent : Component, ITimeComponent
     {
+        public bool IsRemove { get; }
         private IEffectComponent EffectComponent { get; }
         private double Duration { get; set; }
         private bool ResetOnFinished { get; }
@@ -16,6 +20,7 @@ namespace ModifierSystem
             EffectComponent = effectComponent;
             Duration = duration;
             ResetOnFinished = resetOnFinished;
+            IsRemove = false;
         }
 
         /// <summary>
@@ -26,6 +31,7 @@ namespace ModifierSystem
             EffectComponent = removeComponent;
             Duration = lingerDuration;
             ResetOnFinished = false;
+            IsRemove = true;
         }
 
         public void Init(ModifierController modifierController)
@@ -61,7 +67,23 @@ namespace ModifierSystem
             _timer = 0;
         }
 
-        public bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent
+        public HashSet<StatusTag> GetStatusTags()
+        {
+            HashSet<StatusTag> tempStatusTags = new HashSet<StatusTag>();
+            if (EffectComponentIsOfType<RemoveComponent>(false))
+                tempStatusTags.Add(new StatusTag(StatusType.Duration));
+            if (EffectComponentIsOfType<DamageComponent>(true))
+                tempStatusTags.Add(new StatusTag(StatusType.DoT));
+            if (EffectComponentIsOfType<StatusComponent>(true))
+                tempStatusTags.Add(new StatusTag(StatusType.Stun));
+            if (EffectComponentIsOfType<StatusResistanceComponent>(true))
+                tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
+            //if (timeComponent.EffectComponentIsOfType<SlowComponent>(true))
+            //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
+            return tempStatusTags;
+        }
+
+        private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent
         {
             if(checkResetOnFinished)
                 return ResetOnFinished && EffectComponent.GetType() == typeof(T);

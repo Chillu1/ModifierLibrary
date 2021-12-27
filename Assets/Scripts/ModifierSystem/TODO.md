@@ -2,7 +2,7 @@ TODO RN:
 * Sort ideas by prio
 * Conditional modifiers
 * ToDeleted Modifier line.40 ModifierController
-* >Instead of checking type with EffectComponentIsOfType, return tags from component instead?
+* >StatusResistance immune
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it)

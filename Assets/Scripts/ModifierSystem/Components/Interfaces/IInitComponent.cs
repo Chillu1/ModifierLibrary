@@ -1,8 +1,9 @@
+using BaseProject;
+
 namespace ModifierSystem
 {
-    public interface IInitComponent
+    public interface IInitComponent : IStatusTagsHolder
     {
         void Init();
-        bool EffectComponentIsOfType<T>() where T : IEffectComponent;
     }
 }

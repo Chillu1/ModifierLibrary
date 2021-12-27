@@ -44,43 +44,14 @@ namespace ModifierSystem
 
             var tempStatusTags = new HashSet<StatusTag>();
 
-            if (damageData != null)
-                foreach (var data in damageData)
-                {
-                    if (data.DamageType != DamageType.None)
-                        tempStatusTags.Add(new StatusTag(data.DamageType));
-                    if (data.ElementData != null && data.ElementData.ElementalType != ElementalType.None)
-                    {
-                        if(data.ElementData.EffectValue != 0)
-                            tempStatusTags.Add(new StatusTag(StatusType.Element));
-                        tempStatusTags.Add(new StatusTag(data.ElementData.ElementalType));
-                    }
-                }
+            foreach (var data in damageData.EmptyIfNull())
+                tempStatusTags.UnionWith(data.GetStatusTags());
 
             if (InitComponent != null)
-            {
-                if (InitComponent.EffectComponentIsOfType<StatusComponent>())
-                    tempStatusTags.Add(new StatusTag(StatusType.Stun));
-                if (InitComponent.EffectComponentIsOfType<StatusResistanceComponent>())
-                    tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
-                //if (InitComponent.EffectComponentIsOfType<SlowComponent>())
-                //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
-            }
+                tempStatusTags.UnionWith(InitComponent.GetStatusTags());
 
-            if (TimeComponents != null)
-                foreach (var timeComponent in TimeComponents)
-                {
-                    if (timeComponent.EffectComponentIsOfType<RemoveComponent>(false))
-                        tempStatusTags.Add(new StatusTag(StatusType.Duration));
-                    if (timeComponent.EffectComponentIsOfType<DamageComponent>(true))
-                        tempStatusTags.Add(new StatusTag(StatusType.DoT));
-                    if (timeComponent.EffectComponentIsOfType<StatusComponent>(true))
-                        tempStatusTags.Add(new StatusTag(StatusType.Stun));
-                    if (timeComponent.EffectComponentIsOfType<StatusResistanceComponent>(true))
-                        tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
-                    //if (timeComponent.EffectComponentIsOfType<SlowComponent>(true))not timecomponent?
-                    //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
-                }
+            foreach (var timeComponent in TimeComponents.EmptyIfNull())
+                tempStatusTags.UnionWith(timeComponent.GetStatusTags());
 
             StatusTags = tempStatusTags.ToArray();
             _setupFinished = true;
@@ -96,7 +67,7 @@ namespace ModifierSystem
 
                 //Only apply status res to buff/debuff duration, for now
                 //TODO We probably shouldn't this every frame (status)
-                if (timeComponent.EffectComponentIsOfType<RemoveComponent>(false))
+                if (timeComponent.IsRemove)
                     multiplier = ownerStatusResistances.GetStatusMultiplier(StatusTags);
 
                 timeComponent.Update(deltaTime, multiplier);

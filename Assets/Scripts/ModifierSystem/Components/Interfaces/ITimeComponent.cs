@@ -1,9 +1,11 @@
+using BaseProject;
+
 namespace ModifierSystem
 {
-    public interface ITimeComponent
+    public interface ITimeComponent : IStatusTagsHolder
     {
+        bool IsRemove { get; }
         void Init(ModifierController modifierController);
         void Update(float deltaTime, double statusResistance = 1d);
-        bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent;
     }
 }
