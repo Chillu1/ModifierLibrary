@@ -11,8 +11,9 @@ namespace ModifierSystem
         private ElementController ElementController { get; }
 
         private Dictionary<string, IModifier> Modifiers { get; }
-        private HashSet<string> ModifiersToRemove { get; }//Can't think of any setbacks when it comes to not using IModifiers here
+        private ModifierRemover MainModifierRemover { get; }
         private Dictionary<string, float> ComboModifierCooldowns { get; }
+        private ModifierRemover CooldownModifierRemover { get; }
         private float _timer;
 
         public ModifierController(Being owner, ElementController elementController)
@@ -20,8 +21,9 @@ namespace ModifierSystem
             _owner = owner;
             ElementController = elementController;
             Modifiers = new Dictionary<string, IModifier>();
-            ModifiersToRemove = new HashSet<string>();
+            MainModifierRemover = new ModifierRemover();
             ComboModifierCooldowns = new Dictionary<string, float>();
+            CooldownModifierRemover = new ModifierRemover();
         }
 
         public void Update(float deltaTime)
@@ -29,28 +31,27 @@ namespace ModifierSystem
             _timer += deltaTime;
             if (_timer >= 1)
             {
-                foreach (string key in ComboModifierCooldowns.Keys.ToArray())//TODO Making it into an array every is prob uncool
+                foreach (string key in ComboModifierCooldowns.Keys.ToArray()) //TODO Making it into an array is prob uncool, on the -= _timer line
                 {
                     ComboModifierCooldowns[key] -= _timer;
                     if (ComboModifierCooldowns[key] <= 0)
-                        ComboModifierCooldowns.Remove(key);
+                        CooldownModifierRemover.Add(key);
                 }
+
                 _timer = 0;
             }
+
+            CooldownModifierRemover.Update(ComboModifierCooldowns);
 
             //Log.Info(Modifiers.Count);
             foreach (var modifier in Modifiers.Values)
             {
                 modifier.Update(deltaTime, _owner.StatusResistances);
-                if(modifier.ToRemove)
-                    ModifiersToRemove.Add(modifier.Id);
+                if (modifier.ToRemove)
+                    MainModifierRemover.Add(modifier.Id);
             }
 
-            foreach (string id in ModifiersToRemove)
-                Modifiers.Remove(id);
-
-            if(ModifiersToRemove.Count > 0)
-                ModifiersToRemove.Clear();
+            MainModifierRemover.Update(Modifiers);
         }
 
         public void TryAddModifier(IModifier modifier, AddModifierParameters parameters)
@@ -65,8 +66,8 @@ namespace ModifierSystem
                 stacked = internalModifier.Stack();
                 refreshed = internalModifier.Refresh();
                 //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
-                if(!stacked && !refreshed)
-                    internalModifier.Init();//Problem comes here, since the effect might not actually be in Init()
+                if (!stacked && !refreshed)
+                    internalModifier.Init(); //Problem comes here, since the effect might not actually be in Init()
 
                 //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
@@ -105,15 +106,16 @@ namespace ModifierSystem
             {
                 TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
             }
+
             //Check for recipes after adding all modifiers
             //We're recreating the set because new modifiers have been added
-            CheckForComboRecipes();//Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
+            CheckForComboRecipes(); //Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
         }
 
         public bool RemoveModifier(IModifier modifier)
         {
             bool success = Modifiers.Remove(modifier.Id);
-            if(!success)
+            if (!success)
                 Log.Error("Couldn't remove modifier " + modifier.Id, "modifiers");
             return success;
         }
@@ -146,6 +148,7 @@ namespace ModifierSystem
         {
             ListModifiers(Modifiers.Values);
         }
+
         public void ListModifiers([CanBeNull] IEnumerable<IModifier> modifiers)
         {
             if (modifiers != null)
@@ -171,7 +174,8 @@ namespace ModifierSystem
             else
             {
                 //IModifier appliers dont need a target at ctor. Extra check
-                if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) && !modifier.ApplierModifier)
+                if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) &&
+                    !modifier.ApplierModifier)
                 {
                     Log.Error("Non-applier modifier doesn't have a target. Owner isn't the target", "modifiers");
                 }
@@ -197,7 +201,32 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return string.Join(", ",Modifiers);
+            return string.Join(", ", Modifiers);
+        }
+
+        private class ModifierRemover
+        {
+            //Can't think of any setbacks when it comes to not using IModifiers here
+            private HashSet<string> ObjectsToRemove { get; }
+
+            public ModifierRemover()
+            {
+                ObjectsToRemove = new HashSet<string>();
+            }
+
+            public void Update<TValue>(IDictionary<string, TValue> collection)
+            {
+                foreach (string id in ObjectsToRemove)
+                    collection.Remove(id);
+
+                if (ObjectsToRemove.Count > 0)
+                    ObjectsToRemove.Clear();
+            }
+
+            public void Add(string id)
+            {
+                ObjectsToRemove.Add(id);
+            }
         }
     }
 }
