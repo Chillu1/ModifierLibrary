@@ -5,21 +5,21 @@ namespace ModifierSystem
 {
     public class GameController : MonoBehaviour
     {
-        private Being _player;
-        private Being _enemy;
-        public ModifierPrototypes ModifierPrototypes { get; private set; }
+        public Being player;
+        public Being enemy;
+        //public ModifierPrototypes ModifierPrototypes { get; private set; }
 
         private float _timer;
 
         public void Start()
         {
-            ModifierPrototypes = new ModifierPrototypes();
+            //ModifierPrototypes = new ModifierPrototypes();
 
-            _player = new Being(new BeingProperties(){Id = "Player", DamageData = new DamageData(0, DamageType.Physical, null), Health = 150, UnitType = UnitType.Ally});
-            _enemy = new Being(new BeingProperties(){Id = "Enemy", DamageData = new DamageData(2, DamageType.Physical, null), Health = 100, UnitType = UnitType.Enemy});
+            player = new Being(new BeingProperties(){Id = "Player", DamageData = new DamageData(0, DamageType.Physical, null), Health = 150, UnitType = UnitType.Ally});
+            enemy = new Being(new BeingProperties(){Id = "Enemy", DamageData = new DamageData(2, DamageType.Physical, null), Health = 100, UnitType = UnitType.Enemy});
 
-            _player.AddModifier(ModifierPrototypes.GetItem("SpiderPoisonApplier"), AddModifierParameters.NullStartTarget);
-            _player.Attack(_enemy);
+            //player.AddModifier(ModifierPrototypes.GetItem("SpiderPoisonApplier"), AddModifierParameters.NullStartTarget);
+            //player.Attack(enemy);
         }
 
         private void Update()
@@ -27,12 +27,12 @@ namespace ModifierSystem
             _timer+=Time.deltaTime;
             if (_timer >= 1)
             {
-                _player.Attack(_enemy);
+                //player.Attack(enemy);
                 _timer = 0;
             }
 
-            _player.Update(Time.deltaTime);
-            _enemy.Update(Time.deltaTime);
+            //player.Update(Time.deltaTime);
+            //enemy.Update(Time.deltaTime);
             //Log.Info(_enemy.BaseBeing.Health);
         }
     }
