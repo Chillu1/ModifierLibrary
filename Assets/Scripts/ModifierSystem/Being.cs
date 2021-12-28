@@ -175,6 +175,10 @@ namespace ModifierSystem
             return damageData;
         }
 
+        public void Heal(Being target)
+        {
+            BaseBeing.Heal(target.BaseBeing);
+        }
         public void Heal(double value, BaseBeing healer)
         {
             BaseBeing.Heal(value, healer);
@@ -189,6 +193,12 @@ namespace ModifierSystem
         public void ChangeStat(Stat stat)
         {
             Stats.ChangeStat(stat);
+            ModifierController.CheckForComboRecipes();
+        }
+
+        public void ChangeStat(StatType statType, double value)
+        {
+            Stats.ChangeStat(statType, value);
             ModifierController.CheckForComboRecipes();
         }
 

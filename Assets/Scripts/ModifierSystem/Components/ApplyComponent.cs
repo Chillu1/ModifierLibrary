@@ -11,6 +11,7 @@ namespace ModifierSystem
         private BeingConditionEvent ConditionEvent { get; }
 
         private readonly IEffectComponent _effectComponent;
+        private readonly IConditionEffectComponent _conditionEffectComponent;
         private readonly ITargetComponent _targetComponent;
         //private readonly IValidatorComponent<object>[] _validatorComponents;
 
@@ -24,7 +25,19 @@ namespace ModifierSystem
             BeingConditionEvent conditionEvent = BeingConditionEvent.None)
         {
             IsConditionEvent = true;
-            _effectComponent = (IEffectComponent)effectComponent;
+            _conditionEffectComponent = effectComponent;
+            _targetComponent = targetComponent;
+            ConditionEvent = conditionEvent;
+            Validate();
+        }
+        /// <summary>
+        ///     Special constructor for one-off/one-time use modifiers
+        /// </summary>
+        public ApplyComponent(RemoveComponent effectComponent, ITargetComponent targetComponent,
+            BeingConditionEvent conditionEvent = BeingConditionEvent.None)
+        {
+            IsConditionEvent = true;
+            _effectComponent = effectComponent;
             _targetComponent = targetComponent;
             ConditionEvent = conditionEvent;
             Validate();
@@ -44,31 +57,31 @@ namespace ModifierSystem
                 return;
             }
 
-            switch (_effectComponent)
+            if(_effectComponent != null)
             {
-                case IConditionEffectComponent conditionalEffect:
-                    BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, conditionalEffect.Effect);
-                    break;
-                default:
-                    Log.Error("Unrecognized effect component type: "+_effectComponent.GetType());
-                    break;
+                //TODO Temp solution to remove component not having the proper signature, we can remove the anonymous delegate, somehow
+                BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, delegate { _effectComponent.Effect(); });
             }
+            else if (_conditionEffectComponent != null)
+                BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, _conditionEffectComponent.Effect);
+            else
+                Log.Error("Both effect components are null");
         }
 
         public void CleanUp()
         {
-            if (ConditionEvent == BeingConditionEvent.None)
+            if (ConditionEvent == BeingConditionEvent.None || !IsConditionEvent)
                 return;
 
-            switch (_effectComponent)
+            if(_effectComponent != null)
             {
-                case IConditionEffectComponent effectComponent:
-                    BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, effectComponent.Effect);
-                    break;
-                default:
-                    Log.Error("Unrecognized effect component type: "+_effectComponent.GetType());
-                    break;
+                //TODO Temp solution?
+                BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, delegate { _effectComponent.Effect(); });
             }
+            else if (_conditionEffectComponent != null)
+                BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, _conditionEffectComponent.Effect);
+            else
+                Log.Error("Both effect components are null");
         }
 
         private bool Validate()

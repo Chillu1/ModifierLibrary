@@ -18,5 +18,11 @@ namespace ModifierSystem
             _cleanUpComponent?.CleanUp();
             _modifier.SetForRemoval();
         }
+
+        //public void Effect(BaseBeing owner, BaseBeing acter) //Can't be, because BaseBeing and not Being
+        //{
+        //    _targetComponent.HandleTarget(owner, acter,
+        //        (receiverLocal, acterLocal) => receiverLocal.);
+        //}
     }
 }

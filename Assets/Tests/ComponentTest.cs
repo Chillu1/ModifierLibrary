@@ -58,55 +58,19 @@ namespace ModifierSystem.Tests
             enemy.Update(0.2f);
             Assert.False(enemy.ContainsModifier(doTModifier));
         }
-        
-        [Test]
-        public void ConditionalApplyOnKillEffect()
-        {
-            var damageOnKillModifier = modifierPrototypes.GetItem("DamageOnKillTest");
-            character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
-            character.AddModifier(damageOnKillModifier);
-            character.Attack(enemy);
-
-            Assert.True(enemy.Stats.Health.IsDead);
-            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);
-        }
 
         [Test]
-        public void AddStatDamageEffect()
+        public void HealStatBasedEffect()
         {
-            var damageOnKillModifier = modifierPrototypes.GetItem("AddStatDamageTest");
-            character.AddModifier(damageOnKillModifier);
-            Assert.AreEqual(initialDamageCharacter+2, character.Stats.Damage.DamageSum(), Delta);
-        }
+            Assert.True(ally.Stats.Health.PoolStat.IsFull);
+            var healModifier = modifierPrototypes.GetItem("HealStatBasedTest");
+            character.ChangeStat(StatType.Heal, 5);
+            character.AddModifier(healModifier);
+            enemy.ChangeDamageStat(new DamageData(4, DamageType.Physical));
+            enemy.Attack(ally);
+            character.Heal(ally);
 
-        [Test]
-        public void ConditionalApplyOnDeathRevengeEffect()
-        {
-            var damageOnDeathModifier = modifierPrototypes.GetItem("DamageOnDeathTest");
-            enemy.ChangeDamageStat(new DamageData(1000d, DamageType.Physical));
-            character.AddModifier(damageOnDeathModifier);
-            enemy.Attack(character);
-
-            Assert.True(character.Stats.Health.IsDead);
-            Assert.True(enemy.Stats.Health.IsDead);
-        }
-        
-        [Test]
-        public void ConditionalTimedDamageOnKillEffect()
-        {
-            var damageOnKillModifier = modifierPrototypes.GetItem("TimedDamageOnKillTest");
-            character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
-            character.AddModifier(damageOnKillModifier);
-            character.Attack(enemy);
-
-            Assert.True(enemy.Stats.Health.IsDead);//Kill
-            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//Increase in damage
-
-            character.Update(5.1f);//Buff expired
-
-            character.Attack(enemyDummies[0]);//Kill
-            Assert.True(enemyDummies[0].Stats.Health.IsDead);
-            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//No increase in damage
+            Assert.True(ally.Stats.Health.PoolStat.IsFull);
         }
     }
 }

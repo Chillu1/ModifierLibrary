@@ -330,7 +330,7 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(damageOnKillModifier);
                 }
                 {
-                    //Damage on kill
+                    //Timed damage on kill
                     var damageOnKillModifier = new Modifier("TimedDamageOnKillTest");
                     var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
@@ -341,6 +341,55 @@ namespace ModifierSystem.Tests
                     damageOnKillModifier.AddComponent(new TimeComponent(new RemoveComponent(damageOnKillModifier, cleanUp), 5));
                     damageOnKillModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(damageOnKillModifier);
+                }
+                {
+                    //Thorns on hit
+                    var damageOnKillModifier = new Modifier("ThornsOnHitTest");
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Acter);
+                    var effect = new DamageComponent(new []{new DamageData(5, DamageType.Physical)}, target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.HitEvent);
+                    damageOnKillModifier.AddComponent(target);
+                    damageOnKillModifier.AddComponent(new InitComponent(apply));
+                    damageOnKillModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                }
+                {
+                    //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
+                    //Heal on death, once
+                    var healOnDeathModifier = new Modifier("HealOnDeathTest");
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
+                    var effect = new HealComponent(10, target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
+                    var cleanUp = new CleanUpComponent(apply);
+                    var remove = new RemoveComponent(healOnDeathModifier, cleanUp);
+                    var applyRemoval = new ApplyComponent(remove, target, BeingConditionEvent.DeathEvent);
+                    healOnDeathModifier.AddComponent(target);
+                    healOnDeathModifier.AddComponent(new InitComponent(apply, applyRemoval));
+                    healOnDeathModifier.AddComponent(apply);
+                    healOnDeathModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(healOnDeathModifier);
+                }
+                {
+                    //Heal stat based
+                    var healStatBasedModifier = new Modifier("HealStatBasedTest");
+                    var target = new TargetComponent(LegalTarget.Beings);
+                    var effect = new HealStatBasedComponent(target);
+                    var apply = new ApplyComponent(effect, target);
+                    healStatBasedModifier.AddComponent(target);
+                    healStatBasedModifier.AddComponent(new InitComponent(apply));
+                    healStatBasedModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(healStatBasedModifier);
+                }
+                {
+                    //Heal yourself on healing someone else
+                    var healOnHealModifier = new Modifier("HealOnHealTest");
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.SelfSelf);
+                    var effect = new HealStatBasedComponent(target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.HealEvent);
+                    healOnHealModifier.AddComponent(target);
+                    healOnHealModifier.AddComponent(new InitComponent(apply));
+                    healOnHealModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(healOnHealModifier);
                 }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.

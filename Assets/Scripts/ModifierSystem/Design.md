@@ -8,14 +8,16 @@
 | DamageData       | Holds damage values, DamageType, and ElementalData                                                                                 |
 | ElementData      | Holds type and effectData of elements. Ex: Fireball, Fire, 10 effect, 10 linger                                                    |
 | DamageResistance | DamageType and ElementalType resistances: Physical, Magical, Pure, and, Acid, Cold, Fire.                                          |
-| **ModifierSystem**|                                                                                                                                    |
+| **ModifierSystem**|                                                                                                                                   |
 | Modifier         | Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect                         |
 | ModifierApplier  | A special modifier that applies another modifier on someone by either cast or attack                                               |
 | ComboModifier    | Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats |
 | ComboRecipe      | Recipe (condition) for a ComboModifier to be added, possible conditions: specific modifiers (ID), ElementalData or Stats           |
 
-Design questions
+# Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* Do something with Being not being accepted in Heal, etc
+* Single/X use condition modifiers, how? RemoveComponent can hold X stacks, lowering down to 0, then actual effect is triggered
 * Should CleanUp remove buffs/upgrades, ex. on kill. We would need to record the amount, or store it in a different way
 * Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
 * More efficient way of saving timer data related to enum/id (not dict? but array of some sort?)
@@ -23,7 +25,7 @@ Design questions
 * Removing all modifiers from ModifierController wont remove the parmanent buffs & debuffs, make a function that does the opposite for these?
 * What to do with Positive/Negative status tags, how to automate positive? Check for positive value on stats, buffs, etc?
 * Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
-* Are all EffectComponents IConditionEffectComponent? No, because RemoveComponent isnt
+* We might come into trouble with multiple target components, since rn we rely on having only one in modifier
 
   # Modifier
   
@@ -226,6 +228,7 @@ Cant attack, cant be attacked. (Nightmare)
 Reduced regen (healing, mana, etc)  
 More float X or X% with missing health/mana/etc (huskar)  
 Thorns  
+    Before reduction, After reduction, Flat damage thorns
 On kill enemies "Explode" dealing damage (can be comboed with, explode, dealing hp as dmg?) Would be a cool combo modifier  
 The more damage you deal to yourself, the stronger your attacks are  
 Every X attack do Y  

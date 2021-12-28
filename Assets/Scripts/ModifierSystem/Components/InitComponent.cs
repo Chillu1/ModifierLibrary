@@ -5,16 +5,17 @@ namespace ModifierSystem
 {
     public class InitComponent : Component, IInitComponent
     {
-        private readonly IApplyComponent _applyComponent;
+        private readonly IApplyComponent[] _applyComponent;
 
-        public InitComponent(IApplyComponent applyComponent)
+        public InitComponent(params IApplyComponent[] applyComponent)
         {
             _applyComponent = applyComponent;
         }
 
         public void Init()
         {
-            _applyComponent.Apply();
+            foreach (var applyComponent in _applyComponent)
+                applyComponent.Apply();
         }
 
         public HashSet<StatusTag> GetStatusTags()
@@ -31,7 +32,13 @@ namespace ModifierSystem
 
         private bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
-            return _applyComponent.GetType() == typeof(T);
+            foreach (var applyComponent in _applyComponent)
+            {
+                if (applyComponent.GetType() == typeof(T))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

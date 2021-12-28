@@ -2,8 +2,11 @@ TODO RN:
 * Sort ideas by prio
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
-  * >>OnHit & some unit tests for fringe cases
+  * >>Some unit tests for fringe cases condition event
+     * >>OnHeal, heal yourself flat
+     * >>OnHeal, heal yourself 20%
 * >Make lifeSteal component part of actual baseProject.Being class instead 
+* >Have a go at stackComponent again
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Stats StatusTag (stats change)

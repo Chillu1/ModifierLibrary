@@ -89,6 +89,12 @@ namespace ModifierSystem
                 case ConditionTarget.Acter:
                     effect(acter, receiver);
                     break;
+                case ConditionTarget.SelfSelf:
+                    effect(receiver, receiver);
+                    break;
+                case ConditionTarget.ActerActer:
+                    effect(acter, acter);
+                    break;
             }
         }
 
@@ -106,5 +112,7 @@ namespace ModifierSystem
         /// </summary>
         Self = 1,
         Acter = 2,
+        SelfSelf = 3,
+        ActerActer = 4,
     }
 }
