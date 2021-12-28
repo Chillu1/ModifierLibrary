@@ -3,10 +3,9 @@ TODO RN:
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
   * TargetComponent should take care of who's getting what, not the effect components?
-  * OnKill Modifier (ex. increase physical damage by X on kill, increase physical damage by X for 5 seconds on kill)
-  * Validate effect component
   * EffectCleanup (apply)
   * OnHit
+* Make lifeSteal component part of actual baseProject.Being class instead 
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Stats StatusTag (stats change)
@@ -16,7 +15,8 @@ TODO RN:
   * All mechanics & components
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
-* Condition Apply (ex. happens when player has more than 10 damage?)
+* Condition Apply (ex. (apply?) happens when player has more than 10 damage?)
+* Ressurection
 * Editor Window for prototypes/modifiers
 
 Automatic tags:
@@ -26,10 +26,6 @@ Automatic tags:
     Stun/Slow-effect,etc. On Init = StatusType.X
     Unit test: Correct tags
 
-Later:  
-    ConditionalApply, OnAttack, OnCast, OnDeath  
-    SimpleAttackBuff  
+Later:    
     AddTarget (when?) (init & apply need it)  
-    Remove after linger time from modController  
-    SimpleStatBuff  
     StackedDoTDurationModifier

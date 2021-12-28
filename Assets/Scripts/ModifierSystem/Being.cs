@@ -6,7 +6,6 @@ namespace ModifierSystem
 {
     public sealed class Being : IBaseBeing
     {
-        public StatusResistances StatusResistances { get; }
         private ModifierController ModifierController { get; }
 
         /// <summary>
@@ -20,40 +19,41 @@ namespace ModifierSystem
 
         public string Id => BaseBeing.Id;
         public Stats Stats => BaseBeing.Stats;
+        public StatusResistances StatusResistances => BaseBeing.StatusResistances;
         public UnitType UnitType => BaseBeing.UnitType;
         public LegalAction LegalActions => BaseBeing.StatusEffects.LegalActions;
 
-        public event Action<BaseBeing, BaseBeing> AttackEvent
+        public event BaseBeingEvent AttackEvent
         {
             add => BaseBeing.AttackEvent += value;
             remove => BaseBeing.AttackEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> KillEvent
+        public event BaseBeingEvent KillEvent
         {
             add => BaseBeing.KillEvent += value;
             remove => BaseBeing.KillEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> CastEvent
+        public event BaseBeingEvent CastEvent
         {
             add => BaseBeing.CastEvent += value;
             remove => BaseBeing.CastEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> HealEvent
+        public event BaseBeingEvent HealEvent
         {
             add => BaseBeing.HealEvent += value;
             remove => BaseBeing.HealEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> HealedEvent
+        public event BaseBeingEvent HealedEvent
         {
             add => BaseBeing.HealedEvent += value;
             remove => BaseBeing.HealedEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> DeathEvent
+        public event BaseBeingEvent DeathEvent
         {
             add => BaseBeing.DeathEvent += value;
             remove => BaseBeing.DeathEvent -= value;
         }
-        public event Action<BaseBeing, BaseBeing> HitEvent
+        public event BaseBeingEvent HitEvent
         {
             add => BaseBeing.HitEvent += value;
             remove => BaseBeing.HitEvent -= value;
@@ -65,7 +65,6 @@ namespace ModifierSystem
         {
             BaseBeing = new BaseBeing(beingProperties);
             ModifierController = new ModifierController(this, BaseBeing.ElementController);
-            StatusResistances = new StatusResistances();
         }
 
         public bool CastModifier(Being target, string modifierId)

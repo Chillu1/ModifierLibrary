@@ -2,25 +2,26 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageStatComponent : EffectComponent, IConditionalEffectComponent
+    public class DamageStatComponent : EffectComponent, IConditionEffectComponent
     {
-        private readonly DamageData[] _damageData;
+        private DamageData[] DamageData { get; }
         private readonly ITargetComponent _targetComponent;
 
         public DamageStatComponent(DamageData[] damageData, ITargetComponent targetComponent)
         {
-            _damageData = damageData;
+            DamageData = damageData;
             _targetComponent = targetComponent;
         }
 
         public override void Effect()
         {
-            _targetComponent.Target.ChangeDamageStat(_damageData);
+            _targetComponent.Target.ChangeDamageStat(DamageData);
         }
 
         public void Effect(BaseBeing target, BaseBeing attacked)
         {
-            target.Stats.ChangeDamageStat(_damageData);
+            _targetComponent.HandleTarget(target, attacked,
+                (receiverLocal, acterLocal) => receiverLocal.Stats.ChangeDamageStat(DamageData));
         }
     }
 }

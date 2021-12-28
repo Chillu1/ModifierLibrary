@@ -1,19 +1,28 @@
+using BaseProject;
+
 namespace ModifierSystem
 {
-    public class HealComponent : EffectComponent
+    public class HealComponent : EffectComponent, IConditionEffectComponent
     {
         public double Heal { get; private set; }
-        private ITargetComponent TargetComponent { get; }
+
+        private readonly ITargetComponent _targetComponent;
 
         public HealComponent(double heal, ITargetComponent targetComponent)
         {
             Heal = heal;
-            TargetComponent = targetComponent;
+            _targetComponent = targetComponent;
         }
 
         public override void Effect()
         {
-            TargetComponent.Target.Stats.Health.Heal(Heal);
+            _targetComponent.Target.Stats.Health.Heal(Heal);
+        }
+
+        public void Effect(BaseBeing owner, BaseBeing healer)
+        {
+            _targetComponent.HandleTarget(owner, healer,
+                (receiverLocal, acterLocal) => receiverLocal.Heal(Heal, acterLocal));
         }
     }
 }

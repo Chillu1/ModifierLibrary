@@ -21,6 +21,7 @@ Design questions
 * Stack & Refresh
 * Removing all modifiers from ModifierController wont remove the parmanent buffs & debuffs, make a function that does the opposite for these?
 * What to do with Positive/Negative status tags, how to automate positive? Check for positive value on stats, buffs, etc?
+* Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
 
   # Modifier
   

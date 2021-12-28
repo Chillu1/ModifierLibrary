@@ -2,7 +2,7 @@ namespace ModifierSystem
 {
     public interface IValidatorComponent<T>
     {
-        bool Validate(T target);
+        bool ValidateTarget(T target);
     }
 
     //class ManaComponent : IValidatorComponent<Mana>

@@ -2,34 +2,27 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageComponent : EffectComponent, IConditionalEffectComponent, IMetaEffect
+    public class DamageComponent : EffectComponent, IConditionEffectComponent, IMetaEffect
     {
         private DamageData[] Damage { get; }
-        private ITargetComponent TargetComponent { get; }
+        private readonly ITargetComponent _targetComponent;
 
         public DamageComponent(DamageData[] damage, ITargetComponent targetComponent)
         {
             Damage = damage;
-            TargetComponent = targetComponent;
+            _targetComponent = targetComponent;
         }
 
         public override void Effect()
         {
             //Log.Info(_getTarget().BaseBeing.Id);
-            TargetComponent.Target.DealDamage(Damage, TargetComponent.Owner);
+            _targetComponent.Target.DealDamage(Damage, _targetComponent.Owner);
         }
 
         public void Effect(BaseBeing owner, BaseBeing acter)
         {
-            switch (TargetComponent.ConditionalTarget)
-            {
-                case ConditionalTarget.Self:
-                    owner.DealDamage(Damage, acter);
-                    break;
-                case ConditionalTarget.Acter:
-                    acter.DealDamage(Damage, owner);
-                    break;
-            }
+            _targetComponent.HandleTarget(owner, acter,
+                (receiverLocal, acterLocal) => receiverLocal.DealDamage(Damage, acterLocal));
         }
 
         public void MetaEffect(ChangeType changeType, double value)

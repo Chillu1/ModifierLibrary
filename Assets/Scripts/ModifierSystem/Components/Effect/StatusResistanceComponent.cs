@@ -2,12 +2,12 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusResistanceComponent : EffectComponent
+    public class StatusResistanceComponent : EffectComponent, IConditionEffectComponent
     {
         private StatusTag[] StatusTags { get; }
         private double[] Values { get; }
 
-        private ITargetComponent TargetComponent { get; }
+        private readonly ITargetComponent _targetComponent;
 
         public StatusResistanceComponent(StatusTag[] tags, double[] values, ITargetComponent targetComponent)
         {
@@ -15,15 +15,18 @@ namespace ModifierSystem
                 Log.Error("Status tags wrong length for tags/values", "modifiers");
             StatusTags = tags;
             Values = values;
-            TargetComponent = targetComponent;
+            _targetComponent = targetComponent;
         }
 
         public override void Effect()
         {
-            for (int i = 0; i < StatusTags.Length; i++)
-            {
-                TargetComponent.Target.StatusResistances.ChangeValue(StatusTags[i], Values[i]);
-            }
+            _targetComponent.Target.StatusResistances.ChangeValue(StatusTags, Values);
+        }
+
+        public void Effect(BaseBeing owner, BaseBeing acter)
+        {
+            _targetComponent.HandleTarget(owner, acter,
+                (receiverLocal, acterLocal) => receiverLocal.StatusResistances.ChangeValue(StatusTags, Values));
         }
     }
 }

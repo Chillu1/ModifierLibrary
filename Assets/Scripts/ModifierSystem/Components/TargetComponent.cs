@@ -7,7 +7,7 @@ namespace ModifierSystem
 {
     public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent, ICloneable
     {
-        public ConditionalTarget ConditionalTarget { get; private set; }
+        public ConditionTarget ConditionTarget { get; private set; }
         [CanBeNull] public Being Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
@@ -23,13 +23,15 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public TargetComponent(LegalTarget legalTarget, ConditionalTarget conditionalTarget, bool applier = false)
+        public TargetComponent(LegalTarget legalTarget, ConditionTarget conditionTarget, bool applier = false)
         {
             if(legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
+            if(conditionTarget == ConditionTarget.None)
+                Log.Error("Illegal conditionalTarget `None`", "modifiers");
 
             LegalTarget = legalTarget;
-            ConditionalTarget= conditionalTarget;
+            ConditionTarget= conditionTarget;
             Applier = applier;
         }
 
@@ -38,7 +40,7 @@ namespace ModifierSystem
             Owner = owner;
         }
 
-        public bool Validate(Being target)
+        public bool ValidateTarget(Being target)
         {
             if (target == null)
                 return LegalTarget.HasFlag(LegalTarget.Ground);
@@ -67,7 +69,7 @@ namespace ModifierSystem
                 return false;
             }
 
-            if (!Validate(target))
+            if (!ValidateTarget(target))
             {
                 Log.Error("Target is not valid, id: "+target?.Id, "modifiers");
                 return false;
@@ -77,13 +79,26 @@ namespace ModifierSystem
             return true;
         }
 
+        public void HandleTarget(BaseBeing receiver, BaseBeing acter, Action<BaseBeing, BaseBeing> effect)
+        {
+            switch (ConditionTarget)
+            {
+                case ConditionTarget.Self:
+                    effect(receiver, acter);
+                    break;
+                case ConditionTarget.Acter:
+                    effect(acter, receiver);
+                    break;
+            }
+        }
+
         public object Clone()
         {
             return this.Copy();
         }
     }
 
-    public enum ConditionalTarget
+    public enum ConditionTarget
     {
         None = 0,
         /// <summary>

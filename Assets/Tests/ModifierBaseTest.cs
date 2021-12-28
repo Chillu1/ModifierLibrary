@@ -289,7 +289,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on kill
                     var damageOnKillModifier = new Modifier("DamageOnKillTest");
-                    var target = new TargetComponent(LegalTarget.Self);
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target, BeingConditionEvent.KillEvent);
                     damageOnKillModifier.AddComponent(target);
@@ -311,7 +311,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on death
                     var damageOnKillModifier = new Modifier("DamageOnDeathTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionalTarget.Acter);
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Acter);
                     var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
                     var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
                     damageOnKillModifier.AddComponent(target);

@@ -7,24 +7,27 @@ namespace ModifierSystem
     /// </summary>
     public class ApplyComponent : Component, IApplyComponent, ICleanUpComponent
     {
+        private bool IsConditionEvent { get; }
+        private BeingConditionEvent ConditionEvent { get; }
+
         private readonly EffectComponent _effectComponent;
         private readonly ITargetComponent _targetComponent;
         //private readonly IValidatorComponent<object>[] _validatorComponents;
-        private readonly BeingConditionEvent _conditionEvent;
 
         public ApplyComponent(EffectComponent effectComponent, ITargetComponent targetComponent)
         {
             _effectComponent = effectComponent;
             _targetComponent = targetComponent;
-            // TODO Validate
+            Validate();
         }
-        public ApplyComponent(IConditionalEffectComponent effectComponent, ITargetComponent targetComponent,
+        public ApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
             BeingConditionEvent conditionEvent = BeingConditionEvent.None)
         {
+            IsConditionEvent = true;
             _effectComponent = (EffectComponent)effectComponent;
             _targetComponent = targetComponent;
-            _conditionEvent = conditionEvent;
-            // TODO Validate IConditionalEffectComponent
+            ConditionEvent = conditionEvent;
+            Validate();
         }
 
         public void Apply()
@@ -35,7 +38,7 @@ namespace ModifierSystem
             //}
             //_targetComponent.Validate()
 
-            if (_conditionEvent == BeingConditionEvent.None)
+            if (ConditionEvent == BeingConditionEvent.None || !IsConditionEvent)//No conditions, just call it
             {
                 _effectComponent.Effect();
                 return;
@@ -43,8 +46,8 @@ namespace ModifierSystem
 
             switch (_effectComponent)
             {
-                case IConditionalEffectComponent conditionalEffect:
-                    BeingEventHelper.SetupBeingEvent(_targetComponent.Target, _conditionEvent, conditionalEffect.Effect);
+                case IConditionEffectComponent conditionalEffect:
+                    BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, conditionalEffect.Effect);
                     break;
                 default:
                     Log.Error("Unrecognized effect component type: "+_effectComponent.GetType());
@@ -54,13 +57,13 @@ namespace ModifierSystem
 
         public void CleanUp()
         {
-            if (_conditionEvent == BeingConditionEvent.None)
+            if (ConditionEvent == BeingConditionEvent.None)
                 return;
 
             switch (_effectComponent)
             {
-                case IConditionalEffectComponent effectComponent:
-                    BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, _conditionEvent, effectComponent.Effect);
+                case IConditionEffectComponent effectComponent:
+                    BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, effectComponent.Effect);
                     break;
                 default:
                     Log.Error("Unrecognized effect component type: "+_effectComponent.GetType());
@@ -70,7 +73,31 @@ namespace ModifierSystem
 
         private bool Validate()
         {
-            return true;
+            bool success = true;
+            bool conditionEvent = ConditionEvent != BeingConditionEvent.None,
+                conditionTarget = _targetComponent.ConditionTarget != ConditionTarget.None;
+
+            if ((!conditionEvent || !conditionTarget) && IsConditionEvent)
+            {
+                Log.Error("EffectComponent is conditionComponent, but ConditionTarget and ConditionEvent are None, illegal", "modifiers");
+                success = false;
+            }
+
+            if (conditionEvent)
+            {
+                if (!conditionTarget)
+                {
+                    Log.Error("ConditionEvent is set, but ConditionTarget is None, illegal", "modifiers");
+                    success = false;
+                }
+            }
+            else if (conditionTarget)
+            {
+                Log.Error("ConditionTarget is set, but ConditionEvent is None, illegal", "modifiers");
+                success = false;
+            }
+
+            return success;
         }
     }
 }

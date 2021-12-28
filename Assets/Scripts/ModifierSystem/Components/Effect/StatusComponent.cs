@@ -2,24 +2,30 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusComponent : EffectComponent
+    public class StatusComponent : EffectComponent, IConditionEffectComponent
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
 
-        private ITargetComponent TargetComponent { get; }
+        private readonly ITargetComponent _targetComponent;
 
         public StatusComponent(StatusEffect effect, float duration, ITargetComponent targetComponent)
         {
             StatusEffect = effect;
             Duration = duration;
-            TargetComponent = targetComponent;
+            _targetComponent = targetComponent;
         }
 
         public override void Effect()
         {
             //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
-            TargetComponent.Target.ChangeStatusEffect(StatusEffect, Duration);
+            _targetComponent.Target.ChangeStatusEffect(StatusEffect, Duration);
+        }
+
+        public void Effect(BaseBeing owner, BaseBeing acter)
+        {
+            _targetComponent.HandleTarget(owner, acter,
+                (receiverLocal, acterLocal) => receiverLocal.ChangeStatusEffect(StatusEffect, Duration));
         }
     }
 }

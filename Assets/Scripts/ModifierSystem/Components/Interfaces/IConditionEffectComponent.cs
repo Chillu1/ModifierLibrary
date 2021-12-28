@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public interface IConditionalEffectComponent
+    public interface IConditionEffectComponent
     {
         void Effect(BaseBeing owner, BaseBeing acter);
     }
