@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public class ApplierComponent : IEffectComponent
+    public class ApplierComponent : EffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
@@ -15,7 +15,7 @@ namespace ModifierSystem
             TargetComponent = targetComponent;
         }
 
-        public void Effect()
+        public override void Effect()
         {
             //Log.Info(TargetComponent);
             //Log.Info(TargetComponent.GetTarget());

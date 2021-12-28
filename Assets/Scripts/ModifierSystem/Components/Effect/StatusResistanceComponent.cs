@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusResistanceComponent : IEffectComponent
+    public class StatusResistanceComponent : EffectComponent
     {
         private StatusTag[] StatusTags { get; }
         private double[] Values { get; }
@@ -18,7 +18,7 @@ namespace ModifierSystem
             TargetComponent = targetComponent;
         }
 
-        public void Effect()
+        public override void Effect()
         {
             for (int i = 0; i < StatusTags.Length; i++)
             {

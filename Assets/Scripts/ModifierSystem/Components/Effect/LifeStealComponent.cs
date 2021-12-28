@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using BaseProject;
 
@@ -7,35 +6,26 @@ namespace ModifierSystem
     /// <summary>
     ///     LifeSteal before reduction (ignores resistances)
     /// </summary>
-    public class LifeStealComponent : IEffectComponent
+    public class LifeStealComponent : EffectComponent, IConditionalEffectComponent
     {
         //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Being class instead
         private DamageData[] Damage { get; }
         private double Percentage { get; }
 
-        //Target is the being who gets lifeSteal buff
-        private readonly ITargetComponent _targetComponent;
-
-        public LifeStealComponent(DamageData[] damage, double percentage, ITargetComponent targetComponent)
+        public LifeStealComponent(DamageData[] damage, double percentage)
         {
             Damage = damage;
             Percentage = percentage;
-            _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public override void Effect()
         {
-            _targetComponent.Target.AttackEvent += OnLifeStealEvent;
+            //TODO TargetComponent
         }
 
-        public void CleanUp()
+        public void Effect(BaseBeing owner, BaseBeing healer)
         {
-            _targetComponent.Target.AttackEvent -= OnLifeStealEvent;
-        }
-
-        private void OnLifeStealEvent(BaseBeing target, BaseBeing attacked)
-        {
-            target.Heal(Damage.Sum(d => d.Damage) * Percentage);
+            owner.Heal(Damage.Sum(d => d.Damage) * Percentage, healer);
         }
     }
 }

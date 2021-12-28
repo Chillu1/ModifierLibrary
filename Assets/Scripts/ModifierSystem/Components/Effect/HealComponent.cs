@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public class HealComponent : IEffectComponent
+    public class HealComponent : EffectComponent
     {
         public double Heal { get; private set; }
         private ITargetComponent TargetComponent { get; }
@@ -11,7 +11,7 @@ namespace ModifierSystem
             TargetComponent = targetComponent;
         }
 
-        public void Effect()
+        public override void Effect()
         {
             TargetComponent.Target.Stats.Health.Heal(Heal);
         }

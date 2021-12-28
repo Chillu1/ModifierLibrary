@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatComponent : IEffectComponent
+    public class StatComponent : EffectComponent
     {
         private readonly Stat[] _stats;
         private readonly ITargetComponent _targetComponent;
@@ -13,7 +13,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public override void Effect()
         {
             _targetComponent.Target.ChangeStat(_stats);
         }

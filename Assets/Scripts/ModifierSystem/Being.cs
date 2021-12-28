@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public sealed class Being
+    public sealed class Being : IBaseBeing
     {
         public StatusResistances StatusResistances { get; }
         private ModifierController ModifierController { get; }
@@ -27,6 +27,36 @@ namespace ModifierSystem
         {
             add => BaseBeing.AttackEvent += value;
             remove => BaseBeing.AttackEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> KillEvent
+        {
+            add => BaseBeing.KillEvent += value;
+            remove => BaseBeing.KillEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> CastEvent
+        {
+            add => BaseBeing.CastEvent += value;
+            remove => BaseBeing.CastEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> HealEvent
+        {
+            add => BaseBeing.HealEvent += value;
+            remove => BaseBeing.HealEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> HealedEvent
+        {
+            add => BaseBeing.HealedEvent += value;
+            remove => BaseBeing.HealedEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> DeathEvent
+        {
+            add => BaseBeing.DeathEvent += value;
+            remove => BaseBeing.DeathEvent -= value;
+        }
+        public event Action<BaseBeing, BaseBeing> HitEvent
+        {
+            add => BaseBeing.HitEvent += value;
+            remove => BaseBeing.HitEvent -= value;
         }
 
         #endregion
@@ -139,11 +169,16 @@ namespace ModifierSystem
         /// <summary>
         ///     Used for dealing damage with modifiers
         /// </summary>
-        public DamageData[] DealDamage(DamageData[] data)
+        public DamageData[] DealDamage(DamageData[] data, Being attacker)
         {
-            var damageData = BaseBeing.DealDamage(data);
+            var damageData = BaseBeing.DealDamage(data, attacker.BaseBeing);
             ModifierController.CheckForComboRecipes();//Elemental, so we check for combos
             return damageData;
+        }
+
+        public void Heal(double value, BaseBeing healer)
+        {
+            BaseBeing.Heal(value, healer);
         }
 
         public void ChangeStat(Stat[] stats)
@@ -155,6 +190,18 @@ namespace ModifierSystem
         public void ChangeStat(Stat stat)
         {
             Stats.ChangeStat(stat);
+            ModifierController.CheckForComboRecipes();
+        }
+
+        public void ChangeDamageStat(DamageData[] damageData)
+        {
+            Stats.ChangeDamageStat(damageData);
+            ModifierController.CheckForComboRecipes();
+        }
+
+        public void ChangeDamageStat(DamageData damageData)
+        {
+            Stats.ChangeDamageStat(damageData);
             ModifierController.CheckForComboRecipes();
         }
 

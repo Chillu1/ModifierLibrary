@@ -13,6 +13,7 @@ namespace ModifierSystem.Tests
         protected Being enemy;
 
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
+        protected double initialDamageCharacter, initialDamageAlly, initialDamageEnemy;
 
         protected const double Delta = 0.01d;
         protected const float PermanentComboModifierCooldown = 60;//PermanentMods might be able to be stripped/removed later, does it matter?
@@ -52,6 +53,9 @@ namespace ModifierSystem.Tests
             initialHealthCharacter = character.Stats.Health.CurrentHealth;
             initialHealthAlly = ally.Stats.Health.CurrentHealth;
             initialHealthEnemy = enemy.Stats.Health.CurrentHealth;
+            initialDamageCharacter = character.Stats.Damage.DamageSum();
+            initialDamageAlly = ally.Stats.Damage.DamageSum();
+            initialDamageEnemy = enemy.Stats.Damage.DamageSum();
         }
 
         [TearDown]
@@ -281,6 +285,39 @@ namespace ModifierSystem.Tests
                     allTagsModifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(allTagsModifier);
                     _modifierPrototypes.SetupModifierApplier(allTagsModifier);
+                }
+                {
+                    //Damage on kill
+                    var damageOnKillModifier = new Modifier("DamageOnKillTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.KillEvent);
+                    damageOnKillModifier.AddComponent(target);
+                    damageOnKillModifier.AddComponent(new InitComponent(apply));
+                    damageOnKillModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                }
+                {
+                    //Plain add damage permanently
+                    var addStatDamageModifier = new Modifier("AddStatDamageTest");
+                    var target = new TargetComponent(LegalTarget.Self);
+                    var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
+                    var apply = new ApplyComponent(effect, target);
+                    addStatDamageModifier.AddComponent(target);
+                    addStatDamageModifier.AddComponent(new InitComponent(apply));
+                    addStatDamageModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(addStatDamageModifier);
+                }
+                {
+                    //Damage on death
+                    var damageOnKillModifier = new Modifier("DamageOnDeathTest");
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionalTarget.Acter);
+                    var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
+                    damageOnKillModifier.AddComponent(target);
+                    damageOnKillModifier.AddComponent(new InitComponent(apply));
+                    damageOnKillModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(damageOnKillModifier);
                 }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.

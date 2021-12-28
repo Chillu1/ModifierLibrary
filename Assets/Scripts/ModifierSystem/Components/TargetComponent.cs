@@ -7,6 +7,7 @@ namespace ModifierSystem
 {
     public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent, ICloneable
     {
+        public ConditionalTarget ConditionalTarget { get; private set; }
         [CanBeNull] public Being Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
@@ -19,6 +20,16 @@ namespace ModifierSystem
                 Log.Error("Illegal target `None`", "modifiers");
 
             LegalTarget = legalTarget;
+            Applier = applier;
+        }
+
+        public TargetComponent(LegalTarget legalTarget, ConditionalTarget conditionalTarget, bool applier = false)
+        {
+            if(legalTarget == LegalTarget.None)
+                Log.Error("Illegal target `None`", "modifiers");
+
+            LegalTarget = legalTarget;
+            ConditionalTarget= conditionalTarget;
             Applier = applier;
         }
 
@@ -70,5 +81,15 @@ namespace ModifierSystem
         {
             return this.Copy();
         }
+    }
+
+    public enum ConditionalTarget
+    {
+        None = 0,
+        /// <summary>
+        ///     Owner
+        /// </summary>
+        Self = 1,
+        Acter = 2,
     }
 }
