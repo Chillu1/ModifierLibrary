@@ -90,5 +90,23 @@ namespace ModifierSystem.Tests
             Assert.True(character.Stats.Health.IsDead);
             Assert.True(enemy.Stats.Health.IsDead);
         }
+        
+        [Test]
+        public void ConditionalTimedDamageOnKillEffect()
+        {
+            var damageOnKillModifier = modifierPrototypes.GetItem("TimedDamageOnKillTest");
+            character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
+            character.AddModifier(damageOnKillModifier);
+            character.Attack(enemy);
+
+            Assert.True(enemy.Stats.Health.IsDead);//Kill
+            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//Increase in damage
+
+            character.Update(5.1f);//Buff expired
+
+            character.Attack(enemyDummies[0]);//Kill
+            Assert.True(enemyDummies[0].Stats.Health.IsDead);
+            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//No increase in damage
+        }
     }
 }

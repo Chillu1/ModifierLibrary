@@ -11,6 +11,7 @@ namespace ModifierSystem.Tests
         protected Being character;
         protected Being ally;
         protected Being enemy;
+        protected Being[] enemyDummies;
 
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
         protected double initialDamageCharacter, initialDamageAlly, initialDamageEnemy;
@@ -56,6 +57,15 @@ namespace ModifierSystem.Tests
             initialDamageCharacter = character.Stats.Damage.DamageSum();
             initialDamageAlly = ally.Stats.Damage.DamageSum();
             initialDamageEnemy = enemy.Stats.Damage.DamageSum();
+
+            enemyDummies = new Being[5];
+            for (int i = 0; i < 5; i++)
+            {
+                enemyDummies[0] = new Being(new BeingProperties()
+                {
+                    Id = "enemy", Health = 1, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1, UnitType = UnitType.Enemy
+                });
+            }
         }
 
         [TearDown]
@@ -316,6 +326,19 @@ namespace ModifierSystem.Tests
                     var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
                     damageOnKillModifier.AddComponent(target);
                     damageOnKillModifier.AddComponent(new InitComponent(apply));
+                    damageOnKillModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                }
+                {
+                    //Damage on kill
+                    var damageOnKillModifier = new Modifier("TimedDamageOnKillTest");
+                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
+                    var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
+                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.KillEvent);
+                    var cleanUp = new CleanUpComponent(apply);
+                    damageOnKillModifier.AddComponent(target);
+                    damageOnKillModifier.AddComponent(new InitComponent(apply));
+                    damageOnKillModifier.AddComponent(new TimeComponent(new RemoveComponent(damageOnKillModifier, cleanUp), 5));
                     damageOnKillModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(damageOnKillModifier);
                 }

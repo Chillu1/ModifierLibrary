@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageStatComponent : EffectComponent, IConditionEffectComponent
+    public class DamageStatComponent : IEffectComponent, IConditionEffectComponent
     {
         private DamageData[] DamageData { get; }
         private readonly ITargetComponent _targetComponent;
@@ -13,7 +13,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public override void Effect()
+        public void Effect()
         {
             _targetComponent.Target.ChangeDamageStat(DamageData);
         }

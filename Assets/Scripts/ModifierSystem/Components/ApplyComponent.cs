@@ -7,14 +7,14 @@ namespace ModifierSystem
     /// </summary>
     public class ApplyComponent : Component, IApplyComponent, ICleanUpComponent
     {
-        private bool IsConditionEvent { get; }
+        public bool IsConditionEvent { get; }
         private BeingConditionEvent ConditionEvent { get; }
 
-        private readonly EffectComponent _effectComponent;
+        private readonly IEffectComponent _effectComponent;
         private readonly ITargetComponent _targetComponent;
         //private readonly IValidatorComponent<object>[] _validatorComponents;
 
-        public ApplyComponent(EffectComponent effectComponent, ITargetComponent targetComponent)
+        public ApplyComponent(IEffectComponent effectComponent, ITargetComponent targetComponent)
         {
             _effectComponent = effectComponent;
             _targetComponent = targetComponent;
@@ -24,7 +24,7 @@ namespace ModifierSystem
             BeingConditionEvent conditionEvent = BeingConditionEvent.None)
         {
             IsConditionEvent = true;
-            _effectComponent = (EffectComponent)effectComponent;
+            _effectComponent = (IEffectComponent)effectComponent;
             _targetComponent = targetComponent;
             ConditionEvent = conditionEvent;
             Validate();

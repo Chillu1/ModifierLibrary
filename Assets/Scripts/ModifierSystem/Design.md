@@ -16,12 +16,14 @@
 
 Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* Should CleanUp remove buffs/upgrades, ex. on kill. We would need to record the amount, or store it in a different way
 * Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
 * More efficient way of saving timer data related to enum/id (not dict? but array of some sort?)
 * Stack & Refresh
 * Removing all modifiers from ModifierController wont remove the parmanent buffs & debuffs, make a function that does the opposite for these?
 * What to do with Positive/Negative status tags, how to automate positive? Check for positive value on stats, buffs, etc?
 * Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
+* Are all EffectComponents IConditionEffectComponent? No, because RemoveComponent isnt
 
   # Modifier
   

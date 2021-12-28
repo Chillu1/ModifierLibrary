@@ -19,6 +19,7 @@ namespace ModifierSystem
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }
+        [CanBeNull] private CleanUpComponent CleanUpComponent { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
 
@@ -89,6 +90,12 @@ namespace ModifierSystem
             {
                 Log.Error(Id+ " already has a apply component", "modifiers");
                 return;
+            }
+
+            if (applyComponent.IsConditionEvent)
+            {
+                SetupCleanUpComponent();
+                CleanUpComponent!.AddComponent((ApplyComponent)applyComponent);
             }
 
             ApplyComponent = applyComponent;
@@ -230,6 +237,11 @@ namespace ModifierSystem
             }
 
             return success;
+        }
+
+        private void SetupCleanUpComponent()
+        {
+            CleanUpComponent ??= new CleanUpComponent();
         }
 
         public object Clone()

@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public class ApplierComponent : EffectComponent//, IConditionalEffectComponent
+    public class ApplierComponent : IEffectComponent//, IConditionalEffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
@@ -14,7 +14,7 @@ namespace ModifierSystem
             TargetComponent = targetComponent;
         }
 
-        public override void Effect()
+        public void Effect()
         {
             //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
             var clonedModifier = (Modifier)Modifier.Clone();

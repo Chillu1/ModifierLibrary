@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class HealComponent : EffectComponent, IConditionEffectComponent
+    public class HealComponent : IEffectComponent, IConditionEffectComponent
     {
         public double Heal { get; private set; }
 
@@ -14,7 +14,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public override void Effect()
+        public void Effect()
         {
             _targetComponent.Target.Stats.Health.Heal(Heal);
         }

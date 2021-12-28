@@ -6,7 +6,7 @@ namespace ModifierSystem
     /// <summary>
     ///     LifeSteal before reduction (ignores resistances)
     /// </summary>
-    public class LifeStealComponent : EffectComponent, IConditionEffectComponent
+    public class LifeStealComponent : IEffectComponent, IConditionEffectComponent
     {
         //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Being class instead
         private DamageData[] Damage { get; }
@@ -24,7 +24,7 @@ namespace ModifierSystem
             SummedDamage = Damage.Sum(d => d.Damage);
         }
 
-        public override void Effect()
+        public void Effect()
         {
             _targetComponent.Target.Stats.Health.Heal(SummedDamage * Percentage);
         }

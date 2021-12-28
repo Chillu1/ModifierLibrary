@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusComponent : EffectComponent, IConditionEffectComponent
+    public class StatusComponent : IEffectComponent, IConditionEffectComponent
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
@@ -16,7 +16,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public override void Effect()
+        public void Effect()
         {
             //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
             _targetComponent.Target.ChangeStatusEffect(StatusEffect, Duration);

@@ -2,10 +2,8 @@ TODO RN:
 * Sort ideas by prio
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
-  * TargetComponent should take care of who's getting what, not the effect components?
-  * EffectCleanup (apply)
-  * OnHit
-* Make lifeSteal component part of actual baseProject.Being class instead 
+  * >>OnHit & some unit tests for fringe cases
+* >Make lifeSteal component part of actual baseProject.Being class instead 
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Stats StatusTag (stats change)

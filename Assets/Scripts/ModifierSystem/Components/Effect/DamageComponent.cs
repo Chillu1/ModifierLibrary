@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageComponent : EffectComponent, IConditionEffectComponent, IMetaEffect
+    public class DamageComponent : IEffectComponent, IConditionEffectComponent, IMetaEffect
     {
         private DamageData[] Damage { get; }
         private readonly ITargetComponent _targetComponent;
@@ -13,7 +13,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public override void Effect()
+        public void Effect()
         {
             //Log.Info(_getTarget().BaseBeing.Id);
             _targetComponent.Target.DealDamage(Damage, _targetComponent.Owner);
