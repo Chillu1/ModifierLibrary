@@ -391,6 +391,23 @@ namespace ModifierSystem.Tests
                     healOnHealModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(healOnHealModifier);
                 }
+                {
+                    //Stack attempt #1, damage increased per stack
+                    var dotStackModifier = new Modifier("DoTStackTest");
+                    var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                    var target = new TargetComponent(LegalTarget.Beings);
+                    var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffects.Add);
+                    var stack = new StackComponent(effect, WhenStackEffect.Always, 5);
+                    var apply = new ApplyComponent(effect, target);
+                    dotStackModifier.AddComponent(target);
+                    dotStackModifier.AddComponent(stack);
+                    dotStackModifier.AddComponent(new InitComponent(apply));
+                    dotStackModifier.AddComponent(new TimeComponent(effect, 2, true));
+                    dotStackModifier.AddComponent(new TimeComponent(new RemoveComponent(dotStackModifier), 10));
+                    dotStackModifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(dotStackModifier);
+                    _modifierPrototypes.SetupModifierApplier(dotStackModifier);
+                }
 
                 //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
                 //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");

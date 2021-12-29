@@ -185,11 +185,6 @@ namespace ModifierSystem
 
         public void CopyEvents(Modifier prototype)
         {
-            if(prototype.StackComponent != null)
-            {
-                //Log.Info("Clone "+Id);
-                StackComponent = new StackComponent((StackComponent)prototype.StackComponent);
-            }
             //this.event = prototype.event //or we will need to copy it over properly, with a new reference
         }
 

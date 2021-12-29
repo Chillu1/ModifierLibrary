@@ -59,22 +59,5 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.ContainsModifier(doTModifier));
             Assert.AreEqual(initialHealthEnemy-1-5-5-5, enemy.Stats.Health.CurrentHealth, Delta);
         }
-
-        /*[Test]
-        public void DoTStackingDamage()
-        {
-            var doTModifierApplier = modifierPrototypes.GetItem("StackingSpiderPoisonApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
-            //Log.Info(enemy.CurrentHealth);
-            character.Attack(enemy);//1 phys dmg, 5 poison dmg
-            character.Attack(enemy);//1 phys, stack
-            //Log.Info(enemy.CurrentHealth);
-            enemy.Update(2);//7 dmg
-
-            var doTModifier = modifierPrototypes.GetItem("StackingSpiderPoison");
-            Assert.True(enemy.ContainsModifier(doTModifier));
-            Assert.AreEqual(initialHealthEnemy-1-5-1-7, enemy.CurrentHealth, Delta);
-            //We could test for: amount of stacks, simulating the time (then damage taken)
-        }*/
     }
 }

@@ -1,21 +1,24 @@
+using System;
 using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageComponent : IEffectComponent, IConditionEffectComponent, IMetaEffect
+    public class DamageComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
     {
         private DamageData[] Damage { get; }
+        private DamageComponentStackEffects StackEffects { get; }
         private readonly ITargetComponent _targetComponent;
 
-        public DamageComponent(DamageData[] damage, ITargetComponent targetComponent)
+        public DamageComponent(DamageData[] damage, ITargetComponent targetComponent,
+            DamageComponentStackEffects stackEffects = DamageComponentStackEffects.None)
         {
             Damage = damage;
             _targetComponent = targetComponent;
+            StackEffects = stackEffects;
         }
 
         public void Effect()
         {
-            //Log.Info(_getTarget().BaseBeing.Id);
             _targetComponent.Target.DealDamage(Damage, _targetComponent.Owner);
         }
 
@@ -25,22 +28,51 @@ namespace ModifierSystem
                 (receiverLocal, acterLocal) => receiverLocal.DealDamage(Damage, acterLocal));
         }
 
-        public void MetaEffect(ChangeType changeType, double value)
+        public void StackEffect(int stacks, double value)
         {
-            switch (changeType)
+            switch (StackEffects)
             {
-                case ChangeType.None:
-                    Log.Error("Wrong ChangeType");
+                case DamageComponentStackEffects.Effect:
+                    Effect();
                     break;
-                case ChangeType.AdditiveIncrease:
-                    Damage[0].BaseDamage += value;
+                case DamageComponentStackEffects.Add:
+                    StackDamageEffect(data => data.BaseDamage += value);
                     break;
-                case ChangeType.Multiply:
-                    Damage[0].Multiplier += value;
+                case DamageComponentStackEffects.AddStacksBased:
+                    StackDamageEffect(data => data.BaseDamage += value*stacks);
                     break;
-                case ChangeType.EveryXStack:
+                case DamageComponentStackEffects.Multiply:
+                    StackDamageEffect(data => data.Multiplier += value);
                     break;
+                case DamageComponentStackEffects.MultiplyStacksBased:
+                    StackDamageEffect(data => data.Multiplier += value * stacks);
+                    break;
+                case DamageComponentStackEffects.OnXStacksAddElemental:
+                    //TODO
+                    //Damage[0].ElementData.?
+                    break;
+                default:
+                    Log.Error($"StackEffectType {StackEffects} unsupported for {GetType()}");
+                    return;
             }
+
+            void StackDamageEffect(Action<DamageData> action)
+            {
+                foreach (var data in Damage)
+                    action(data);
+            }
+        }
+
+        public enum DamageComponentStackEffects
+        {
+            None = 0,
+            Effect,
+            Add,
+            AddStacksBased,
+            Multiply,
+            MultiplyStacksBased,
+
+            OnXStacksAddElemental,
         }
     }
 }

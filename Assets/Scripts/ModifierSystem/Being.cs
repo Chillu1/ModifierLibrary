@@ -179,9 +179,9 @@ namespace ModifierSystem
         {
             BaseBeing.Heal(target.BaseBeing);
         }
-        public void Heal(double value, BaseBeing healer)
+        public void Heal(double value, BaseBeing healer, bool triggerEvents = true)
         {
-            BaseBeing.Heal(value, healer);
+            BaseBeing.Heal(value, healer, triggerEvents);
         }
 
         public void ChangeStat(Stat[] stats)

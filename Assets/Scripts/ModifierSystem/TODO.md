@@ -1,12 +1,11 @@
 TODO RN:  
 * Sort ideas by prio
+* >Have a go at stackComponent again
+    What to do with EveryXStacks mechanic? Aka prevent someone from removing & adding stacks to get the effect. Dont let it be removable/have a high MaxStacks
+    Prob dont give damage to all damageData in the whole array
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
-  * >>Some unit tests for fringe cases condition event
-     * >>OnHeal, heal yourself flat
-     * >>OnHeal, heal yourself 20%
-* >Make lifeSteal component part of actual baseProject.Being class instead 
-* >Have a go at stackComponent again
+* Make lifeSteal component part of actual baseProject.Being class instead
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Stats StatusTag (stats change)

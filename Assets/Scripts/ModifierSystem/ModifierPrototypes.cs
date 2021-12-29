@@ -39,13 +39,11 @@ namespace ModifierSystem
             var spiderPoisonTarget = new TargetComponent(LegalTarget.Self);
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var spiderPoisonEffect = new DamageComponent(damageData, spiderPoisonTarget);
-            var spiderPoisonStack = new StackComponent((data, value) => data[0].BaseDamage += value, 10);
             var spiderPoisonApply = new ApplyComponent(spiderPoisonEffect, spiderPoisonTarget);
             spiderPoisonModifier.AddComponent(new InitComponent(spiderPoisonApply));//Apply first stack/damage on init
             spiderPoisonModifier.AddComponent(spiderPoisonTarget);
             spiderPoisonModifier.AddComponent(new TimeComponent(spiderPoisonEffect, 2, true));//Every 2 seconds, deal 5 damage
             spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));//Remove after 10 secs
-            spiderPoisonModifier.AddComponent(spiderPoisonStack);
             _modifierPrototypes.AddModifier(spiderPoisonModifier);
             _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier, LegalTarget.DefaultOffensive);
 
