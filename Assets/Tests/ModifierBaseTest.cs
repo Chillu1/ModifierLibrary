@@ -88,30 +88,6 @@ namespace ModifierSystem.Tests
 
             private void SetupModifierPrototypes()
             {
-                //Super simple example modifier:
-                //Single 100 damage ability on target, (lingers 0.5s, but no actual duration)
-                //On Init, Apply It (deal damage), remove 0.5 seconds after from manager
-
-                {
-                    //Absolute Modifier Setup Template
-                    var modifier = new Modifier("DoTStackRefreshTest");
-                    var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
-                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.AttackEvent);
-                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
-                    var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffects.Add);
-                    var apply = new ApplyComponent(effect, target, conditionData);
-                    var cleanUp = new CleanUpComponent(apply);
-                    var timeRemove = new TimeComponent(new RemoveComponent(modifier, cleanUp), 10);
-                    modifier.AddComponent(target);
-                    modifier.AddComponent(timeRemove);
-                    modifier.AddComponent(new InitComponent(apply));
-                    modifier.AddComponent(new TimeComponent(effect, 2, true));
-                    modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 5 }));
-                    modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
-                    modifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(modifier);
-                    _modifierPrototypes.SetupModifierApplier(modifier);
-                }
                 {
                     //IceBoltDebuff
                     var modifier = new Modifier("IceBoltTest");
@@ -119,8 +95,8 @@ namespace ModifierSystem.Tests
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(modifier);
@@ -406,7 +382,7 @@ namespace ModifierSystem.Tests
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(new TimeComponent(effect, 2, true));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
-                    modifier.AddComponent(new StackComponent(effect, WhenStackEffect.Always, 5));
+                    modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 5 }));
                     modifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(modifier);
                     _modifierPrototypes.SetupModifierApplier(modifier);

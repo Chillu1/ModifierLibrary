@@ -36,16 +36,16 @@ namespace ModifierSystem
                     Effect();
                     break;
                 case DamageComponentStackEffects.Add:
-                    StackDamageEffect(data => data.BaseDamage += value);
+                    Damage[0].BaseDamage += value;
                     break;
                 case DamageComponentStackEffects.AddStacksBased:
-                    StackDamageEffect(data => data.BaseDamage += value*stacks);
+                    Damage[0].BaseDamage += value * stacks;
                     break;
                 case DamageComponentStackEffects.Multiply:
-                    StackDamageEffect(data => data.Multiplier += value);
+                    Damage[0].Multiplier += value;
                     break;
                 case DamageComponentStackEffects.MultiplyStacksBased:
-                    StackDamageEffect(data => data.Multiplier += value * stacks);
+                    Damage[0].Multiplier += value * stacks;
                     break;
                 case DamageComponentStackEffects.OnXStacksAddElemental:
                     //TODO
@@ -55,23 +55,18 @@ namespace ModifierSystem
                     Log.Error($"StackEffectType {StackEffects} unsupported for {GetType()}");
                     return;
             }
-
-            void StackDamageEffect(Action<DamageData> action)
-            {
-                foreach (var data in Damage)
-                    action(data);
-            }
         }
 
         public enum DamageComponentStackEffects
         {
             None = 0,
             Effect,
-            Add,
+            Add,//TODO Add to all damages?
             AddStacksBased,
-            Multiply,
+            Multiply,//TODO Multiply all damages?
             MultiplyStacksBased,
 
+            //DamageComponent specific
             OnXStacksAddElemental,
         }
     }

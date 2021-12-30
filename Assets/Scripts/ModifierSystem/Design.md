@@ -15,35 +15,68 @@
 | ComboRecipe      | Recipe (condition) for a ComboModifier to be added, possible conditions: specific modifiers (ID), ElementalData or Stats           |
 
 # Rules/Ways of doing stuff
-Should be initiated directly into modifier:
+Only components that should be initiated directly into modifier:
 * init
 * timeEffect
 * stack
 * refresh
 
-What interacts with what, component relations?
-Remove is Effect, Effect is not Remove
-% = Optional
+## Creating a new modifier
+![ModifierFlowChart](ModifierFlowChart.png "Modifier Flow Chart")
+
+## What interacts with what, component relations?   
+Green = Needed  
+Yellow & Brown = Needed Choice (or both)  
+Blue = Optional  
+Blank arrow = Optional  
+
+![Components](ModifierComponents.png "Components")
+
+Must have: Target, Effect    
+One of: Time/(Apply+Init)  
+Optional: CleanUp, Stack, Refresh  
+
+Remove is Effect, Effect is not Remove  
+% = Optional  
 [] = params
 
-Target
-Effect -> Target
-Apply -> Effect                 (-> Target) & Target
-Init -> Apply[]                 (-> Effect (-> Target) & Target)
-CleanUp -> Apply                (-> Effect (-> Target) & Target)
-Remove -> Modifier & CleanUp    (-> Apply (-> Effect (-> Target) & Target))
-Time -> Effect                  (-> Target)
-Stack -> Effect                 (-> Target)
-Refresh -> Time -> Remove       (-> Modifier & CleanUp (-> Apply (-> Effect (-> Target) & Target)))
+* Target
+* Effect -> Target
+* Apply -> Effect                 (-> Target) & Target
+* Init -> Apply[]                 (-> Effect (-> Target) & Target)
+* CleanUp -> Apply                (-> Effect (-> Target) & Target)
+* Remove -> Modifier & CleanUp%   (-> Apply (-> Effect (-> Target) & Target))
+* Time -> Effect                  (-> Target)
+* Stack -> Effect                 (-> Target)
+* Refresh -> Time -> Remove       (-> Modifier & CleanUp% (-> Apply (-> Effect (-> Target) & Target)))
 
-Old:
-InitComponent -> ApplyComponent -> EffectComponent    
-TimeComponent -> ApplyComponent? -> EffectComponent   
-TimeComponent -> RemoveComponent
+Direct Order:  
+Modifier, Data,  
+Target, Effect, Apply, Init, CleanUp, Remove, Time, Stack, Refresh    
+Ideal order:  
+Modifier, Data.  
+Target, Effect, Apply, CleanUp, Remove, TimeRemove, Stack, Refresh.  
+Init, TimeEffect, Stack, Refresh   
+
+Making a modifier decision flow chart:  
+* Duration based
+  * TimeComponentEffect
+  * Refreshable duration
+    * RefreshComponent
+* Finite duration
+  * TimeComponentRemove
+* OnStart/Init
+  * Apply & Init
+* StackableEffect
+  * StackComponent
+ConditonBased
+
+Applier
 
 
 # Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* What more mechanics can refreshComponent have?
 * Recursion problem, when a condition event is triggered, there's a chance it will be triggered again by the same call. Disabling them fully is kinda uncool, since it makes some nice interactions impossible
 * Do something with Being not being accepted in Heal, etc
 * Single/X use condition modifiers, how? RemoveComponent can hold X stacks, lowering down to 0, then actual effect is triggered

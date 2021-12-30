@@ -39,11 +39,10 @@ namespace ModifierSystem
         private void DoTModifier()
         {
             var modifier = new Modifier("DoT");
-            var target = new TargetComponent();
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+            var target = new TargetComponent();
             var effect = new DamageComponent(damageData, target);
             var apply = new ApplyComponent(effect, target);
-            var removeEffect = new RemoveComponent(modifier);
             var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);

@@ -60,10 +60,10 @@ namespace ModifierSystem
             if(_effectComponent != null)
             {
                 //TODO Temp solution to remove component not having the proper signature, we can remove the anonymous delegate, somehow
-                BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, delegate { _effectComponent.Effect(); });
+                ConditionEvent.SetupBeingEvent(_targetComponent.Target, delegate { _effectComponent.Effect(); });
             }
             else if (_conditionEffectComponent != null)
-                BeingEventHelper.SetupBeingEvent(_targetComponent.Target, ConditionEvent, _conditionEffectComponent.Effect);
+                ConditionEvent.SetupBeingEvent(_targetComponent.Target, _conditionEffectComponent.Effect);
             else
                 Log.Error("Both effect components are null");
         }
@@ -76,10 +76,10 @@ namespace ModifierSystem
             if(_effectComponent != null)
             {
                 //TODO Temp solution?
-                BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, delegate { _effectComponent.Effect(); });
+                ConditionEvent.RemoveBeingEvent(_targetComponent.Target, delegate { _effectComponent.Effect(); });
             }
             else if (_conditionEffectComponent != null)
-                BeingEventHelper.RemoveBeingEvent(_targetComponent.Target, ConditionEvent, _conditionEffectComponent.Effect);
+                ConditionEvent.RemoveBeingEvent(_targetComponent.Target, _conditionEffectComponent.Effect);
             else
                 Log.Error("Both effect components are null");
         }

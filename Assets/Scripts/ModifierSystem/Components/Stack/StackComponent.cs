@@ -5,26 +5,14 @@ namespace ModifierSystem
 {
     public class StackComponent : Component, IStackComponent
     {
-        //Cooldown?
-        public IStackEffectComponent StackEffectComponent { get; }
+        [NotNull] public IStackEffectComponent StackEffectComponent { get; }
         public WhenStackEffect WhenStackEffect { get; }
         public double Value { get; }
         public int OnXStacks { get; }
 
         private int Stacks { get; set; }
         private int MaxStacks { get; set; }
-
-        public StackComponent(IStackEffectComponent stackEffectComponent, WhenStackEffect whenStackEffect = WhenStackEffect.Always,
-            double value = 0, int onXStacks = -1, int maxStacks = 10)
-        {
-            StackEffectComponent = stackEffectComponent;
-            WhenStackEffect = whenStackEffect;
-            Value = value;
-            OnXStacks = onXStacks;
-            MaxStacks = maxStacks;
-
-            //Validate();//TODO
-        }
+        private bool Finished { get; set; }
 
         public StackComponent(StackComponentProperties properties)
         {
@@ -39,7 +27,7 @@ namespace ModifierSystem
 
         public void Stack()
         {
-            if (Stacks + 1 >= MaxStacks)
+            if (Finished || Stacks + 1 >= MaxStacks)
                 return;
             //Log.Verbose($"Stacks: {Stacks}/{MaxStacks}", "modifiers");
 
@@ -47,22 +35,31 @@ namespace ModifierSystem
             switch (WhenStackEffect)
             {
                 case WhenStackEffect.Always:
-                    StackEffectComponent.StackEffect(Stacks, Value);
+                    TriggerStackEffect();
                     break;
                 case WhenStackEffect.OnXStacks:
                     if (Stacks == OnXStacks)
                     {
-                        StackEffectComponent.StackEffect(Stacks, Value);
-                        ResetStacks();
+                        TriggerStackEffect();
+                        Finished = true;
+                        //TODO Remove? Trigger TimeComponent Remove timer?
                     }
                     break;
                 case WhenStackEffect.EveryXStacks:
-                    if (Stacks % OnXStacks == 0)
-                        StackEffectComponent.StackEffect(Stacks, Value);
+                    if (Stacks == OnXStacks)
+                    {
+                        TriggerStackEffect();
+                        ResetStacks();
+                    }
                     break;
                 case WhenStackEffect.None:
                     Log.Error($"StackEffectType {WhenStackEffect.None} illegal");
                     return;
+            }
+
+            void TriggerStackEffect()
+            {
+                StackEffectComponent.StackEffect(Stacks, Value);
             }
         }
 
@@ -71,7 +68,7 @@ namespace ModifierSystem
         /// </summary>
         public void RemoveStack()
         {
-            if (Stacks <= 0)
+            if (Finished || Stacks <= 0)
                 return;
 
             Stacks--;
@@ -91,20 +88,6 @@ namespace ModifierSystem
         public void ResetStacks()
         {
             Stacks = 0;
-        }
-    }
-
-    public class StackComponentProperties
-    {
-        [NotNull] public IStackEffectComponent StackEffectComponent { get; }
-        public WhenStackEffect WhenStackEffect = WhenStackEffect.Always;
-        public double Value = 0;
-        public int OnXStacks = -1;
-        public int MaxStacks = 10;
-
-        public StackComponentProperties([NotNull] IStackEffectComponent stackEffectComponent)
-        {
-            StackEffectComponent = stackEffectComponent;
         }
     }
 
