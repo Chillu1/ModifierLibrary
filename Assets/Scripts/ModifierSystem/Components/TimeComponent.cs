@@ -6,7 +6,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Responsible for everything timing related, interval, duration, etc
     /// </summary>
-    public class TimeComponent : Component, ITimeComponent
+    public class TimeComponent : Component, ITimeComponent, IRefreshEffectComponent
     {
         public bool IsRemove { get; }
         private IEffectComponent EffectComponent { get; }
@@ -50,6 +50,22 @@ namespace ModifierSystem
                     _timer = 0;
                     _finished = false;
                 }
+            }
+        }
+
+        public void RefreshEffect(RefreshEffectType refreshEffectType)
+        {
+            switch (refreshEffectType)
+            {
+                case RefreshEffectType.RefreshDuration:
+                    RefreshTimer();
+                    break;
+                //case RefreshEffectType.Effect:
+                //    EffectComponent.Effect();
+                //    break;
+                default:
+                    Log.Error($"Unsupported refresh effect type {refreshEffectType}");
+                    return;
             }
         }
 

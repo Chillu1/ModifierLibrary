@@ -133,7 +133,7 @@ namespace ModifierSystem
 
         public void AddComponent(IRefreshComponent refreshComponent)
         {
-            if (StackComponent != null)
+            if (RefreshComponent != null)
             {
                 Log.Error(Id+ " already has a refresh component", "modifiers");
                 return;

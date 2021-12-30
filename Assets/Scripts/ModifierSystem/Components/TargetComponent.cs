@@ -23,15 +23,15 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public TargetComponent(LegalTarget legalTarget, ConditionTarget conditionTarget, bool applier = false)
+        public TargetComponent(LegalTarget legalTarget, ConditionData conditionData, bool applier = false)
         {
             if(legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
-            if(conditionTarget == ConditionTarget.None)
+            if(conditionData.ConditionTarget == ConditionTarget.None)
                 Log.Error("Illegal conditionalTarget `None`", "modifiers");
 
             LegalTarget = legalTarget;
-            ConditionTarget= conditionTarget;
+            ConditionTarget = conditionData.ConditionTarget;
             Applier = applier;
         }
 
@@ -102,17 +102,5 @@ namespace ModifierSystem
         {
             return this.Copy();
         }
-    }
-
-    public enum ConditionTarget
-    {
-        None = 0,
-        /// <summary>
-        ///     Owner
-        /// </summary>
-        Self = 1,
-        Acter = 2,
-        SelfSelf = 3,
-        ActerActer = 4,
     }
 }

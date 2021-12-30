@@ -22,24 +22,24 @@ namespace ModifierSystem
             Validate();
         }
         public ApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
-            BeingConditionEvent conditionEvent = BeingConditionEvent.None)
+            ConditionData conditionData = default)
         {
             IsConditionEvent = true;
             _conditionEffectComponent = effectComponent;
             _targetComponent = targetComponent;
-            ConditionEvent = conditionEvent;
+            ConditionEvent = conditionData.BeingConditionEvent;
             Validate();
         }
         /// <summary>
         ///     Special constructor for one-off/one-time use modifiers
         /// </summary>
         public ApplyComponent(RemoveComponent effectComponent, ITargetComponent targetComponent,
-            BeingConditionEvent conditionEvent = BeingConditionEvent.None)
+            ConditionData conditionData = default)
         {
             IsConditionEvent = true;
             _effectComponent = effectComponent;
             _targetComponent = targetComponent;
-            ConditionEvent = conditionEvent;
+            ConditionEvent = conditionData.BeingConditionEvent;
             Validate();
         }
 

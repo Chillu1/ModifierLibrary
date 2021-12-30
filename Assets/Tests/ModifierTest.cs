@@ -59,5 +59,19 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.ContainsModifier(doTModifier));
             Assert.AreEqual(initialHealthEnemy-1-5-5-5, enemy.Stats.Health.CurrentHealth, Delta);
         }
+
+        [Test]
+        public void DoTRefresh()
+        {
+            var doTModifierApplier = modifierPrototypes.GetItem("DoTRefreshTestApplier");
+            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            var doTModifier = modifierPrototypes.GetItem("DoTRefreshTest");
+            character.Attack(enemy);
+            Assert.True(enemy.ContainsModifier(doTModifier));
+            enemy.Update(8);//2 seconds left
+            character.Attack(enemy);//Refresh
+            enemy.Update(6);//4 seconds left
+            Assert.True(enemy.ContainsModifier(doTModifier));
+        }
     }
 }

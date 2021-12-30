@@ -93,192 +93,190 @@ namespace ModifierSystem.Tests
                 //On Init, Apply It (deal damage), remove 0.5 seconds after from manager
 
                 {
+                    //Absolute Modifier Setup Template
+                    var modifier = new Modifier("DoTStackRefreshTest");
+                    var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.AttackEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
+                    var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffects.Add);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var cleanUp = new CleanUpComponent(apply);
+                    var timeRemove = new TimeComponent(new RemoveComponent(modifier, cleanUp), 10);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(timeRemove);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new TimeComponent(effect, 2, true));
+                    modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 5 }));
+                    modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
+                }
+                {
                     //IceBoltDebuff
-                    var iceBoltModifier = new Modifier("IceBoltTest");
+                    var modifier = new Modifier("IceBoltTest");
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    iceBoltModifier.AddComponent(new InitComponent(apply));
-                    iceBoltModifier.AddComponent(target);
-                    iceBoltModifier.AddComponent(new TimeComponent(new RemoveComponent(iceBoltModifier)));
-                    iceBoltModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(iceBoltModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
                     //Apply on attack
-                    _modifierPrototypes.SetupModifierApplier(iceBoltModifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
-                    var spiderPoisonModifier = new Modifier("SpiderPoisonTest");
+                    var modifier = new Modifier("SpiderPoisonTest");
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    spiderPoisonModifier.AddComponent(new InitComponent(apply));
-                    spiderPoisonModifier.AddComponent(target);
-                    spiderPoisonModifier.AddComponent(new TimeComponent(effect, 2, true));
-                    spiderPoisonModifier.AddComponent(new TimeComponent(new RemoveComponent(spiderPoisonModifier), 10));
-                    spiderPoisonModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(spiderPoisonModifier);
-                    _modifierPrototypes.SetupModifierApplier(spiderPoisonModifier);
-                }
-                {
-                    //RefreshableCobraVenom, removed after 10 seconds
-                    //-Refresh = refreshes duration (timer)
-                    //TODO -Refresh = refreshes duration (timer) & increased duration by flat 10%
-                    //TODO -Refresh = refreshes duration (timer) & intensify effect?
-                    var cobraVenomModifier = new Modifier("CobraVenomTest");
-                    var target = new TargetComponent();
-                    var damageData = new[]
-                        { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 5, 20)) };
-                    var effect = new DamageComponent(damageData, target);
-                    var time = new TimeComponent(new RemoveComponent(cobraVenomModifier), 10);
-                    var refresh = new RefreshComponent(time);
-                    var apply = new ApplyComponent(effect, target);
-                    cobraVenomModifier.AddComponent(new InitComponent(apply)); //Apply first stack/damage on init
-                    cobraVenomModifier.AddComponent(target);
-                    cobraVenomModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
-                    cobraVenomModifier.AddComponent(time); //Remove after 10 secs
-                    cobraVenomModifier.AddComponent(refresh);
-                    cobraVenomModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(cobraVenomModifier);
-                    _modifierPrototypes.SetupModifierApplier(cobraVenomModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 2, true));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //PassiveSelfHeal
-                    var selfHealModifier = new Modifier("PassiveSelfHealTest");
+                    var modifier = new Modifier("PassiveSelfHealTest");
                     var target = new TargetComponent();
                     var effect = new HealComponent(10, target);
                     var apply = new ApplyComponent(effect, target);
-                    selfHealModifier.AddComponent(new InitComponent(apply));
-                    selfHealModifier.AddComponent(target);
-                    selfHealModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(selfHealModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
                     //SetupModifierApplier(selfHealModifier, LegalTarget.Self);
                 }
                 {
-                    var allyHealModifier = new Modifier("AllyHealTest");
+                    var modifier = new Modifier("AllyHealTest");
                     var target = new TargetComponent();
                     var effect = new HealComponent(10, target);
                     var apply = new ApplyComponent(effect, target);
-                    allyHealModifier.AddComponent(new InitComponent(apply));
-                    allyHealModifier.AddComponent(target);
-                    allyHealModifier.AddComponent(new TimeComponent(new RemoveComponent(allyHealModifier)));
-                    allyHealModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(allyHealModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
-                    _modifierPrototypes.SetupModifierApplier(allyHealModifier, LegalTarget.DefaultFriendly);
+                    _modifierPrototypes.SetupModifierApplier(modifier, LegalTarget.DefaultFriendly);
                 }
                 {
                     //BasicPoison, removed after 10 seconds
-                    var poisonModifier = new Modifier("PoisonTest");
+                    var modifier = new Modifier("PoisonTest");
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    poisonModifier.AddComponent(new InitComponent(apply)); //Apply damage on init
-                    poisonModifier.AddComponent(target);
-                    poisonModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
-                    poisonModifier.AddComponent(new TimeComponent(new RemoveComponent(poisonModifier), 10)); //Remove after 10 secs
-                    poisonModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(poisonModifier);
-                    _modifierPrototypes.SetupModifierApplier(poisonModifier);
+                    modifier.AddComponent(new InitComponent(apply)); //Apply damage on init
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //BasicBleed, removed after 10 seconds
-                    var bleedModifier = new Modifier("BleedTest");
+                    var modifier = new Modifier("BleedTest");
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    bleedModifier.AddComponent(new InitComponent(apply)); //Apply damage on init
-                    bleedModifier.AddComponent(target);
-                    bleedModifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
-                    bleedModifier.AddComponent(new TimeComponent(new RemoveComponent(bleedModifier), 10)); //Remove after 10 secs
-                    bleedModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(bleedModifier);
-                    _modifierPrototypes.SetupModifierApplier(bleedModifier);
+                    modifier.AddComponent(new InitComponent(apply)); //Apply damage on init
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //MovementSpeedOfCat, removed after 10 seconds
-                    var movementSpeedOfCatModifier = new Modifier("MovementSpeedOfCatTest");
+                    var modifier = new Modifier("MovementSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, target);
                     var apply = new ApplyComponent(effect, target);
-                    movementSpeedOfCatModifier.AddComponent(new InitComponent(apply)); //Apply stat on init
-                    movementSpeedOfCatModifier.AddComponent(target);
-                    movementSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(movementSpeedOfCatModifier), 10)); //Remove after 10 secs
-                    movementSpeedOfCatModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(movementSpeedOfCatModifier);
+                    modifier.AddComponent(new InitComponent(apply)); //Apply stat on init
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //AttackSpeedOfCatTest, removed after 10 seconds
-                    var attackSpeedOfCatModifier = new Modifier("AttackSpeedOfCatTest");
+                    var modifier = new Modifier("AttackSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, target);
                     var apply = new ApplyComponent(effect, target);
-                    attackSpeedOfCatModifier.AddComponent(new InitComponent(apply)); //Apply stat on init
-                    attackSpeedOfCatModifier.AddComponent(target);
-                    attackSpeedOfCatModifier.AddComponent(new TimeComponent(new RemoveComponent(attackSpeedOfCatModifier), 10)); //Remove after 10 secs
-                    attackSpeedOfCatModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(attackSpeedOfCatModifier);
+                    modifier.AddComponent(new InitComponent(apply)); //Apply stat on init
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Disarm modifier
-                    var disarmModifier = new Modifier("DisarmModifierTest");
+                    var modifier = new Modifier("DisarmModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Disarm, 2f, target);
                     var apply = new ApplyComponent(effect, target);
-                    disarmModifier.AddComponent(new InitComponent(apply));
-                    disarmModifier.AddComponent(target);
-                    disarmModifier.AddComponent(new TimeComponent(new RemoveComponent(disarmModifier)));
-                    disarmModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(disarmModifier);
-                    _modifierPrototypes.SetupModifierApplier(disarmModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //Cast modifier
-                    var silenceModifier = new Modifier("SilenceModifierTest");
+                    var modifier = new Modifier("SilenceModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Silence, 2f, target);
                     var apply = new ApplyComponent(effect, target);
-                    silenceModifier.AddComponent(new InitComponent(apply));
-                    silenceModifier.AddComponent(target);
-                    silenceModifier.AddComponent(new TimeComponent(new RemoveComponent(silenceModifier)));
-                    silenceModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(silenceModifier);
-                    _modifierPrototypes.SetupModifierApplier(silenceModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //Root timed modifier (enigma Q)
-                    var timedRootModifier = new Modifier("RootTimedModifierTest");
+                    var modifier = new Modifier("RootTimedModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Root, 0.1f, target);
                     var apply = new ApplyComponent(effect, target);
-                    timedRootModifier.AddComponent(new InitComponent(apply));
-                    timedRootModifier.AddComponent(target);
-                    timedRootModifier.AddComponent(new TimeComponent(effect, 1, true));
-                    timedRootModifier.AddComponent(new TimeComponent(new RemoveComponent(timedRootModifier), 10));
-                    timedRootModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(timedRootModifier);
-                    _modifierPrototypes.SetupModifierApplier(timedRootModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 1, true));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //Delayed silence modifier
-                    var delayedSilenceModifier = new Modifier("DelayedSilenceModifierTest");
+                    var modifier = new Modifier("DelayedSilenceModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Silence, 1, target);
-                    delayedSilenceModifier.AddComponent(target);
-                    delayedSilenceModifier.AddComponent(new TimeComponent(effect, 1));
-                    delayedSilenceModifier.AddComponent(new TimeComponent(new RemoveComponent(delayedSilenceModifier), 2));
-                    delayedSilenceModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(delayedSilenceModifier);
-                    _modifierPrototypes.SetupModifierApplier(delayedSilenceModifier);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 1));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 2));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //All possible tags modifiers
-                    var allTagsModifier = new Modifier("ManyTagsTest");
+                    var modifier = new Modifier("ManyTagsTest");
                     var target = new TargetComponent();
                     var damageData = new[]
                     {
@@ -288,135 +286,147 @@ namespace ModifierSystem.Tests
                     };
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
-                    allTagsModifier.AddComponent(new InitComponent(apply));
-                    allTagsModifier.AddComponent(target);
-                    allTagsModifier.AddComponent(new TimeComponent(effect, 2, true));
-                    allTagsModifier.AddComponent(new TimeComponent(new RemoveComponent(allTagsModifier), 10));
-                    allTagsModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(allTagsModifier);
-                    _modifierPrototypes.SetupModifierApplier(allTagsModifier);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new TimeComponent(effect, 2, true));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
                     //Damage on kill
-                    var damageOnKillModifier = new Modifier("DamageOnKillTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
+                    var modifier = new Modifier("DamageOnKillTest");
+                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.KillEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.KillEvent);
-                    damageOnKillModifier.AddComponent(target);
-                    damageOnKillModifier.AddComponent(new InitComponent(apply));
-                    damageOnKillModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Plain add damage permanently
-                    var addStatDamageModifier = new Modifier("AddStatDamageTest");
+                    var modifier = new Modifier("AddStatDamageTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target);
-                    addStatDamageModifier.AddComponent(target);
-                    addStatDamageModifier.AddComponent(new InitComponent(apply));
-                    addStatDamageModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(addStatDamageModifier);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Damage on death
-                    var damageOnKillModifier = new Modifier("DamageOnDeathTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Acter);
+                    var modifier = new Modifier("DamageOnDeathTest");
+                    var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
-                    damageOnKillModifier.AddComponent(target);
-                    damageOnKillModifier.AddComponent(new InitComponent(apply));
-                    damageOnKillModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Timed damage on kill
-                    var damageOnKillModifier = new Modifier("TimedDamageOnKillTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
+                    var modifier = new Modifier("TimedDamageOnKillTest");
+                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.KillEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.KillEvent);
+                    var apply = new ApplyComponent(effect, target, conditionData);
                     var cleanUp = new CleanUpComponent(apply);
-                    damageOnKillModifier.AddComponent(target);
-                    damageOnKillModifier.AddComponent(new InitComponent(apply));
-                    damageOnKillModifier.AddComponent(new TimeComponent(new RemoveComponent(damageOnKillModifier, cleanUp), 5));
-                    damageOnKillModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier, cleanUp), 5));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Thorns on hit
-                    var damageOnKillModifier = new Modifier("ThornsOnHitTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Acter);
+                    var modifier = new Modifier("ThornsOnHitTest");
+                    var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.HitEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(5, DamageType.Physical)}, target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.HitEvent);
-                    damageOnKillModifier.AddComponent(target);
-                    damageOnKillModifier.AddComponent(new InitComponent(apply));
-                    damageOnKillModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(damageOnKillModifier);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
                     //Heal on death, once
-                    var healOnDeathModifier = new Modifier("HealOnDeathTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.Self);
+                    var modifier = new Modifier("HealOnDeathTest");
+                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.DeathEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealComponent(10, target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.DeathEvent);
+                    var apply = new ApplyComponent(effect, target, conditionData);
                     var cleanUp = new CleanUpComponent(apply);
-                    var remove = new RemoveComponent(healOnDeathModifier, cleanUp);
-                    var applyRemoval = new ApplyComponent(remove, target, BeingConditionEvent.DeathEvent);
-                    healOnDeathModifier.AddComponent(target);
-                    healOnDeathModifier.AddComponent(new InitComponent(apply, applyRemoval));
-                    healOnDeathModifier.AddComponent(apply);
-                    healOnDeathModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(healOnDeathModifier);
+                    var removeEffect = new RemoveComponent(modifier, cleanUp);
+                    var applyRemoval = new ApplyComponent(removeEffect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply, applyRemoval));
+                    modifier.AddComponent(apply);
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Heal stat based
-                    var healStatBasedModifier = new Modifier("HealStatBasedTest");
+                    var modifier = new Modifier("HealStatBasedTest");
                     var target = new TargetComponent(LegalTarget.Beings);
                     var effect = new HealStatBasedComponent(target);
                     var apply = new ApplyComponent(effect, target);
-                    healStatBasedModifier.AddComponent(target);
-                    healStatBasedModifier.AddComponent(new InitComponent(apply));
-                    healStatBasedModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(healStatBasedModifier);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Heal yourself on healing someone else
-                    var healOnHealModifier = new Modifier("HealOnHealTest");
-                    var target = new TargetComponent(LegalTarget.Beings, ConditionTarget.SelfSelf);
+                    var modifier = new Modifier("HealOnHealTest");
+                    var conditionData = new ConditionData(ConditionTarget.SelfSelf, BeingConditionEvent.HealEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealStatBasedComponent(target);
-                    var apply = new ApplyComponent(effect, target, BeingConditionEvent.HealEvent);
-                    healOnHealModifier.AddComponent(target);
-                    healOnHealModifier.AddComponent(new InitComponent(apply));
-                    healOnHealModifier.FinishSetup();
-                    _modifierPrototypes.AddModifier(healOnHealModifier);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
                 }
                 {
                     //Stack attempt #1, damage increased per stack
-                    var dotStackModifier = new Modifier("DoTStackTest");
+                    var modifier = new Modifier("DoTStackTest");
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var target = new TargetComponent(LegalTarget.Beings);
                     var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffects.Add);
-                    var stack = new StackComponent(effect, WhenStackEffect.Always, 5);
                     var apply = new ApplyComponent(effect, target);
-                    dotStackModifier.AddComponent(target);
-                    dotStackModifier.AddComponent(stack);
-                    dotStackModifier.AddComponent(new InitComponent(apply));
-                    dotStackModifier.AddComponent(new TimeComponent(effect, 2, true));
-                    dotStackModifier.AddComponent(new TimeComponent(new RemoveComponent(dotStackModifier), 10));
-                    dotStackModifier.FinishSetup(damageData);
-                    _modifierPrototypes.AddModifier(dotStackModifier);
-                    _modifierPrototypes.SetupModifierApplier(dotStackModifier);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new TimeComponent(effect, 2, true));
+                    modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                    modifier.AddComponent(new StackComponent(effect, WhenStackEffect.Always, 5));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
                 }
-
-                //On apply/init, add attackSpeed & speed buffs, after 5 seconds, remove buff.
-                //var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
-                //var aspectOfTheCatBuff = new StatComponent( /*5 speed & 5 attackSpeed*/);
-                //aspectOfTheCatModifier.AddComponent(new TimeComponent(5, new RemoveComponent(aspectOfTheCatModifier)));
-                //aspectOfTheCatModifier.AddComponent(new InitComponent(new ApplyComponent(aspectOfTheCatBuff)));
-
-
-                //Graphics-, Audio-, Component, etc, whatever
+                {
+                    //Refresh attempt #1, refresh duration
+                    var modifier = new Modifier("DoTRefreshTest");
+                    var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                    var target = new TargetComponent(LegalTarget.Beings);
+                    var effect = new DamageComponent(damageData, target);
+                    var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(timeRemove);
+                    modifier.AddComponent(new InitComponent(new ApplyComponent(effect, target)));
+                    modifier.AddComponent(new TimeComponent(effect, 2, true));
+                    modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
+                    modifier.FinishSetup(damageData);
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
+                }
             }
 
             [CanBeNull]

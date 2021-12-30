@@ -14,6 +14,34 @@
 | ComboModifier    | Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats |
 | ComboRecipe      | Recipe (condition) for a ComboModifier to be added, possible conditions: specific modifiers (ID), ElementalData or Stats           |
 
+# Rules/Ways of doing stuff
+Should be initiated directly into modifier:
+* init
+* timeEffect
+* stack
+* refresh
+
+What interacts with what, component relations?
+Remove is Effect, Effect is not Remove
+% = Optional
+[] = params
+
+Target
+Effect -> Target
+Apply -> Effect                 (-> Target) & Target
+Init -> Apply[]                 (-> Effect (-> Target) & Target)
+CleanUp -> Apply                (-> Effect (-> Target) & Target)
+Remove -> Modifier & CleanUp    (-> Apply (-> Effect (-> Target) & Target))
+Time -> Effect                  (-> Target)
+Stack -> Effect                 (-> Target)
+Refresh -> Time -> Remove       (-> Modifier & CleanUp (-> Apply (-> Effect (-> Target) & Target)))
+
+Old:
+InitComponent -> ApplyComponent -> EffectComponent    
+TimeComponent -> ApplyComponent? -> EffectComponent   
+TimeComponent -> RemoveComponent
+
+
 # Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
 * Recursion problem, when a condition event is triggered, there's a chance it will be triggered again by the same call. Disabling them fully is kinda uncool, since it makes some nice interactions impossible
@@ -50,9 +78,7 @@ Technical lifecycle:
     May modifier.Apply()  
     After linger/duration remove ModifierManage.RemoveModifier(modifier)
 
-InitComponent -> ApplyComponent -> EffectComponent    
-TimeComponent -> ApplyComponent? -> EffectComponent   
-TimeComponent -> RemoveComponent  
+
 
 Figure out order of operations:  
     Attack  
@@ -112,16 +138,22 @@ Component based system (mixing components to a new modifier, like a recipe):
 Components needed:  
     Effect  
     Target (makes sure Target(s) is valid)  
-Component types:  
-    InitComponent  
-    ApplyComponent  
-        Simple apply, no rules, just call effect  
-        Conditional apply, when effect is triggered & a conditional value is true  
-    TimeComponent   
-    StackComponent  
-    RefreshComponent  
-    RemoveComponent  
-    CleanUpComponent  
+Component types (-Component):  
+* Init  
+* Apply  
+  * Simple apply, no rules, just call effect  
+  * Conditional apply, when effect is triggered & a conditional value is true  
+* Time   
+* Stack  
+* Refresh  
+* Remove  
+* CleanUp  
+Non-Technical:
+* Graphics
+* Sound
+* ParticleEffect
+
+    
 
 ### TimeComponent
 
@@ -167,7 +199,7 @@ RefreshComponent is also fairly complex, cuz it's still tricky on how to make it
 RefreshComponent:  
     refresh duration  
     & increase duration  
-    & incrase effect?  
+    & trigger effect
 
 # Elemental Data
 

@@ -56,13 +56,13 @@ namespace ModifierSystem
             var cobraVenomDamageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 5, 20)) };
             var cobraVenomEffect = new DamageComponent(cobraVenomDamageData, cobraVenomTarget);
             var cobraVenomRemoveTime = new TimeComponent(new RemoveComponent(cobraVenomModifier), 10);
-            var cobraVenomRefresh = new RefreshComponent(cobraVenomRemoveTime);
+            //var cobraVenomRefresh = new RefreshComponent(cobraVenomRemoveTime);
             var cobraVenomApply = new ApplyComponent(cobraVenomEffect, cobraVenomTarget);
             cobraVenomModifier.AddComponent(new InitComponent(cobraVenomApply));//Apply first stack/damage on init
             cobraVenomModifier.AddComponent(cobraVenomTarget);
             cobraVenomModifier.AddComponent(new TimeComponent(cobraVenomEffect, 2, true));//Every 2 seconds, deal 5 damage
             cobraVenomModifier.AddComponent(cobraVenomRemoveTime);//Remove after 10 secs
-            cobraVenomModifier.AddComponent(cobraVenomRefresh);
+            //cobraVenomModifier.AddComponent(cobraVenomRefresh);
             _modifierPrototypes.AddModifier(cobraVenomModifier);
             _modifierPrototypes.SetupModifierApplier(cobraVenomModifier, LegalTarget.DefaultOffensive);
 

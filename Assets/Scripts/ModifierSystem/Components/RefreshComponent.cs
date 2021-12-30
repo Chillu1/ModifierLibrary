@@ -2,16 +2,25 @@ namespace ModifierSystem
 {
     public class RefreshComponent : IRefreshComponent
     {
-        private TimeComponent TimeComponent { get; }
+        private IRefreshEffectComponent RefreshEffectComponent { get; }
+        private RefreshEffectType RefreshEffect { get; }
 
-        public RefreshComponent(TimeComponent timeComponent)
+        public RefreshComponent(IRefreshEffectComponent refreshEffectComponent, RefreshEffectType refreshEffect)
         {
-            TimeComponent = timeComponent;
+            RefreshEffectComponent = refreshEffectComponent;
+            RefreshEffect = refreshEffect;
         }
 
         public void Refresh()
         {
-            TimeComponent.RefreshTimer();
+            RefreshEffectComponent.RefreshEffect(RefreshEffect);
         }
+    }
+
+    public enum RefreshEffectType
+    {
+        None = 0,
+        RefreshDuration = 1,
+        //Effect = 2,//Useless?
     }
 }
