@@ -21,7 +21,8 @@ namespace ModifierSystem
             var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
             var apply = new ApplyComponent(effect, target, conditionData);
             var cleanUp = new CleanUpComponent(apply);
-            var timeRemove = new TimeComponent(new RemoveComponent(modifier, cleanUp), 10);
+            var remove = new RemoveComponent(modifier, cleanUp);
+            var timeRemove = new TimeComponent(remove, 10);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply));

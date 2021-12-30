@@ -1,11 +1,11 @@
 TODO RN:  
 * Sort ideas by prio
-* >Change all recipes to use the new pattern
+* Fix diagram needing init & apply. Instead it needs init & apply or Stack
 * More Applier shenanigans, not permanent modifiers, etc
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown
-  * >Silence on 4 stacks
-  * >Validate
+  * Stack Modifiers
+    * >Apply another modifier on 5 stacks. Small problem? Its an applier modifier, so it will be used as one for enemies as well
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
 * Make lifeSteal component part of actual baseProject.Being class instead
@@ -20,5 +20,5 @@ TODO RN:
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
 * Condition Apply (ex. (apply?) happens when player has more than 10 damage?)
-* >Ressurection
+* >Ressurection EffectComponent?
 * Editor Window for prototypes/modifiers

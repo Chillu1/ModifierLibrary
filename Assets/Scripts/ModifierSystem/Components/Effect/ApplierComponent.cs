@@ -1,17 +1,19 @@
 namespace ModifierSystem
 {
-    public class ApplierComponent : IEffectComponent//, IConditionalEffectComponent
+    public class ApplierComponent : IEffectComponent, IStackEffectComponent//, IConditionalEffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
-        private ITargetComponent TargetComponent { get; }
+        public bool StackEffect { get; }
+        private readonly ITargetComponent _targetComponent;
 
         public ApplierComponent(IModifier modifier, ITargetComponent targetComponent,
-            AddModifierParameters parameters = AddModifierParameters.Default)
+            AddModifierParameters parameters = AddModifierParameters.Default, bool stackEffect = false)
         {
             Modifier = modifier;
             Parameters = parameters;
-            TargetComponent = targetComponent;
+            _targetComponent = targetComponent;
+            StackEffect = stackEffect;
         }
 
         public void Effect()
@@ -19,7 +21,7 @@ namespace ModifierSystem
             //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
             var clonedModifier = (Modifier)Modifier.Clone();
             clonedModifier.CopyEvents((Modifier)Modifier);
-            TargetComponent.Target.AddModifier(clonedModifier, Parameters);
+            _targetComponent.Target.AddModifier(clonedModifier, Parameters);
         }
 
         //TODO Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
@@ -34,9 +36,15 @@ namespace ModifierSystem
         //        });
         //}
 
+        public void Effect(int stacks, double value)
+        {
+            if (StackEffect)
+                Effect();
+        }
+
         public void ApplyModifierToTarget(Being target)
         {
-            TargetComponent.SetTarget(target);
+            _targetComponent.SetTarget(target);
             //Log.Verbose("Applying "+Data.Modifier);
             //Apply();
         }

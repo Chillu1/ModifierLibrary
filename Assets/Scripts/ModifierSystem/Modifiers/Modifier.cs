@@ -200,9 +200,9 @@ namespace ModifierSystem
 
             if (ApplierModifier || Id.Contains("Applier"))
             {
-                if (ApplyComponent == null)
+                if (ApplyComponent == null && StackComponent == null)
                 {
-                    Log.Error("ModifierApplier needs an ApplyComponent", "modifiers");
+                    Log.Error("ModifierApplier needs an ApplyComponent or StackComponent", "modifiers");
                     success = false;
                 }
             }

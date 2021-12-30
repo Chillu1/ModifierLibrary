@@ -37,5 +37,26 @@ namespace ModifierSystem.Tests
             var silenceModifier = modifierPrototypes.GetItem("SilenceXStacksTest");
             Assert.True(enemy.ContainsModifier(silenceModifier));
         }
+
+        [Test]
+        public void ApplyStunModifierXStacks()
+        {
+            var applyStunModifierApplier = modifierPrototypes.GetItem("ApplyStunModifierXStacksTestApplierApplier");
+            var applyStunModifier = modifierPrototypes.GetItem("ApplyStunModifierXStacksTestApplier");
+            var stunModifier = modifierPrototypes.GetItem("GenericStunModifierTest");
+            character.AddModifier(applyStunModifierApplier, AddModifierParameters.NullStartTarget);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            character.Attack(enemy);//1
+            Assert.True(enemy.ContainsModifier(applyStunModifier));
+            character.Attack(enemy);//2
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            character.Attack(enemy);//3
+            enemy.Update(0.2f);
+            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.True(enemy.ContainsModifier(stunModifier));
+            enemy.Update(3.2f);
+            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.False(enemy.ContainsModifier(stunModifier));
+        }
     }
 }

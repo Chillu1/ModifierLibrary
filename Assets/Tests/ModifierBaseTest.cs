@@ -91,8 +91,8 @@ namespace ModifierSystem.Tests
                 {
                     //IceBoltDebuff
                     var modifier = new Modifier("IceBoltTest");
-                    var target = new TargetComponent();
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                    var target = new TargetComponent();
                     var effect = new DamageComponent(damageData, target);
                     var apply = new ApplyComponent(effect, target);
                     modifier.AddComponent(target);
@@ -100,8 +100,6 @@ namespace ModifierSystem.Tests
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(modifier);
-                    //Forever buff (applier), not refreshable or stackable (for now)
-                    //Apply on attack
                     _modifierPrototypes.SetupModifierApplier(modifier);
                 }
                 {
@@ -417,6 +415,28 @@ namespace ModifierSystem.Tests
                     modifier.AddComponent(new StackComponent(new StackComponentProperties(effect)
                         { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 4 }));
                     modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
+                }
+                {
+                    //Apply a new modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
+                    var stunModifier = new Modifier("GenericStunModifierTest");
+                    var stunTarget = new TargetComponent();
+                    var stunEffect = new StatusComponent(StatusEffect.Stun, 2, stunTarget);
+                    var stunApply = new ApplyComponent(stunEffect, stunTarget);
+                    stunModifier.AddComponent(stunTarget);
+                    stunModifier.AddComponent(new InitComponent(stunApply));
+                    stunModifier.AddComponent(new TimeComponent(new RemoveComponent(stunModifier)));
+                    stunModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(stunModifier);
+
+                    var modifier = new Modifier("ApplyStunModifierXStacksTestApplier", true);
+                    var target = new TargetComponent(LegalTarget.Self, true);
+                    var effect = new ApplierComponent(stunModifier, target, stackEffect: true);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new StackComponent(new StackComponentProperties(effect)
+                        { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 }));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                     _modifierPrototypes.SetupModifierApplier(modifier);

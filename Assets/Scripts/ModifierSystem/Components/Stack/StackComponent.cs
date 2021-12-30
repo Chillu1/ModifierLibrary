@@ -22,7 +22,7 @@ namespace ModifierSystem
             OnXStacks = properties.OnXStacks;
             MaxStacks = properties.MaxStacks;
 
-            //Validate();//TODO
+            Validate();
         }
 
         public void Stack()
@@ -88,6 +88,40 @@ namespace ModifierSystem
         public void ResetStacks()
         {
             Stacks = 0;
+        }
+
+        private bool Validate()
+        {
+            //TODO Has to have Value if the effect is ValueBased, not sure how to check though
+            bool valid = true;
+
+            switch (WhenStackEffect)
+            {
+                case WhenStackEffect.Always:
+                    break;
+                case WhenStackEffect.OnXStacks:
+                    if (OnXStacks == -1)
+                    {
+                        Log.Error("OnXStacks with a undefined OnXStacks value");
+                        valid = false;
+                    }
+                    break;
+                case WhenStackEffect.EveryXStacks:
+                    if (OnXStacks == -1)
+                    {
+                        Log.Error("EveryXStacks with a undefined OnXStacks value");
+                        valid = false;
+                    }
+                    break;
+                case WhenStackEffect.ZeroStacks:
+                    break;
+                default:
+                    Log.Error($"StackEffectType {WhenStackEffect.None} illegal");
+                    valid = false;
+                    break;
+            }
+
+            return valid;
         }
     }
 
