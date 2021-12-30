@@ -97,6 +97,7 @@ namespace ModifierSystem
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
+            modifier.Stack();//If has stack component, we will trigger it on add
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 

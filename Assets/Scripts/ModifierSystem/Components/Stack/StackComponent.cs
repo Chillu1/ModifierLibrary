@@ -59,7 +59,7 @@ namespace ModifierSystem
 
             void TriggerStackEffect()
             {
-                StackEffectComponent.StackEffect(Stacks, Value);
+                StackEffectComponent.Effect(Stacks, Value);
             }
         }
 
@@ -77,7 +77,7 @@ namespace ModifierSystem
             {
                 case WhenStackEffect.ZeroStacks:
                     if (Stacks == 0)
-                        StackEffectComponent.StackEffect(Stacks, Value);
+                        StackEffectComponent.Effect(Stacks, Value);
                     break;
                 case WhenStackEffect.None:
                     Log.Error($"StackEffectType {WhenStackEffect.None} illegal");

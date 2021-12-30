@@ -18,7 +18,7 @@ namespace ModifierSystem
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffects.Add);
+            var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
             var apply = new ApplyComponent(effect, target, conditionData);
             var cleanUp = new CleanUpComponent(apply);
             var timeRemove = new TimeComponent(new RemoveComponent(modifier, cleanUp), 10);

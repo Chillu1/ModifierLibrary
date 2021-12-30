@@ -1,9 +1,11 @@
 TODO RN:  
 * Sort ideas by prio
+* >Change all recipes to use the new pattern
+* More Applier shenanigans, not permanent modifiers, etc
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown
   * >Silence on 4 stacks
-  * Validate
+  * >Validate
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
 * Make lifeSteal component part of actual baseProject.Being class instead

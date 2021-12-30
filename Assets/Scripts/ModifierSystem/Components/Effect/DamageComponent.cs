@@ -1,4 +1,3 @@
-using System;
 using BaseProject;
 
 namespace ModifierSystem
@@ -6,15 +5,15 @@ namespace ModifierSystem
     public class DamageComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
     {
         private DamageData[] Damage { get; }
-        private DamageComponentStackEffects StackEffects { get; }
+        private DamageComponentStackEffect StackEffect { get; }
         private readonly ITargetComponent _targetComponent;
 
         public DamageComponent(DamageData[] damage, ITargetComponent targetComponent,
-            DamageComponentStackEffects stackEffects = DamageComponentStackEffects.None)
+            DamageComponentStackEffect stackEffect = DamageComponentStackEffect.None)
         {
             Damage = damage;
             _targetComponent = targetComponent;
-            StackEffects = stackEffects;
+            StackEffect = stackEffect;
         }
 
         public void Effect()
@@ -28,36 +27,36 @@ namespace ModifierSystem
                 (receiverLocal, acterLocal) => receiverLocal.DealDamage(Damage, acterLocal));
         }
 
-        public void StackEffect(int stacks, double value)
+        public void Effect(int stacks, double value)
         {
-            switch (StackEffects)
+            switch (StackEffect)
             {
-                case DamageComponentStackEffects.Effect:
+                case DamageComponentStackEffect.Effect:
                     Effect();
                     break;
-                case DamageComponentStackEffects.Add:
+                case DamageComponentStackEffect.Add:
                     Damage[0].BaseDamage += value;
                     break;
-                case DamageComponentStackEffects.AddStacksBased:
+                case DamageComponentStackEffect.AddStacksBased:
                     Damage[0].BaseDamage += value * stacks;
                     break;
-                case DamageComponentStackEffects.Multiply:
+                case DamageComponentStackEffect.Multiply:
                     Damage[0].Multiplier += value;
                     break;
-                case DamageComponentStackEffects.MultiplyStacksBased:
+                case DamageComponentStackEffect.MultiplyStacksBased:
                     Damage[0].Multiplier += value * stacks;
                     break;
-                case DamageComponentStackEffects.OnXStacksAddElemental:
+                case DamageComponentStackEffect.OnXStacksAddElemental:
                     //TODO
                     //Damage[0].ElementData.?
                     break;
                 default:
-                    Log.Error($"StackEffectType {StackEffects} unsupported for {GetType()}");
+                    Log.Error($"StackEffectType {StackEffect} unsupported for {GetType()}");
                     return;
             }
         }
 
-        public enum DamageComponentStackEffects
+        public enum DamageComponentStackEffect
         {
             None = 0,
             Effect,
