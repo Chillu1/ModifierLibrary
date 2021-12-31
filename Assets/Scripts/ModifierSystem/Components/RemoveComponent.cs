@@ -1,8 +1,9 @@
+using BaseProject;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class RemoveComponent : IEffectComponent
+    public class RemoveComponent : IEffectComponent, IConditionEffectComponent
     {
         private readonly IModifier _modifier;
         [CanBeNull] private readonly CleanUpComponent _cleanUpComponent;
@@ -19,10 +20,9 @@ namespace ModifierSystem
             _modifier.SetForRemoval();
         }
 
-        //public void Effect(BaseBeing owner, BaseBeing acter) //Can't be, because BaseBeing and not Being
-        //{
-        //    _targetComponent.HandleTarget(owner, acter,
-        //        (receiverLocal, acterLocal) => receiverLocal.);
-        //}
+        public void Effect(BaseBeing owner, BaseBeing acter)//Can't make it proper, because BaseBeing and not Being
+        {
+            Effect();
+        }
     }
 }

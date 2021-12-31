@@ -43,11 +43,10 @@ namespace ModifierSystem
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var target = new TargetComponent();
             var effect = new DamageComponent(damageData, target);
-            var apply = new ApplyComponent(effect, target);
             var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
-            modifier.AddComponent(new InitComponent(apply));
+            modifier.AddComponent(new InitComponent(effect));
             modifier.AddComponent(new TimeComponent(effect, 2, true));
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);

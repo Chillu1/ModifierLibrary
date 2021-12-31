@@ -1,4 +1,5 @@
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
@@ -12,13 +13,15 @@ namespace ModifierSystem
 
         private readonly IEffectComponent _effectComponent;
         private readonly IConditionEffectComponent _conditionEffectComponent;
-        private readonly ITargetComponent _targetComponent;
+        [CanBeNull] private readonly ITargetComponent _targetComponent;
         //private readonly IValidatorComponent<object>[] _validatorComponents;
 
-        public ApplyComponent(IEffectComponent effectComponent, ITargetComponent targetComponent)
+        /// <summary>
+        ///     Special constructor for Appliers
+        /// </summary>
+        public ApplyComponent(ApplierComponent applierComponent)
         {
-            _effectComponent = effectComponent;
-            _targetComponent = targetComponent;
+            _effectComponent = applierComponent;
             Validate();
         }
         public ApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
@@ -26,18 +29,6 @@ namespace ModifierSystem
         {
             IsConditionEvent = true;
             _conditionEffectComponent = effectComponent;
-            _targetComponent = targetComponent;
-            ConditionEvent = conditionData.BeingConditionEvent;
-            Validate();
-        }
-        /// <summary>
-        ///     Special constructor for one-off/one-time use modifiers
-        /// </summary>
-        public ApplyComponent(RemoveComponent effectComponent, ITargetComponent targetComponent,
-            ConditionData conditionData = default)
-        {
-            IsConditionEvent = true;
-            _effectComponent = effectComponent;
             _targetComponent = targetComponent;
             ConditionEvent = conditionData.BeingConditionEvent;
             Validate();
@@ -57,15 +48,13 @@ namespace ModifierSystem
                 return;
             }
 
-            if(_effectComponent != null)
+            if (_conditionEffectComponent == null)
             {
-                //TODO Temp solution to remove component not having the proper signature, we can remove the anonymous delegate, somehow
-                ConditionEvent.SetupBeingEvent(_targetComponent.Target, delegate { _effectComponent.Effect(); });
+                Log.Error("Condition effect component is null");
+                return;
             }
-            else if (_conditionEffectComponent != null)
-                ConditionEvent.SetupBeingEvent(_targetComponent.Target, _conditionEffectComponent.Effect);
-            else
-                Log.Error("Both effect components are null");
+
+            ConditionEvent.SetupBeingEvent(_targetComponent!.Target, _conditionEffectComponent.Effect);
         }
 
         public void CleanUp()
@@ -73,22 +62,20 @@ namespace ModifierSystem
             if (ConditionEvent == BeingConditionEvent.None || !IsConditionEvent)
                 return;
 
-            if(_effectComponent != null)
+            if (_conditionEffectComponent == null)
             {
-                //TODO Temp solution?
-                ConditionEvent.RemoveBeingEvent(_targetComponent.Target, delegate { _effectComponent.Effect(); });
+                Log.Error("Condition effect component is null");
+                return;
             }
-            else if (_conditionEffectComponent != null)
-                ConditionEvent.RemoveBeingEvent(_targetComponent.Target, _conditionEffectComponent.Effect);
-            else
-                Log.Error("Both effect components are null");
+
+            ConditionEvent.RemoveBeingEvent(_targetComponent!.Target, _conditionEffectComponent.Effect);
         }
 
         private bool Validate()
         {
             bool success = true;
             bool conditionEvent = ConditionEvent != BeingConditionEvent.None,
-                conditionTarget = _targetComponent.ConditionTarget != ConditionTarget.None;
+                conditionTarget = _targetComponent != null && _targetComponent.ConditionTarget != ConditionTarget.None;
 
             if ((!conditionEvent || !conditionTarget) && IsConditionEvent)
             {

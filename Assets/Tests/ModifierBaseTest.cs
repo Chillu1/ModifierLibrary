@@ -94,9 +94,8 @@ namespace ModifierSystem.Tests
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData, target);
-                    var apply = new ApplyComponent(effect, target);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup(damageData);
                     _modifierPrototypes.AddModifier(modifier);
@@ -107,9 +106,8 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var effect = new DamageComponent(damageData, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(effect, 2, true));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
                     modifier.FinishSetup(damageData);
@@ -121,9 +119,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("PassiveSelfHealTest");
                     var target = new TargetComponent();
                     var effect = new HealComponent(10, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                     //Forever buff (applier), not refreshable or stackable (for now)
@@ -133,9 +130,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("AllyHealTest");
                     var target = new TargetComponent();
                     var effect = new HealComponent(10, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -148,9 +144,8 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
                     var effect = new DamageComponent(damageData, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply)); //Apply damage on init
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect)); //Apply damage on init
                     modifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
                     modifier.FinishSetup(damageData);
@@ -163,9 +158,8 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent();
                     var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
                     var effect = new DamageComponent(damageData, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply)); //Apply damage on init
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect)); //Apply damage on init
                     modifier.AddComponent(new TimeComponent(effect, 2, true)); //Every 2 seconds, deal 5 damage
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
                     modifier.FinishSetup(damageData);
@@ -177,9 +171,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("MovementSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply)); //Apply stat on init
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect)); //Apply stat on init
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -189,9 +182,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("AttackSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply)); //Apply stat on init
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect)); //Apply stat on init
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -201,9 +193,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("DisarmModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Disarm, 2f, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -214,9 +205,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("SilenceModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Silence, 2f, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -227,9 +217,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("RootTimedModifierTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatusComponent(StatusEffect.Root, 0.1f, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(effect, 1, true));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
                     modifier.FinishSetup();
@@ -259,9 +248,8 @@ namespace ModifierSystem.Tests
                         new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Cold, 10, 20)),
                     };
                     var effect = new DamageComponent(damageData, target);
-                    var apply = new ApplyComponent(effect, target);
-                    modifier.AddComponent(new InitComponent(apply));
                     modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(effect, 2, true));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
                     modifier.FinishSetup(damageData);
@@ -285,9 +273,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("AddStatDamageTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
-                    var apply = new ApplyComponent(effect, target);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                 }
@@ -351,9 +338,8 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("HealStatBasedTest");
                     var target = new TargetComponent(LegalTarget.Beings);
                     var effect = new HealStatBasedComponent(target);
-                    var apply = new ApplyComponent(effect, target);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                 }
@@ -375,11 +361,10 @@ namespace ModifierSystem.Tests
                     var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
                     var target = new TargetComponent(LegalTarget.Beings);
                     var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
-                    var apply = new ApplyComponent(effect, target);
                     var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
                     modifier.AddComponent(target);
                     modifier.AddComponent(timeRemove);
-                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(effect, 2, true));
                     modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 2 }));
                     modifier.FinishSetup(damageData);
@@ -395,7 +380,7 @@ namespace ModifierSystem.Tests
                     var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
                     modifier.AddComponent(target);
                     modifier.AddComponent(timeRemove);
-                    modifier.AddComponent(new InitComponent(new ApplyComponent(effect, target)));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new TimeComponent(effect, 2, true));
                     modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
                     modifier.FinishSetup(damageData);
@@ -407,11 +392,10 @@ namespace ModifierSystem.Tests
                     var modifier = new Modifier("SilenceXStacksTest");
                     var target = new TargetComponent(LegalTarget.Beings);
                     var effect = new StatusComponent(StatusEffect.Silence, 4, target, StatusComponent.StatusComponentStackEffect.Effect);
-                    var apply = new ApplyComponent(effect, target);
                     var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
                     modifier.AddComponent(target);
                     modifier.AddComponent(timeRemove);
-                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.AddComponent(new InitComponent(effect));
                     modifier.AddComponent(new StackComponent(new StackComponentProperties(effect)
                         { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 4 }));
                     modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
@@ -424,9 +408,8 @@ namespace ModifierSystem.Tests
                     var stunModifier = new Modifier("GenericStunModifierTest");
                     var stunTarget = new TargetComponent();
                     var stunEffect = new StatusComponent(StatusEffect.Stun, 2, stunTarget);
-                    var stunApply = new ApplyComponent(stunEffect, stunTarget);
                     stunModifier.AddComponent(stunTarget);
-                    stunModifier.AddComponent(new InitComponent(stunApply));
+                    stunModifier.AddComponent(new InitComponent(stunEffect));
                     stunModifier.AddComponent(new TimeComponent(new RemoveComponent(stunModifier)));
                     stunModifier.FinishSetup();
                     _modifierPrototypes.AddModifier(stunModifier);
@@ -485,9 +468,8 @@ namespace ModifierSystem.Tests
                     var aspectOfTheCatModifier = new Modifier("AspectOfTheCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
                     var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed) { baseValue = 10 }}, target);
-                    var apply = new ApplyComponent(effect, target);
-                    aspectOfTheCatModifier.AddComponent(new InitComponent(apply));
                     aspectOfTheCatModifier.AddComponent(target);
+                    aspectOfTheCatModifier.AddComponent(new InitComponent(effect));
                     aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
                     aspectOfTheCatModifier.FinishSetup();
                     var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
@@ -504,9 +486,8 @@ namespace ModifierSystem.Tests
                         {
                             new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50))
                         }, target);
-                    var apply = new ApplyComponent(effect, target);
-                    infectionModifier.AddComponent(new InitComponent(apply));
                     infectionModifier.AddComponent(target);
+                    infectionModifier.AddComponent(new InitComponent(effect));
                     infectionModifier.AddComponent(new TimeComponent(effect, 2, true));
                     infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
                     infectionModifier.FinishSetup();
@@ -522,9 +503,8 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent(LegalTarget.Self);
                     //Physical resistances
                     var effect = new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }, target);
-                    var apply = new ApplyComponent(effect, target);
-                    giantModifier.AddComponent(new InitComponent(apply));
                     giantModifier.AddComponent(target);
+                    giantModifier.AddComponent(new InitComponent(effect));
                     giantModifier.FinishSetup();
                     var statsNeeded = new[] { new Stat(StatType.Health) };
                     statsNeeded[0].Init(10000);
@@ -538,9 +518,8 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent(LegalTarget.Self);
                     //Physical resistances
                     var effect = new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }, target);
-                    var apply = new ApplyComponent(effect, target);
-                    timedGiantModifier.AddComponent(new InitComponent(apply));
                     timedGiantModifier.AddComponent(target);
+                    timedGiantModifier.AddComponent(new InitComponent(effect));
                     timedGiantModifier.AddComponent(new TimeComponent(new RemoveComponent(timedGiantModifier), 10));
                     timedGiantModifier.FinishSetup();
                     var statsNeeded = new[] { new Stat(StatType.Health) };

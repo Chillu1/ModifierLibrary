@@ -26,35 +26,33 @@ namespace ModifierSystem
             //Scope brackets so it's impossible to use a wrong component/modifier
             {
                 //Aspect of the cat
-                var aspectOfTheCatModifier = new Modifier("AspectOfTheCat");
-                var aspectOfTheCatTarget = new TargetComponent(LegalTarget.Self);
-                var aspectOfTheCatEffect = new StatComponent(new []{new Stat(StatType.MovementSpeed){baseValue = 5}}, aspectOfTheCatTarget);
-                var aspectOfTheCatApply = new ApplyComponent(aspectOfTheCatEffect, aspectOfTheCatTarget);
-                aspectOfTheCatModifier.AddComponent(new InitComponent(aspectOfTheCatApply));
-                aspectOfTheCatModifier.AddComponent(aspectOfTheCatTarget);
-                aspectOfTheCatModifier.AddComponent(new TimeComponent(new RemoveComponent(aspectOfTheCatModifier), 10));
-                var aspectOfTheCatComboModifier = new ComboModifier(aspectOfTheCatModifier,
+                var modifier = new Modifier("AspectOfTheCat");
+                var target = new TargetComponent(LegalTarget.Self);
+                var effect = new StatComponent(new []{new Stat(StatType.MovementSpeed){baseValue = 5}}, target);
+                modifier.AddComponent(target);
+                modifier.AddComponent(new InitComponent(effect));
+                modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                var comboModifier = new ComboModifier(modifier,
                     new ComboRecipes(new ComboRecipe(new[] { "Dexterity", "Speed" })),
                     1);
-                ModifierPrototypes.AddModifier(aspectOfTheCatComboModifier);
+                ModifierPrototypes.AddModifier(comboModifier);
             }
             {
                 //Poison & bleed = infection
-                var infectionModifier = new Modifier("Infection");
-                var infectionTarget = new TargetComponent(LegalTarget.Self);
-                var infectionEffect = new DamageComponent(new[]
+                var modifier = new Modifier("Infection");
+                var target = new TargetComponent(LegalTarget.Self);
+                var effect = new DamageComponent(new[]
                         { new DamageData(20, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) },
-                        infectionTarget);
-                var infectionApply = new ApplyComponent(infectionEffect, infectionTarget);
-                infectionModifier.AddComponent(new InitComponent(infectionApply));
-                infectionModifier.AddComponent(infectionTarget);
-                infectionModifier.AddComponent(new TimeComponent(infectionEffect, 2, true));
-                infectionModifier.AddComponent(new TimeComponent(new RemoveComponent(infectionModifier), 10));
-                var infectionComboModifier = new ComboModifier(infectionModifier,
+                        target);
+                modifier.AddComponent(target);
+                modifier.AddComponent(new InitComponent(effect));
+                modifier.AddComponent(new TimeComponent(effect, 2, true));
+                modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
+                var comboModifier = new ComboModifier(modifier,
                     new ComboRecipes(new ComboRecipe(
                         new[]{new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5)})),
                     1);
-                ModifierPrototypes.AddModifier(infectionComboModifier);
+                ModifierPrototypes.AddModifier(comboModifier);
             }
         }
 

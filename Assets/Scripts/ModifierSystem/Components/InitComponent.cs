@@ -1,21 +1,41 @@
 using System.Collections.Generic;
 using BaseProject;
+using BaseProject.Utils;
 
 namespace ModifierSystem
 {
     public class InitComponent : Component, IInitComponent
     {
-        private readonly IApplyComponent[] _applyComponent;
+        private bool ConditionBased { get; }
 
-        public InitComponent(params IApplyComponent[] applyComponent)
+        private readonly IEffectComponent[] _effectComponents;
+        private readonly IApplyComponent[] _applyComponents;
+
+        public InitComponent(params IEffectComponent[] effectComponents)
         {
-            _applyComponent = applyComponent;
+            _effectComponents = effectComponents;
+        }
+        /// <summary>
+        ///     Condition based Init
+        /// </summary>
+        public InitComponent(params IApplyComponent[] applyComponents)
+        {
+            ConditionBased = true;
+            _applyComponents = applyComponents;
         }
 
         public void Init()
         {
-            foreach (var applyComponent in _applyComponent)
-                applyComponent.Apply();
+            if(ConditionBased)
+            {
+                foreach (var applyComponent in _applyComponents)
+                    applyComponent.Apply();
+            }
+            else
+            {
+                foreach (var effectComponent in _effectComponents)
+                    effectComponent.Effect();
+            }
         }
 
         public HashSet<StatusTag> GetStatusTags()
@@ -32,9 +52,9 @@ namespace ModifierSystem
 
         private bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
-            foreach (var applyComponent in _applyComponent)
+            foreach (var effectComponent in _effectComponents.EmptyIfNull())
             {
-                if (applyComponent.GetType() == typeof(T))
+                if (effectComponent.GetType() == typeof(T))
                     return true;
             }
 

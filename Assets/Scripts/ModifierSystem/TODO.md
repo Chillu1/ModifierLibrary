@@ -1,6 +1,7 @@
 TODO RN:  
 * Sort ideas by prio
-* Fix diagram needing init & apply. Instead it needs init & apply or Stack
+* >Fix diagram needing init & apply. Instead it needs init & apply or Stack
+  * >Fix diagram needing apply
 * More Applier shenanigans, not permanent modifiers, etc
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown
