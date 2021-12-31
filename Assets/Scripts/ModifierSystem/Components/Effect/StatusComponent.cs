@@ -22,13 +22,13 @@ namespace ModifierSystem
         public void Effect()
         {
             //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
-            _targetComponent.Target.ChangeStatusEffect(StatusEffect, Duration);
+            _targetComponent.Target.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
         public void Effect(BaseBeing owner, BaseBeing acter)
         {
             _targetComponent.HandleTarget(owner, acter,
-                (receiverLocal, acterLocal) => receiverLocal.ChangeStatusEffect(StatusEffect, Duration));
+                (receiverLocal, acterLocal) => receiverLocal.StatusEffects.ChangeStatusEffect(StatusEffect, Duration));
         }
 
         public void Effect(int stacks, double value)

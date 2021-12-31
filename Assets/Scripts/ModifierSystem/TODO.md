@@ -1,6 +1,6 @@
 TODO RN:  
 * Sort ideas by prio
-* >Being inheritance
+* >Being/BaseBeing protected? IConditionEffectComponent being
 * More Applier shenanigans, not permanent modifiers, etc
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown

@@ -23,9 +23,10 @@ namespace ModifierSystem
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
             var timeRemove = new TimeComponent(remove, 10);
+            var applyRemoval = new ApplyComponent(remove, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
-            modifier.AddComponent(new InitComponent(apply));
+            modifier.AddComponent(new InitComponent(apply, applyRemoval));
             modifier.AddComponent(new TimeComponent(effect, 2, true));
             modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 5 }));
             modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));

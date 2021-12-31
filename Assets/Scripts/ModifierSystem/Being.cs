@@ -1,70 +1,19 @@
-using System;
 using BaseProject;
-using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public sealed class Being : IBaseBeing
+    public sealed class Being : BaseBeing
     {
         private ModifierController ModifierController { get; }
 
         /// <summary>
         ///     On getting a combo
         /// </summary>
-        public event Action<Being> ComboEvent;
+        public event BaseBeingEvent ComboEvent;
 
-        #region BaseBeing Members
-
-        private BaseBeing BaseBeing { get; }
-
-        public string Id => BaseBeing.Id;
-        public Stats Stats => BaseBeing.Stats;
-        public StatusResistances StatusResistances => BaseBeing.StatusResistances;
-        public UnitType UnitType => BaseBeing.UnitType;
-        public LegalAction LegalActions => BaseBeing.StatusEffects.LegalActions;
-
-        public event BaseBeingEvent AttackEvent
+        public Being(BeingProperties beingProperties) : base(beingProperties)
         {
-            add => BaseBeing.AttackEvent += value;
-            remove => BaseBeing.AttackEvent -= value;
-        }
-        public event BaseBeingEvent KillEvent
-        {
-            add => BaseBeing.KillEvent += value;
-            remove => BaseBeing.KillEvent -= value;
-        }
-        public event BaseBeingEvent CastEvent
-        {
-            add => BaseBeing.CastEvent += value;
-            remove => BaseBeing.CastEvent -= value;
-        }
-        public event BaseBeingEvent HealEvent
-        {
-            add => BaseBeing.HealEvent += value;
-            remove => BaseBeing.HealEvent -= value;
-        }
-        public event BaseBeingEvent HealedEvent
-        {
-            add => BaseBeing.HealedEvent += value;
-            remove => BaseBeing.HealedEvent -= value;
-        }
-        public event BaseBeingEvent DeathEvent
-        {
-            add => BaseBeing.DeathEvent += value;
-            remove => BaseBeing.DeathEvent -= value;
-        }
-        public event BaseBeingEvent HitEvent
-        {
-            add => BaseBeing.HitEvent += value;
-            remove => BaseBeing.HitEvent -= value;
-        }
-
-        #endregion
-
-        public Being(BeingProperties beingProperties)
-        {
-            BaseBeing = new BaseBeing(beingProperties);
-            ModifierController = new ModifierController(this, BaseBeing.ElementController);
+            ModifierController = new ModifierController(this, ElementController);
         }
 
         public bool CastModifier(Being target, string modifierId)
@@ -82,7 +31,7 @@ namespace ModifierSystem
                 return false;
             }
 
-            if (!LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
+            if (!StatusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
                 return false;
 
             modifier.TryApply(target);
@@ -98,7 +47,7 @@ namespace ModifierSystem
             var modifierAppliers = ModifierController.GetModifierAppliers();
             if (modifierAppliers == null)
             {
-                Log.Verbose(BaseBeing.Id + " has no applier modifiers", "modifiers");
+                Log.Verbose(Id + " has no applier modifiers", "modifiers");
                 return;
             }
 
@@ -123,7 +72,7 @@ namespace ModifierSystem
 
         public void CopyEvents(Being prototype)
         {
-            BaseBeing.CopyEvents(prototype.BaseBeing);
+            base.CopyEvents(prototype);
             ComboEvent = prototype.ComboEvent;
             //Copy modifierEvents
             //problem, we copy the event, but the target is wrong modifierController (old)
@@ -132,33 +81,27 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return BaseBeing.ToString() + ModifierController;
+            return base.ToString() + ModifierController;
         }
 
         #region BaseBeing Methods
 
-        public void Update(float deltaTime)
+        public override void Update(float deltaTime)
         {
-            BaseBeing.Update(deltaTime);
+            base.Update(deltaTime);
             ModifierController.Update(deltaTime);
-        }
-
-        public void ChangeStatusEffect(StatusEffect effect, float amount)
-        {
-            BaseBeing.ChangeStatusEffect(effect, amount);
         }
 
         /// <summary>
         ///     Manual attack, NOT a modifier attack
         /// </summary>
-        [CanBeNull]
-        public DamageData[] Attack(Being target)
+        public override DamageData[] Attack(BaseBeing target)
         {
-            if (!LegalActions.HasFlag(LegalAction.Act))//Can't attack
+            if (!StatusEffects.LegalActions.HasFlag(LegalAction.Act))//Can't attack
                 return null;
             
-            ApplyModifiers(target);
-            var damageData = BaseBeing.Attack(target.BaseBeing);
+            ApplyModifiers((Being)target);
+            var damageData = base.Attack(target);
 
             //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
             ModifierController.CheckForComboRecipes();//Not redundant? Might lead to performance issues in super high combo counts?
@@ -168,20 +111,11 @@ namespace ModifierSystem
         /// <summary>
         ///     Used for dealing damage with modifiers
         /// </summary>
-        public DamageData[] DealDamage(DamageData[] data, Being attacker)
+        public override DamageData[] DealDamage(DamageData[] data, BaseBeing attacker)
         {
-            var damageData = BaseBeing.DealDamage(data, attacker.BaseBeing);
+            var damageData = base.DealDamage(data, attacker);
             ModifierController.CheckForComboRecipes();//Elemental, so we check for combos
             return damageData;
-        }
-
-        public void Heal(Being target)
-        {
-            BaseBeing.Heal(target.BaseBeing);
-        }
-        public void Heal(double value, BaseBeing healer, bool triggerEvents = true)
-        {
-            BaseBeing.Heal(value, healer, triggerEvents);
         }
 
         public void ChangeStat(Stat[] stats)

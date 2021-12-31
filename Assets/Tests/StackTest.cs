@@ -25,15 +25,15 @@ namespace ModifierSystem.Tests
         {
             var silenceModifierApplier = modifierPrototypes.GetItem("SilenceXStacksTestApplier");
             character.AddModifier(silenceModifierApplier, AddModifierParameters.NullStartTarget);
-            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             character.Attack(enemy);//1
             enemy.Update(8.1f);
             character.Attack(enemy);//2
-            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             character.Attack(enemy);//3
             enemy.Update(8.1f);
             character.Attack(enemy);//4
-            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Cast));
+            Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             var silenceModifier = modifierPrototypes.GetItem("SilenceXStacksTest");
             Assert.True(enemy.ContainsModifier(silenceModifier));
         }
@@ -45,17 +45,17 @@ namespace ModifierSystem.Tests
             var applyStunModifier = modifierPrototypes.GetItem("ApplyStunModifierXStacksTestApplier");
             var stunModifier = modifierPrototypes.GetItem("GenericStunModifierTest");
             character.AddModifier(applyStunModifierApplier, AddModifierParameters.NullStartTarget);
-            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             character.Attack(enemy);//1
             Assert.True(enemy.ContainsModifier(applyStunModifier));
             character.Attack(enemy);//2
-            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             character.Attack(enemy);//3
             enemy.Update(0.2f);
-            Assert.False(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.True(enemy.ContainsModifier(stunModifier));
             enemy.Update(3.2f);
-            Assert.True(enemy.LegalActions.HasFlag(LegalAction.Act));
+            Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.False(enemy.ContainsModifier(stunModifier));
         }
     }

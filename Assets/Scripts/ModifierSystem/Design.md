@@ -65,6 +65,7 @@ Applier
 
 # Design questions
 * OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* CleanUpComponent only needed when we have remove? Automated with apply otherwise?
 * What more mechanics can refreshComponent have?
 * Recursion problem, when a condition event is triggered, there's a chance it will be triggered again by the same call. Disabling them fully is kinda uncool, since it makes some nice interactions impossible
 * Do something with Being not being accepted in Heal, etc

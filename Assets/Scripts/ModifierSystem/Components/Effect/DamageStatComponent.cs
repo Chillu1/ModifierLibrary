@@ -21,7 +21,7 @@ namespace ModifierSystem
         public void Effect(BaseBeing target, BaseBeing attacked)
         {
             _targetComponent.HandleTarget(target, attacked,
-                (receiverLocal, acterLocal) => receiverLocal.Stats.ChangeDamageStat(DamageData));
+                (receiverLocal, acterLocal) => ((Being)receiverLocal).ChangeDamageStat(DamageData));
         }
     }
 }
