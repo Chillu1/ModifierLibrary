@@ -25,37 +25,26 @@ Only components that should be initiated directly into modifier:
 ![ModifierFlowChart](ModifierFlowChart.png "Modifier Flow Chart")
 
 ## What interacts with what, component relations?   
-Green = Needed  
-Yellow & Brown = Needed Choice (or both)  
-Blue = Optional  
+Blue = Needed  
+Green = One Needed (holder of Effect), darker green = more common  
+Red = Different types of Effect  
+White = Optional  
 Blank arrow = Optional  
+Double arrow = Params  
 
 ![Components](ModifierComponents.png "Components")
 
 Must have: Target, Effect    
-One of: Time/(Apply+Init)  
+One of: Init/Time/Apply/Stack  
 Optional: CleanUp, Stack, Refresh  
-
-Remove is Effect, Effect is not Remove  
-% = Optional  
-[] = params
-
-* Target
-* Effect -> Target
-* Apply -> Effect                 (-> Target) & Target
-* Init -> Apply[]                 (-> Effect (-> Target) & Target)
-* CleanUp -> Apply                (-> Effect (-> Target) & Target)
-* Remove -> Modifier & CleanUp%   (-> Apply (-> Effect (-> Target) & Target))
-* Time -> Effect                  (-> Target)
-* Stack -> Effect                 (-> Target)
-* Refresh -> Time -> Remove       (-> Modifier & CleanUp% (-> Apply (-> Effect (-> Target) & Target)))
 
 Direct Order:  
 Modifier, Data,  
-Target, Effect, Apply, Init, CleanUp, Remove, Time, Stack, Refresh    
-Ideal order:  
+Target, Effect, Apply, Init, CleanUp, Remove, Time, Stack, Refresh  
+
+**Ideal order**:  
 Modifier, Data.  
-Target, Effect, Apply, CleanUp, Remove, TimeRemove, Stack, Refresh.  
+Target, Effect, Apply, CleanUp, Remove, TimeRemove.  
 Init, TimeEffect, Stack, Refresh   
 
 Making a modifier decision flow chart:  

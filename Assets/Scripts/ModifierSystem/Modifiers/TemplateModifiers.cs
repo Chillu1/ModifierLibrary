@@ -10,7 +10,7 @@ namespace ModifierSystem
         private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
 
         /// <summary>
-        ///     Absolute Full Modifier Setup Template, every value and component used. DoTStackRefresh
+        ///     Absolute Full Modifier Setup Template, every value and component used. ConditionDoTStackRefresh
         /// </summary>
         private void FullModifier()
         {

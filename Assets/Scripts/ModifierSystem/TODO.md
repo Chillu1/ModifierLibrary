@@ -1,7 +1,6 @@
 TODO RN:  
 * Sort ideas by prio
-* >Fix diagram needing init & apply. Instead it needs init & apply or Stack
-  * >Fix diagram needing apply
+* >Being inheritance
 * More Applier shenanigans, not permanent modifiers, etc
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown
@@ -20,6 +19,6 @@ TODO RN:
   * All mechanics & components
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
-* Condition Apply (ex. (apply?) happens when player has more than 10 damage?)
-* >Ressurection EffectComponent?
+* >Condition Apply (ex. (apply?) happens when player has less/more than 10 X(damage, health, etc)?)
+* >Ressurection EffectComponent? Needs to be condition based though
 * Editor Window for prototypes/modifiers
