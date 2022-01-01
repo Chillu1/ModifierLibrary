@@ -9,7 +9,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
-    public class Modifier : IModifier, IEventCopy<Modifier>
+    public class Modifier : IModifier
     {
         public string Id { get; private set; }
         public bool ApplierModifier { get; }
@@ -36,7 +36,7 @@ namespace ModifierSystem
             InitComponent?.Init();
         }
 
-        public void FinishSetup([CanBeNull] DamageData[] damageData = null)
+        public void FinishSetup(DamageData[] damageData = null)
         {
             if (_setupFinished)
                 Log.Error("Setup already finished, overwriting. Should never happen");
@@ -183,9 +183,8 @@ namespace ModifierSystem
             ToRemove = true;
         }
 
-        public void CopyEvents(Modifier prototype)
+        public void CopyEvents(IModifier prototype)
         {
-            //this.event = prototype.event //or we will need to copy it over properly, with a new reference
         }
 
         public virtual bool ValidatePrototypeSetup()

@@ -4,11 +4,11 @@ namespace ModifierSystem
 {
     public class ModifierPrototypes
     {
-        private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
+        private readonly ModifierPrototypesBase<IModifier> _modifierPrototypes;
 
         public ModifierPrototypes()
         {
-            _modifierPrototypes = new ModifierPrototypesBase<Modifier>();
+            _modifierPrototypes = new ModifierPrototypesBase<IModifier>();
             SetupModifierPrototypes();
         }
 
@@ -17,7 +17,7 @@ namespace ModifierSystem
         }
 
         [CanBeNull]
-        public Modifier GetItem(string key)
+        public IModifier GetItem(string key)
         {
             return _modifierPrototypes.GetItem(key);
         }

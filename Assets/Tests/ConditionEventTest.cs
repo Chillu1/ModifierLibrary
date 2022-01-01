@@ -90,12 +90,26 @@ namespace ModifierSystem.Tests
             enemy.ChangeDamageStat(new DamageData(4, DamageType.Physical));
             enemy.Attack(ally);
             enemy.Attack(character);
-            Assert.False(ally.Stats.Health.PoolStat.IsFull);
-            Assert.False(character.Stats.Health.PoolStat.IsFull);
+            Assert.False(ally.Stats.Health.IsFull);
+            Assert.False(character.Stats.Health.IsFull);
             character.Heal(ally);
-            Assert.True(ally.Stats.Health.PoolStat.IsFull);
+            Assert.True(ally.Stats.Health.IsFull);
             //Log.Info(character.Stats.Health.CurrentHealth);
-            Assert.True(character.Stats.Health.PoolStat.IsFull);
+            Assert.True(character.Stats.Health.IsFull);
         }
+
+        /*[Test]
+        public void ConditionApplyHealthOnDeathEffect()
+        {
+            var modifierApplierApplier = modifierPrototypes.GetItem("DeathHealthTestApplierApplier");
+            var modifierApplier = modifierPrototypes.GetItem("DeathHealthTestApplier");
+            character.AddModifier(modifierApplierApplier, AddModifierParameters.DefaultOffensive);
+            enemy.ChangeDamageStat(new DamageData(1000, DamageType.Physical));
+            enemy.Attack(character);
+            Assert.False(enemy.ContainsModifier(modifierApplierApplier));
+            Assert.True(character.Stats.Health.IsDead);
+            Assert.AreEqual(initialHealthEnemy-15, enemy.Stats.Health.CurrentHealth);
+            Assert.True(enemy.ContainsModifier(modifierApplier));
+        }*/
     }
 }

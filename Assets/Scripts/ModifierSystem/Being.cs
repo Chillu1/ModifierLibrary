@@ -44,14 +44,7 @@ namespace ModifierSystem
         /// </summary>
         private void ApplyModifiers(Being target)
         {
-            var modifierAppliers = ModifierController.GetModifierAppliers();
-            if (modifierAppliers == null)
-            {
-                Log.Verbose(Id + " has no applier modifiers", "modifiers");
-                return;
-            }
-
-            foreach (var modifierApplier in modifierAppliers)
+            foreach (var modifierApplier in ModifierController.GetModifierAppliers())
                 modifierApplier.TryApply(target);
         }
 

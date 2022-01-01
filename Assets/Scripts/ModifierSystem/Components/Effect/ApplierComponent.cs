@@ -1,6 +1,8 @@
+using BaseProject;
+
 namespace ModifierSystem
 {
-    public class ApplierComponent : IEffectComponent, IStackEffectComponent//, IConditionalEffectComponent
+    public class ApplierComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
@@ -19,34 +21,26 @@ namespace ModifierSystem
         public void Effect()
         {
             //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
-            var clonedModifier = (Modifier)Modifier.Clone();
-            clonedModifier.CopyEvents((Modifier)Modifier);
+            var clonedModifier = (IModifier)Modifier.Clone();
+            clonedModifier.CopyEvents(Modifier);
             _targetComponent.Target.AddModifier(clonedModifier, Parameters);
         }
 
-        //TODO Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
-        //public void Effect(BaseBeing owner, BaseBeing acter)
-        //{
-        //    TargetComponent.HandleTarget(owner, acter,
-        //        delegate(BaseBeing receiverLocal, BaseBeing acterLocal)
-        //        {
-        //            var clonedModifier = (Modifier)Modifier.Clone();
-        //            clonedModifier.CopyEvents((Modifier)Modifier);
-        //            receiverLocal.AddModifier(clonedModifier, Parameters);//Problem is, BaseBeing has all the events
-        //        });
-        //}
+        public void Effect(BaseBeing owner, BaseBeing acter)
+        {
+            _targetComponent.HandleTarget(owner, acter,
+                (receiverLocal, acterLocal) =>
+                {
+                    var clonedModifier = (IModifier)Modifier.Clone();
+                    clonedModifier.CopyEvents(Modifier);
+                    ((Being)receiverLocal).AddModifier(clonedModifier, Parameters);
+                });
+        }
 
         public void Effect(int stacks, double value)
         {
             if (StackEffect)
                 Effect();
-        }
-
-        public void ApplyModifierToTarget(Being target)
-        {
-            _targetComponent.SetTarget(target);
-            //Log.Verbose("Applying "+Data.Modifier);
-            //Apply();
         }
     }
 }

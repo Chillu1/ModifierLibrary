@@ -7,7 +7,7 @@ namespace ModifierSystem
     /// </summary>
     internal class TemplateModifiers
     {
-        private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
+        private readonly ModifierPrototypesBase<IModifier> _modifierPrototypes;
 
         /// <summary>
         ///     Absolute Full Modifier Setup Template, every value and component used. ConditionDoTStackRefresh
@@ -52,6 +52,22 @@ namespace ModifierSystem
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);
             _modifierPrototypes.SetupModifierApplier(modifier);
+        }
+
+        /// <summary>
+        ///     Simple condition modifier, damage on death
+        /// </summary>
+        private void ConditionModifier()
+        {
+            var modifier = new Modifier("DamageOnDeath");
+            var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
+            var target = new TargetComponent(LegalTarget.Beings, conditionData);
+            var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
+            var apply = new ApplyComponent(effect, target, conditionData);
+            modifier.AddComponent(target);
+            modifier.AddComponent(new InitComponent(apply));
+            modifier.FinishSetup();
+            _modifierPrototypes.AddModifier(modifier);
         }
     }
 }

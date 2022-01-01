@@ -1,11 +1,12 @@
 TODO RN:  
 * Sort ideas by prio
-* >Being/BaseBeing protected? IConditionEffectComponent being
+* Being/BaseBeing protected?
+* Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc
+  * Condition Applier (IConditionEffectComponent)
 * More StackComponent Modifiers & Unit Tests
   * StackAdd Cooldown, and/or StackEffect Cooldown
   * Stack Modifiers
-    * >Apply another modifier on 5 stacks. Small problem? Its an applier modifier, so it will be used as one for enemies as well
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
 * Make lifeSteal component part of actual baseProject.Being class instead
@@ -20,5 +21,6 @@ TODO RN:
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
 * >Condition Apply (ex. (apply?) happens when player has less/more than 10 X(damage, health, etc)?)
+    * On low health
 * >Ressurection EffectComponent? Needs to be condition based though
 * Editor Window for prototypes/modifiers

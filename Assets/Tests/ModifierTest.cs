@@ -38,7 +38,7 @@ namespace ModifierSystem.Tests
             character.CastModifier(ally, "AllyHealTestApplier");
             var healModifier = modifierPrototypes.GetItem("AllyHealTest");
             Assert.True(ally.ContainsModifier(healModifier));
-            Assert.True(ally.Stats.Health.PoolStat.IsFull);
+            Assert.True(ally.Stats.Health.IsFull);
 
             enemy.Attack(ally);
             enemy.Attack(ally);

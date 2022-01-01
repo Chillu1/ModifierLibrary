@@ -78,11 +78,11 @@ namespace ModifierSystem.Tests
 
         public class ModifierPrototypesTest
         {
-            private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
+            private readonly ModifierPrototypesBase<IModifier> _modifierPrototypes;
 
             public ModifierPrototypesTest()
             {
-                _modifierPrototypes = new ModifierPrototypesBase<Modifier>();
+                _modifierPrototypes = new ModifierPrototypesBase<IModifier>();
                 SetupModifierPrototypes();
             }
 
@@ -170,7 +170,7 @@ namespace ModifierSystem.Tests
                     //MovementSpeedOfCat, removed after 10 seconds
                     var modifier = new Modifier("MovementSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
-                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed){baseValue = 5} }, target);
+                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed, 5) }, target);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(effect)); //Apply stat on init
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
@@ -181,7 +181,7 @@ namespace ModifierSystem.Tests
                     //AttackSpeedOfCatTest, removed after 10 seconds
                     var modifier = new Modifier("AttackSpeedOfCatTest");
                     var target = new TargetComponent(LegalTarget.Self);
-                    var effect = new StatComponent(new[] { new Stat(StatType.AttackSpeed){baseValue = 5} }, target);
+                    var effect = new StatComponent(new[] { new Stat(StatType.AttackSpeed, 5) }, target);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(effect)); //Apply stat on init
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10)); //Remove after 10 secs
@@ -328,8 +328,8 @@ namespace ModifierSystem.Tests
                     var removeEffect = new RemoveComponent(modifier, cleanUp);
                     var applyRemoval = new ApplyComponent(removeEffect, target, conditionData);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(apply, applyRemoval));
                     modifier.AddComponent(apply);
+                    modifier.AddComponent(new InitComponent(apply, applyRemoval));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                 }
@@ -422,12 +422,30 @@ namespace ModifierSystem.Tests
                         { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 }));
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
-                    _modifierPrototypes.SetupModifierApplier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);//ApplierApplier
                 }
+
+                
+
+                /*{
+                    //Applier onDeath (lowers health), copies itself, infinite loop possible?
+                    var modifier = new Modifier("DeathHealthTestApplier", true);
+                    var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData, true);
+                    var effect = new StatComponent(new[] { new Stat(StatType.Health, -15) }, target);
+                    var applierEffect = new ApplierComponent(modifier, target);
+                    var apply = new ApplyComponent(applierEffect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(apply);
+                    modifier.AddComponent(new InitComponent(effect));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                    _modifierPrototypes.SetupModifierApplier(modifier);
+                }*/
             }
 
             [CanBeNull]
-            public Modifier GetItem(string key)
+            public IModifier GetItem(string key)
             {
                 if (key.Contains("Applier"))
                 {
@@ -468,7 +486,7 @@ namespace ModifierSystem.Tests
                     var comboModifier = new ComboModifier("ComboAspectOfTheCatTest",
                         new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })), 1);
                     var target = new TargetComponent(LegalTarget.Self);
-                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed) { baseValue = 10 }}, target);
+                    var effect = new StatComponent(new[] { new Stat(StatType.MovementSpeed, 10) }, target);
                     comboModifier.AddComponent(target);
                     comboModifier.AddComponent(new InitComponent(effect));
                     comboModifier.AddComponent(new TimeComponent(new RemoveComponent(comboModifier), 10));
@@ -495,8 +513,7 @@ namespace ModifierSystem.Tests
                 }
                 {
                     //10k health = giant
-                    var statsNeeded = new[] { new Stat(StatType.Health) };
-                    statsNeeded[0].Init(10000);
+                    var statsNeeded = new[] { new Stat(StatType.Health, 10000) };
                     var comboModifier = new ComboModifier("ComboGiantTest", new ComboRecipes(new ComboRecipe(statsNeeded)),
                         PermanentComboModifierCooldown);
                     var target = new TargetComponent(LegalTarget.Self);
@@ -509,8 +526,7 @@ namespace ModifierSystem.Tests
                 }
                 {
                     //10k health = temporary giant
-                    var statsNeeded = new[] { new Stat(StatType.Health) };
-                    statsNeeded[0].Init(10000);
+                    var statsNeeded = new[] { new Stat(StatType.Health, 10000) };
                     var comboModifier = new ComboModifier("ComboTimedGiantTest", new ComboRecipes(new ComboRecipe(statsNeeded)),
                         PermanentComboModifierCooldown);
                     var target = new TargetComponent(LegalTarget.Self);

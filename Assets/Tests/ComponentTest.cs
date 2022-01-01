@@ -19,7 +19,7 @@ namespace ModifierSystem.Tests
             LogAssert.Expect(LogType.Error, new Regex("Target is not valid*"));
             //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies
             character.Attack(ally);
-            Assert.True(ally.Stats.Health.Check(24));
+            Assert.AreEqual(24, ally.Stats.Health.CurrentHealth, Delta);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void HealStatBasedEffect()
         {
-            Assert.True(ally.Stats.Health.PoolStat.IsFull);
+            Assert.True(ally.Stats.Health.IsFull);
             var healModifier = modifierPrototypes.GetItem("HealStatBasedTest");
             character.ChangeStat(StatType.Heal, 5);
             character.AddModifier(healModifier);
@@ -70,7 +70,7 @@ namespace ModifierSystem.Tests
             enemy.Attack(ally);
             character.Heal(ally);
 
-            Assert.True(ally.Stats.Health.PoolStat.IsFull);
+            Assert.True(ally.Stats.Health.IsFull);
         }
     }
 }

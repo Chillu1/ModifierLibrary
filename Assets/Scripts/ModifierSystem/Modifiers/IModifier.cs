@@ -1,11 +1,13 @@
 using System;
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public interface IModifier : IEntity<string>, ICloneable
+    public interface IModifier : IEntity<string>, ICloneable, IEventCopy<IModifier>
     {
         TargetComponent TargetComponent { get; }
+        StatusTag[] StatusTags { get; }
         bool ApplierModifier { get; }
         bool ToRemove { get; }
         void Init();
@@ -15,5 +17,6 @@ namespace ModifierSystem
         bool Refresh();
         void SetForRemoval();
         bool ValidatePrototypeSetup();
+        void FinishSetup([CanBeNull] DamageData[] damageData = null);
     }
 }

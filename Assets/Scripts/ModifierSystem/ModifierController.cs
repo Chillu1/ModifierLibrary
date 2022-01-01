@@ -115,9 +115,14 @@ namespace ModifierSystem
 
         public bool RemoveModifier(IModifier modifier)
         {
-            bool success = Modifiers.Remove(modifier.Id);
+            return RemoveModifier(modifier.Id);
+        }
+
+        public bool RemoveModifier(string id)
+        {
+            bool success = Modifiers.Remove(id);
             if (!success)
-                Log.Error("Couldn't remove modifier " + modifier.Id, "modifiers");
+                Log.Error("Couldn't remove modifier " + id, "modifiers");
             return success;
         }
 
@@ -194,10 +199,9 @@ namespace ModifierSystem
             //    RegisterModifier(Modifiers[modifier.Id]);
         }
 
-        [CanBeNull]
         public IEnumerable<IModifier> GetModifierAppliers()
         {
-            return Modifiers.Values.Where(m => m.ApplierModifier);
+            return Modifiers.Values.Where(m => m.ApplierModifier);//Invalid target on appliers with self, so no need for extra checks rn
         }
 
         public override string ToString()
