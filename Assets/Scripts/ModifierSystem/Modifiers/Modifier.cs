@@ -188,14 +188,14 @@ namespace ModifierSystem
             //this.event = prototype.event //or we will need to copy it over properly, with a new reference
         }
 
-        public bool ValidatePrototypeSetup()
+        public virtual bool ValidatePrototypeSetup()
         {
-            bool success = true;
+            bool valid = true;
 
             if (TargetComponent == null)
             {
                 Log.Error("Modifier needs a target component", "modifiers");
-                success = false;
+                valid = false;
             }
 
             if (ApplierModifier || Id.Contains("Applier"))
@@ -203,35 +203,35 @@ namespace ModifierSystem
                 if (ApplyComponent == null && StackComponent == null)
                 {
                     Log.Error("ModifierApplier needs an ApplyComponent or StackComponent", "modifiers");
-                    success = false;
+                    valid = false;
                 }
             }
             //Not applier, check for other components
             else if ((TimeComponents == null || TimeComponents.Count == 0) && InitComponent == null)
             {
                 Log.Error("Modifier needs either an init or time component to work (unless maybe its a flag modifier?)", "modifiers");
-                success = false;
+                valid = false;
             }
 
             if (Id.Contains("Applier") && !ApplierModifier)
             {
                 Log.Error("Id contains applier, but the flag isn't set", "modifiers");
-                success = false;
+                valid = false;
             }
             if (!Id.Contains("Applier") && ApplierModifier)
             {
                 Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
-                success = false;
+                valid = false;
             }
 
             if (!_setupFinished || StatusTags == null)
             {
                 Log.Error("Setup has not been properly finished", "modifiers");
                 StatusTags = new StatusTag[0];
-                success = false;
+                valid = false;
             }
 
-            return success;
+            return valid;
         }
 
         private void SetupCleanUpComponent()
@@ -239,9 +239,9 @@ namespace ModifierSystem
             CleanUpComponent ??= new CleanUpComponent();
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
-            return this.Copy(); // MemberwiseClone();
+            return this.Copy();
         }
 
         public override string ToString()

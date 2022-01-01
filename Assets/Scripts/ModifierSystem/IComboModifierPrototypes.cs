@@ -2,7 +2,7 @@ namespace ModifierSystem
 {
     public interface IComboModifierPrototypes
     {
-        ModifierPrototypesBase<ComboModifier> ModifierPrototypes { get; }
-        ComboModifier GetItem(string id);
+        ModifierPrototypesBase<IComboModifier> ModifierPrototypes { get; }
+        IComboModifier GetItem(string id);
     }
 }

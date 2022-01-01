@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public sealed class ModifierPrototypesBase<TModifierType> where TModifierType : class, IModifier, IEntity<string>, ICloneable, IEventCopy<TModifierType>
+    public sealed class ModifierPrototypesBase<TModifierType> where TModifierType : IModifier, IEntity<string>, ICloneable, IEventCopy<TModifierType>
     {
         private readonly BasePrototypeController<string, TModifierType> _prototypeController;
 

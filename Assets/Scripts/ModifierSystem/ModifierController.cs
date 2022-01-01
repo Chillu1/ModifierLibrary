@@ -73,8 +73,8 @@ namespace ModifierSystem
             }
             else
             {
-                if (modifier.GetType() == typeof(ComboModifier) && !ComboModifierCooldowns.ContainsKey(modifier.Id))
-                    ComboModifierCooldowns.Add(modifier.Id, ((ComboModifier)modifier).Cooldown);
+                if (modifier is IComboModifier && !ComboModifierCooldowns.ContainsKey(modifier.Id))
+                    ComboModifierCooldowns.Add(modifier.Id, ((IComboModifier)modifier).Cooldown);
                 AddModifier(modifier);
             }
 
@@ -101,7 +101,7 @@ namespace ModifierSystem
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
-        private void AddComboModifiers(HashSet<ComboModifier> comboModifiers)
+        private void AddComboModifiers(HashSet<IComboModifier> comboModifiers)
         {
             foreach (var modifier in comboModifiers)
             {

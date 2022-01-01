@@ -14,7 +14,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.Stats.CheckStat(StatType.MovementSpeed, 5));
             character.AddModifier(attackSpeedOfCat);
 
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("AspectOfTheCatTest")));
+            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("ComboAspectOfTheCatTest")));
             Assert.True(character.Stats.CheckStat(StatType.MovementSpeed, 15));
         }
 
@@ -29,7 +29,7 @@ namespace ModifierSystem.Tests
             character.Attack(enemy);
 
             //Check for infected comboMod
-            Assert.True(enemy.ContainsModifier("InfectionTest"));
+            Assert.True(enemy.ContainsModifier("ComboInfectionTest"));
         }
 
         [Test]
@@ -50,21 +50,22 @@ namespace ModifierSystem.Tests
         public void ComboModifierStats()
         {
             character.ChangeStat(new Stat(StatType.Health, 10000));
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("GiantTest")));
+            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("ComboGiantTest")));
         }
 
         [Test]
         public void ComboModifierCooldown()
         {
+            var timedGiantComboModifier = comboModifierPrototypesTest.GetItem("ComboTimedGiantTest");
             character.ChangeStat(new Stat(StatType.Health, 10000));
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            Assert.True(character.ContainsModifier(timedGiantComboModifier));
             character.Update(PermanentComboModifierCooldown/2);
-            Assert.False(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            Assert.False(character.ContainsModifier(timedGiantComboModifier));
             character.ChangeStat(new Stat(StatType.Health, 1));//ComboCheck (GiantTest can be added without cooldown check)
-            Assert.False(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            Assert.False(character.ContainsModifier(timedGiantComboModifier));
             character.Update(PermanentComboModifierCooldown);
             character.ChangeStat(new Stat(StatType.Health, 1));//ComboCheck
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("TimedGiantTest")));
+            Assert.True(character.ContainsModifier(timedGiantComboModifier));
         }
     }
 }

@@ -7,36 +7,33 @@ namespace ModifierSystem
     /// <summary>
     ///     Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats
     /// </summary>
-    public class ComboModifier : IModifier, IEventCopy<ComboModifier>
+    public sealed class ComboModifier : Modifier, IComboModifier, IEventCopy<ComboModifier>
     {
-        public string Id => Modifier.Id;
-
-        private Modifier Modifier { get; }
         private ComboRecipes ComboRecipes { get; }
         public float Cooldown { get; }
 
-        public TargetComponent TargetComponent => Modifier.TargetComponent;
-        public bool ApplierModifier => Modifier.ApplierModifier;
-        public bool ToRemove => Modifier.ToRemove;
-
-        public ComboModifier(Modifier modifier, ComboRecipes comboRecipes, float cooldown)
+        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5) : base(id, false)
         {
-            Modifier = modifier;
             ComboRecipes = comboRecipes;
             Cooldown = cooldown;
         }
 
-        public bool ValidatePrototypeSetup()
+        public override bool ValidatePrototypeSetup()
         {
-            bool success = Modifier.ValidatePrototypeSetup();
+            bool valid = base.ValidatePrototypeSetup();
 
-            if (Id.Contains("Applier") || Modifier.ApplierModifier)
+            if (!Id.StartsWith("Combo"))
             {
-                Log.Error("ComboModifier can't be an applier modifier, right?", "modifiers");
-                success = false;
+                Log.Error("ComboModifier have to start with Combo", "modifiers");
+                valid = false;
+            }
+            if (Id.Contains("Applier") || ApplierModifier)
+            {
+                Log.Error("ComboModifier can't be an applier modifier, right? Maybe?", "modifiers");
+                valid = false;
             }
 
-            return success;
+            return valid;
         }
 
         public bool CheckRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
@@ -113,26 +110,17 @@ namespace ModifierSystem
 
         public void CopyEvents(ComboModifier prototype)
         {
-            Modifier.CopyEvents(prototype.Modifier);
+            base.CopyEvents(prototype);
             //ComboRecipes = (ComboRecipes)prototype.ComboRecipes.Clone();
             //Cooldown = prototype.Cooldown;
         }
 
-        public void Init() => Modifier.Init();
-        public void TryApply(Being target) => Modifier.TryApply(target);
-
-        public void Update(float deltaTime, StatusResistances ownerStatusResistances) => Modifier.Update(deltaTime, ownerStatusResistances);
-
-        public bool Stack() => Modifier.Stack();
-
-        public bool Refresh() => Modifier.Refresh();
-
-        public void SetForRemoval()
+        public void CopyEvents(IComboModifier prototype)
         {
-            Modifier.SetForRemoval();
+            base.CopyEvents((Modifier)prototype);
         }
 
-        public object Clone()
+        public override object Clone()
         {
             //Modifier = (Modifier)Modifier.Clone();
             return this.Copy();
