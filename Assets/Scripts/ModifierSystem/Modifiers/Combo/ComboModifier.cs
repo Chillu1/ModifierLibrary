@@ -101,7 +101,7 @@ namespace ModifierSystem
             foreach (var stat in recipe.Stat!)
             {
                 //TODO What to do with damage stat?
-                if (!stats.CheckStat(stat.StatType, stat.Value))
+                if (!stats.HasStat(stat.StatType, stat.Value))
                     return false;
             }
 

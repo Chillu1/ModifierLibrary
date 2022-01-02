@@ -427,9 +427,9 @@ namespace ModifierSystem.Tests
                 {
                     var modifier = new Modifier("DamageOnLowHealthTest");
                     var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.HitEvent);
-                    //var condition = ConditionGenerator.GenerateBeingCondition(ConditionBeingStatus.HealthIsLow);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
-                    var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target, ConditionBeingStatus.HealthIsLow);
+                    var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target,
+                        new ConditionCheckData(ConditionBeingStatus.HealthIsLow));
                     var apply = new ApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));

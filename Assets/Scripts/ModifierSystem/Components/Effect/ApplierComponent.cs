@@ -9,7 +9,7 @@ namespace ModifierSystem
         public bool IsStackEffect { get; }
 
         public ApplierComponent(IModifier modifier, ITargetComponent targetComponent, AddModifierParameters parameters = AddModifierParameters.Default,
-            bool isStackEffect = false, ConditionBeingStatus status = ConditionBeingStatus.None) : base(targetComponent, status)
+            bool isStackEffect = false, ConditionCheckData conditionCheckData = null) : base(targetComponent, conditionCheckData)
         {
             Modifier = modifier;
             Parameters = parameters;

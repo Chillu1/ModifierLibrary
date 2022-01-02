@@ -1,16 +1,17 @@
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
     public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent
     {
-        private ConditionBeingStatus Status { get; }
+        [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
         private readonly ITargetComponent _targetComponent;
 
-        protected EffectComponent(ITargetComponent targetComponent, ConditionBeingStatus status = ConditionBeingStatus.None)
+        protected EffectComponent(ITargetComponent targetComponent, ConditionCheckData conditionCheckData = null)
         {
             _targetComponent = targetComponent;
-            Status = status;
+            ConditionCheckData = conditionCheckData;
         }
 
         protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents);
@@ -22,9 +23,9 @@ namespace ModifierSystem
 
         private void Effect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            if (Status != ConditionBeingStatus.None)
+            if (ConditionCheckData != null)
             {
-                var beingCondition = ConditionGenerator.GenerateBeingCondition(Status);
+                var beingCondition = ConditionGenerator.GenerateBeingCondition(ConditionCheckData);
                 if (!beingCondition(receiver, acter))
                     return;
             }

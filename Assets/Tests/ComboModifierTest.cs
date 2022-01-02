@@ -11,11 +11,11 @@ namespace ModifierSystem.Tests
             var movementSpeedOfCat = modifierPrototypes.GetItem("MovementSpeedOfCatTest");
             var attackSpeedOfCat = modifierPrototypes.GetItem("AttackSpeedOfCatTest");
             character.AddModifier(movementSpeedOfCat);
-            Assert.True(character.Stats.CheckStat(StatType.MovementSpeed, 5));
+            Assert.True(character.Stats.HasStat(StatType.MovementSpeed, 5));
             character.AddModifier(attackSpeedOfCat);
 
             Assert.True(character.ContainsModifier(comboModifierPrototypesTest.GetItem("ComboAspectOfTheCatTest")));
-            Assert.True(character.Stats.CheckStat(StatType.MovementSpeed, 15));
+            Assert.True(character.Stats.HasStat(StatType.MovementSpeed, 15));
         }
 
         [Test]
