@@ -26,7 +26,7 @@ namespace ModifierSystem
                 return (receiver, acter)
                     => receiver.Stats.HasStat(checkData.StatType, checkData.Value, checkData.ComparisonCheck);
 
-            if(checkData.ModifierId != string.Empty)
+            if(!string.IsNullOrEmpty(checkData.ModifierId))
                 return (receiver, acter) => ((Being)receiver).ContainsModifier(checkData.ModifierId);
 
             if(checkData.ElementalType != ElementalType.None)

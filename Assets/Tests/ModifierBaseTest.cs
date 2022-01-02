@@ -259,7 +259,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on kill
                     var modifier = new Modifier("DamageOnKillTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.KillEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -281,7 +281,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on death
                     var modifier = new Modifier("DamageOnDeathTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Acter, ConditionEvent.DeathEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -293,7 +293,7 @@ namespace ModifierSystem.Tests
                 {
                     //Timed damage on kill
                     var modifier = new Modifier("TimedDamageOnKillTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.KillEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -307,7 +307,7 @@ namespace ModifierSystem.Tests
                 {
                     //Thorns on hit
                     var modifier = new Modifier("ThornsOnHitTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Acter, ConditionEvent.HitEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(5, DamageType.Physical)}, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -320,7 +320,7 @@ namespace ModifierSystem.Tests
                     //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
                     //Heal on death, once
                     var modifier = new Modifier("HealOnDeathTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.DeathEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealComponent(10, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -426,10 +426,44 @@ namespace ModifierSystem.Tests
                 }
                 {
                     var modifier = new Modifier("DamageOnLowHealthTest");
-                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.HitEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target,
                         new ConditionCheckData(ConditionBeingStatus.HealthIsLow));
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    var flagModifier = new Modifier("FlagTest");
+                    var flagTarget = new TargetComponent(LegalTarget.Beings);
+                    var effectFlag = new DamageStatComponent(new[] { new DamageData(1, DamageType.Physical) }, flagTarget);
+                    flagModifier.AddComponent(flagTarget);
+                    flagModifier.AddComponent(new InitComponent(effectFlag));
+                    flagModifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(flagModifier);
+
+                    var modifier = new Modifier("DamageOnModifierIdTest");
+                    var target = new TargetComponent(LegalTarget.Beings);
+                    var effect = new DamageStatComponent(new[] { new DamageData(double.MaxValue, DamageType.Physical) }, target,
+                        new ConditionCheckData("FlagTest"));
+                    //var apply = new ApplyComponent(effect, target);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(effect));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    //If enemy is on fire, deal damage to him, on hit
+                    var modifier = new Modifier("DealDamageOnElementalIntensityTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
+                    //We check intensity on acter?
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
+                    var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
+                        conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
+                            Curves.ElementIntensity.Evaluate(900)));
                     var apply = new ApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));

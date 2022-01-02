@@ -4,14 +4,14 @@ namespace ModifierSystem
 {
     public class ConditionCheckData
     {
-        public ConditionBeingStatus Status { get; }
+        public ConditionBeingStatus Status { get; } = ConditionBeingStatus.None;
 
-        public ComparisonCheck ComparisonCheck { get; }
+        public ComparisonCheck ComparisonCheck { get; } = ComparisonCheck.None;
         public double Value { get; }
 
         public StatType StatType { get; }
         public string ModifierId { get; }
-        public ElementalType ElementalType { get; }
+        public ElementalType ElementalType { get; } = ElementalType.None;
         public bool ElementalIntensityCheck { get; }
 
         public ConditionCheckData(ConditionBeingStatus status)

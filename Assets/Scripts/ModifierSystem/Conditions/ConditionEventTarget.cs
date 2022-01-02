@@ -2,14 +2,17 @@ using BaseProject;
 
 namespace ModifierSystem
 {
+    /// <summary>
+    ///     Owner/Retriever - Acter/Giver
+    /// </summary>
     public enum ConditionEventTarget
     {
         None = 0,
         /// <summary>
-        ///     Owner
+        ///     Owner/Retriever - Acter/Giver
         /// </summary>
-        Self = 1,
-        Acter = 2,
+        SelfActer = 1,
+        ActerSelf = 2,
         SelfSelf = 3,
         ActerActer = 4,
     }

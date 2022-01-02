@@ -83,10 +83,10 @@ namespace ModifierSystem
         {
             switch (ConditionEventTarget)
             {
-                case ConditionEventTarget.Self:
+                case ConditionEventTarget.SelfActer:
                     effect(receiver, acter);
                     break;
-                case ConditionEventTarget.Acter:
+                case ConditionEventTarget.ActerSelf:
                     effect(acter, receiver);
                     break;
                 case ConditionEventTarget.SelfSelf:

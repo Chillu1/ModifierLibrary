@@ -23,8 +23,6 @@ TODO RN:
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
 * >Condition Apply (ex. (apply?) happens when player has less/more than 10 X(damage, health, etc)?)
-  > ConditionCheck Modifier Id (add dmg)  
-  > ConditionCheck Elemental Intensity  
   > ConditionCheck Has Stat  
   > Condition without ConditionEvents (only applies on X)  
   >  OnDealDamage, check health stat for owner. If lower than X, apply effect  
