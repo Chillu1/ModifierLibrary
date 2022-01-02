@@ -2,20 +2,18 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatComponent : IEffectComponent
+    public class StatComponent : EffectComponent
     {
-        private readonly Stat[] _stats;
-        private readonly ITargetComponent _targetComponent;
+        private Stat[] Stats { get; }
 
-        public StatComponent(Stat[] stats, ITargetComponent targetComponent)
+        public StatComponent(Stat[] stats, ITargetComponent targetComponent) : base(targetComponent)
         {
-            _stats = stats;
-            _targetComponent = targetComponent;
+            Stats = stats;
         }
 
-        public void SimpleEffect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            _targetComponent.Target.ChangeStat(_stats);
+            ((Being)receiver).ChangeStat(Stats);
         }
     }
 }

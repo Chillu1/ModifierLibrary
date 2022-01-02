@@ -69,5 +69,25 @@ namespace ModifierSystem
             modifier.FinishSetup();
             _modifierPrototypes.AddModifier(modifier);
         }
+
+        /// <summary>
+        ///     Hit, if enemy has X intensity, deal 10000 damage
+        /// </summary>
+        private void ConditionConditionCheckModifier()
+        {
+            //If enemy is on fire, deal damage to him, on hit
+            var modifier = new Modifier("DealDamageOnElementalIntensityTest");
+            var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
+            //We check intensity on acter?
+            var target = new TargetComponent(LegalTarget.Beings, conditionData);
+            var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
+                conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
+                    Curves.ElementIntensity.Evaluate(900)));
+            var apply = new ApplyComponent(effect, target, conditionData);
+            modifier.AddComponent(target);
+            modifier.AddComponent(new InitComponent(apply));
+            modifier.FinishSetup();
+            _modifierPrototypes.AddModifier(modifier);
+        }
     }
 }

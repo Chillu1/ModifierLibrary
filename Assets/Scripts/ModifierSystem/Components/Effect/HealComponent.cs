@@ -2,27 +2,18 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class HealComponent : IEffectComponent, IConditionEffectComponent
+    public class HealComponent : EffectComponent
     {
         public double Heal { get; private set; }
 
-        private readonly ITargetComponent _targetComponent;
-
-        public HealComponent(double heal, ITargetComponent targetComponent)
+        public HealComponent(double heal, ITargetComponent targetComponent) : base(targetComponent)
         {
             Heal = heal;
-            _targetComponent = targetComponent;
         }
 
-        public void SimpleEffect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            _targetComponent.Target.Stats.Health.Heal(Heal);
-        }
-
-        public void ConditionEffect(BaseBeing receiver, BaseBeing healer)
-        {
-            _targetComponent.HandleTarget(receiver, healer,
-                (receiverLocal, acterLocal) => receiverLocal.Heal(Heal, acterLocal));
+            receiver.Stats.Health.Heal(Heal);
         }
     }
 }

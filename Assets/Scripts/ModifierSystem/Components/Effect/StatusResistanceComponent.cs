@@ -2,31 +2,22 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusResistanceComponent : IEffectComponent, IConditionEffectComponent
+    public class StatusResistanceComponent : EffectComponent
     {
         private StatusTag[] StatusTags { get; }
         private double[] Values { get; }
 
-        private readonly ITargetComponent _targetComponent;
-
-        public StatusResistanceComponent(StatusTag[] tags, double[] values, ITargetComponent targetComponent)
+        public StatusResistanceComponent(StatusTag[] tags, double[] values, ITargetComponent targetComponent) : base(targetComponent)
         {
             if (tags.Length != values.Length)
                 Log.Error("Status tags wrong length for tags/values", "modifiers");
             StatusTags = tags;
             Values = values;
-            _targetComponent = targetComponent;
         }
 
-        public void SimpleEffect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            _targetComponent.Target.StatusResistances.ChangeValue(StatusTags, Values);
-        }
-
-        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
-        {
-            _targetComponent.HandleTarget(receiver, acter,
-                (receiverLocal, acterLocal) => receiverLocal.StatusResistances.ChangeValue(StatusTags, Values));
+            ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values);
         }
     }
 }

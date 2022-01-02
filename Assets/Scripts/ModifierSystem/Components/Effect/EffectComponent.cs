@@ -16,11 +16,17 @@ namespace ModifierSystem
 
         protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents);
 
+        /// <summary>
+        ///     No conditions, just effect
+        /// </summary>
         public void SimpleEffect()
         {
             Effect(_targetComponent.Target, _targetComponent.Owner, true);
         }
 
+        /// <summary>
+        ///     Main effect helper, checks for CheckCondition
+        /// </summary>
         private void Effect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
             if (ConditionCheckData != null)
@@ -33,6 +39,9 @@ namespace ModifierSystem
             ActualEffect(receiver, acter, triggerEvents);
         }
 
+        /// <summary>
+        ///     Being Event based condition effect
+        /// </summary>
         public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
         {
             _targetComponent.HandleTarget(receiver, acter, EventEffect);

@@ -2,33 +2,23 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
+    public class StatusComponent : EffectComponent, IStackEffectComponent
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
         private StatusComponentStackEffect StackEffectType { get; }
 
-        private readonly ITargetComponent _targetComponent;
-
         public StatusComponent(StatusEffect effect, float duration, ITargetComponent targetComponent,
-            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None)
+            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None) : base(targetComponent)
         {
             StatusEffect = effect;
             Duration = duration;
-            _targetComponent = targetComponent;
             StackEffectType = stackEffectType;
         }
 
-        public void SimpleEffect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
-            _targetComponent.Target.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
-        }
-
-        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
-        {
-            _targetComponent.HandleTarget(receiver, acter,
-                (receiverLocal, acterLocal) => receiverLocal.StatusEffects.ChangeStatusEffect(StatusEffect, Duration));
+            receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
         public void StackEffect(int stacks, double value)

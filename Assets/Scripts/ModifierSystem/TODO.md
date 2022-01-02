@@ -24,9 +24,9 @@ TODO RN:
 * UniqueId per new component?
 * >Condition Apply (ex. (apply?) happens when player has less/more than 10 X(damage, health, etc)?)
   > ConditionCheck Has Stat  
-  > Condition without ConditionEvents (only applies on X)  
+  > Condition without ConditionEvents (only applies on X) how do?  
   >  OnDealDamage, check health stat for owner. If lower than X, apply effect  
-  >  If health on IsLow, add 50 damage, if not, remove that 50 damage  
+  >>  If health on IsLow, add 50 damage, if not, remove that 50 damage  
     > Conditional enemy(acter)  
     > Value Based   
     > On low health

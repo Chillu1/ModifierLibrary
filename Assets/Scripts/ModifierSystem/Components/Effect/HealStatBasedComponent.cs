@@ -2,25 +2,15 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class HealStatBasedComponent : IEffectComponent, IConditionEffectComponent
+    public class HealStatBasedComponent : EffectComponent
     {
-        private readonly ITargetComponent _targetComponent;
-
-        public HealStatBasedComponent(ITargetComponent targetComponent)
+        public HealStatBasedComponent(ITargetComponent targetComponent) : base(targetComponent)
         {
-            _targetComponent = targetComponent;
         }
 
-        public void SimpleEffect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            _targetComponent.Target.Heal(_targetComponent.Owner);
-            //_targetComponent.Target.Heal(_targetComponent.Owner.Stats.HealStat, _targetComponent.Owner.BaseBeing);
-        }
-
-        public void ConditionEffect(BaseBeing receiver, BaseBeing healer)
-        {
-            _targetComponent.HandleTarget(receiver, healer,
-                (receiverLocal, acterLocal) => receiverLocal.Heal(receiverLocal, acterLocal, false));
+            receiver.Heal(receiver, acter, triggerEvents);
         }
     }
 }
