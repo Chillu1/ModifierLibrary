@@ -34,7 +34,7 @@ namespace ModifierSystem
             else
             {
                 foreach (var effectComponent in _effectComponents)
-                    effectComponent.Effect();
+                    effectComponent.SimpleEffect();
             }
         }
 

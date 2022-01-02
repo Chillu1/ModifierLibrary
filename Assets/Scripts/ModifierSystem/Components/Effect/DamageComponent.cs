@@ -2,37 +2,30 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
+    public sealed class DamageComponent : EffectComponent, IStackEffectComponent
     {
         private DamageData[] Damage { get; }
-        private DamageComponentStackEffect StackEffect { get; }
-        private readonly ITargetComponent _targetComponent;
+        private DamageComponentStackEffect StackEffectType { get; }
 
         public DamageComponent(DamageData[] damage, ITargetComponent targetComponent,
-            DamageComponentStackEffect stackEffect = DamageComponentStackEffect.None)
+            DamageComponentStackEffect stackEffectType = DamageComponentStackEffect.None,
+            ConditionBeingStatus status = ConditionBeingStatus.None) : base(targetComponent, status)
         {
             Damage = damage;
-            _targetComponent = targetComponent;
-            StackEffect = stackEffect;
+            StackEffectType = stackEffectType;
         }
 
-        public void Effect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            _targetComponent.Target.DealDamage(Damage, _targetComponent.Owner);
+            receiver.DealDamage(Damage, acter, triggerEvents);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing acter)
+        public void StackEffect(int stacks, double value)
         {
-            _targetComponent.HandleTarget(owner, acter,
-                (receiverLocal, acterLocal) => receiverLocal.DealDamage(Damage, acterLocal));
-        }
-
-        public void Effect(int stacks, double value)
-        {
-            switch (StackEffect)
+            switch (StackEffectType)
             {
                 case DamageComponentStackEffect.Effect:
-                    Effect();
+                    SimpleEffect();
                     break;
                 case DamageComponentStackEffect.Add:
                     Damage[0].BaseDamage += value;
@@ -51,7 +44,7 @@ namespace ModifierSystem
                     //Damage[0].ElementData.?
                     break;
                 default:
-                    Log.Error($"StackEffectType {StackEffect} unsupported for {GetType()}");
+                    Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
                     return;
             }
         }
@@ -60,9 +53,9 @@ namespace ModifierSystem
         {
             None = 0,
             Effect,
-            Add,//TODO Add to all damages?
+            Add, //TODO Add to all damages?
             AddStacksBased,
-            Multiply,//TODO Multiply all damages?
+            Multiply, //TODO Multiply all damages?
             MultiplyStacksBased,
 
             //DamageComponent specific

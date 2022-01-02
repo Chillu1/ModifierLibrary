@@ -1,5 +1,7 @@
 TODO RN:  
 * Sort ideas by prio
+* >Better naming for Condition stuff
+* >Make all effects implement new refactor
 * Being/BaseBeing protected?
 * Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc
@@ -21,6 +23,10 @@ TODO RN:
 * Unity UI for controlling beings and their values, modifiers, timers, etc (check how entitas does it, can't because it's closed source...)
 * UniqueId per new component?
 * >Condition Apply (ex. (apply?) happens when player has less/more than 10 X(damage, health, etc)?)
-    * On low health
+  > Condition without ConditionEvents (only applies on X)  
+  >  OnDealDamage, check health stat for owner. If lower than X, apply effect  
+  >  If health on IsLow, add 50 damage, if not, remove that 50 damage  
+    > Conditional enemy(acter)  
+    > On low health
 * >Ressurection EffectComponent? Needs to be condition based though
 * Editor Window for prototypes/modifiers

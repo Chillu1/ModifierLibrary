@@ -24,14 +24,14 @@ namespace ModifierSystem
             SummedDamage = Damage.Sum(d => d.Damage);
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _targetComponent.Target.Stats.Health.Heal(SummedDamage * Percentage);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing healer)
+        public void ConditionEffect(BaseBeing receiver, BaseBeing healer)
         {
-            _targetComponent.HandleTarget(owner, healer,
+            _targetComponent.HandleTarget(receiver, healer,
                 (receiverLocal, acterLocal) => receiverLocal.Heal(SummedDamage * Percentage, acterLocal));
         }
     }

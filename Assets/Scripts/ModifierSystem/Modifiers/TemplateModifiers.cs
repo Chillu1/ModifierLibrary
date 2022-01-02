@@ -16,7 +16,7 @@ namespace ModifierSystem
         {
             var modifier = new Modifier("Full");
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
-            var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.AttackEvent);
+            var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
             var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
             var apply = new ApplyComponent(effect, target, conditionData);
@@ -60,7 +60,7 @@ namespace ModifierSystem
         private void ConditionModifier()
         {
             var modifier = new Modifier("DamageOnDeath");
-            var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
+            var conditionData = new ConditionEventData(ConditionEventTarget.Acter, ConditionEvent.DeathEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
             var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
             var apply = new ApplyComponent(effect, target, conditionData);

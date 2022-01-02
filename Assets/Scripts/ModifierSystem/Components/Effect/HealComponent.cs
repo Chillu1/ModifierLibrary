@@ -14,14 +14,14 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _targetComponent.Target.Stats.Health.Heal(Heal);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing healer)
+        public void ConditionEffect(BaseBeing receiver, BaseBeing healer)
         {
-            _targetComponent.HandleTarget(owner, healer,
+            _targetComponent.HandleTarget(receiver, healer,
                 (receiverLocal, acterLocal) => receiverLocal.Heal(Heal, acterLocal));
         }
     }

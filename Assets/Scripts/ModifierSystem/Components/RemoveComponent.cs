@@ -14,15 +14,15 @@ namespace ModifierSystem
             _cleanUpComponent = cleanUpComponent;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _cleanUpComponent?.CleanUp();
             _modifier.SetForRemoval();
         }
 
-        public void Effect(BaseBeing owner, BaseBeing acter)//Can't make it proper, because BaseBeing and not Being
+        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)//Can't make it proper, because BaseBeing and not Being
         {
-            Effect();
+            SimpleEffect();
         }
     }
 }

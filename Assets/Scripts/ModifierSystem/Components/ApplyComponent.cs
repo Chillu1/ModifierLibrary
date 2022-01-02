@@ -9,7 +9,8 @@ namespace ModifierSystem
     public class ApplyComponent : Component, IApplyComponent, ICleanUpComponent
     {
         public bool IsConditionEvent { get; }
-        private BeingConditionEvent ConditionEvent { get; }
+        private ConditionEvent ConditionEvent { get; }
+        private ConditionBeingStatus Status { get; }
 
         private readonly IEffectComponent _effectComponent;
         private readonly IConditionEffectComponent _conditionEffectComponent;
@@ -25,12 +26,12 @@ namespace ModifierSystem
             Validate();
         }
         public ApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
-            ConditionData conditionData = default)
+            ConditionEventData conditionEventData = default)
         {
             IsConditionEvent = true;
             _conditionEffectComponent = effectComponent;
             _targetComponent = targetComponent;
-            ConditionEvent = conditionData.BeingConditionEvent;
+            ConditionEvent = conditionEventData.conditionEvent;
             Validate();
         }
 
@@ -42,9 +43,9 @@ namespace ModifierSystem
             //}
             //_targetComponent.Validate()
 
-            if (ConditionEvent == BeingConditionEvent.None || !IsConditionEvent)//No conditions, just call it
+            if (ConditionEvent == ConditionEvent.None || !IsConditionEvent)//No conditions, just call it
             {
-                _effectComponent.Effect();
+                _effectComponent.SimpleEffect();
                 return;
             }
 
@@ -54,12 +55,12 @@ namespace ModifierSystem
                 return;
             }
 
-            ConditionEvent.SetupBeingEvent(_targetComponent!.Target, _conditionEffectComponent.Effect);
+            ConditionEvent.SetupBeingEvent(_targetComponent!.Target, _conditionEffectComponent.ConditionEffect);
         }
 
         public void CleanUp()
         {
-            if (ConditionEvent == BeingConditionEvent.None || !IsConditionEvent)
+            if (ConditionEvent == ConditionEvent.None || !IsConditionEvent)
                 return;
 
             if (_conditionEffectComponent == null)
@@ -68,14 +69,14 @@ namespace ModifierSystem
                 return;
             }
 
-            ConditionEvent.RemoveBeingEvent(_targetComponent!.Target, _conditionEffectComponent.Effect);
+            ConditionEvent.RemoveBeingEvent(_targetComponent!.Target, _conditionEffectComponent.ConditionEffect);
         }
 
         private bool Validate()
         {
             bool success = true;
-            bool conditionEvent = ConditionEvent != BeingConditionEvent.None,
-                conditionTarget = _targetComponent != null && _targetComponent.ConditionTarget != ConditionTarget.None;
+            bool conditionEvent = ConditionEvent != ConditionEvent.None,
+                conditionTarget = _targetComponent != null && _targetComponent.ConditionEventTarget != ConditionEventTarget.None;
 
             if ((!conditionEvent || !conditionTarget) && IsConditionEvent)
             {

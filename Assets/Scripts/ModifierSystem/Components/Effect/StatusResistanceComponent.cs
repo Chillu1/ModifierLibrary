@@ -18,14 +18,14 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _targetComponent.Target.StatusResistances.ChangeValue(StatusTags, Values);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing acter)
+        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
         {
-            _targetComponent.HandleTarget(owner, acter,
+            _targetComponent.HandleTarget(receiver, acter,
                 (receiverLocal, acterLocal) => receiverLocal.StatusResistances.ChangeValue(StatusTags, Values));
         }
     }

@@ -7,7 +7,7 @@ namespace ModifierSystem
 {
     public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent, ICloneable
     {
-        public ConditionTarget ConditionTarget { get; private set; }
+        public ConditionEventTarget ConditionEventTarget { get; private set; }
         [CanBeNull] public Being Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
@@ -23,15 +23,15 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public TargetComponent(LegalTarget legalTarget, ConditionData conditionData, bool applier = false)
+        public TargetComponent(LegalTarget legalTarget, ConditionEventData conditionEventData, bool applier = false)
         {
             if(legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
-            if(conditionData.ConditionTarget == ConditionTarget.None)
+            if(conditionEventData.conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Illegal conditionalTarget `None`", "modifiers");
 
             LegalTarget = legalTarget;
-            ConditionTarget = conditionData.ConditionTarget;
+            ConditionEventTarget = conditionEventData.conditionEventTarget;
             Applier = applier;
         }
 
@@ -79,20 +79,20 @@ namespace ModifierSystem
             return true;
         }
 
-        public void HandleTarget(BaseBeing receiver, BaseBeing acter, Action<BaseBeing, BaseBeing> effect)
+        public void HandleTarget(BaseBeing receiver, BaseBeing acter, BaseBeingEvent effect)
         {
-            switch (ConditionTarget)
+            switch (ConditionEventTarget)
             {
-                case ConditionTarget.Self:
+                case ConditionEventTarget.Self:
                     effect(receiver, acter);
                     break;
-                case ConditionTarget.Acter:
+                case ConditionEventTarget.Acter:
                     effect(acter, receiver);
                     break;
-                case ConditionTarget.SelfSelf:
+                case ConditionEventTarget.SelfSelf:
                     effect(receiver, receiver);
                     break;
-                case ConditionTarget.ActerActer:
+                case ConditionEventTarget.ActerActer:
                     effect(acter, acter);
                     break;
             }

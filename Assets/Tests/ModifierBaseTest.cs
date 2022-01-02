@@ -259,7 +259,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on kill
                     var modifier = new Modifier("DamageOnKillTest");
-                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.KillEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -281,7 +281,7 @@ namespace ModifierSystem.Tests
                 {
                     //Damage on death
                     var modifier = new Modifier("DamageOnDeathTest");
-                    var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Acter, ConditionEvent.DeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -293,7 +293,7 @@ namespace ModifierSystem.Tests
                 {
                     //Timed damage on kill
                     var modifier = new Modifier("TimedDamageOnKillTest");
-                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.KillEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -307,7 +307,7 @@ namespace ModifierSystem.Tests
                 {
                     //Thorns on hit
                     var modifier = new Modifier("ThornsOnHitTest");
-                    var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.HitEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Acter, ConditionEvent.HitEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(5, DamageType.Physical)}, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -320,7 +320,7 @@ namespace ModifierSystem.Tests
                     //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
                     //Heal on death, once
                     var modifier = new Modifier("HealOnDeathTest");
-                    var conditionData = new ConditionData(ConditionTarget.Self, BeingConditionEvent.DeathEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.DeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealComponent(10, target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -346,7 +346,7 @@ namespace ModifierSystem.Tests
                 {
                     //Heal yourself on healing someone else
                     var modifier = new Modifier("HealOnHealTest");
-                    var conditionData = new ConditionData(ConditionTarget.SelfSelf, BeingConditionEvent.HealEvent);
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HealEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealStatBasedComponent(target);
                     var apply = new ApplyComponent(effect, target, conditionData);
@@ -416,7 +416,7 @@ namespace ModifierSystem.Tests
 
                     var modifier = new Modifier("ApplyStunModifierXStacksTestApplier", true);
                     var target = new TargetComponent(LegalTarget.Self, true);
-                    var effect = new ApplierComponent(stunModifier, target, stackEffect: true);
+                    var effect = new ApplierComponent(stunModifier, target, isStackEffect: true);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new StackComponent(new StackComponentProperties(effect)
                         { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 }));
@@ -424,8 +424,19 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(modifier);
                     _modifierPrototypes.SetupModifierApplier(modifier);//ApplierApplier
                 }
+                {
+                    var modifier = new Modifier("DamageOnLowHealthTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.Self, ConditionEvent.HitEvent);
+                    //var condition = ConditionGenerator.GenerateBeingCondition(ConditionBeingStatus.HealthIsLow);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
+                    var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target, ConditionBeingStatus.HealthIsLow);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
 
-                
 
                 /*{
                     //Applier onDeath (lowers health), copies itself, infinite loop possible?

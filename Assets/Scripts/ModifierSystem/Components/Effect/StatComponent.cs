@@ -13,7 +13,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _targetComponent.Target.ChangeStat(_stats);
         }

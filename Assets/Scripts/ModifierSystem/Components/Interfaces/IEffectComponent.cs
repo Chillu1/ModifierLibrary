@@ -2,6 +2,6 @@ namespace ModifierSystem
 {
     public interface IEffectComponent
     {
-        void Effect();
+        void SimpleEffect();
     }
 }

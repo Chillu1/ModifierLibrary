@@ -2,45 +2,31 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class ApplierComponent : IEffectComponent, IConditionEffectComponent, IStackEffectComponent
+    public sealed class ApplierComponent : EffectComponent, IStackEffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
-        public bool StackEffect { get; }
-        private readonly ITargetComponent _targetComponent;
+        public bool IsStackEffect { get; }
 
-        public ApplierComponent(IModifier modifier, ITargetComponent targetComponent,
-            AddModifierParameters parameters = AddModifierParameters.Default, bool stackEffect = false)
+        public ApplierComponent(IModifier modifier, ITargetComponent targetComponent, AddModifierParameters parameters = AddModifierParameters.Default,
+            bool isStackEffect = false, ConditionBeingStatus status = ConditionBeingStatus.None) : base(targetComponent, status)
         {
             Modifier = modifier;
             Parameters = parameters;
-            _targetComponent = targetComponent;
-            StackEffect = stackEffect;
+            IsStackEffect = isStackEffect;
         }
 
-        public void Effect()
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
         {
-            //Log.Info(TargetComponent.GetTarget().BaseBeing.Id);
             var clonedModifier = (IModifier)Modifier.Clone();
             clonedModifier.CopyEvents(Modifier);
-            _targetComponent.Target.AddModifier(clonedModifier, Parameters);
+            ((Being)receiver).AddModifier(clonedModifier, Parameters);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing acter)
+        public void StackEffect(int stacks, double value)
         {
-            _targetComponent.HandleTarget(owner, acter,
-                (receiverLocal, acterLocal) =>
-                {
-                    var clonedModifier = (IModifier)Modifier.Clone();
-                    clonedModifier.CopyEvents(Modifier);
-                    ((Being)receiverLocal).AddModifier(clonedModifier, Parameters);
-                });
-        }
-
-        public void Effect(int stacks, double value)
-        {
-            if (StackEffect)
-                Effect();
+            if (IsStackEffect)
+                SimpleEffect();
         }
     }
 }

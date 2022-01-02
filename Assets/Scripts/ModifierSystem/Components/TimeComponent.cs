@@ -42,7 +42,7 @@ namespace ModifierSystem
             if (_timer >= Duration * statusResistance)
             {
                 //Log.Info(_timer + "_"+Duration * statusResistance);
-                EffectComponent.Effect();
+                EffectComponent.SimpleEffect();
                 _finished = true;
 
                 if(ResetOnFinished)

@@ -11,15 +11,15 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             _targetComponent.Target.Heal(_targetComponent.Owner);
             //_targetComponent.Target.Heal(_targetComponent.Owner.Stats.HealStat, _targetComponent.Owner.BaseBeing);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing healer)
+        public void ConditionEffect(BaseBeing receiver, BaseBeing healer)
         {
-            _targetComponent.HandleTarget(owner, healer,
+            _targetComponent.HandleTarget(receiver, healer,
                 (receiverLocal, acterLocal) => receiverLocal.Heal(receiverLocal, acterLocal, false));
         }
     }

@@ -104,9 +104,9 @@ namespace ModifierSystem
         /// <summary>
         ///     Used for dealing damage with modifiers
         /// </summary>
-        public override DamageData[] DealDamage(DamageData[] data, BaseBeing attacker)
+        public override DamageData[] DealDamage(DamageData[] data, BaseBeing attacker, bool triggerEvents = true)
         {
-            var damageData = base.DealDamage(data, attacker);
+            var damageData = base.DealDamage(data, attacker, triggerEvents);
             ModifierController.CheckForComboRecipes();//Elemental, so we check for combos
             return damageData;
         }

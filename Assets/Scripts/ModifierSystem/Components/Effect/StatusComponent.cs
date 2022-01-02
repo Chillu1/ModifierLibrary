@@ -6,40 +6,40 @@ namespace ModifierSystem
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
-        private StatusComponentStackEffect StackEffect { get; }
+        private StatusComponentStackEffect StackEffectType { get; }
 
         private readonly ITargetComponent _targetComponent;
 
         public StatusComponent(StatusEffect effect, float duration, ITargetComponent targetComponent,
-            StatusComponentStackEffect stackEffect = StatusComponentStackEffect.None)
+            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None)
         {
             StatusEffect = effect;
             Duration = duration;
             _targetComponent = targetComponent;
-            StackEffect = stackEffect;
+            StackEffectType = stackEffectType;
         }
 
-        public void Effect()
+        public void SimpleEffect()
         {
             //Log.Info($"Status effect {StatusEffect} with duration {Duration}");
             _targetComponent.Target.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
-        public void Effect(BaseBeing owner, BaseBeing acter)
+        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
         {
-            _targetComponent.HandleTarget(owner, acter,
+            _targetComponent.HandleTarget(receiver, acter,
                 (receiverLocal, acterLocal) => receiverLocal.StatusEffects.ChangeStatusEffect(StatusEffect, Duration));
         }
 
-        public void Effect(int stacks, double value)
+        public void StackEffect(int stacks, double value)
         {
-            switch (StackEffect)
+            switch (StackEffectType)
             {
                 case StatusComponentStackEffect.Effect:
-                    Effect();
+                    SimpleEffect();
                     break;
                 default:
-                    Log.Error($"StackEffectType {StackEffect} unsupported for {GetType()}");
+                    Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
                     return;
             }
         }
