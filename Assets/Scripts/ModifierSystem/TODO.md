@@ -1,14 +1,15 @@
 TODO RN:  
 * Sort ideas by prio
+* >>Being events max call count
+  * > Have a class that handles this. Whenever we go through code that triggers event, we call a function to know if we should call the event. Incrementing, or decrementing the internal counter
 * >Better naming for Condition stuff
-* >Make all effects implement new refactor
 * Being/BaseBeing protected?
 * Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc
   * Condition Applier (IConditionEffectComponent)
 * More StackComponent Modifiers & Unit Tests
-  * StackAdd Cooldown, and/or StackEffect Cooldown
-  * Stack Modifiers
+  * >StackAdd Cooldown, and/or StackEffect Cooldown
+  * >Stack Modifiers
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 
 * Make lifeSteal component part of actual baseProject.Being class instead
@@ -27,8 +28,7 @@ TODO RN:
   > Condition without ConditionEvents (only applies on X) how do?  
   >  OnDealDamage, check health stat for owner. If lower than X, apply effect  
   >>  If health on IsLow, add 50 damage, if not, remove that 50 damage  
-    > Conditional enemy(acter)  
-    > Value Based   
-    > On low health
+     Conditional towards enemy(acter)  
+     Value Based   
 * >Ressurection EffectComponent? Needs to be condition based though
 * Editor Window for prototypes/modifiers

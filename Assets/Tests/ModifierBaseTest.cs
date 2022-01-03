@@ -458,8 +458,8 @@ namespace ModifierSystem.Tests
                 {
                     //If enemy is on fire, deal damage to him, on hit
                     var modifier = new Modifier("DealDamageOnElementalIntensityTest");
+                    //We check intensity on acter
                     var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
-                    //We check intensity on acter?
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
                         conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
@@ -470,7 +470,42 @@ namespace ModifierSystem.Tests
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                 }
-
+                {
+                    //On hit, attack yourself
+                    var modifier = new Modifier("AttackYourselfOnHitTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnHitEvent);
+                    var target = new TargetComponent(LegalTarget.Self, conditionData);
+                    var effect = new AttackComponent(target);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    //On damaged, attack yourself
+                    var modifier = new Modifier("AttackYourselfOnDamagedTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnDamagedEvent);
+                    var target = new TargetComponent(LegalTarget.Self, conditionData);
+                    var effect = new AttackComponent(target);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    //Hit, heal yourself
+                    var modifier = new Modifier("HealYourselfHitTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HitEvent);
+                    var target = new TargetComponent(LegalTarget.Self, conditionData);
+                    var effect = new HealStatBasedComponent(target);
+                    var apply = new ApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
 
                 /*{
                     //Applier onDeath (lowers health), copies itself, infinite loop possible?

@@ -98,6 +98,47 @@ namespace ModifierSystem.Tests
             Assert.True(character.Stats.Health.IsFull);
         }
 
+        [Test]
+        public void ConditionAttackYourselfOnHitEffect()
+        {
+            var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
+            character.AddModifier(modifier);
+            enemy.Attack(character);
+            Assert.Less(character.Stats.Health.CurrentHealth, initialHealthCharacter-initialDamageEnemy);//Player should have hit himself at least once
+        }
+
+        [Test]
+        public void ConditionAttackYourselfOnHitAndDamagedEffect()
+        {
+            var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
+            var secondModifier = modifierPrototypes.GetItem("AttackYourselfOnDamagedTest");
+            character.AddModifier(modifier);
+            character.AddModifier(secondModifier);
+            enemy.Attack(character);
+            Assert.Less(character.Stats.Health.CurrentHealth, initialHealthCharacter-initialDamageEnemy);//Player should have hit himself at least once
+            Assert.AreEqual(
+                initialHealthCharacter - initialDamageEnemy - initialDamageCharacter * 2 * BaseBeingEventController.MaxEventRecursions,
+                character.Stats.Health.CurrentHealth, Delta);
+            character.Update(0.21f);//Interval
+            enemy.Attack(character);
+            Assert.AreEqual(
+                initialHealthCharacter - initialDamageEnemy * 2 - initialDamageCharacter * 4 * BaseBeingEventController.MaxEventRecursions,
+                character.Stats.Health.CurrentHealth, Delta);
+        }
+
+        [Test]
+        public void ConditionAttackAndHealYourselfOnHitEffect()
+        {
+            var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
+            var secondModifier = modifierPrototypes.GetItem("HealYourselfHitTest");
+            character.ChangeDamageStat(new DamageData(3, DamageType.Physical));
+            character.ChangeStat(StatType.Heal, 5);
+            character.AddModifier(modifier);
+            character.AddModifier(secondModifier);
+            enemy.Attack(character);
+            Assert.True(character.Stats.Health.IsFull);
+        }
+
         /*[Test]
         public void ConditionApplyHealthOnDeathEffect()
         {

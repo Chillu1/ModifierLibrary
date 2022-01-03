@@ -64,20 +64,26 @@ Applier
 
 
 # Design questions
-* OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
+* First being events have priority rn over all the other ones, so their calls will take over other events counters, ex, AttackEvent heal 1 health, will take over next event that is ex. HitEvent heal 100 health
+  * We could maybe set some sort of priority to all events? Or give everyone a fair shot/fair deal instead of limiting every event?
+* How to check for ConditionCheck applies? Through a special timeComponent logic? That checks every X, if true, effect. If effect passed, wait. Better than OnDamagedEvent and such?
 * In EffectComponent, should be pass _targetComponent.Owner as acter instead of null? We might want to check owner, when its a normal non-condition effect? At some point.
 * CleanUpComponent only needed when we have remove? Automated with apply otherwise?
 * What more mechanics can refreshComponent have?
-* Recursion problem, when a condition event is triggered, there's a chance it will be triggered again by the same call. Disabling them fully is kinda uncool, since it makes some nice interactions impossible
 * Do something with Being not being accepted in Heal, etc
 * Single/X use condition modifiers, how? RemoveComponent can hold X stacks, lowering down to 0, then actual effect is triggered
 * Should CleanUp remove buffs/upgrades, ex. on kill. We would need to record the amount, or store it in a different way
 * Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect
 * More efficient way of saving timer data related to enum/id (not dict? but array of some sort?)
+* OnStatChange ComboModifierRecipe check, how? We don't have a generic function for all stat changes where we could check for combos
 * Removing all modifiers from ModifierController wont remove the parmanent buffs & debuffs, make a function that does the opposite for these?
 * What to do with Positive/Negative status tags, how to automate positive? Check for positive value on stats, buffs, etc?
 * Should appliers be allowed for conditional? Most probably yes, like applying poison modifier on getting hit
 * We might come into trouble with multiple target components, since rn we rely on having only one in modifier
+
+## Design solutions
+* Recursion problem, when a condition event is triggered, there's a chance it will be triggered again by the same call. Disabling them fully is kinda uncool, since it makes some nice interactions impossible
+  * BaseBeingEventController. Whenever we go through code controller tells us when to trigger event
 
 # Modifier
 
