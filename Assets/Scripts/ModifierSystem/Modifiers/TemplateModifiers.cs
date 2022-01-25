@@ -41,17 +41,15 @@ namespace ModifierSystem
         /// </summary>
         private void DoTModifier()
         {
-            var modifier = new Modifier("DoT");
+            //BasicPoison
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
-            var target = new TargetComponent();
-            var effect = new DamageComponent(damageData);
-            effect.Setup(target);
-            var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
-            modifier.AddComponent(target);
-            modifier.AddComponent(timeRemove);
-            modifier.AddComponent(new InitComponent(effect));
-            modifier.AddComponent(new TimeComponent(effect, 2, true));
-            modifier.FinishSetup(damageData);
+            var properties = new ModifierGenerationProperties("DoT");
+            properties.AddEffect(new DamageComponent(damageData), damageData);
+            properties.SetEffectOnInit();
+            properties.SetEffectOnTime(2, true);
+            properties.SetRemovable(10);
+
+            var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
             _modifierPrototypes.SetupModifierApplier(modifier);
         }
@@ -61,15 +59,12 @@ namespace ModifierSystem
         /// </summary>
         private void ConditionModifier()
         {
-            var modifier = new Modifier("DamageOnDeath");
-            var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
-            var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)});
-            effect.Setup(target);
-            var apply = new ConditionalApplyComponent(effect, target, conditionData);
-            modifier.AddComponent(target);
-            modifier.AddComponent(new InitComponent(apply));
-            modifier.FinishSetup();
+            var damageData = new []{new DamageData(double.MaxValue, DamageType.Magical)};
+            var properties = new ModifierGenerationProperties("DamageOnDeath", LegalTarget.Beings);
+            properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent));
+            properties.AddEffect(new DamageComponent(damageData), damageData);
+
+            var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
         }
 
@@ -85,7 +80,6 @@ namespace ModifierSystem
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                     Curves.ElementIntensity.Evaluate(900))), damageData);
-            properties.SetEffectOnApply();
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);

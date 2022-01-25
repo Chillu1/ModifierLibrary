@@ -248,7 +248,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("DamageOnKillTest", LegalTarget.Beings);
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent));
                     properties.AddEffect(new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }));
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -268,7 +267,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("DamageOnDeathTest", LegalTarget.Beings);
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent));
                     properties.AddEffect(new DamageComponent(damageData), damageData);
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -279,7 +277,7 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("TimedDamageOnKillTest", LegalTarget.Beings);
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent));
                     properties.AddEffect(new DamageStatComponent(damageData), damageData);
-                    properties.SetEffectOnApply();
+                    
                     properties.SetRemovable(5);
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
@@ -291,7 +289,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("ThornsOnHitTest", LegalTarget.Beings);
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent));
                     properties.AddEffect(new DamageComponent(damageData), damageData);
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -302,7 +299,7 @@ namespace ModifierSystem.Tests
                 //     var properties = new ModifierGenerationProperties("HealOnDeathTest", LegalTarget.Beings);
                 //     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent));
                 //     properties.AddEffect(new HealComponent(10));
-                //     properties.SetEffectOnApply();
+                //     
                 //
                 //     var modifier = ModifierGenerator.GenerateModifier(properties);
                 //     _modifierPrototypes.AddModifier(modifier);
@@ -320,7 +317,6 @@ namespace ModifierSystem.Tests
                     var removeEffect = new RemoveComponent(modifier, cleanUp);
                     var applyRemoval = new ConditionalApplyComponent(removeEffect, target, conditionData);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(apply);//TODO Add component in generator, whats the point?
                     modifier.AddComponent(new InitComponent(apply, applyRemoval));//TODO Separate data for each apply & effect? SetEffectOnApply(index 1)?
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
@@ -339,7 +335,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("HealOnHealTest", LegalTarget.Beings);
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HealEvent));
                     properties.AddEffect(new HealStatBasedComponent());
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -414,7 +409,6 @@ namespace ModifierSystem.Tests
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent));
                     properties.AddEffect(new DamageStatComponent(damageData,
                         new ConditionCheckData(ConditionBeingStatus.HealthIsLow)), damageData);
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -446,7 +440,6 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new DamageComponent(damageData,
                             conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                                 Curves.ElementIntensity.Evaluate(900))), damageData);
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -459,7 +452,6 @@ namespace ModifierSystem.Tests
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent));
                     properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData(ConditionBeingStatus.HealthIsLow)),
                         damageData);
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -469,7 +461,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("AttackYourselfOnHitTest");
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnHitEvent));
                     properties.AddEffect(new AttackComponent());
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -479,7 +470,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("AttackYourselfOnDamagedTest");
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnDamagedEvent));
                     properties.AddEffect(new AttackComponent());
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -489,7 +479,6 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("HealYourselfHitTest");
                     properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HitEvent));
                     properties.AddEffect(new HealStatBasedComponent());
-                    properties.SetEffectOnApply();
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -559,7 +548,7 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new StatComponent(new[] { new Stat(StatType.MovementSpeed, 10) }));
                     properties.SetRemovable(10);
 
-                    var modifier = ModifierGenerator.GenerateModifierTest(properties);
+                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
                     ModifierPrototypes.AddModifier(modifier);
                 }
                 {
@@ -576,7 +565,7 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new DamageComponent(damageData)/*, damageData*/);//TODO What to do with infection & such combined status res enums?
                     properties.SetRemovable(10);
 
-                    var modifier = ModifierGenerator.GenerateModifierTest(properties);
+                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
                     ModifierPrototypes.AddModifier(modifier);
                 }
                 {
@@ -588,7 +577,7 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
 
-                    var modifier = ModifierGenerator.GenerateModifierTest(properties);
+                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
                     ModifierPrototypes.AddModifier(modifier);
                 }
                 {
@@ -601,7 +590,7 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
 
-                    var modifier = ModifierGenerator.GenerateModifierTest(properties);
+                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
                     ModifierPrototypes.AddModifier(modifier);
                 }
             }

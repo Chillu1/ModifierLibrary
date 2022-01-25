@@ -1,6 +1,3 @@
-using System;
-using BaseProject;
-
 namespace ModifierSystem
 {
     public static class ModifierGenerator
@@ -13,11 +10,10 @@ namespace ModifierSystem
                 Init, TimeEffect, Stack, Refresh
              */
 
-            Modifier modifier = new Modifier(properties.Name, properties.Applier);
-
-            //---Data---
-            //damageData (set in properties)
-            //conditionData (set in properties)
+            Modifier modifier;
+            modifier = properties is ComboModifierGenerationProperties comboProperties
+                ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
+                : new Modifier(properties.Name, properties.Applier);
 
             //---Components---
 
@@ -40,26 +36,16 @@ namespace ModifierSystem
             //---CleanUp---
             //TODO ApplyComponent in cleanup
             CleanUpComponent cleanUpComponent = null;
-            if (properties.CleanUpPossible && properties.EffectOn.HasFlag(EffectOn.Apply))
+            if (properties.Removable && properties.EffectOn.HasFlag(EffectOn.Apply))
                 cleanUpComponent = new CleanUpComponent(conditionalApplyComponent);
 
             //---Remove---
-            RemoveComponent removeComponent = new RemoveComponent(modifier, cleanUpComponent);
-
-            //---TimeRemove & ConditionalRemove---
+            //---TimeRemove--- //TODO & ConditionalApplyComponent(remove)
             TimeComponent removeTimeComponent = null;
-            TimeComponent condtionalRemoveComponent = null;
-            if (properties.RemoveOn != RemoveOn.None)
+            if (properties.Removable)
             {
-                switch (properties.RemoveOn)
-                {
-                    case RemoveOn.ConditionApply:
-
-                        break;
-                    case RemoveOn.Time:
-                        removeTimeComponent = new TimeComponent(removeComponent, properties.RemoveDuration);
-                        break;
-                }
+                RemoveComponent removeComponent = new RemoveComponent(modifier, cleanUpComponent);
+                removeTimeComponent = new TimeComponent(removeComponent, properties.RemoveDuration);
             }
 
 
@@ -68,8 +54,6 @@ namespace ModifierSystem
             modifier.AddComponent(targetComponent);
             if (removeTimeComponent != null)
                 modifier.AddComponent(removeTimeComponent);
-            //modifier.AddComponent(new InitComponent(applyComponent, removalApplyComponent));
-            //modifier.AddComponent(new TimeComponent(effectComponent, ));
 
             //Make rest of the component that won't be used by anything else
             if (properties.EffectOn.HasFlag(EffectOn.Init))
@@ -79,86 +63,13 @@ namespace ModifierSystem
             if (properties.EffectOn.HasFlag(EffectOn.Time))
                 modifier.AddComponent(new TimeComponent(effectComponent, properties.EffectDuration, properties.ResetOnFinished));
 
-            //Stack
+            //---Stack---
             if(effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
                 modifier.AddComponent(new StackComponent(stackEffectComponent, properties.StackComponentProperties));
 
-            //Refresh
+            //---Refresh---
             if (properties.RefreshEffectType != RefreshEffectType.None)
                 modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
-
-            modifier.FinishSetup(properties.DamageData);
-            return modifier;
-        }
-
-        public static ComboModifier GenerateModifierTest(ComboModifierGenerationProperties properties)//TODOPRIO
-        {
-            /*
-                Modifier, Data.
-                Target, Effect, Apply, CleanUp, Remove, TimeRemove.
-                Init, TimeEffect, Stack, Refresh
-             */
-
-            ComboModifier modifier = new ComboModifier(properties.Name, properties.Recipes, properties.Cooldown);
-
-            //---Data---
-            //damageData (set in properties)
-            //conditionData (set in properties)
-
-            //---Components---
-
-            TargetComponent targetComponent;
-            targetComponent = properties.HasConditionData
-                ? new TargetComponent(properties.LegalTarget, properties.ConditionData)
-                : new TargetComponent(properties.LegalTarget);
-
-            //---Effect---
-            EffectComponent effectComponent = properties.EffectComponent;
-            effectComponent.Setup(targetComponent);
-
-            //---Apply---?
-
-            //---CleanUp---
-            //TODO ApplyComponent in cleanup
-            CleanUpComponent cleanUpComponent = null;
-
-            //---Remove---
-            RemoveComponent removeComponent = new RemoveComponent(modifier, cleanUpComponent);
-
-            //---TimeRemove & ConditionalRemove---
-            TimeComponent removeTimeComponent = null;
-            TimeComponent condtionalRemoveComponent = null;
-            if (properties.RemoveOn != RemoveOn.None)
-            {
-                switch (properties.RemoveOn)
-                {
-                    case RemoveOn.ConditionApply:
-
-                        break;
-                    case RemoveOn.Time:
-                        removeTimeComponent = new TimeComponent(removeComponent, properties.RemoveDuration);
-                        break;
-                }
-            }
-
-            //---Conditional Apply---
-            ConditionalApplyComponent conditionalApplyComponent = new ConditionalApplyComponent(removeComponent, targetComponent, properties.ConditionData);
-
-            //---Finish Setup---
-            //Add all components to modifier
-            modifier.AddComponent(targetComponent);
-            if (removeTimeComponent != null)
-                modifier.AddComponent(removeTimeComponent);
-            //modifier.AddComponent(new InitComponent(applyComponent, removalApplyComponent));
-            //modifier.AddComponent(new TimeComponent(effectComponent, ));
-
-            //Make rest of the component that won't be used by anything else
-            if (properties.EffectOn.HasFlag(EffectOn.Init))
-                modifier.AddComponent(new InitComponent(effectComponent));
-            //if (properties.EffectOn.HasFlag(EffectOn.Apply))
-            //    modifier.AddComponent(new InitComponent(conditionalApplyComponent));
-            if (properties.EffectOn.HasFlag(EffectOn.Time))
-                modifier.AddComponent(new TimeComponent(effectComponent, properties.EffectDuration, properties.ResetOnFinished));
 
             modifier.FinishSetup(properties.DamageData);
             return modifier;
