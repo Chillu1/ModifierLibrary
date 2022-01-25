@@ -7,8 +7,7 @@ namespace ModifierSystem
     {
         private DamageData[] DamageData { get; }
 
-        public DamageStatComponent(DamageData[] damageData, ITargetComponent targetComponent,
-            ConditionCheckData conditionCheckData = null) : base(targetComponent, conditionCheckData)
+        public DamageStatComponent(DamageData[] damageData, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             DamageData = damageData;
         }

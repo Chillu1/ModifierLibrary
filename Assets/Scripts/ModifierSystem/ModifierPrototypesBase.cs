@@ -34,7 +34,8 @@ namespace ModifierSystem
         {
             var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
             var target = new TargetComponent(legalTarget, true);
-            var effect = new ApplierEffectComponent(appliedModifier, target);
+            var effect = new ApplierEffectComponent(appliedModifier);
+            effect.Setup(target);
             var applier = new ApplierComponent(effect);
             modifierApplier.AddComponent(applier);
             modifierApplier.AddComponent(target);

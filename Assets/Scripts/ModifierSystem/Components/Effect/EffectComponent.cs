@@ -8,9 +8,8 @@ namespace ModifierSystem
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
         private ITargetComponent _targetComponent;
 
-        protected EffectComponent(ITargetComponent targetComponent, ConditionCheckData conditionCheckData = null)
+        protected EffectComponent(ConditionCheckData conditionCheckData = null)
         {
-            _targetComponent = targetComponent;
             ConditionCheckData = conditionCheckData;
         }
 

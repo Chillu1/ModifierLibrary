@@ -6,7 +6,7 @@ namespace ModifierSystem
     {
         public double Heal { get; private set; }
 
-        public HealComponent(double heal, ITargetComponent targetComponent) : base(targetComponent)
+        public HealComponent(double heal) : base()
         {
             Heal = heal;
         }

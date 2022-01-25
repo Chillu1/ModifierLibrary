@@ -8,8 +8,8 @@ namespace ModifierSystem
         private AddModifierParameters Parameters { get; }
         public bool IsStackEffect { get; }
 
-        public ApplierEffectComponent(IModifier modifier, ITargetComponent targetComponent, AddModifierParameters parameters = AddModifierParameters.Default,
-            bool isStackEffect = false, ConditionCheckData conditionCheckData = null) : base(targetComponent, conditionCheckData)
+        public ApplierEffectComponent(IModifier modifier, AddModifierParameters parameters = AddModifierParameters.Default,
+            bool isStackEffect = false, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Modifier = modifier;
             Parameters = parameters;

@@ -8,8 +8,8 @@ namespace ModifierSystem
         private float Duration { get; }
         private StatusComponentStackEffect StackEffectType { get; }
 
-        public StatusComponent(StatusEffect effect, float duration, ITargetComponent targetComponent,
-            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None) : base(targetComponent)
+        public StatusComponent(StatusEffect effect, float duration,
+            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None) : base()
         {
             StatusEffect = effect;
             Duration = duration;

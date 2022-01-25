@@ -4,8 +4,7 @@ namespace ModifierSystem
 {
     public class AttackComponent : EffectComponent
     {
-        public AttackComponent(ITargetComponent targetComponent, ConditionCheckData conditionCheckData = null)
-            : base(targetComponent, conditionCheckData)
+        public AttackComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
         }
 

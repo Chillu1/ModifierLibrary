@@ -7,9 +7,8 @@ namespace ModifierSystem
         private DamageData[] Damage { get; }
         private DamageComponentStackEffect StackEffectType { get; }
 
-        public DamageComponent(DamageData[] damage, ITargetComponent targetComponent,
-            DamageComponentStackEffect stackEffectType = DamageComponentStackEffect.None,
-            ConditionCheckData conditionCheckData = null) : base(targetComponent, conditionCheckData)
+        public DamageComponent(DamageData[] damage, DamageComponentStackEffect stackEffectType = DamageComponentStackEffect.None,
+            ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Damage = damage;
             StackEffectType = stackEffectType;

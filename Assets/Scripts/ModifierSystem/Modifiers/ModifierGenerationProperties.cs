@@ -34,10 +34,7 @@ namespace ModifierSystem
         public bool HasConditionData { get; private set; }
         public ConditionEventData ConditionData { get; private set; }
 
-
-        public bool IsDamageEffect { get; private set; }
         public DamageData[] DamageData { get; private set; }
-        public DamageComponent.DamageComponentStackEffect DamageStackEffect { get; private set; } = DamageComponent.DamageComponentStackEffect.None;
 
         public RemoveOn RemoveOn { get; private set; }
         //if RemoveOn not none:
@@ -50,7 +47,7 @@ namespace ModifierSystem
 
         //TODO Refresh
 
-        public IEffectComponent EffectComponent { get; private set; }
+        public EffectComponent EffectComponent { get; private set; }
 
         public EffectOn EffectOn { get; private set; }
         public bool ResetOnFinished { get; private set; }
@@ -68,19 +65,11 @@ namespace ModifierSystem
             ConditionData = conditionData;
         }
 
-        public void AddEffect(EffectComponent effectComponent)
+        public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
         {
-        }
-
-        /// <summary>
-        ///     Damage that will affect target (by dealing damage to them)
-        /// </summary>
-        public void AddDamageData(DamageData[] data,
-            DamageComponent.DamageComponentStackEffect stackEffect = DamageComponent.DamageComponentStackEffect.None)
-        {
-            IsDamageEffect = true;
-            DamageData = data;
-            DamageStackEffect = stackEffect;
+            EffectComponent = effectComponent;
+            if (damageData != null)
+                DamageData = damageData;
         }
 
         public void SetEffectOnInit() => EffectOn |= EffectOn.Init;
@@ -93,6 +82,11 @@ namespace ModifierSystem
             ResetOnFinished = resetOnFinished;
         }
 
+        public void SetEffectOnApply()
+        {
+            EffectOn |= EffectOn.Apply;
+        }
+
 
         /// <summary>
         ///     Is removed after <paramref name="removeDuration"/>
@@ -102,6 +96,19 @@ namespace ModifierSystem
         {
             RemoveOn = removeOn;
             RemoveDuration = removeDuration;
+        }
+    }
+
+    public class ComboModifierGenerationProperties : ModifierGenerationProperties
+    {
+        public ComboRecipes Recipes { get; }
+        public float Cooldown { get; }
+
+        public ComboModifierGenerationProperties(string name, ComboRecipes comboRecipes, float cooldown,
+            LegalTarget legalTarget = LegalTarget.Self) : base(name, legalTarget)
+        {
+            Recipes = comboRecipes;
+            Cooldown = cooldown;
         }
     }
 }

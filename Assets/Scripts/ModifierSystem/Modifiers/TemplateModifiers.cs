@@ -18,7 +18,8 @@ namespace ModifierSystem
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
+            var effect = new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add);
+            effect.Setup(target);
             var apply = new ConditionalApplyComponent(effect, target, conditionData);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
@@ -43,7 +44,8 @@ namespace ModifierSystem
             var modifier = new Modifier("DoT");
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var target = new TargetComponent();
-            var effect = new DamageComponent(damageData, target);
+            var effect = new DamageComponent(damageData);
+            effect.Setup(target);
             var timeRemove = new TimeComponent(new RemoveComponent(modifier), 10);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
@@ -62,7 +64,8 @@ namespace ModifierSystem
             var modifier = new Modifier("DamageOnDeath");
             var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
+            var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)});
+            effect.Setup(target);
             var apply = new ConditionalApplyComponent(effect, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(new InitComponent(apply));
@@ -80,9 +83,10 @@ namespace ModifierSystem
             var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
             //We check intensity on acter?
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
+            var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) },
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                     Curves.ElementIntensity.Evaluate(900)));
+            effect.Setup(target);
             var apply = new ConditionalApplyComponent(effect, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(new InitComponent(apply));
