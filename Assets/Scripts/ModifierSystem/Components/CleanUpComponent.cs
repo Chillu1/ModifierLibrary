@@ -2,6 +2,9 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
+    /// <summary>
+    ///     Responsible for cleaning up (removing) being event
+    /// </summary>
     public class CleanUpComponent : Component, ICleanUpComponent
     {
         [CanBeNull]

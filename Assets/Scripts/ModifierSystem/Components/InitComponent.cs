@@ -9,7 +9,7 @@ namespace ModifierSystem
         private bool ConditionBased { get; }
 
         private readonly IEffectComponent[] _effectComponents;
-        private readonly IApplyComponent[] _applyComponents;
+        private readonly IConditionalApplyComponent[] _applyComponents;
 
         public InitComponent(params IEffectComponent[] effectComponents)
         {
@@ -18,7 +18,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Condition based Init
         /// </summary>
-        public InitComponent(params IApplyComponent[] applyComponents)
+        public InitComponent(params IConditionalApplyComponent[] applyComponents)
         {
             ConditionBased = true;
             _applyComponents = applyComponents;

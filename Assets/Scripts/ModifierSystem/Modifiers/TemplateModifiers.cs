@@ -28,7 +28,7 @@ namespace ModifierSystem
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply, applyRemoval));
             modifier.AddComponent(new TimeComponent(effect, 2, true));
-            modifier.AddComponent(new StackComponent(new StackComponentProperties(effect) { Value = 5 }));
+            modifier.AddComponent(new StackComponent(effect, new StackComponentProperties() { Value = 5 }));
             modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);

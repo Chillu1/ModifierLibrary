@@ -6,12 +6,17 @@ namespace ModifierSystem
     public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent
     {
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
-        private readonly ITargetComponent _targetComponent;
+        private ITargetComponent _targetComponent;
 
         protected EffectComponent(ITargetComponent targetComponent, ConditionCheckData conditionCheckData = null)
         {
             _targetComponent = targetComponent;
             ConditionCheckData = conditionCheckData;
+        }
+
+        public void Setup(ITargetComponent targetComponent)
+        {
+            _targetComponent = targetComponent;
         }
 
         protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter);

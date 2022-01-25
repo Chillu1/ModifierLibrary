@@ -92,7 +92,7 @@ namespace ModifierSystem
                 return;
             }
 
-            if (applyComponent is IConditionalApplyComponent cond && cond.IsConditionEvent)
+            if (applyComponent is IConditionalApplyComponent cond)
             {
                 SetupCleanUpComponent();
                 CleanUpComponent!.AddComponent((ConditionalApplyComponent)cond);

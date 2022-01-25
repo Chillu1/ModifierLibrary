@@ -7,7 +7,6 @@ namespace ModifierSystem
     /// </summary>
     public class ConditionalApplyComponent : Component, IConditionalApplyComponent, ICleanUpComponent
     {
-        public bool IsConditionEvent { get; }
         private ConditionEvent ConditionEvent { get; }
         private ConditionBeingStatus Status { get; }
 
@@ -18,7 +17,6 @@ namespace ModifierSystem
         public ConditionalApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
             ConditionEventData conditionEventData = default)
         {
-            IsConditionEvent = true;
             _conditionEffectComponent = effectComponent;
             _targetComponent = targetComponent;
             ConditionEvent = conditionEventData.conditionEvent;
@@ -33,18 +31,12 @@ namespace ModifierSystem
             //}
             //_targetComponent.Validate()
 
-            if (_conditionEffectComponent == null)
-            {
-                Log.Error("Condition effect component is null");
-                return;
-            }
-
             ConditionEvent.SetupBeingEvent(_targetComponent.Target, _conditionEffectComponent.ConditionEffect);
         }
 
         public void CleanUp()
         {
-            if (ConditionEvent == ConditionEvent.None || !IsConditionEvent)
+            if (ConditionEvent == ConditionEvent.None)
                 return;
 
             if (_conditionEffectComponent == null)
@@ -61,12 +53,6 @@ namespace ModifierSystem
             bool success = true;
             bool conditionEvent = ConditionEvent != ConditionEvent.None,
                 conditionTarget = _targetComponent.ConditionEventTarget != ConditionEventTarget.None;
-
-            if ((!conditionEvent || !conditionTarget) && IsConditionEvent)
-            {
-                Log.Error("EffectComponent is conditionComponent, but ConditionTarget and ConditionEvent are None, illegal", "modifiers");
-                success = false;
-            }
 
             if (conditionEvent)
             {

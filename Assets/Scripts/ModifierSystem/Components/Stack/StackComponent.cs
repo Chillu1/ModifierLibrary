@@ -5,7 +5,7 @@ namespace ModifierSystem
 {
     public class StackComponent : Component, IStackComponent
     {
-        [NotNull] public IStackEffectComponent StackEffectComponent { get; }
+        public IStackEffectComponent StackEffectComponent { get; }
         public WhenStackEffect WhenStackEffect { get; }
         public double Value { get; }
         public int OnXStacks { get; }
@@ -14,9 +14,9 @@ namespace ModifierSystem
         private int MaxStacks { get; set; }
         private bool Finished { get; set; }
 
-        public StackComponent(StackComponentProperties properties)
+        public StackComponent(IStackEffectComponent effect, StackComponentProperties properties)
         {
-            StackEffectComponent = properties.StackEffectComponent;
+            StackEffectComponent = effect;
             WhenStackEffect = properties.WhenStackEffect;
             Value = properties.Value;
             OnXStacks = properties.OnXStacks;
