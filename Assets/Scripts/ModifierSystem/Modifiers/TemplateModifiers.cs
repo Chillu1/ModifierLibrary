@@ -79,18 +79,15 @@ namespace ModifierSystem
         private void ConditionConditionCheckModifier()
         {
             //If enemy is on fire, deal damage to him, on hit
-            var modifier = new Modifier("DealDamageOnElementalIntensityTest");
-            var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
-            //We check intensity on acter?
-            var target = new TargetComponent(LegalTarget.Beings, conditionData);
-            var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) },
+            var damageData = new[] { new DamageData(10000, DamageType.Physical) };
+            var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
+            properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent));
+            properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
-                    Curves.ElementIntensity.Evaluate(900)));
-            effect.Setup(target);
-            var apply = new ConditionalApplyComponent(effect, target, conditionData);
-            modifier.AddComponent(target);
-            modifier.AddComponent(new InitComponent(apply));
-            modifier.FinishSetup();
+                    Curves.ElementIntensity.Evaluate(900))), damageData);
+            properties.SetEffectOnApply();
+
+            var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
         }
     }

@@ -29,7 +29,7 @@ namespace ModifierSystem
     {
         public string Name { get; }
         public LegalTarget LegalTarget { get; }
-
+        public bool Applier { get; set; }
 
         public bool HasConditionData { get; private set; }
         public ConditionEventData ConditionData { get; private set; }
@@ -47,11 +47,16 @@ namespace ModifierSystem
 
         //TODO Refresh
 
+        public bool CleanUpPossible { get; private set; }
+
         public EffectComponent EffectComponent { get; private set; }
 
         public EffectOn EffectOn { get; private set; }
         public bool ResetOnFinished { get; private set; }
         public double EffectDuration { get; private set; }
+
+        public StackComponentProperties StackComponentProperties { get; private set; }
+        public RefreshEffectType RefreshEffectType { get; private set; }
 
         public ModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self)
         {
@@ -63,6 +68,11 @@ namespace ModifierSystem
         {
             HasConditionData = true;
             ConditionData = conditionData;
+        }
+
+        public void SetApplier()
+        {
+            Applier = true;
         }
 
         public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
@@ -82,11 +92,24 @@ namespace ModifierSystem
             ResetOnFinished = resetOnFinished;
         }
 
+        /// <summary>
+        ///     Should apply be passed to init (conditional effect, ex: OnDeath)
+        /// </summary>
         public void SetEffectOnApply()
         {
             EffectOn |= EffectOn.Apply;
         }
 
+        public void SetEffectOnStack(StackComponentProperties stackComponentProperties)
+        {
+            StackComponentProperties = stackComponentProperties;
+        }
+
+
+        public void SetRefreshable(RefreshEffectType refreshDuration)
+        {
+            RefreshEffectType = refreshDuration;
+        }
 
         /// <summary>
         ///     Is removed after <paramref name="removeDuration"/>
@@ -94,6 +117,7 @@ namespace ModifierSystem
         /// <remarks>Default = linger</remarks>
         public void SetRemovable(double removeDuration = 0.5d, RemoveOn removeOn = RemoveOn.Time)
         {
+            CleanUpPossible = true;
             RemoveOn = removeOn;
             RemoveDuration = removeDuration;
         }
@@ -101,13 +125,20 @@ namespace ModifierSystem
 
     public class ComboModifierGenerationProperties : ModifierGenerationProperties
     {
-        public ComboRecipes Recipes { get; }
-        public float Cooldown { get; }
+        public ComboRecipes Recipes { get; private set; }
+        public float Cooldown { get; private set; }
 
-        public ComboModifierGenerationProperties(string name, ComboRecipes comboRecipes, float cooldown,
-            LegalTarget legalTarget = LegalTarget.Self) : base(name, legalTarget)
+        public ComboModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self) : base(name, legalTarget)
+        {
+        }
+
+        public void AddRecipes(ComboRecipes comboRecipes)
         {
             Recipes = comboRecipes;
+        }
+
+        public void SetCooldown(float cooldown)
+        {
             Cooldown = cooldown;
         }
     }

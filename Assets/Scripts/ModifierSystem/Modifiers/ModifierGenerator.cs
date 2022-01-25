@@ -13,7 +13,7 @@ namespace ModifierSystem
                 Init, TimeEffect, Stack, Refresh
              */
 
-            Modifier modifier = new Modifier(properties.Name);
+            Modifier modifier = new Modifier(properties.Name, properties.Applier);
 
             //---Data---
             //damageData (set in properties)
@@ -22,8 +22,8 @@ namespace ModifierSystem
             //---Components---
 
             var targetComponent = properties.HasConditionData
-                ? new TargetComponent(properties.LegalTarget, properties.ConditionData)
-                : new TargetComponent(properties.LegalTarget);
+                ? new TargetComponent(properties.LegalTarget, properties.ConditionData, properties.Applier)
+                : new TargetComponent(properties.LegalTarget, properties.Applier);
 
             //---Effect---
             EffectComponent effectComponent = properties.EffectComponent;
@@ -31,9 +31,17 @@ namespace ModifierSystem
 
             //---Apply---?
 
+            //TODO, Specify if effect or remove component should be added to applyComponent
+            //---Conditional Apply---
+            ConditionalApplyComponent conditionalApplyComponent = null;
+            if(properties.HasConditionData)
+                conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionData);
+
             //---CleanUp---
             //TODO ApplyComponent in cleanup
             CleanUpComponent cleanUpComponent = null;
+            if (properties.CleanUpPossible && properties.EffectOn.HasFlag(EffectOn.Apply))
+                cleanUpComponent = new CleanUpComponent(conditionalApplyComponent);
 
             //---Remove---
             RemoveComponent removeComponent = new RemoveComponent(modifier, cleanUpComponent);
@@ -54,12 +62,6 @@ namespace ModifierSystem
                 }
             }
 
-            //TODO, Specify if effect or remove component should be added to applyComponent
-            //---Conditional Apply---
-            ConditionalApplyComponent conditionalApplyComponent = null;
-            if(properties.HasConditionData)
-                conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionData);
-
 
             //---Finish Setup---
             //Add all components to modifier
@@ -76,6 +78,14 @@ namespace ModifierSystem
                 modifier.AddComponent(new InitComponent(conditionalApplyComponent));
             if (properties.EffectOn.HasFlag(EffectOn.Time))
                 modifier.AddComponent(new TimeComponent(effectComponent, properties.EffectDuration, properties.ResetOnFinished));
+
+            //Stack
+            if(effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
+                modifier.AddComponent(new StackComponent(stackEffectComponent, properties.StackComponentProperties));
+
+            //Refresh
+            if (properties.RefreshEffectType != RefreshEffectType.None)
+                modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
 
             modifier.FinishSetup(properties.DamageData);
             return modifier;
