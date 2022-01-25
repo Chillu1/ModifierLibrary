@@ -16,7 +16,7 @@ namespace ModifierSystem
             StackEffectType = stackEffectType;
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }

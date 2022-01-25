@@ -5,14 +5,14 @@ namespace ModifierSystem
     public class CleanUpComponent : Component, ICleanUpComponent
     {
         [CanBeNull]
-        private ApplyComponent _applyComponent;
+        private ConditionalApplyComponent _applyComponent;
 
-        public CleanUpComponent([CanBeNull] ApplyComponent applyComponent = null)
+        public CleanUpComponent([CanBeNull] ConditionalApplyComponent applyComponent = null)
         {
             _applyComponent = applyComponent;
         }
 
-        public void AddComponent(ApplyComponent component)
+        public void AddComponent(ConditionalApplyComponent component)
         {
             _applyComponent = component;
         }

@@ -9,7 +9,7 @@ namespace ModifierSystem
         {
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             acter.Attack(receiver);//TODO Not sure about this
         }

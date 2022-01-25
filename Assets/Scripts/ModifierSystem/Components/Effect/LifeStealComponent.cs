@@ -20,7 +20,7 @@ namespace ModifierSystem
             SummedDamage = Damage.Sum(d => d.Damage);
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.Stats.Health.Heal(SummedDamage * Percentage);
         }

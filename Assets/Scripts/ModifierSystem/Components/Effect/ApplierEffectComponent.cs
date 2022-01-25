@@ -2,13 +2,13 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public sealed class ApplierComponent : EffectComponent, IStackEffectComponent
+    public sealed class ApplierEffectComponent : EffectComponent, IStackEffectComponent
     {
         private IModifier Modifier { get; }
         private AddModifierParameters Parameters { get; }
         public bool IsStackEffect { get; }
 
-        public ApplierComponent(IModifier modifier, ITargetComponent targetComponent, AddModifierParameters parameters = AddModifierParameters.Default,
+        public ApplierEffectComponent(IModifier modifier, ITargetComponent targetComponent, AddModifierParameters parameters = AddModifierParameters.Default,
             bool isStackEffect = false, ConditionCheckData conditionCheckData = null) : base(targetComponent, conditionCheckData)
         {
             Modifier = modifier;
@@ -16,7 +16,7 @@ namespace ModifierSystem
             IsStackEffect = isStackEffect;
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             var clonedModifier = (IModifier)Modifier.Clone();
             clonedModifier.CopyEvents(Modifier);

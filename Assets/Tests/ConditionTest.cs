@@ -47,5 +47,21 @@ namespace ModifierSystem.Tests
 
             Assert.True(enemy.Stats.Health.IsDead);
         }
+
+        /*[Test]
+        public void ConditionDamageOnLowHealthRemove()
+        {
+            var modifier = modifierPrototypes.GetItem("DamageOnLowHealthRemoveTest");
+            character.AddModifier(modifier);
+            enemy.ChangeDamageStat(new DamageData(initialHealthCharacter-3, DamageType.Physical));
+
+            enemy.Attack(character);//Gain 50 damage on character
+
+            Assert.AreEqual(initialDamageCharacter+50, character.Stats.Damage.DamageSum(), Delta);
+
+            character.Stats.Health.Heal(initialHealthCharacter-2);
+
+            Assert.AreEqual(initialDamageCharacter, character.Stats.Damage.DamageSum(), Delta);//Lose 50 damage on character
+        }*/
     }
 }

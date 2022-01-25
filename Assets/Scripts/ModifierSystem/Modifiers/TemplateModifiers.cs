@@ -19,11 +19,11 @@ namespace ModifierSystem
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
             var effect = new DamageComponent(damageData, target, DamageComponent.DamageComponentStackEffect.Add);
-            var apply = new ApplyComponent(effect, target, conditionData);
+            var apply = new ConditionalApplyComponent(effect, target, conditionData);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
             var timeRemove = new TimeComponent(remove, 10);
-            var applyRemoval = new ApplyComponent(remove, target, conditionData);
+            var applyRemoval = new ConditionalApplyComponent(remove, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply, applyRemoval));
@@ -63,7 +63,7 @@ namespace ModifierSystem
             var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData);
             var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
-            var apply = new ApplyComponent(effect, target, conditionData);
+            var apply = new ConditionalApplyComponent(effect, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(new InitComponent(apply));
             modifier.FinishSetup();
@@ -83,7 +83,7 @@ namespace ModifierSystem
             var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                     Curves.ElementIntensity.Evaluate(900)));
-            var apply = new ApplyComponent(effect, target, conditionData);
+            var apply = new ConditionalApplyComponent(effect, target, conditionData);
             modifier.AddComponent(target);
             modifier.AddComponent(new InitComponent(apply));
             modifier.FinishSetup();

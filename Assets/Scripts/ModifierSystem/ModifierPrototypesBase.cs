@@ -34,9 +34,9 @@ namespace ModifierSystem
         {
             var modifierApplier = new Modifier(appliedModifier.Id+"Applier", true);
             var target = new TargetComponent(legalTarget, true);
-            var effect = new ApplierComponent(appliedModifier, target);
-            var apply = new ApplyComponent(effect);
-            modifierApplier.AddComponent(apply);
+            var effect = new ApplierEffectComponent(appliedModifier, target);
+            var applier = new ApplierComponent(effect);
+            modifierApplier.AddComponent(applier);
             modifierApplier.AddComponent(target);
             modifierApplier.FinishSetup();//"No tags", for now?
             AddModifier((TModifierType)(IModifier)modifierApplier);

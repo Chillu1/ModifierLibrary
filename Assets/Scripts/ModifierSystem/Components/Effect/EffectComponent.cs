@@ -14,20 +14,20 @@ namespace ModifierSystem
             ConditionCheckData = conditionCheckData;
         }
 
-        protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents);
+        protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter);
 
         /// <summary>
         ///     No conditions, just effect
         /// </summary>
         public void SimpleEffect()
         {
-            Effect(_targetComponent.Target, _targetComponent.Owner, true);
+            Effect(_targetComponent.Target, _targetComponent.Owner);
         }
 
         /// <summary>
         ///     Main effect helper, checks for CheckCondition
         /// </summary>
-        private void Effect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        private void Effect(BaseBeing receiver, BaseBeing acter)
         {
             if (ConditionCheckData != null)
             {
@@ -36,7 +36,7 @@ namespace ModifierSystem
                     return;
             }
 
-            ActualEffect(receiver, acter, triggerEvents);
+            ActualEffect(receiver, acter);
         }
 
         /// <summary>
@@ -44,12 +44,7 @@ namespace ModifierSystem
         /// </summary>
         public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
         {
-            _targetComponent.HandleTarget(receiver, acter, EventEffect);
-
-            void EventEffect(BaseBeing receiverLocal, BaseBeing acterLocal)
-            {
-                Effect(receiverLocal, acterLocal, false);
-            }
+            _targetComponent.HandleTarget(receiver, acter, Effect);
         }
     }
 }

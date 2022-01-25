@@ -11,7 +11,7 @@ namespace ModifierSystem
             Heal = heal;
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.Stats.Health.Heal(Heal);
         }

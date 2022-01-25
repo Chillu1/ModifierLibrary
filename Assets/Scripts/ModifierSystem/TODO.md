@@ -1,7 +1,8 @@
 TODO RN:  
 * Sort ideas by prio
-* >>Being events max call count
-  * > Have a class that handles this. Whenever we go through code that triggers event, we call a function to know if we should call the event. Incrementing, or decrementing the internal counter
+* >>Recipe system for modifiers? (Easier to create, without know the ins & outs)
+* >>Separate ApplyComponent to two components
+* >>Redesign BaseBeingAttack, to include target & acter, like heal
 * >Better naming for Condition stuff
 * Being/BaseBeing protected?
 * Proper LegalTarget(ing)

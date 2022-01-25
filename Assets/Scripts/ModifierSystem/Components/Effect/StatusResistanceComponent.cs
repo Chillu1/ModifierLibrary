@@ -15,7 +15,7 @@ namespace ModifierSystem
             Values = values;
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values);
         }

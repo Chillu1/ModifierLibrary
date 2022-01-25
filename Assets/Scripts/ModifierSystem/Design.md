@@ -341,6 +341,38 @@ Rupture  (damage while moving/doing actions)
 OnHeal = they heal you back
 OnHealed = you heal them back
 OnHealed = attack them (might be an interesting downside-mod)
+Stun every time you get damaged for 0.2 seconds, cooldown 0.3-0.4 seconds (cold snap)
+For every damage taken, take 50% of that damage again 10 seconds later (Maledict)
+For every elementalData do/buff X
+For every elementalData with intensity do/buff X
+
+## Game interaction/mechanics ideas
+Web (flamable, modifier/combo makes it immune to flames/makes it out of flames)  
+Spawning spiders (on cast, kill, whatever). Buffing them instead of yourself  
+All buffs are doubled, but don't work on you anymore.  
+Self-buffs work/are applied on your allies as well, but all buffs effect is lowered by 80-90%.  
+Your lifesteal is shared between allies, but you can't lifesteal anymore.  
+Infest:   
+* On kill spawn spider  
+* Infest a creature into an enemy, killing them slowly from the inside (ignores resistances). Can't be applied to non-biological forms?    
+For each spell cast (by anyone) do/buff X  
+	
+### Interactions list
+
+#### Positives
+Shares lifesteal with allies, but...
+Nullify enemy X resistances/elemental data, but... (deal no damage?)
+
+#### Negatives
+Can't heal, but...
+Can't lifesteal, but...
+Can't cast spells, but...
+
+
+#### Neutral
+Allies share health, but...
+Allies share mana, but...
+Enemies share X resistance(s), but...
 
 ## Combo mod ideas
 

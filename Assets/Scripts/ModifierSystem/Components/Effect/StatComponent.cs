@@ -11,7 +11,7 @@ namespace ModifierSystem
             Stats = stats;
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter, bool triggerEvents)
+        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).ChangeStat(Stats);
         }

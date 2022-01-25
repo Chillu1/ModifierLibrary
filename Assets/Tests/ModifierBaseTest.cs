@@ -262,7 +262,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -284,7 +284,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(double.MaxValue, DamageType.Magical)}, target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -296,7 +296,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }, target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     var cleanUp = new CleanUpComponent(apply);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
@@ -310,7 +310,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageComponent(new []{new DamageData(5, DamageType.Physical)}, target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -323,10 +323,10 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealComponent(10, target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     var cleanUp = new CleanUpComponent(apply);
                     var removeEffect = new RemoveComponent(modifier, cleanUp);
-                    var applyRemoval = new ApplyComponent(removeEffect, target, conditionData);
+                    var applyRemoval = new ConditionalApplyComponent(removeEffect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(apply);
                     modifier.AddComponent(new InitComponent(apply, applyRemoval));
@@ -349,7 +349,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HealEvent);
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new HealStatBasedComponent(target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -416,7 +416,7 @@ namespace ModifierSystem.Tests
 
                     var modifier = new Modifier("ApplyStunModifierXStacksTestApplier", true);
                     var target = new TargetComponent(LegalTarget.Self, true);
-                    var effect = new ApplierComponent(stunModifier, target, isStackEffect: true);
+                    var effect = new ApplierEffectComponent(stunModifier, target, isStackEffect: true);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new StackComponent(new StackComponentProperties(effect)
                         { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 }));
@@ -430,7 +430,7 @@ namespace ModifierSystem.Tests
                     var target = new TargetComponent(LegalTarget.Beings, conditionData);
                     var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target,
                         new ConditionCheckData(ConditionBeingStatus.HealthIsLow));
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -464,7 +464,20 @@ namespace ModifierSystem.Tests
                     var effect = new DamageComponent(new[] { new DamageData(10000, DamageType.Physical) }, target,
                         conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                             Curves.ElementIntensity.Evaluate(900)));
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
+                    modifier.AddComponent(target);
+                    modifier.AddComponent(new InitComponent(apply));
+                    modifier.FinishSetup();
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    //If health on IsLow, add 50 physical damage, if not, remove 50 physical damage
+                    var modifier = new Modifier("DamageOnLowHealthRemoveTest");
+                    var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent);
+                    var target = new TargetComponent(LegalTarget.Beings, conditionData);
+                    var effect = new DamageStatComponent(new[] { new DamageData(50, DamageType.Physical) }, target,
+                        new ConditionCheckData(ConditionBeingStatus.HealthIsLow));
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -476,7 +489,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnHitEvent);
                     var target = new TargetComponent(LegalTarget.Self, conditionData);
                     var effect = new AttackComponent(target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -488,7 +501,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.OnDamagedEvent);
                     var target = new TargetComponent(LegalTarget.Self, conditionData);
                     var effect = new AttackComponent(target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
@@ -500,7 +513,7 @@ namespace ModifierSystem.Tests
                     var conditionData = new ConditionEventData(ConditionEventTarget.SelfSelf, ConditionEvent.HitEvent);
                     var target = new TargetComponent(LegalTarget.Self, conditionData);
                     var effect = new HealStatBasedComponent(target);
-                    var apply = new ApplyComponent(effect, target, conditionData);
+                    var apply = new ConditionalApplyComponent(effect, target, conditionData);
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(apply));
                     modifier.FinishSetup();
