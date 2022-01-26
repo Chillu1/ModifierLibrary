@@ -7,7 +7,7 @@ namespace ModifierSystem
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
-                : new Modifier(properties.Name, properties.Applier);
+                : new Modifier(properties.Name, properties.Applier, properties.HasConditionData);
 
             //---Components---
 
@@ -24,7 +24,7 @@ namespace ModifierSystem
             //TODO, Specify if effect or remove component should be added to applyComponent
             //---Conditional Apply---
             ConditionalApplyComponent conditionalApplyComponent = null;
-            if(properties.HasConditionData)
+            if (properties.HasConditionData)
                 conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionEvent);
 
             //---CleanUp---
@@ -46,6 +46,13 @@ namespace ModifierSystem
             //---Finish Setup---
             //Add all components to modifier
             modifier.AddComponent(targetComponent);
+
+            if (properties.Applier && effectComponent is ApplierEffectComponent applier)
+            {
+                var applierComponent = new ApplierComponent(applier);
+                modifier.AddComponent(applierComponent);
+            }
+
             if (removeTimeComponent != null)
                 modifier.AddComponent(removeTimeComponent);
 
@@ -58,7 +65,7 @@ namespace ModifierSystem
                 modifier.AddComponent(new TimeComponent(effectComponent, properties.EffectDuration, properties.ResetOnFinished));
 
             //---Stack---
-            if(effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
+            if (effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
                 modifier.AddComponent(new StackComponent(stackEffectComponent, properties.StackComponentProperties));
 
             //---Refresh---

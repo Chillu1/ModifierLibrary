@@ -29,9 +29,10 @@ namespace ModifierSystem
         {
             if (Finished || Stacks + 1 >= MaxStacks)
                 return;
-            //Log.Verbose($"Stacks: {Stacks}/{MaxStacks}", "modifiers");
 
             Stacks++;
+            //Log.Verbose($"Stacks: {Stacks}/{MaxStacks}", "modifiers");
+
             switch (WhenStackEffect)
             {
                 case WhenStackEffect.Always:
@@ -44,6 +45,7 @@ namespace ModifierSystem
                         Finished = true;
                         //TODO Remove? Trigger TimeComponent Remove timer?
                     }
+
                     break;
                 case WhenStackEffect.EveryXStacks:
                     if (Stacks == OnXStacks)
@@ -51,6 +53,7 @@ namespace ModifierSystem
                         TriggerStackEffect();
                         ResetStacks();
                     }
+
                     break;
                 case WhenStackEffect.None:
                     Log.Error($"StackEffectType {WhenStackEffect.None} illegal");
@@ -105,6 +108,7 @@ namespace ModifierSystem
                         Log.Error("OnXStacks with a undefined OnXStacks value");
                         valid = false;
                     }
+
                     break;
                 case WhenStackEffect.EveryXStacks:
                     if (OnXStacks == -1)
@@ -112,6 +116,7 @@ namespace ModifierSystem
                         Log.Error("EveryXStacks with a undefined OnXStacks value");
                         valid = false;
                     }
+
                     break;
                 case WhenStackEffect.ZeroStacks:
                     break;

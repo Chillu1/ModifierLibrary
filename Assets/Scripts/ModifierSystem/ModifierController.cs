@@ -31,7 +31,8 @@ namespace ModifierSystem
             _timer += deltaTime;
             if (_timer >= 1)
             {
-                foreach (string key in ComboModifierCooldowns.Keys.ToArray()) //TODO Making it into an array is prob uncool, on the -= _timer line
+                //TODO Making it into an array is prob uncool, on the -= _timer line
+                foreach (string key in ComboModifierCooldowns.Keys.ToArray())
                 {
                     ComboModifierCooldowns[key] -= _timer;
                     if (ComboModifierCooldowns[key] <= 0)
@@ -97,7 +98,7 @@ namespace ModifierSystem
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
-            modifier.Stack();//If has stack component, we will trigger it on add
+            modifier.Stack(); //If has stack component, we will trigger it on add
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
@@ -201,7 +202,8 @@ namespace ModifierSystem
 
         public IEnumerable<IModifier> GetModifierAppliers()
         {
-            return Modifiers.Values.Where(m => m.ApplierModifier);//Invalid target on appliers with self, so no need for extra checks rn
+            //Invalid target on appliers with self, so no need for extra checks rn
+            return Modifiers.Values.Where(m => m.ApplierModifier && !m.IsConditionModifier);
         }
 
         public override string ToString()

@@ -1,13 +1,14 @@
 TODO RN:  
 * Sort ideas by prio
 * Counter attack (onhit event? Or built-in)
-* Ursa E
-* >Spectre E
-* >Attack types: nothit (internal or reflect), not physical (doesnt trigger OnAttacked), etc
-  * >Recipe system for modifiers (Easier to create, without know the ins & outs)
-      Add non-time remove (conditional)
-      "Pointer" to what we should refresh, effect, or removeeffect
-      SetRemovable ICleanUpComponent
+* Stack effect HasFlag instead of switch
+* >Ursa E (stackbased)
+    Target is null on applier, but we're trying to setup a conditional
+    We apply modifier through attacking & onHit
+* >Recipe system for modifiers (Easier to create, without know the ins & outs)
+    Add non-time remove (conditional)
+    "Pointer" to what we should refresh, effect, or removeeffect
+    SetRemovable ICleanUpComponent
 * >Better naming for Condition stuff
 * Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc

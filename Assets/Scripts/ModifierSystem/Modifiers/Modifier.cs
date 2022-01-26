@@ -13,6 +13,7 @@ namespace ModifierSystem
     {
         public string Id { get; private set; }
         public bool ApplierModifier { get; }
+        public bool IsConditionModifier { get; }
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
@@ -25,10 +26,11 @@ namespace ModifierSystem
 
         private bool _setupFinished;
 
-        public Modifier(string id, bool applierModifier = false)
+        public Modifier(string id, bool applierModifier = false, bool isConditionModifier = false)
         {
             Id = id;
             ApplierModifier = applierModifier;
+            IsConditionModifier = isConditionModifier;
         }
 
         public void Init()
@@ -77,7 +79,7 @@ namespace ModifierSystem
         {
             if (InitComponent != null)
             {
-                Log.Error(Id+ " already has a init component", "modifiers");
+                Log.Error(Id + " already has a init component", "modifiers");
                 return;
             }
 
@@ -88,7 +90,7 @@ namespace ModifierSystem
         {
             if (ApplyComponent != null)
             {
-                Log.Error(Id+ " already has a apply component", "modifiers");
+                Log.Error(Id + " already has a apply component", "modifiers");
                 return;
             }
 
@@ -105,7 +107,7 @@ namespace ModifierSystem
         {
             if (TargetComponent != null)
             {
-                Log.Error(Id+ " already has a target component", "modifiers");
+                Log.Error(Id + " already has a target component", "modifiers");
                 return;
             }
 
@@ -124,7 +126,7 @@ namespace ModifierSystem
         {
             if (StackComponent != null)
             {
-                Log.Error(Id+ " already has a stack component", "modifiers");
+                Log.Error(Id + " already has a stack component", "modifiers");
                 return;
             }
 
@@ -135,7 +137,7 @@ namespace ModifierSystem
         {
             if (RefreshComponent != null)
             {
-                Log.Error(Id+ " already has a refresh component", "modifiers");
+                Log.Error(Id + " already has a refresh component", "modifiers");
                 return;
             }
 
@@ -145,7 +147,7 @@ namespace ModifierSystem
         public void TryApply(Being target)
         {
             bool validTarget = TargetComponent.SetTarget(target);
-            if(validTarget)
+            if (validTarget)
                 Apply();
         }
 
@@ -217,6 +219,7 @@ namespace ModifierSystem
                 Log.Error("Id contains applier, but the flag isn't set", "modifiers");
                 valid = false;
             }
+
             if (!Id.Contains("Applier") && ApplierModifier)
             {
                 Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");

@@ -9,6 +9,7 @@ namespace ModifierSystem
         TargetComponent TargetComponent { get; }
         StatusTag[] StatusTags { get; }
         bool ApplierModifier { get; }
+        bool IsConditionModifier { get; }
         bool ToRemove { get; }
         void Init();
         void TryApply(Being target);

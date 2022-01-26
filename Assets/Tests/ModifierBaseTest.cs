@@ -17,9 +17,12 @@ namespace ModifierSystem.Tests
         protected double initialDamageCharacter, initialDamageAlly, initialDamageEnemy;
 
         protected const double Delta = 0.01d;
-        protected const float PermanentComboModifierCooldown = 60;//PermanentMods might be able to be stripped/removed later, does it matter?
+
+        protected const float
+            PermanentComboModifierCooldown = 60; //PermanentMods might be able to be stripped/removed later, does it matter?
 
         protected ModifierPrototypesTest modifierPrototypes;
+
         protected ComboModifierPrototypesTest comboModifierPrototypesTest;
         //protected ComboModifierPrototypesTest comboModifierPrototypes;
 
@@ -63,7 +66,8 @@ namespace ModifierSystem.Tests
             {
                 enemyDummies[0] = new Being(new BeingProperties()
                 {
-                    Id = "enemy", Health = 1, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1, UnitType = UnitType.Enemy
+                    Id = "enemy", Health = 1, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
+                    UnitType = UnitType.Enemy
                 });
             }
         }
@@ -263,7 +267,7 @@ namespace ModifierSystem.Tests
                 }
                 {
                     //Damage on death
-                    var damageData = new []{new DamageData(double.MaxValue, DamageType.Magical)};
+                    var damageData = new[] { new DamageData(double.MaxValue, DamageType.Magical) };
                     var properties = new ModifierGenerationProperties("DamageOnDeathTest", LegalTarget.Beings);
                     properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
                     properties.AddEffect(new DamageComponent(damageData), damageData);
@@ -318,7 +322,8 @@ namespace ModifierSystem.Tests
                     var removeEffect = new RemoveComponent(modifier, cleanUp);
                     var applyRemoval = new ConditionalApplyComponent(removeEffect, target, conditionData.conditionEvent);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(apply, applyRemoval));//TODO Separate data for each apply & effect? SetEffectOnApply(index 1)?
+                    modifier.AddComponent(new InitComponent(apply,
+                        applyRemoval)); //TODO Separate data for each apply & effect? SetEffectOnApply(index 1)?
                     modifier.FinishSetup();
                     _modifierPrototypes.AddModifier(modifier);
                 }
@@ -439,8 +444,8 @@ namespace ModifierSystem.Tests
                     var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
                     properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
                     properties.AddEffect(new DamageComponent(damageData,
-                            conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
-                                Curves.ElementIntensity.Evaluate(900))), damageData);
+                        conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
+                            Curves.ElementIntensity.Evaluate(900))), damageData);
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -485,10 +490,40 @@ namespace ModifierSystem.Tests
                     _modifierPrototypes.AddModifier(modifier);
                 }
                 {
-                    //Reflect back 20% of damage dealt (Spectre E)
+                    //Reflect back 20% of damage dealt
                     var properties = new ModifierGenerationProperties("ReflectOnDamagedTest");
                     properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDamagedEvent);
                     properties.AddEffect(new DamageReflectComponent(0.2));
+
+                    var modifier = ModifierGenerator.GenerateModifier(properties);
+                    _modifierPrototypes.AddModifier(modifier);
+                }
+                {
+                    //More fixed damage per stack (on target being, probably it's own debuff modifier?) (Ursa E)
+                    //Workings: Attack enemy being, add timed (10s) modifier with 1 stack to enemy being.
+                    //  Next time we attack, we check for that modifier, call it's effect, add +1 stack, deal X damage * Y stacks
+
+                    //Stack flag modifier
+                    var damageData = new[] { new DamageData(2, DamageType.Physical) };
+                    var flagProperties = new ModifierGenerationProperties("DamagePerStackTest");
+                    flagProperties.AddEffect(
+                        new DamageComponent(damageData,
+                            DamageComponent.DamageComponentStackEffect.Effect |
+                            DamageComponent.DamageComponentStackEffect.SetMultiplierStacksBased), damageData);
+                    flagProperties.SetEffectOnStack(new StackComponentProperties()
+                        { WhenStackEffect = WhenStackEffect.Always, MaxStacks = 100 });
+                    flagProperties.SetRefreshable(RefreshEffectType.RefreshDuration);
+                    flagProperties.SetRemovable(10);
+
+                    var flagModifier = ModifierGenerator.GenerateModifier(flagProperties);
+                    _modifierPrototypes.AddModifier(flagModifier);
+
+
+                    var properties = new ModifierGenerationProperties("DamagePerStackTestApplier", LegalTarget.Beings);
+                    properties.SetApplier();
+                    properties.AddConditionData(ConditionEventTarget.ActerSelf,
+                        ConditionEvent.HitEvent); //This is optional, we can always apply on attack instead
+                    properties.AddEffect(new ApplierEffectComponent(flagModifier));
 
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
@@ -572,7 +607,9 @@ namespace ModifierSystem.Tests
 
                     properties.SetEffectOnInit();
                     properties.SetEffectOnTime(2, true);
-                    properties.AddEffect(new DamageComponent(damageData)/*, damageData*/);//TODO What to do with infection & such combined status res enums?
+                    properties.AddEffect(
+                        new DamageComponent(
+                            damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
                     properties.SetRemovable(10);
 
                     var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
@@ -611,7 +648,8 @@ namespace ModifierSystem.Tests
                 return ModifierPrototypes.GetItem(key);
             }
 
-            public static HashSet<IComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)
+            public static HashSet<IComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController,
+                Stats stats)
             {
                 HashSet<IComboModifier> modifierToAdd = new HashSet<IComboModifier>();
                 if (_instance == null)

@@ -1,3 +1,4 @@
+using System;
 using BaseProject;
 
 namespace ModifierSystem
@@ -21,44 +22,40 @@ namespace ModifierSystem
 
         public void StackEffect(int stacks, double value)
         {
-            switch (StackEffectType)
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.Add))
+                Damage[0].BaseDamage += value;
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.AddStacksBased))
+                Damage[0].BaseDamage += value * stacks;
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.Multiply))
+                Damage[0].Multiplier += value;
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.SetMultiplierStacksBased))
+                Damage[0].Multiplier = stacks;
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.MultiplyStacksBased))
+                Damage[0].Multiplier += value * stacks;
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.OnXStacksAddElemental))
             {
-                case DamageComponentStackEffect.Effect:
-                    SimpleEffect();
-                    break;
-                case DamageComponentStackEffect.Add:
-                    Damage[0].BaseDamage += value;
-                    break;
-                case DamageComponentStackEffect.AddStacksBased:
-                    Damage[0].BaseDamage += value * stacks;
-                    break;
-                case DamageComponentStackEffect.Multiply:
-                    Damage[0].Multiplier += value;
-                    break;
-                case DamageComponentStackEffect.MultiplyStacksBased:
-                    Damage[0].Multiplier += value * stacks;
-                    break;
-                case DamageComponentStackEffect.OnXStacksAddElemental:
-                    //TODO
-                    //Damage[0].ElementData.?
-                    break;
-                default:
-                    Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
-                    return;
+                //TODO
+                //Damage[0].ElementData.?
             }
+
+            //Effect at the end, after all the other possible calcs
+            if (StackEffectType.HasFlag(DamageComponentStackEffect.Effect))
+                SimpleEffect();
         }
 
+        [Flags]
         public enum DamageComponentStackEffect
         {
             None = 0,
-            Effect,
-            Add, //TODO Add to all damages?
-            AddStacksBased,
-            Multiply, //TODO Multiply all damages?
-            MultiplyStacksBased,
+            Effect = 1,
+            Add = 2, //TODO Add to all damages?
+            AddStacksBased = 4,
+            Multiply = 8, //TODO Multiply all damages?
+            MultiplyStacksBased = 16,
+            SetMultiplierStacksBased = 32, //TODO Multiply all damages?
 
             //DamageComponent specific
-            OnXStacksAddElemental,
+            OnXStacksAddElemental = 64,
         }
     }
 }
