@@ -24,7 +24,8 @@ namespace ModifierSystem
         public LegalTarget LegalTarget { get; }
         public bool Applier { get; private set; }
         public bool HasConditionData { get; private set; }
-        public ConditionEventData ConditionData { get; private set; }
+        public ConditionEventTarget ConditionEventTarget { get; private set; }
+        public ConditionEvent ConditionEvent { get; private set; }
 
         public DamageData[] DamageData { get; private set; }
 
@@ -46,10 +47,16 @@ namespace ModifierSystem
             LegalTarget = legalTarget;
         }
 
-        public void AddConditionData(ConditionEventData conditionData)
+        public void AddConditionData(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
         {
+            if(conditionEventTarget == ConditionEventTarget.None)
+                Log.Error("Wrong ConditionTarget, None");
+            if(conditionEvent == ConditionEvent.None)
+                Log.Error("Wrong BeingConditionEvent, None");
+
             HasConditionData = true;
-            ConditionData = conditionData;
+            ConditionEventTarget = conditionEventTarget;
+            ConditionEvent = conditionEvent;
             SetEffectOnApply();//Always true?
         }
 

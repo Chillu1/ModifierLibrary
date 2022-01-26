@@ -17,14 +17,14 @@ namespace ModifierSystem
             var modifier = new Modifier("Full");
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
-            var target = new TargetComponent(LegalTarget.Beings, conditionData);
+            var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add);
             effect.Setup(target);
-            var apply = new ConditionalApplyComponent(effect, target, conditionData);
+            var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
             var timeRemove = new TimeComponent(remove, 10);
-            var applyRemoval = new ConditionalApplyComponent(remove, target, conditionData);
+            var applyRemoval = new ConditionalApplyComponent(remove, target, conditionData.conditionEvent);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply, applyRemoval));
@@ -61,7 +61,7 @@ namespace ModifierSystem
         {
             var damageData = new []{new DamageData(double.MaxValue, DamageType.Magical)};
             var properties = new ModifierGenerationProperties("DamageOnDeath", LegalTarget.Beings);
-            properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent));
+            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
             properties.AddEffect(new DamageComponent(damageData), damageData);
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
@@ -76,7 +76,7 @@ namespace ModifierSystem
             //If enemy is on fire, deal damage to him, on hit
             var damageData = new[] { new DamageData(10000, DamageType.Physical) };
             var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
-            properties.AddConditionData(new ConditionEventData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent));
+            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                     Curves.ElementIntensity.Evaluate(900))), damageData);

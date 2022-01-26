@@ -1,3 +1,4 @@
+using System;
 using BaseProject;
 
 namespace ModifierSystem
@@ -17,6 +18,7 @@ namespace ModifierSystem
         ActerActer = 4,
     }
 
+    [Obsolete]
     public struct ConditionEventData
     {
         public ConditionEventTarget conditionEventTarget;

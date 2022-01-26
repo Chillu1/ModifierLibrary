@@ -4,12 +4,6 @@ namespace ModifierSystem
     {
         public static Modifier GenerateModifier(ModifierGenerationProperties properties)
         {
-            /*
-                Modifier, Data.
-                Target, Effect, Apply, CleanUp, Remove, TimeRemove.
-                Init, TimeEffect, Stack, Refresh
-             */
-
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
@@ -18,7 +12,7 @@ namespace ModifierSystem
             //---Components---
 
             var targetComponent = properties.HasConditionData
-                ? new TargetComponent(properties.LegalTarget, properties.ConditionData, properties.Applier)
+                ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.Applier)
                 : new TargetComponent(properties.LegalTarget, properties.Applier);
 
             //---Effect---
@@ -31,7 +25,7 @@ namespace ModifierSystem
             //---Conditional Apply---
             ConditionalApplyComponent conditionalApplyComponent = null;
             if(properties.HasConditionData)
-                conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionData);
+                conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionEvent);
 
             //---CleanUp---
             //TODO ApplyComponent in cleanup

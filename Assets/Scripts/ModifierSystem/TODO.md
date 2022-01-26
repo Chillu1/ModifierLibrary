@@ -1,9 +1,7 @@
 TODO RN:  
 * Sort ideas by prio
   * >>Recipe system for modifiers? (Easier to create, without know the ins & outs)
-      Does non-time remove exist?
-      Is there every conditionalEventData without apply? Yes, with remove, specific scenario
-         AddConditionData means we always SetEffectOnApply?
+      Add non-time remove (conditional)
       "Pointer" to what we should refresh, effect, or removeeffect
       SetRemovable ICleanUpComponent
 * >>Separate ApplyComponent to two components

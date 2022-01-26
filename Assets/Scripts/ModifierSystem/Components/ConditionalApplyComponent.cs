@@ -15,11 +15,11 @@ namespace ModifierSystem
         //private readonly IValidatorComponent<object>[] _validatorComponents;
 
         public ConditionalApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
-            ConditionEventData conditionEventData)
+            ConditionEvent conditionEvent)
         {
             _conditionEffectComponent = effectComponent;
             _targetComponent = targetComponent;
-            ConditionEvent = conditionEventData.conditionEvent;
+            ConditionEvent = conditionEvent;
             Validate();
         }
 

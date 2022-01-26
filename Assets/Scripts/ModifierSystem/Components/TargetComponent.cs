@@ -23,15 +23,15 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public TargetComponent(LegalTarget legalTarget, ConditionEventData conditionEventData, bool applier = false)
+        public TargetComponent(LegalTarget legalTarget, ConditionEventTarget conditionEventTarget, bool applier = false)
         {
             if(legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
-            if(conditionEventData.conditionEventTarget == ConditionEventTarget.None)
+            if(conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Illegal conditionalTarget `None`", "modifiers");
 
             LegalTarget = legalTarget;
-            ConditionEventTarget = conditionEventData.conditionEventTarget;
+            ConditionEventTarget = conditionEventTarget;
             Applier = applier;
         }
 
