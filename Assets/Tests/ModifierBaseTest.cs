@@ -484,6 +484,15 @@ namespace ModifierSystem.Tests
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                     _modifierPrototypes.AddModifier(modifier);
                 }
+                {
+                    //Reflect back 20% of damage dealt (Spectre E)
+                    var properties = new ModifierGenerationProperties("ReflectOnDamagedTest");
+                    properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDamagedEvent);
+                    properties.AddEffect(new DamageReflectComponent(0.2));
+
+                    var modifier = ModifierGenerator.GenerateModifier(properties);
+                    _modifierPrototypes.AddModifier(modifier);
+                }
 
                 /*{
                     //Applier onDeath (lowers health), copies itself, infinite loop possible?

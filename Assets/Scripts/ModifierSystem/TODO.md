@@ -1,12 +1,14 @@
 TODO RN:  
 * Sort ideas by prio
-  * >>Recipe system for modifiers (Easier to create, without know the ins & outs)
+* Counter attack (onhit event? Or built-in)
+* Ursa E
+* >Spectre E
+* >Attack types: nothit (internal or reflect), not physical (doesnt trigger OnAttacked), etc
+  * >Recipe system for modifiers (Easier to create, without know the ins & outs)
       Add non-time remove (conditional)
       "Pointer" to what we should refresh, effect, or removeeffect
       SetRemovable ICleanUpComponent
-* >>Redesign BaseBeingAttack, to include target & acter, like heal
 * >Better naming for Condition stuff
-* Being/BaseBeing protected?
 * Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc
   * Condition Applier (IConditionEffectComponent)
@@ -19,7 +21,7 @@ TODO RN:
 * Mutlitarget? Modifier, for AoE?
 * TimeComp Slow (veno gale)
 * Stats StatusTag (stats change)
-* Improve modifier decision flow chart
+* Improve & update modifier decision flow chart (generator)
 * Unittest:
   * Value & intensity updates with time (10 linger = 1 second, 100 linger = 5 sec, 1000 linger = 20)±
   * Stat change removal after duration/remove effect

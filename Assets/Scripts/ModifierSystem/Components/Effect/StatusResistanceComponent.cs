@@ -7,11 +7,12 @@ namespace ModifierSystem
         private StatusTag[] StatusTags { get; }
         private double[] Values { get; }
 
-        public StatusResistanceComponent(StatusTag[] tags, double[] values) : base()
+        public StatusResistanceComponent(StatusTag[] statusTags, double[] values, ConditionCheckData conditionCheckData = null) : base(
+            conditionCheckData)
         {
-            if (tags.Length != values.Length)
+            if (statusTags.Length != values.Length)
                 Log.Error("Status tags wrong length for tags/values", "modifiers");
-            StatusTags = tags;
+            StatusTags = statusTags;
             Values = values;
         }
 

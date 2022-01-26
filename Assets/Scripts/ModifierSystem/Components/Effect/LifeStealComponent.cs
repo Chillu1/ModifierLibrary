@@ -13,7 +13,8 @@ namespace ModifierSystem
         private double SummedDamage { get; }
         private double Percentage { get; }
 
-        public LifeStealComponent(DamageData[] damage, double percentage) : base()
+        public LifeStealComponent(DamageData[] damage, double percentage, ConditionCheckData conditionCheckData = null) : base(
+            conditionCheckData)
         {
             Damage = damage;
             Percentage = percentage;

@@ -322,8 +322,7 @@ Health is mana, mana is health
 Invis?  
 Morph into enemy, gain 1-2 of his spells (might be bad)  
 Mana burn  
-Reflect one damage instance  
-Disarm  
+Reflect one damage instance
 Crit  
 On attack X chance to spawn illu  
 Link (razor)  

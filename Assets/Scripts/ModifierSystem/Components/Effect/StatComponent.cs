@@ -6,7 +6,7 @@ namespace ModifierSystem
     {
         private Stat[] Stats { get; }
 
-        public StatComponent(Stat[] stats) : base()
+        public StatComponent(Stat[] stats, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Stats = stats;
         }

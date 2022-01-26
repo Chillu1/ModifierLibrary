@@ -4,7 +4,7 @@ namespace ModifierSystem
 {
     public class HealStatBasedComponent : EffectComponent
     {
-        public HealStatBasedComponent() : base()
+        public HealStatBasedComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
         }
 

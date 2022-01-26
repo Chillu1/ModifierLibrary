@@ -7,7 +7,7 @@ namespace ModifierSystem.Tests
     public class ConditionEventTest : ModifierBaseTest
     {
         [Test]
-        public void ConditionApplyOnKillEffect()
+        public void ConditionApplyOnKill()
         {
             var damageOnKillModifier = modifierPrototypes.GetItem("DamageOnKillTest");
             character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
@@ -19,7 +19,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void AddStatDamageEffect()
+        public void AddStatDamage()
         {
             var damageOnKillModifier = modifierPrototypes.GetItem("AddStatDamageTest");
             character.AddModifier(damageOnKillModifier);
@@ -27,7 +27,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionApplyOnDeathRevengeEffect()
+        public void ConditionApplyOnDeathRevenge()
         {
             var damageOnDeathModifier = modifierPrototypes.GetItem("DamageOnDeathTest");
             enemy.ChangeDamageStat(new DamageData(1000d, DamageType.Physical));
@@ -39,7 +39,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionTimedDamageOnKillEffect()//TODOPRIO FIXME
+        public void ConditionTimedDamageOnKill()//TODOPRIO FIXME
         {
             /*var damageOnKillModifier = modifierPrototypes.GetItem("TimedDamageOnKillTest");
             character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
@@ -58,7 +58,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionThornsOnHitEffect()
+        public void ConditionThornsOnHit()
         {
             var thornsOnHitModifier = modifierPrototypes.GetItem("ThornsOnHitTest");
             character.AddModifier(thornsOnHitModifier);
@@ -68,7 +68,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionApplyHealOnDeathEffect()
+        public void ConditionApplyHealOnDeath()
         {
             var damageOnDeathModifier = modifierPrototypes.GetItem("HealOnDeathTest");
             character.ChangeStat(new Stat(StatType.Heal, 10));
@@ -83,7 +83,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void HealStatBasedEffect()
+        public void HealStatBased()
         {
             var healModifier = modifierPrototypes.GetItem("HealOnHealTest");
             character.ChangeStat(StatType.Heal, 5);
@@ -100,7 +100,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionAttackYourselfOnHitEffect()
+        public void ConditionAttackYourselfOnHit()
         {
             var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
             character.AddModifier(modifier);
@@ -109,7 +109,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionAttackYourselfOnHitAndDamagedEffect()
+        public void ConditionAttackYourselfOnHitAndDamaged()
         {
             var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
             var secondModifier = modifierPrototypes.GetItem("AttackYourselfOnDamagedTest");
@@ -128,7 +128,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void ConditionAttackAndHealYourselfOnHitEffect()
+        public void ConditionAttackAndHealYourselfOnHit()
         {
             var modifier = modifierPrototypes.GetItem("AttackYourselfOnHitTest");
             var secondModifier = modifierPrototypes.GetItem("HealYourselfHitTest");
@@ -139,9 +139,22 @@ namespace ModifierSystem.Tests
             enemy.Attack(character);
             Assert.True(character.Stats.Health.IsFull);
         }
+        
+        [Test]
+        public void ConditionReflectDamageOnHit()
+        {
+            var modifier = modifierPrototypes.GetItem("ReflectOnDamagedTest");
+            
+            enemy.ChangeDamageStat(new DamageData(4, DamageType.Physical));
+            character.AddModifier(modifier);
+
+            enemy.Attack(character);//5 damage attack, 20% reflect = 1 damage reflect
+
+            Assert.AreEqual(initialHealthEnemy-1, enemy.Stats.Health.CurrentHealth, Delta);
+        }
 
         /*[Test]
-        public void ConditionApplyHealthOnDeathEffect()
+        public void ConditionApplyHealthOnDeath()
         {
             var modifierApplierApplier = modifierPrototypes.GetItem("DeathHealthTestApplierApplier");
             var modifierApplier = modifierPrototypes.GetItem("DeathHealthTestApplier");
