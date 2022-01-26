@@ -1,10 +1,9 @@
 TODO RN:  
 * Sort ideas by prio
-  * >>Recipe system for modifiers? (Easier to create, without know the ins & outs)
+  * >>Recipe system for modifiers (Easier to create, without know the ins & outs)
       Add non-time remove (conditional)
       "Pointer" to what we should refresh, effect, or removeeffect
       SetRemovable ICleanUpComponent
-* >>Separate ApplyComponent to two components
 * >>Redesign BaseBeingAttack, to include target & acter, like heal
 * >Better naming for Condition stuff
 * Being/BaseBeing protected?

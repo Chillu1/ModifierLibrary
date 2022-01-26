@@ -41,8 +41,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void ConditionTimedDamageOnKillEffect()//TODOPRIO FIXME
         {
-            return;
-            var damageOnKillModifier = modifierPrototypes.GetItem("TimedDamageOnKillTest");
+            /*var damageOnKillModifier = modifierPrototypes.GetItem("TimedDamageOnKillTest");
             character.ChangeDamageStat(new DamageData(29, DamageType.Physical));//30 dmg per hit
             character.AddModifier(damageOnKillModifier);
             character.Attack(enemy);
@@ -55,7 +54,7 @@ namespace ModifierSystem.Tests
 
             character.Attack(enemyDummies[0]);//Kill
             Assert.True(enemyDummies[0].Stats.Health.IsDead);
-            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//Increase in damage
+            Assert.AreEqual(initialDamageCharacter+29+2, character.Stats.Damage.DamageSum(), Delta);//Increase in damage*/
         }
 
         [Test]
