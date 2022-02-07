@@ -16,7 +16,7 @@ namespace ModifierSystem
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
-            if(legalTarget == LegalTarget.None)
+            if (legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
 
             LegalTarget = legalTarget;
@@ -25,9 +25,9 @@ namespace ModifierSystem
 
         public TargetComponent(LegalTarget legalTarget, ConditionEventTarget conditionEventTarget, bool applier = false)
         {
-            if(legalTarget == LegalTarget.None)
+            if (legalTarget == LegalTarget.None)
                 Log.Error("Illegal target `None`", "modifiers");
-            if(conditionEventTarget == ConditionEventTarget.None)
+            if (conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Illegal conditionalTarget `None`", "modifiers");
 
             LegalTarget = legalTarget;
@@ -58,6 +58,7 @@ namespace ModifierSystem
             if (LegalTarget.HasFlag(LegalTarget.Enemy) && target.UnitType == UnitType.Enemy)
                 return true;
 
+            Log.Error("LegalTargets are: " + LegalTarget + ". But our unit type is: " + target.UnitType);
             return false;
         }
 
@@ -71,7 +72,7 @@ namespace ModifierSystem
 
             if (!ValidateTarget(target))
             {
-                Log.Error("Target is not valid, id: "+target?.Id, "modifiers");
+                Log.Error("Target is not valid, id: " + target?.Id, "modifiers");
                 return false;
             }
 

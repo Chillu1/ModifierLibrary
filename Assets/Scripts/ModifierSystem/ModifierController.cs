@@ -15,6 +15,7 @@ namespace ModifierSystem
         private Dictionary<string, float> ComboModifierCooldowns { get; }
         private ModifierRemover CooldownModifierRemover { get; }
         private float _timer;
+        private float _secondTimer;
 
         public ModifierController(Being owner, ElementController elementController)
         {
@@ -29,6 +30,7 @@ namespace ModifierSystem
         public void Update(float deltaTime)
         {
             _timer += deltaTime;
+            _secondTimer += deltaTime;
             if (_timer >= 1)
             {
                 //TODO Making it into an array is prob uncool, on the -= _timer line
@@ -42,6 +44,9 @@ namespace ModifierSystem
                 _timer = 0;
             }
 
+            if (_secondTimer < 0.2f)
+                return;
+
             CooldownModifierRemover.Update(ComboModifierCooldowns);
 
             //Log.Info(Modifiers.Count);
@@ -53,6 +58,8 @@ namespace ModifierSystem
             }
 
             MainModifierRemover.Update(Modifiers);
+
+            _secondTimer = 0f;
         }
 
         public void TryAddModifier(IModifier modifier, AddModifierParameters parameters)
@@ -223,6 +230,9 @@ namespace ModifierSystem
 
             public void Update<TValue>(IDictionary<string, TValue> collection)
             {
+                if (ObjectsToRemove.Count == 0)
+                    return;
+
                 foreach (string id in ObjectsToRemove)
                     collection.Remove(id);
 

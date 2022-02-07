@@ -1,5 +1,7 @@
-TODO RN:  
+TODO:  
 * Sort ideas by prio
+* >Status effect to legal actions? (Replace?)
+* >Try to make an actual playable "game" out of it. Ex. a hero fighting against spawning enemies
 * Counter attack (onhit event? Or built-in)
 * Stack effect HasFlag instead of switch
 * >Ursa E (stackbased)

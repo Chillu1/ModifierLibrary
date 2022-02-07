@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
 
@@ -27,6 +28,7 @@ namespace ModifierSystem
                 Log.Error("ComboModifier have to start with Combo", "modifiers");
                 valid = false;
             }
+
             if (Id.Contains("Applier") || ApplierModifier)
             {
                 Log.Error("ComboModifier can't be an applier modifier, right? Maybe?", "modifiers");
@@ -41,17 +43,18 @@ namespace ModifierSystem
             if (modifierIds.Contains(Id))
             {
                 Log.Info($"Already contains {Id}, skipping", "modifiers");
-                return false;//Already contains this combo modifier, skip (try refresh & stack? Might be a problem without proper sophisticated cooldowns)
+                return
+                    false; //Already contains this combo modifier, skip (try refresh & stack? Might be a problem without proper sophisticated cooldowns)
             }
 
             foreach (var recipe in ComboRecipes.Recipes)
             {
                 //Go through all possible recipes
                 if (CheckRecipe(recipe, modifierIds, elementController, stats))
-                    return true;//If we found one, success
+                    return true; //If we found one, success
             }
 
-            return false;//Didn't find a recipe
+            return false; //Didn't find a recipe
         }
 
         private bool CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
@@ -61,11 +64,13 @@ namespace ModifierSystem
                 if (!CheckForIdConditions(recipe, modifierIds))
                     return false;
             }
+
             if (recipe.ElementalRecipe != null && recipe.ElementalRecipe.Length != 0)
             {
                 if (!CheckForElementalConditions(recipe, elementController))
                     return false;
             }
+
             if (recipe.Stat != null && recipe.Stat.Length != 0)
             {
                 if (!CheckForStatConditions(recipe, stats))
@@ -86,6 +91,7 @@ namespace ModifierSystem
 
             return true;
         }
+
         private bool CheckForElementalConditions(ComboRecipe recipe, ElementController elementController)
         {
             foreach (var elementalRecipe in recipe.ElementalRecipe!)
@@ -96,6 +102,7 @@ namespace ModifierSystem
 
             return true;
         }
+
         private bool CheckForStatConditions(ComboRecipe recipe, Stats stats)
         {
             foreach (var stat in recipe.Stat!)

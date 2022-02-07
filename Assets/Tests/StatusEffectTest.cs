@@ -15,7 +15,7 @@ namespace ModifierSystem.Tests
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
 
-            enemy.Attack(character);//Shouldn't deal any damage, since disarmed
+            enemy.Attack(character); //Shouldn't deal any damage, since disarmed
             Assert.AreEqual(initialHealthCharacter, character.Stats.Health.CurrentHealth, Delta);
         }
 
@@ -30,7 +30,7 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
 
-            enemy.CastModifier(character, "SilenceModifierTestApplier");//Shouldn't do anything
+            enemy.CastModifier(character, "SilenceModifierTestApplier"); //Shouldn't do anything
             Assert.True(character.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.True(character.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
         }
@@ -43,10 +43,10 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Move));
             enemy.Update(0.01f);
             enemy.Update(0.01f);
-            character.Attack(enemy);//Root (init)
+            character.Attack(enemy); //Root (init)
             enemy.Update(0.01f);
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Move));
-           // Log.Info(enemy.StatusEffects.LegalActions);
+            // Log.Info(enemy.StatusEffects.LegalActions);
             enemy.Update(1.01f);
             //Log.Info(enemy.StatusEffects.LegalActions);
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Move));
@@ -64,9 +64,9 @@ namespace ModifierSystem.Tests
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             enemy.Update(0.9f);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            enemy.Update(0.11f);
+            enemy.Update(0.2f);
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            enemy.Update(1);
+            enemy.Update(1f);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
         }
     }

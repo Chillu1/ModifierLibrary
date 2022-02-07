@@ -85,24 +85,20 @@ namespace ModifierSystem
             ModifierController.Update(deltaTime);
         }
 
-        public override DamageData[] Attack(BaseBeing target)
-        {
-            return Attack(target, this);
-        }
-
         /// <summary>
         ///     Manual attack, NOT a modifier attack
         /// </summary>
         public override DamageData[] Attack(BaseBeing target, BaseBeing attacker)
         {
-            if (!attacker.StatusEffects.LegalActions.HasFlag(LegalAction.Act))//Can't attack
+            if (!attacker.StatusEffects.LegalActions.HasFlag(LegalAction.Act)) //Can't attack
                 return null;
-            
+
             ApplyModifiers((Being)target);
             var damageData = base.Attack(target, attacker);
 
             //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
-            ((Being)attacker).ModifierController.CheckForComboRecipes();//Not redundant? Might lead to performance issues in super high combo counts?
+            ((Being)attacker).ModifierController
+                .CheckForComboRecipes(); //Not redundant? Might lead to performance issues in super high combo counts?
             return damageData;
         }
 
@@ -112,7 +108,7 @@ namespace ModifierSystem
         public override DamageData[] DealDamage(DamageData[] data, BaseBeing attacker, AttackType attackType = AttackType.DefaultAttack)
         {
             var damageData = base.DealDamage(data, attacker, attackType);
-            ModifierController.CheckForComboRecipes();//Elemental, so we check for combos
+            ModifierController.CheckForComboRecipes(); //Elemental, so we check for combos
             return damageData;
         }
 

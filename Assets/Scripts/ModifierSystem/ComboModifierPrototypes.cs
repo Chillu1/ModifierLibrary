@@ -7,12 +7,12 @@ namespace ModifierSystem
     public class ComboModifierPrototypes : IComboModifierPrototypes
     {
         private static IComboModifierPrototypes _instance;
-        public ModifierPrototypesBase<IComboModifier> ModifierPrototypes { get; }
+        public ModifierPrototypesBase ModifierPrototypes { get; }
 
         public ComboModifierPrototypes()
         {
             _instance = this;
-            ModifierPrototypes = new ModifierPrototypesBase<IComboModifier>();
+            ModifierPrototypes = new ModifierPrototypesBase();
             SetupModifierPrototypes();
         }
 
@@ -59,7 +59,7 @@ namespace ModifierSystem
         [CanBeNull]
         public IComboModifier GetItem(string key)
         {
-            return ModifierPrototypes.GetItem(key);
+            return (IComboModifier)ModifierPrototypes.Get(key);
         }
 
         public static HashSet<IComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
@@ -74,9 +74,9 @@ namespace ModifierSystem
 
             foreach (var comboModifier in _instance.ModifierPrototypes.Values)
             {
-                if(comboModifierCooldowns.ContainsKey(comboModifier.Id))//Skip if there's a cooldown on the comboModifier
+                if (comboModifierCooldowns.ContainsKey(comboModifier.Id)) //Skip if there's a cooldown on the comboModifier
                     continue;
-                if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
+                if (((IComboModifier)comboModifier).CheckRecipes(modifierIds, elementController, stats))
                     modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
             }
 
