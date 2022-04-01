@@ -1,7 +1,10 @@
 - [ ] Add Random modifier
 - [ ] Targeting auto casting
-- [x] ElementController not updating every 0 element
 
 # Design
 
 Playable game. Strong Hero, fighting vs spawning enemies. "Bench"
+Basic incremenetal setup:
+1 hero, 3 offensive spells to choose from, 2 defensive, 2 utility/passive?
+vs
+Enemies with random modifier & stats

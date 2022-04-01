@@ -10,7 +10,7 @@ namespace ModifierSystem
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
-            receiver.Heal(receiver, acter);
+            BaseBeing.Heal(receiver, acter);
         }
     }
 }

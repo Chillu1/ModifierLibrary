@@ -5,13 +5,14 @@ namespace ModifierSystem
 {
     public class StackComponent : Component, IStackComponent
     {
-        public IStackEffectComponent StackEffectComponent { get; }
-        public WhenStackEffect WhenStackEffect { get; }
-        public double Value { get; }
-        public int OnXStacks { get; }
+        private IStackEffectComponent StackEffectComponent { get; }
+        private WhenStackEffect WhenStackEffect { get; }
+
+        private double Value { get; }
+        private int OnXStacks { get; }
 
         private int Stacks { get; set; }
-        private int MaxStacks { get; set; }
+        private int MaxStacks { get; /*set;*/ }
         private bool Finished { get; set; }
 
         public StackComponent(IStackEffectComponent effect, StackComponentProperties properties)

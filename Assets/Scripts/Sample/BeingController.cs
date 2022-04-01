@@ -16,7 +16,7 @@ namespace ModifierSystem.Sample
         private readonly List<BaseBeing> _deadEnemies;
 
         private float _enemySpawnTimer;
-        private float _enemySpawnCooldown = 1000.1f;
+        private float _enemySpawnCooldown = 0.1f;
 
         private readonly BeingProperties _enemyProperties = new BeingProperties()
         {
@@ -24,10 +24,13 @@ namespace ModifierSystem.Sample
             UnitType = UnitType.Enemy
         };
 
+        private readonly ModifierPrototypesBase _modifiers;
+
         private int _enemyCount;
 
-        public BeingController()
+        public BeingController(ModifierPrototypesBase modifiers)
         {
+            _modifiers = modifiers;
             _characters = new List<BaseBeing>(1);
             _enemies = new List<BaseBeing>(10);
 
@@ -49,8 +52,13 @@ namespace ModifierSystem.Sample
             _enemyProperties.Id = "Enemy #" + _enemyCount;
             _enemyProperties.Health = GlobalRandom.Next(10, 100);
             _enemyProperties.DamageData = new DamageData(GlobalRandom.Next(5, 25), DamageType.Physical);
-            var spawnBeing = SpawnBaseBeing(_enemyProperties, true);
+            var enemy = (Being)SpawnBaseBeing(_enemyProperties, true);
 
+            var thornsModifier = _modifiers.Get("ThornsOnHitTest");
+            var dotStackingModifier = _modifiers.Get("DoTStackTestApplier");
+
+            enemy.AddModifier(thornsModifier);
+            enemy.AddModifier(dotStackingModifier, AddModifierParameters.NullStartTarget);
             //being.TargetingSystem.SetupTargets(GetRandomCharacterTarget);
             //TODO Add random modifier
 

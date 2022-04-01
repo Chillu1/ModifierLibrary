@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
+using Force.DeepCloner;
 
 namespace ModifierSystem
 {
@@ -122,8 +123,8 @@ namespace ModifierSystem
 
         public override object Clone()
         {
-            //Modifier = (Modifier)Modifier.Clone();
-            return this.Copy();
+            return this.DeepClone();
+            //return this.Copy();
         }
     }
 }

@@ -11,12 +11,12 @@ TODO:
     Add non-time remove (conditional)
     "Pointer" to what we should refresh, effect, or removeeffect
     SetRemovable ICleanUpComponent
+* Shield absorption (Abaddon W) (Subscribing to takeDmg event, then getting data (dmg taken) from that event?)
 * >Better naming for Condition stuff
 * Proper LegalTarget(ing)
 * More Applier shenanigans, not permanent modifiers, etc
   * Condition Applier (IConditionEffectComponent)
 * More StackComponent Modifiers & Unit Tests
-  * >StackAdd Cooldown, and/or StackEffect Cooldown
   * >Stack Modifiers
 * Conditional modifiers
   * IBaseBeing instead of BaseBeing in events? 

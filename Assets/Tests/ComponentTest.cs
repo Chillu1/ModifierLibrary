@@ -11,16 +11,15 @@ namespace ModifierSystem.Tests
     [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
     public class ComponentTest : ModifierBaseTest
     {
-        [Test]
-        public void TargetNotValidAlly()
-        {
-            var damageModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
-            character.AddModifier(damageModifierApplier, AddModifierParameters.NullStartTarget);
-            LogAssert.Expect(LogType.Error, new Regex("Target is not valid*"));
-            //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies
-            character.Attack(ally);
-            Assert.AreEqual(24, ally.Stats.Health.CurrentHealth, Delta);
-        }
+        // [Test]
+        // public void TargetNotValidAlly()
+        // {
+        //     var damageModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
+        //     character.AddModifier(damageModifierApplier, AddModifierParameters.NullStartTarget);
+        //     //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies
+        //     character.Attack(ally);
+        //     Assert.AreEqual(initialHealthAlly - initialDamageAlly, ally.Stats.Health.CurrentHealth, Delta);
+        // }
 
         [Test]
         public void RemoveComponentContains()

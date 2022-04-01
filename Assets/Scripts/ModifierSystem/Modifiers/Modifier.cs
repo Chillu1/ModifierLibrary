@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using BaseProject.Utils;
+using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -243,7 +244,8 @@ namespace ModifierSystem
 
         public virtual object Clone()
         {
-            return this.Copy();
+            return this.DeepClone();
+            //return this.Copy();
         }
 
         public override string ToString()

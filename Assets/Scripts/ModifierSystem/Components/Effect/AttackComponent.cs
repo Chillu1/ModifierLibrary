@@ -10,7 +10,7 @@ namespace ModifierSystem
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
-            acter.Attack(receiver, acter);//TODO Not sure about this
+            Being.Attack((Being)receiver, (Being)acter); //TODO Not sure about this
         }
     }
 }
