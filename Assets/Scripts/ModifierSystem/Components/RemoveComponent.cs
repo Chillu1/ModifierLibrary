@@ -5,10 +5,10 @@ namespace ModifierSystem
 {
     public class RemoveComponent : IEffectComponent, IConditionEffectComponent
     {
-        private readonly IModifier _modifier;
+        private readonly Modifier _modifier;
         [CanBeNull] private readonly CleanUpComponent _cleanUpComponent;
 
-        public RemoveComponent(IModifier modifier, CleanUpComponent cleanUpComponent = null)
+        public RemoveComponent(Modifier modifier, CleanUpComponent cleanUpComponent = null)
         {
             _modifier = modifier;
             _cleanUpComponent = cleanUpComponent;

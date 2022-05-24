@@ -12,7 +12,7 @@ namespace ModifierSystem.Sample
 
         private BeingController _beingController;
 
-        private ModifierPrototypesBase _modifiers;
+        private ModifierPrototypesBase<Modifier> _modifiers;
 
         private float _timer;
         private Being _character;
@@ -22,7 +22,7 @@ namespace ModifierSystem.Sample
             int seed = Environment.TickCount;
             GlobalRandom = new Random(seed);
 
-            _modifiers = new ModifierPrototypesBase(true);
+            _modifiers = new ModifierPrototypesBase<Modifier>(true);
             var _ = new ComboModifierPrototypes();
 
             //ModifierPrototypes = new ModifierPrototypes();

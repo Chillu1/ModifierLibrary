@@ -9,7 +9,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats
     /// </summary>
-    public sealed class ComboModifier : Modifier, IComboModifier
+    public sealed class ComboModifier : Modifier, IEventCopy<ComboModifier>
     {
         private ComboRecipes ComboRecipes { get; }
         public float Cooldown { get; }
@@ -116,7 +116,7 @@ namespace ModifierSystem
             return true;
         }
 
-        public void CopyEvents(IComboModifier prototype)
+        public void CopyEvents(ComboModifier prototype)
         {
             base.CopyEvents(prototype);
         }

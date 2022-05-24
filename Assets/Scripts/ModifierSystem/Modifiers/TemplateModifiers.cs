@@ -7,7 +7,7 @@ namespace ModifierSystem
     /// </summary>
     internal class TemplateModifiers
     {
-        private readonly ModifierPrototypesBase _modifierPrototypes;
+        private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
 
         /// <summary>
         ///     Absolute Full Modifier Setup Template, every value and component used. ConditionDoTStackRefresh

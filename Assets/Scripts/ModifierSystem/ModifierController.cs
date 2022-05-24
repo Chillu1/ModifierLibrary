@@ -10,7 +10,7 @@ namespace ModifierSystem
         private readonly Being _owner;
         private ElementController ElementController { get; }
 
-        private Dictionary<string, IModifier> Modifiers { get; }
+        private Dictionary<string, Modifier> Modifiers { get; }
         private ModifierRemover MainModifierRemover { get; }
         private Dictionary<string, float> ComboModifierCooldowns { get; }
         private ModifierRemover CooldownModifierRemover { get; }
@@ -21,7 +21,7 @@ namespace ModifierSystem
         {
             _owner = owner;
             ElementController = elementController;
-            Modifiers = new Dictionary<string, IModifier>();
+            Modifiers = new Dictionary<string, Modifier>();
             MainModifierRemover = new ModifierRemover();
             ComboModifierCooldowns = new Dictionary<string, float>();
             CooldownModifierRemover = new ModifierRemover();
@@ -62,12 +62,12 @@ namespace ModifierSystem
             _secondTimer = 0f;
         }
 
-        public void TryAddModifier(IModifier modifier, AddModifierParameters parameters)
+        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters)
         {
             modifier.TargetComponent.SetupOwner(_owner);
             HandleTarget(modifier, parameters);
 
-            if (ContainsModifier(modifier, out IModifier internalModifier))
+            if (ContainsModifier(modifier, out Modifier internalModifier))
             {
                 bool stacked, refreshed;
                 //Run stack & refresh in case it has those components
@@ -81,8 +81,8 @@ namespace ModifierSystem
             }
             else
             {
-                if (modifier is IComboModifier && !ComboModifierCooldowns.ContainsKey(modifier.Id))
-                    ComboModifierCooldowns.Add(modifier.Id, ((IComboModifier)modifier).Cooldown);
+                if (modifier is ComboModifier && !ComboModifierCooldowns.ContainsKey(modifier.Id))
+                    ComboModifierCooldowns.Add(modifier.Id, ((ComboModifier)modifier).Cooldown);
                 AddModifier(modifier);
             }
 
@@ -100,7 +100,7 @@ namespace ModifierSystem
                 AddComboModifiers(comboModifierToAdd);
         }
 
-        private void AddModifier(IModifier modifier)
+        private void AddModifier(Modifier modifier)
         {
             RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
@@ -109,7 +109,7 @@ namespace ModifierSystem
             //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
         }
 
-        private void AddComboModifiers(HashSet<IComboModifier> comboModifiers)
+        private void AddComboModifiers(HashSet<ComboModifier> comboModifiers)
         {
             foreach (var modifier in comboModifiers)
             {
@@ -121,7 +121,7 @@ namespace ModifierSystem
             CheckForComboRecipes(); //Possible ComboModifier that need comboModifiers, if badly done. Possible infinite loop
         }
 
-        public bool RemoveModifier(IModifier modifier)
+        public bool RemoveModifier(Modifier modifier)
         {
             return RemoveModifier(modifier.Id);
         }
@@ -139,12 +139,12 @@ namespace ModifierSystem
             return ContainsModifier(modifierId, out _);
         }
 
-        public bool ContainsModifier(string modifierId, out IModifier modifier)
+        public bool ContainsModifier(string modifierId, out Modifier modifier)
         {
             return Modifiers.TryGetValue(modifierId, out modifier);
         }
 
-        public bool ContainsModifier(IModifier modifier)
+        public bool ContainsModifier(Modifier modifier)
         {
             return Modifiers.ContainsKey(modifier.Id);
         }
@@ -152,7 +152,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Used for refreshing, stacking ,etc
         /// </summary>
-        public bool ContainsModifier(IModifier modifier, out IModifier internalModifier)
+        public bool ContainsModifier(Modifier modifier, out Modifier internalModifier)
         {
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
             //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
@@ -163,14 +163,14 @@ namespace ModifierSystem
             ListModifiers(Modifiers.Values);
         }
 
-        public void ListModifiers([CanBeNull] IEnumerable<IModifier> modifiers)
+        public void ListModifiers([CanBeNull] IEnumerable<Modifier> modifiers)
         {
             if (modifiers != null)
                 Log.Info("OwnerTarget: " + _owner + ". " + string.Join(". ", modifiers) + " Modifiers count: " + Modifiers.Count,
                     "modifiers", true);
         }
 
-        private void HandleTarget(IModifier modifier, AddModifierParameters parameters)
+        private void HandleTarget(Modifier modifier, AddModifierParameters parameters)
         {
             if (parameters.HasFlag(AddModifierParameters.OwnerIsTarget))
             {
@@ -187,7 +187,7 @@ namespace ModifierSystem
             }
             else
             {
-                //IModifier appliers dont need a target at ctor. Extra check
+                //Modifier appliers dont need a target at ctor. Extra check
                 if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) &&
                     !modifier.ApplierModifier)
                 {
@@ -196,7 +196,7 @@ namespace ModifierSystem
             }
         }
 
-        private void RegisterModifier(IModifier modifier)
+        private void RegisterModifier(Modifier modifier)
         {
             //modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed", "modifiers");
         }
@@ -207,7 +207,7 @@ namespace ModifierSystem
             //    RegisterModifier(Modifiers[modifier.Id]);
         }
 
-        public IEnumerable<IModifier> GetModifierAppliers()
+        public IEnumerable<Modifier> GetModifierAppliers()
         {
             //Invalid target on appliers with self, so no need for extra checks rn
             return Modifiers.Values.Where(m => m.ApplierModifier && !m.IsConditionModifier);
@@ -220,7 +220,7 @@ namespace ModifierSystem
 
         private class ModifierRemover
         {
-            //Can't think of any setbacks when it comes to not using IModifiers here
+            //Can't think of any setbacks when it comes to not using Modifiers here
             private HashSet<string> ObjectsToRemove { get; }
 
             public ModifierRemover()

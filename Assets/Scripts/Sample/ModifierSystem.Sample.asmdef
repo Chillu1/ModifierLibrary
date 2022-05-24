@@ -3,7 +3,7 @@
     "rootNamespace": "ModifierSystem.Sample",
     "references": [
         "GUID:b77841bd4b683019ebdce558ba93802c",
-        "GUID:c100100d5d699bc52b3a6dc16b03725f"
+        "GUID:ee5d359b52d33cffabf129098e3f5f25"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

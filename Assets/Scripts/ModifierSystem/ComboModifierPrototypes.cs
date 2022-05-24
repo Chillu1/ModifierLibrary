@@ -4,15 +4,13 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class ComboModifierPrototypes : IComboModifierPrototypes
+    public class ComboModifierPrototypes : ModifierPrototypesBase<ComboModifier>, IComboModifierPrototypes
     {
         private static IComboModifierPrototypes _instance;
-        public ModifierPrototypesBase ModifierPrototypes { get; }
 
         public ComboModifierPrototypes()
         {
             _instance = this;
-            ModifierPrototypes = new ModifierPrototypesBase();
             SetupModifierPrototypes();
         }
 
@@ -56,27 +54,29 @@ namespace ModifierSystem
             }*/
         }
 
+        //public new Dictionary<string, IComboModifier>.ValueCollection Values => base.Values;
+
         [CanBeNull]
-        public IComboModifier GetItem(string key)
+        public new ComboModifier GetItem(string key)
         {
-            return (IComboModifier)ModifierPrototypes.Get(key);
+            return Get(key);
         }
 
-        public static HashSet<IComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
+        public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
             Dictionary<string, float> comboModifierCooldowns, ElementController elementController, Stats stats)
         {
-            HashSet<IComboModifier> modifierToAdd = new HashSet<IComboModifier>();
+            HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
             if (_instance == null)
             {
                 Log.Warning("ComboModifier instance is null, this is bad, unless this is a unit test");
                 return modifierToAdd;
             }
 
-            foreach (var comboModifier in _instance.ModifierPrototypes.Values)
+            foreach (var comboModifier in _instance.Values)
             {
                 if (comboModifierCooldowns.ContainsKey(comboModifier.Id)) //Skip if there's a cooldown on the comboModifier
                     continue;
-                if (((IComboModifier)comboModifier).CheckRecipes(modifierIds, elementController, stats))
+                if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
                     modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
             }
 

@@ -1,39 +1,35 @@
-using System;
 using System.Collections.Generic;
 using BaseProject;
 using JetBrains.Annotations;
+using Random = System.Random;
 
 namespace ModifierSystem
 {
-    public sealed class ModifierPrototypesBase
+    public class ModifierPrototypesBase<TModifier> : BasePrototypeController<string, TModifier>
+        where TModifier : Modifier, IEventCopy<TModifier>
     {
-        private readonly BasePrototypeController<string, IModifier> _prototypeController;
-
-        public Dictionary<string, IModifier>.ValueCollection Values => _prototypeController.Values;
-
         public ModifierPrototypesBase(bool includeTest = false)
         {
-            _prototypeController = new BasePrototypeController<string, IModifier>();
             if (includeTest)
                 SetupTestModifiers();
         }
 
-        public void AddModifier(IModifier modifier)
+        public void AddModifier(TModifier modifier)
         {
             if (!modifier.ValidatePrototypeSetup())
                 return;
 
-            if (_prototypeController.ContainsKey(modifier.Id))
+            if (ContainsKey(modifier.Id))
             {
                 Log.Error("A modifier with id: " + modifier.Id + " already exists", "modifiers");
                 return;
             }
 
-            _prototypeController.AddItem(modifier.Id, modifier);
+            AddItem(modifier.Id, modifier);
         }
 
         //Generic non-removable (permanent) applier, for now
-        public void SetupModifierApplier(IModifier appliedModifier, LegalTarget legalTarget = LegalTarget.Beings)
+        public void SetupModifierApplier(TModifier appliedModifier, LegalTarget legalTarget = LegalTarget.Beings)
         {
             var modifierApplier = new Modifier(appliedModifier.Id + "Applier", true);
             var target = new TargetComponent(legalTarget, true);
@@ -43,31 +39,31 @@ namespace ModifierSystem
             modifierApplier.AddComponent(applier);
             modifierApplier.AddComponent(target);
             modifierApplier.FinishSetup(); //"No tags", for now?
-            AddModifier(modifierApplier);
+            AddModifier((TModifier)modifierApplier);
         }
 
         [CanBeNull]
-        public IModifier Get(string key)
+        public TModifier Get(string key)
         {
-            var modifier = _prototypeController.GetItem(key);
+            var modifier = GetItem(key);
             ValidateModifier(modifier);
 
             return modifier;
         }
 
         [CanBeNull]
-        public IModifier GetRandom(Random random)
+        public TModifier GetRandom(Random random)
         {
-            var modifier = _prototypeController.GetRandomItem(random);
+            var modifier = GetRandomItem(random);
             ValidateModifier(modifier);
 
             return modifier;
         }
 
         [CanBeNull]
-        public IModifier GetRandomApplier(Random random)
+        public TModifier GetRandomApplier(Random random)
         {
-            var modifier = _prototypeController.GetRandomItem(random, localModifier => localModifier.ApplierModifier);
+            var modifier = GetRandomItem(random, localModifier => localModifier.ApplierModifier);
             ValidateModifier(modifier);
 
             return modifier;
@@ -83,7 +79,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -96,7 +92,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(2, true);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -106,7 +102,7 @@ namespace ModifierSystem
                 properties.AddEffect(new HealComponent(10));
                 properties.SetEffectOnInit();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -116,7 +112,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 //Forever buff (applier), not refreshable or stackable (for now)
                 SetupModifierApplier(modifier, LegalTarget.DefaultFriendly);
@@ -130,7 +126,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(2, true);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -143,7 +139,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(2, true);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -154,7 +150,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -164,7 +160,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -174,7 +170,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -185,7 +181,7 @@ namespace ModifierSystem
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -197,7 +193,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(1, true);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -208,7 +204,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(1, false);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -226,7 +222,7 @@ namespace ModifierSystem
                 properties.SetEffectOnTime(2, true);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -236,7 +232,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                 properties.AddEffect(new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }));
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -245,7 +241,7 @@ namespace ModifierSystem
                 properties.AddEffect(new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }));
                 properties.SetEffectOnInit();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -255,7 +251,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             /*{//TODOPRIO FIXME
@@ -267,7 +263,7 @@ namespace ModifierSystem
 
                 properties.SetRemovable(5);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }*/
             {
@@ -277,7 +273,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             /*{
@@ -289,7 +285,7 @@ namespace ModifierSystem
                 properties.AddEffect(new HealComponent(10));
 
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }*/
             {
@@ -308,7 +304,7 @@ namespace ModifierSystem
                 modifier.AddComponent(new InitComponent(apply,
                     applyRemoval)); //TODO Separate data for each apply & effect? SetEffectOnApply(index 1)?
                 modifier.FinishSetup();
-                AddModifier(modifier);
+                AddModifier((TModifier)modifier);
             }
             {
                 //Heal stat based
@@ -316,7 +312,7 @@ namespace ModifierSystem
                 properties.AddEffect(new HealStatBasedComponent());
                 properties.SetEffectOnInit();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -325,7 +321,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.SelfSelf, ConditionEvent.HealEvent);
                 properties.AddEffect(new HealStatBasedComponent());
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -338,7 +334,7 @@ namespace ModifierSystem
                 properties.SetEffectOnStack(new StackComponentProperties() { Value = 2, MaxStacks = 1000 });
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -352,7 +348,7 @@ namespace ModifierSystem
                 properties.SetRefreshable(RefreshEffectType.RefreshDuration);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -366,7 +362,7 @@ namespace ModifierSystem
                 properties.SetRefreshable(RefreshEffectType.RefreshDuration);
                 properties.SetRemovable(10);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -377,7 +373,7 @@ namespace ModifierSystem
                 stunProperties.SetEffectOnInit();
                 stunProperties.SetRemovable();
 
-                var stunModifier = ModifierGenerator.GenerateModifier(stunProperties);
+                var stunModifier = (TModifier)ModifierGenerator.GenerateModifier(stunProperties);
                 AddModifier(stunModifier);
 
 
@@ -387,7 +383,7 @@ namespace ModifierSystem
                 properties.SetEffectOnStack(new StackComponentProperties()
                     { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 });
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier);
             }
@@ -399,7 +395,7 @@ namespace ModifierSystem
                 properties.AddEffect(new DamageStatComponent(damageData,
                     new ConditionCheckData(ConditionBeingStatus.HealthIsLow)), damageData);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -409,7 +405,7 @@ namespace ModifierSystem
                 flagProperties.AddEffect(new DamageStatComponent(flagDamageData), flagDamageData);
                 flagProperties.SetEffectOnInit();
 
-                var flagModifier = ModifierGenerator.GenerateModifier(flagProperties);
+                var flagModifier = (TModifier)ModifierGenerator.GenerateModifier(flagProperties);
                 AddModifier(flagModifier);
 
                 //Damage on modifier id (flag)
@@ -418,7 +414,7 @@ namespace ModifierSystem
                 properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData("FlagTest")), damageData);
                 properties.SetEffectOnInit();
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -430,7 +426,7 @@ namespace ModifierSystem
                     conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                         Curves.ElementIntensity.Evaluate(900))), damageData);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -442,7 +438,7 @@ namespace ModifierSystem
                 properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData(ConditionBeingStatus.HealthIsLow)),
                     damageData);
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -451,7 +447,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.SelfSelf, ConditionEvent.OnHitEvent);
                 properties.AddEffect(new AttackComponent());
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -460,7 +456,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.SelfSelf, ConditionEvent.OnDamagedEvent);
                 properties.AddEffect(new AttackComponent());
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -469,7 +465,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.SelfSelf, ConditionEvent.HitEvent);
                 properties.AddEffect(new HealStatBasedComponent());
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -478,7 +474,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDamagedEvent);
                 properties.AddEffect(new DamageReflectComponent(0.2));
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
             {
@@ -498,7 +494,7 @@ namespace ModifierSystem
                 flagProperties.SetRefreshable(RefreshEffectType.RefreshDuration);
                 flagProperties.SetRemovable(10);
 
-                var flagModifier = ModifierGenerator.GenerateModifier(flagProperties);
+                var flagModifier = (TModifier)ModifierGenerator.GenerateModifier(flagProperties);
                 AddModifier(flagModifier);
 
 
@@ -508,7 +504,7 @@ namespace ModifierSystem
                     ConditionEvent.HitEvent); //This is optional, we can always apply on attack instead
                 properties.AddEffect(new ApplierEffectComponent(flagModifier));
 
-                var modifier = ModifierGenerator.GenerateModifier(properties);
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
             }
 
@@ -529,7 +525,7 @@ namespace ModifierSystem
             }*/
         }
 
-        private bool ValidateModifier(IModifier modifier)
+        private bool ValidateModifier(Modifier modifier)
         {
             if (modifier.TargetComponent.Target != null || modifier.TargetComponent.Owner != null)
             {

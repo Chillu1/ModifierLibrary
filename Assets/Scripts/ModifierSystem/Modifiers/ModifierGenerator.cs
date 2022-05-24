@@ -2,6 +2,11 @@ namespace ModifierSystem
 {
     public static class ModifierGenerator
     {
+        public static ComboModifier GenerateComboModifier(ModifierGenerationProperties properties)
+        {
+            return (ComboModifier)GenerateModifier(properties);
+        }
+
         public static Modifier GenerateModifier(ModifierGenerationProperties properties)
         {
             Modifier modifier;
@@ -73,6 +78,7 @@ namespace ModifierSystem
                 modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
 
             modifier.FinishSetup(properties.DamageData);
+            //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
             return modifier;
         }
     }

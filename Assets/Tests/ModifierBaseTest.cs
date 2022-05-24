@@ -80,17 +80,14 @@ namespace ModifierSystem.Tests
             enemy = null;
         }
 
-        public class ModifierPrototypesTest
+        public class ModifierPrototypesTest : ModifierPrototypesBase<Modifier>
         {
-            private readonly ModifierPrototypesBase _modifierPrototypes;
-
-            public ModifierPrototypesTest()
+            public ModifierPrototypesTest() : base(true)
             {
-                _modifierPrototypes = new ModifierPrototypesBase(true);
             }
 
             [CanBeNull]
-            public IModifier GetItem(string key)
+            public new Modifier GetItem(string key)
             {
                 if (key.Contains("Applier"))
                 {
@@ -107,19 +104,17 @@ namespace ModifierSystem.Tests
                     return null;
                 }
 
-                return _modifierPrototypes.Get(key);
+                return Get(key);
             }
         }
 
-        public class ComboModifierPrototypesTest : IComboModifierPrototypes
+        public class ComboModifierPrototypesTest : ModifierPrototypesBase<ComboModifier>, IComboModifierPrototypes
         {
             private static ComboModifierPrototypesTest _instance;
-            public ModifierPrototypesBase ModifierPrototypes { get; }
 
             public ComboModifierPrototypesTest()
             {
                 _instance = this;
-                ModifierPrototypes = new ModifierPrototypesBase();
                 SetupModifierPrototypes();
             }
 
@@ -136,8 +131,8 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new StatComponent(new[] { new Stat(StatType.MovementSpeed, 10) }));
                     properties.SetRemovable(10);
 
-                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
-                    ModifierPrototypes.AddModifier(modifier);
+                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
+                    AddModifier(modifier);
                 }
                 {
                     //Poison & bleed = infection
@@ -155,8 +150,8 @@ namespace ModifierSystem.Tests
                             damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
                     properties.SetRemovable(10);
 
-                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
-                    ModifierPrototypes.AddModifier(modifier);
+                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
+                    AddModifier(modifier);
                 }
                 {
                     //10k health = giant (physical res)
@@ -167,8 +162,8 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
 
-                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
-                    ModifierPrototypes.AddModifier(modifier);
+                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
+                    AddModifier(modifier);
                 }
                 {
                     //10k health = temporary giant (physical res)
@@ -180,31 +175,32 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
 
-                    var modifier = (ComboModifier)ModifierGenerator.GenerateModifier(properties);
-                    ModifierPrototypes.AddModifier(modifier);
+                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
+                    AddModifier(modifier);
                 }
             }
 
+
             [CanBeNull]
-            public IComboModifier GetItem(string key)
+            public new ComboModifier GetItem(string key)
             {
-                return (IComboModifier)ModifierPrototypes.Get(key);
+                return Get(key);
             }
 
-            public static HashSet<IComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController,
+            public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController,
                 Stats stats)
             {
-                HashSet<IComboModifier> modifierToAdd = new HashSet<IComboModifier>();
+                HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
                 if (_instance == null)
                 {
                     Log.Warning("ComboModifier instance is null, this is bad, unless this is a unit test");
                     return modifierToAdd;
                 }
 
-                foreach (var comboModifier in _instance.ModifierPrototypes.Values)
+                foreach (var comboModifier in _instance.Values)
                 {
-                    if (((IComboModifier)comboModifier).CheckRecipes(modifierIds, elementController, stats))
-                        modifierToAdd.Add((IComboModifier)comboModifier);
+                    if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
+                        modifierToAdd.Add(comboModifier);
                 }
 
                 return modifierToAdd;
