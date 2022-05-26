@@ -189,7 +189,7 @@ namespace ModifierSystem
             {
                 //Modifier appliers dont need a target at ctor. Extra check
                 if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) &&
-                    !modifier.ApplierModifier)
+                    !modifier.IsApplierModifier)
                 {
                     Log.Error("Non-applier modifier doesn't have a target. Owner isn't the target", "modifiers");
                 }
@@ -210,7 +210,7 @@ namespace ModifierSystem
         public IEnumerable<Modifier> GetModifierAppliers()
         {
             //Invalid target on appliers with self, so no need for extra checks rn
-            return Modifiers.Values.Where(m => m.ApplierModifier && !m.IsConditionModifier);
+            return Modifiers.Values.Where(m => m.IsApplierModifier && !m.IsConditionModifier);
         }
 
         public override string ToString()

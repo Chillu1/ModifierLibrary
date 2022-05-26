@@ -14,7 +14,7 @@ namespace ModifierSystem
         private ComboRecipes ComboRecipes { get; }
         public float Cooldown { get; }
 
-        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5) : base(id, false)
+        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5) : base(id)
         {
             ComboRecipes = comboRecipes;
             Cooldown = cooldown;
@@ -30,7 +30,7 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (Id.Contains("Applier") || ApplierModifier)
+            if (Id.Contains("Applier") || IsApplierModifier)
             {
                 Log.Error("ComboModifier can't be an applier modifier, right? Maybe?", "modifiers");
                 valid = false;

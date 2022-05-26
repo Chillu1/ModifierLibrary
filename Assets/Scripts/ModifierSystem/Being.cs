@@ -1,10 +1,12 @@
 using BaseProject;
+using UnityEngine;
 
 namespace ModifierSystem
 {
     public sealed class Being : BaseBeing
     {
         private ModifierController ModifierController { get; }
+        private CastingController CastingController { get; }
 
         /// <summary>
         ///     On getting a combo
@@ -14,29 +16,12 @@ namespace ModifierSystem
         public Being(BeingProperties beingProperties) : base(beingProperties)
         {
             ModifierController = new ModifierController(this, ElementController);
+            CastingController = new CastingController(ModifierController, StatusEffects);
         }
 
         public bool CastModifier(Being target, string modifierId)
         {
-            if (!ModifierController.ContainsModifier(modifierId, out var modifier))
-            {
-                Log.Error("Modifier " + modifierId + " not present in collection", "modifiers");
-                return false;
-            }
-
-            if (!modifier.ApplierModifier)
-            {
-                //TODO Not sure, about this one, but probably true
-                Log.Error("Can't cast a non-applier modifier: " + modifierId, "modifiers");
-                return false;
-            }
-
-            if (!StatusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
-                return false;
-
-            modifier.TryApply(target);
-
-            return true;
+            return CastingController.CastModifier(target, modifierId);
         }
 
         /// <summary>
@@ -83,10 +68,12 @@ namespace ModifierSystem
         {
             base.Update(deltaTime);
             ModifierController.Update(deltaTime);
+            CastingController.Update(deltaTime);
         }
 
         public override DamageData[] Attack(BaseBeing target)
         {
+            //Debug.Log("Attack");
             return Attack((Being)target, this);
         }
 

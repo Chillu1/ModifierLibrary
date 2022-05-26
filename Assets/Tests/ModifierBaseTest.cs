@@ -80,14 +80,14 @@ namespace ModifierSystem.Tests
             enemy = null;
         }
 
-        public class ModifierPrototypesTest : ModifierPrototypesBase<Modifier>
+        public class ModifierPrototypesTest : ModifierPrototypes<Modifier>
         {
             public ModifierPrototypesTest() : base(true)
             {
             }
 
             [CanBeNull]
-            public new Modifier GetItem(string key)
+            public new Modifier Get(string key)
             {
                 if (key.Contains("Applier"))
                 {
@@ -104,11 +104,11 @@ namespace ModifierSystem.Tests
                     return null;
                 }
 
-                return Get(key);
+                return base.Get(key);
             }
         }
 
-        public class ComboModifierPrototypesTest : ModifierPrototypesBase<ComboModifier>, IComboModifierPrototypes
+        public class ComboModifierPrototypesTest : ModifierPrototypes<ComboModifier>, IComboModifierPrototypes
         {
             private static ComboModifierPrototypesTest _instance;
 
@@ -182,9 +182,9 @@ namespace ModifierSystem.Tests
 
 
             [CanBeNull]
-            public new ComboModifier GetItem(string key)
+            public new ComboModifier Get(string key)
             {
-                return Get(key);
+                return base.Get(key);
             }
 
             public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController,

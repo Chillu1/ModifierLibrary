@@ -14,7 +14,8 @@ namespace ModifierSystem
     public class Modifier : IEntity<string>, ICloneable, IEventCopy<Modifier>
     {
         public string Id { get; private set; }
-        public bool ApplierModifier { get; }
+        public bool IsApplierModifier => ApplierType != ApplierType.None;
+        public ApplierType ApplierType { get; }
         public bool IsConditionModifier { get; }
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
@@ -28,10 +29,12 @@ namespace ModifierSystem
 
         private bool _setupFinished;
 
-        public Modifier(string id, bool applierModifier = false, bool isConditionModifier = false)
+        public Modifier(string id, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
         {
             Id = id;
-            ApplierModifier = applierModifier;
+            if (applierType != ApplierType.None)
+                ApplierType = applierType;
+
             IsConditionModifier = isConditionModifier;
         }
 
@@ -201,7 +204,7 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (ApplierModifier || Id.Contains("Applier"))
+            if (IsApplierModifier || Id.Contains("Applier"))
             {
                 if (ApplyComponent == null && StackComponent == null)
                 {
@@ -216,13 +219,13 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (Id.Contains("Applier") && !ApplierModifier)
+            if (Id.Contains("Applier") && !IsApplierModifier)
             {
                 Log.Error("Id contains applier, but the flag isn't set", "modifiers");
                 valid = false;
             }
 
-            if (!Id.Contains("Applier") && ApplierModifier)
+            if (!Id.Contains("Applier") && IsApplierModifier)
             {
                 Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
                 valid = false;

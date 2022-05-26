@@ -1,9 +1,12 @@
 # TODO:  
 - [ ] StatusTags refactor
+- [ ] Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project
+- [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] IEventCopy not needed?
 - [ ] Refactor ModifierPrototypesBase all modifiers setup
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
+- [ ] Modifiers that need to be casted. With cooldown/mana?
 
 # #Lower prio
 
@@ -12,6 +15,7 @@
 - [ ] >Try to make an actual playable "game" out of it. Ex. a hero fighting against spawning enemies
 - [ ] Counter attack (onhit event? Or built-in)
 - [ ] Stack effect HasFlag instead of switch
+- [ ] ComboAppliers?
 - [ ] >Ursa E (stackbased)
     Target is null on applier, but we're trying to setup a conditional
     We apply modifier through attacking & onHit

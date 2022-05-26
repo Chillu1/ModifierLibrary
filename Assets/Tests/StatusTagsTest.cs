@@ -11,7 +11,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void TryOverwriteTags()
         {
-            var modifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            var modifier = modifierPrototypes.Get("SpiderPoisonTest");
             LogAssert.Expect(LogType.Error, new Regex("overwriting*"));
             modifier!.FinishSetup();
         }
@@ -19,7 +19,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void CorrectTagsPhysicalPoisonDot()
         {
-            var spiderPoisonModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            var spiderPoisonModifier = modifierPrototypes.Get("SpiderPoisonTest");
 
             var tags = spiderPoisonModifier!.StatusTags;
             for (int i = 0; i < tags.Length; i++)
@@ -35,7 +35,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void ManyCorrectTags()
         {
-            var allTagsModifier = modifierPrototypes.GetItem("ManyTagsTest");
+            var allTagsModifier = modifierPrototypes.Get("ManyTagsTest");
 
             var tags = allTagsModifier!.StatusTags;
             for (int i = 0; i < tags.Length; i++)

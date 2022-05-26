@@ -22,7 +22,8 @@ namespace ModifierSystem
     {
         public string Name { get; }
         public LegalTarget LegalTarget { get; }
-        public bool Applier { get; private set; }
+        public bool IsApplier => ApplierType != ApplierType.None;
+        public ApplierType ApplierType { get; private set; }
         public bool HasConditionData { get; private set; }
         public ConditionEventTarget ConditionEventTarget { get; private set; }
         public ConditionEvent ConditionEvent { get; private set; }
@@ -49,20 +50,20 @@ namespace ModifierSystem
 
         public void AddConditionData(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
         {
-            if(conditionEventTarget == ConditionEventTarget.None)
+            if (conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
-            if(conditionEvent == ConditionEvent.None)
+            if (conditionEvent == ConditionEvent.None)
                 Log.Error("Wrong BeingConditionEvent, None");
 
             HasConditionData = true;
             ConditionEventTarget = conditionEventTarget;
             ConditionEvent = conditionEvent;
-            SetEffectOnApply();//Always true?
+            SetEffectOnApply(); //Always true?
         }
 
-        public void SetApplier()
+        public void SetApplier(ApplierType applierType)
         {
-            Applier = true;
+            ApplierType = applierType;
         }
 
         public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)

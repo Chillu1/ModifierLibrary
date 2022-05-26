@@ -7,7 +7,7 @@ namespace ModifierSystem
     /// </summary>
     internal class TemplateModifiers
     {
-        private readonly ModifierPrototypesBase<Modifier> _modifierPrototypes;
+        private readonly ModifierPrototypes<Modifier> _modifierPrototypes;
 
         /// <summary>
         ///     Absolute Full Modifier Setup Template, every value and component used. ConditionDoTStackRefresh
@@ -33,7 +33,7 @@ namespace ModifierSystem
             modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);
-            _modifierPrototypes.SetupModifierApplier(modifier);
+            _modifierPrototypes.SetupModifierApplier(modifier, ApplierType.Attack);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace ModifierSystem
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
-            _modifierPrototypes.SetupModifierApplier(modifier);
+            _modifierPrototypes.SetupModifierApplier(modifier, ApplierType.Attack);
         }
 
         /// <summary>

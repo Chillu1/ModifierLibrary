@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class ComboModifierPrototypes : ModifierPrototypesBase<ComboModifier>, IComboModifierPrototypes
+    public class ComboModifierPrototypes : ModifierPrototypes<ComboModifier>, IComboModifierPrototypes
     {
         private static IComboModifierPrototypes _instance;
 
@@ -57,9 +57,9 @@ namespace ModifierSystem
         //public new Dictionary<string, IComboModifier>.ValueCollection Values => base.Values;
 
         [CanBeNull]
-        public new ComboModifier GetItem(string key)
+        public new ComboModifier Get(string key)
         {
-            return Get(key);
+            return base.Get(key);
         }
 
         public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
@@ -77,7 +77,7 @@ namespace ModifierSystem
                 if (comboModifierCooldowns.ContainsKey(comboModifier.Id)) //Skip if there's a cooldown on the comboModifier
                     continue;
                 if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
-                    modifierToAdd.Add(_instance.GetItem(comboModifier.Id));
+                    modifierToAdd.Add(_instance.Get(comboModifier.Id));
             }
 
             return modifierToAdd;

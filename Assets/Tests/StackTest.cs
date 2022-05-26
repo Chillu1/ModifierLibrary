@@ -8,49 +8,49 @@ namespace ModifierSystem.Tests
         [Test]
         public void DoTStackingDamage()
         {
-            var doTModifierApplier = modifierPrototypes.GetItem("DoTStackTestApplier");
+            var doTModifierApplier = modifierPrototypes.Get("DoTStackTestApplier");
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
-            character.Attack(enemy);//1 phys dmg, 1 poison dmg(init), stack (+2 poison dmg)
-            enemy.Update(2.1f);//3 poison damage
-            character.Attack(enemy);//1 phys, stack (+2 poison dmg)
-            enemy.Update(2.1f);//5 poison dmg
+            character.Attack(enemy); //1 phys dmg, 1 poison dmg(init), stack (+2 poison dmg)
+            enemy.Update(2.1f); //3 poison damage
+            character.Attack(enemy); //1 phys, stack (+2 poison dmg)
+            enemy.Update(2.1f); //5 poison dmg
 
-            var doTModifier = modifierPrototypes.GetItem("DoTStackTest");
+            var doTModifier = modifierPrototypes.Get("DoTStackTest");
             Assert.True(enemy.ContainsModifier(doTModifier));
-            Assert.AreEqual(initialHealthEnemy-1-1-3-1-5, enemy.Stats.Health.CurrentHealth, Delta);
+            Assert.AreEqual(initialHealthEnemy - 1 - 1 - 3 - 1 - 5, enemy.Stats.Health.CurrentHealth, Delta);
         }
 
         [Test]
         public void SilenceXStacks()
         {
-            var silenceModifierApplier = modifierPrototypes.GetItem("SilenceXStacksTestApplier");
+            var silenceModifierApplier = modifierPrototypes.Get("SilenceXStacksTestApplier");
             character.AddModifier(silenceModifierApplier, AddModifierParameters.NullStartTarget);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            character.Attack(enemy);//1
+            character.Attack(enemy); //1
             enemy.Update(8.1f);
-            character.Attack(enemy);//2
+            character.Attack(enemy); //2
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            character.Attack(enemy);//3
+            character.Attack(enemy); //3
             enemy.Update(8.1f);
-            character.Attack(enemy);//4
+            character.Attack(enemy); //4
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            var silenceModifier = modifierPrototypes.GetItem("SilenceXStacksTest");
+            var silenceModifier = modifierPrototypes.Get("SilenceXStacksTest");
             Assert.True(enemy.ContainsModifier(silenceModifier));
         }
 
         [Test]
         public void ApplyStunModifierXStacks()
         {
-            var applyStunModifierApplier = modifierPrototypes.GetItem("ApplyStunModifierXStacksTestApplierApplier");
-            var applyStunModifier = modifierPrototypes.GetItem("ApplyStunModifierXStacksTestApplier");
-            var stunModifier = modifierPrototypes.GetItem("GenericStunModifierTest");
+            var applyStunModifierApplier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplierApplier");
+            var applyStunModifier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplier");
+            var stunModifier = modifierPrototypes.Get("GenericStunModifierTest");
             character.AddModifier(applyStunModifierApplier, AddModifierParameters.NullStartTarget);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
-            character.Attack(enemy);//1
+            character.Attack(enemy); //1
             Assert.True(enemy.ContainsModifier(applyStunModifier));
-            character.Attack(enemy);//2
+            character.Attack(enemy); //2
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
-            character.Attack(enemy);//3
+            character.Attack(enemy); //3
             enemy.Update(0.2f);
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.True(enemy.ContainsModifier(stunModifier));

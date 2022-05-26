@@ -24,11 +24,11 @@ namespace ModifierSystem.Sample
             UnitType = UnitType.Enemy
         };
 
-        private readonly ModifierPrototypesBase<Modifier> _modifiers;
+        private readonly ModifierPrototypes<Modifier> _modifiers;
 
         private int _enemyCount;
 
-        public BeingController(ModifierPrototypesBase<Modifier> modifiers)
+        public BeingController(ModifierPrototypes<Modifier> modifiers)
         {
             _modifiers = modifiers;
             _characters = new List<BaseBeing>(1);

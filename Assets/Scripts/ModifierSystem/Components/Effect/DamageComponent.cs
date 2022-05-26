@@ -1,5 +1,6 @@
 using System;
 using BaseProject;
+using UnityEngine;
 
 namespace ModifierSystem
 {
@@ -22,6 +23,7 @@ namespace ModifierSystem
 
         public void StackEffect(int stacks, double value)
         {
+            //Debug.Log("StackEffect");
             if (StackEffectType.HasFlag(DamageComponentStackEffect.Add))
                 Damage[0].BaseDamage += value;
             if (StackEffectType.HasFlag(DamageComponentStackEffect.AddStacksBased))

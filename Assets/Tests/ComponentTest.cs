@@ -24,35 +24,35 @@ namespace ModifierSystem.Tests
         [Test]
         public void RemoveComponentContains()
         {
-            var doTModifierApplier = modifierPrototypes.GetItem("SpiderPoisonTestApplier");
+            var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
             enemy.Update(9.9f);
 
-            var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            var doTModifier = modifierPrototypes.Get("SpiderPoisonTest");
             Assert.True(enemy.ContainsModifier(doTModifier));
         }
 
         [Test]
         public void RemoveComponentEffect()
         {
-            var doTModifierApplier = modifierPrototypes.GetItem("SpiderPoisonTestApplier");
+            var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
             enemy.Update(10.1f);
 
-            var doTModifier = modifierPrototypes.GetItem("SpiderPoisonTest");
+            var doTModifier = modifierPrototypes.Get("SpiderPoisonTest");
             Assert.False(enemy.ContainsModifier(doTModifier));
         }
 
         [Test]
         public void RemoveComponentLingerEffect()
         {
-            var doTModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
+            var doTModifierApplier = modifierPrototypes.Get("IceBoltTestApplier");
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
             enemy.Update(0.4f);
-            var doTModifier = modifierPrototypes.GetItem("IceBoltTest");
+            var doTModifier = modifierPrototypes.Get("IceBoltTest");
             Assert.True(enemy.ContainsModifier(doTModifier));
             enemy.Update(0.2f);
             Assert.False(enemy.ContainsModifier(doTModifier));
@@ -62,7 +62,7 @@ namespace ModifierSystem.Tests
         public void HealStatBasedEffect()
         {
             Assert.True(ally.Stats.Health.IsFull);
-            var healModifier = modifierPrototypes.GetItem("HealStatBasedTest");
+            var healModifier = modifierPrototypes.Get("HealStatBasedTest");
             character.ChangeStat(StatType.Heal, 5);
             character.AddModifier(healModifier);
             enemy.ChangeDamageStat(new DamageData(4, DamageType.Physical));

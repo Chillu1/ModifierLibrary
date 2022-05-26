@@ -7,7 +7,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void DamagePerStackFlag()
         {
-            var modifierApplier = modifierPrototypes.GetItem("DamagePerStackTestApplier");
+            var modifierApplier = modifierPrototypes.Get("DamagePerStackTestApplier");
             character.AddModifier(modifierApplier);
             //Log.Info(enemy.Stats.Health.CurrentHealth);
             character.Attack(enemy); //1+2 damage

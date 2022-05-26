@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ModifierSystem
 {
     public static class ModifierGenerator
@@ -12,13 +14,13 @@ namespace ModifierSystem
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
-                : new Modifier(properties.Name, properties.Applier, properties.HasConditionData);
+                : new Modifier(properties.Name, properties.ApplierType);
 
             //---Components---
 
             var targetComponent = properties.HasConditionData
-                ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.Applier)
-                : new TargetComponent(properties.LegalTarget, properties.Applier);
+                ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.IsApplier)
+                : new TargetComponent(properties.LegalTarget, properties.IsApplier);
 
             //---Effect---
             EffectComponent effectComponent = properties.EffectComponent;
@@ -52,7 +54,7 @@ namespace ModifierSystem
             //Add all components to modifier
             modifier.AddComponent(targetComponent);
 
-            if (properties.Applier && effectComponent is ApplierEffectComponent applier)
+            if (properties.IsApplier && effectComponent is ApplierEffectComponent applier)
             {
                 var applierComponent = new ApplierComponent(applier);
                 modifier.AddComponent(applierComponent);

@@ -8,7 +8,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void ActAttackStatusEffect()
         {
-            var disarmModifierApplier = modifierPrototypes.GetItem("DisarmModifierTestApplier");
+            var disarmModifierApplier = modifierPrototypes.Get("DisarmModifierTestApplier");
             character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
 
@@ -22,9 +22,9 @@ namespace ModifierSystem.Tests
         [Test]
         public void CastSilenceStatusEffect()
         {
-            var disarmModifierApplier = modifierPrototypes.GetItem("SilenceModifierTestApplier");
+            var disarmModifierApplier = modifierPrototypes.Get("SilenceModifierTestApplier");
             character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.AddModifier(modifierPrototypes.GetItem("SilenceModifierTestApplier"), AddModifierParameters.NullStartTarget);
+            enemy.AddModifier(modifierPrototypes.Get("SilenceModifierTestApplier"), AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
 
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
@@ -38,7 +38,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void TimedStatusEffect()
         {
-            var rootModifierApplier = modifierPrototypes.GetItem("RootTimedModifierTestApplier");
+            var rootModifierApplier = modifierPrototypes.Get("RootTimedModifierTestApplier");
             character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Move));
             enemy.Update(0.01f);
@@ -57,7 +57,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void DelayedStatusEffect()
         {
-            var rootModifierApplier = modifierPrototypes.GetItem("DelayedSilenceModifierTestApplier");
+            var rootModifierApplier = modifierPrototypes.Get("DelayedSilenceModifierTestApplier");
             character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             character.CastModifier(enemy, "DelayedSilenceModifierTestApplier");

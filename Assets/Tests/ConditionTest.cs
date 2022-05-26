@@ -8,27 +8,27 @@ namespace ModifierSystem.Tests
         [Test]
         public void ConditionDamageOnLowHealth()
         {
-            var modifier = modifierPrototypes.GetItem("DamageOnLowHealthTest");
+            var modifier = modifierPrototypes.Get("DamageOnLowHealthTest");
             character.AddModifier(modifier);
-            enemy.ChangeDamageStat(new DamageData(initialHealthCharacter-3, DamageType.Physical));
+            enemy.ChangeDamageStat(new DamageData(initialHealthCharacter - 3, DamageType.Physical));
 
             enemy.Attack(character);
 
-            Assert.AreEqual(initialDamageCharacter+50, character.Stats.Damage.DamageSum(), Delta);
+            Assert.AreEqual(initialDamageCharacter + 50, character.Stats.Damage.DamageSum(), Delta);
         }
 
         [Test]
         public void ConditionModifierId()
         {
-            var flagModifier = modifierPrototypes.GetItem("FlagTest");
-            var modifier = modifierPrototypes.GetItem("DamageOnModifierIdTest");
-            character.AddModifier(modifier);//No flag, returns effect (has modifier)
+            var flagModifier = modifierPrototypes.Get("FlagTest");
+            var modifier = modifierPrototypes.Get("DamageOnModifierIdTest");
+            character.AddModifier(modifier); //No flag, returns effect (has modifier)
             Assert.AreEqual(initialDamageCharacter, character.Stats.Damage.DamageSum(), Delta);
 
             character.AddModifier(flagModifier);
             Assert.True(character.ContainsModifier(flagModifier));
 
-            character.AddModifier(modifier);//Has flag modifier now, add
+            character.AddModifier(modifier); //Has flag modifier now, add
 
             Assert.AreEqual(double.MaxValue, character.Stats.Damage.DamageSum(), Delta);
         }
@@ -36,7 +36,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void ConditionElementalIntensity()
         {
-            var modifier = modifierPrototypes.GetItem("DealDamageOnElementalIntensityTest");
+            var modifier = modifierPrototypes.Get("DealDamageOnElementalIntensityTest");
             character.AddModifier(modifier);
 
             character.Attack(enemy);
