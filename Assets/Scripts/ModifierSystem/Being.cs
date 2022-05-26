@@ -30,7 +30,10 @@ namespace ModifierSystem
         private void ApplyModifiers(Being target)
         {
             foreach (var modifierApplier in ModifierController.GetModifierAppliers())
+            {
+                //Debug.Log("Applying: " + modifierApplier);
                 modifierApplier.TryApply(target);
+            }
         }
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)

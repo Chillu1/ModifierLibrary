@@ -14,7 +14,7 @@ namespace ModifierSystem
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
-                : new Modifier(properties.Name, properties.ApplierType);
+                : new Modifier(properties.Name, properties.ApplierType, properties.HasConditionData);
 
             //---Components---
 
