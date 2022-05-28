@@ -24,7 +24,14 @@ namespace ModifierSystem
             if (_timer >= _cooldown)
             {
                 _timer -= _cooldown;
+                //Automatic cast
+                TryCast();
             }
+        }
+
+        public bool TryCast()
+        {
+            return true;
         }
 
         public void ManualCast()

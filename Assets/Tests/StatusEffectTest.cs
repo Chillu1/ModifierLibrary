@@ -25,7 +25,7 @@ namespace ModifierSystem.Tests
             var disarmModifierApplier = modifierPrototypes.Get("SilenceModifierTestApplier");
             character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
             enemy.AddModifier(modifierPrototypes.Get("SilenceModifierTestApplier"), AddModifierParameters.NullStartTarget);
-            character.Attack(enemy);
+            character.CastModifier(enemy, "SilenceModifierTestApplier");
 
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));

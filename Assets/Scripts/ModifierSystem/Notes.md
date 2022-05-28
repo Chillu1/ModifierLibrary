@@ -2,6 +2,16 @@
 
 ## Temp Notes
 
+CastComponent: Holds cooldown, mana. Gets fed: target, cd reduction, mana reduction.
+CostCOmponent: Mana, health, w/e.
+CastingController: ?
+Modifier: Updates CastComponent
+ModifierController: Updates all modifiers
+
+Casting
+Modifier should hold the Cooldown, Mana usage data.
+We should feed the CD/mana reduction on TryApply.
+
 Automatic casting of spells, mana/cooldown?
 CastComponent? Prob not. Modifiers shouldn't internally know anything about themself being cast?
 Just have data, and cooldown in modifier, and handle casting in being/modifier controller?

@@ -1,26 +1,48 @@
+using System.Collections.Generic;
 using BaseProject;
 
 namespace ModifierSystem
 {
+    /// <summary>
+    ///     Responsible for casting modifiers on targets
+    /// </summary>
     public class CastingController
     {
-        private readonly ModifierController _modifierController;
-        private readonly StatusEffects _statusEffects;
+        private ModifierController ModifierController { get; }
+        private StatusEffects StatusEffects { get; }
+        private TargetingSystem TargetingSystem { get; }
 
-        public CastingController(ModifierController modifierController, StatusEffects statusEffects)
+        private readonly List<Modifier> _castingModifiers;
+
+        public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
         {
-            _modifierController = modifierController;
-            _statusEffects = statusEffects;
+            ModifierController = modifierController;
+            StatusEffects = statusEffects;
+            TargetingSystem = targetingSystem;
+
+            _castingModifiers = new List<Modifier>();
         }
 
 
         public void Update(float deltaTime)
         {
+            foreach (var castingModifier in _castingModifiers)
+            {
+                //if mana?
+                //if cooldown
+
+                //try cast
+            }
+        }
+
+        public bool CastModifier(string modifierId)
+        {
+            return CastModifier((Being)TargetingSystem.CastTarget, modifierId);
         }
 
         public bool CastModifier(Being target, string modifierId)
         {
-            if (!_modifierController.ContainsModifier(modifierId, out var modifier))
+            if (!ModifierController.ContainsModifier(modifierId, out var modifier))
             {
                 Log.Error("Modifier " + modifierId + " not present in collection", "modifiers");
                 return false;
@@ -33,12 +55,34 @@ namespace ModifierSystem
                 return false;
             }
 
-            if (!_statusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
+            if (!modifier.ApplierType.HasFlag(ApplierType.Cast))
+            {
+                Log.Error("Can't cast a non-cast applier modifier: " + modifierId, "modifiers");
+                return false;
+            }
+
+            if (modifier.ApplierType == ApplierType.Attack)
+            {
+                Log.Error("Can't cast an attack modifier: " + modifierId, "modifiers");
+                return false;
+            }
+
+            if (!StatusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
                 return false;
 
             modifier.TryApply(target);
 
             return true;
+        }
+
+        public void AddCastingModifier(Modifier modifier)
+        {
+            _castingModifiers.Add(modifier);
+        }
+
+        public void RemoveCastingModifier(Modifier modifier)
+        {
+            _castingModifiers.Remove(modifier);
         }
     }
 }

@@ -41,6 +41,7 @@ namespace ModifierSystem
 
         public StackComponentProperties StackComponentProperties { get; private set; }
         public RefreshEffectType RefreshEffectType { get; private set; }
+        public (CostType, float) Cost { get; private set; }
 
         public ModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self)
         {
@@ -112,6 +113,11 @@ namespace ModifierSystem
         public void SetRefreshable(RefreshEffectType refreshDuration)
         {
             RefreshEffectType = refreshDuration;
+        }
+
+        public void SetCost(CostType costType, int amount)
+        {
+            Cost = (costType, amount);
         }
     }
 

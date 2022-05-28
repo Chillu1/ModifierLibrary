@@ -71,5 +71,34 @@ namespace ModifierSystem.Tests
 
             Assert.True(ally.Stats.Health.IsFull);
         }
+
+        [Test]
+        public void HealthCostTest()
+        {
+            //On attack, we should try to apply the modifier, check for cost, then apply, then take the cost.
+            var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
+            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+
+            Assert.True(character.Stats.Health.IsFull);
+            character.Attack(enemy);
+
+            Assert.AreEqual(initialHealthCharacter - 10, character.Stats.Health.CurrentHealth, Delta); //cost component took away 10 health
+            Assert.AreNotEqual(initialHealthEnemy, enemy.Stats.Health.CurrentHealth); //enemy took damage
+        }
+
+        [Test]
+        public void HealthCostNotLethalTest()
+        {
+            var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
+            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+
+            Assert.True(character.Stats.Health.IsFull);
+            for (int i = 0; i < 7; i++)
+            {
+                character.Attack(enemy);
+            }
+
+            Assert.False(character.Stats.Health.IsDead);
+        }
     }
 }

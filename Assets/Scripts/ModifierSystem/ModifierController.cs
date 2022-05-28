@@ -64,7 +64,7 @@ namespace ModifierSystem
 
         public void TryAddModifier(Modifier modifier, AddModifierParameters parameters)
         {
-            modifier.TargetComponent.SetupOwner(_owner);
+            modifier.SetupOwner(_owner);
             HandleTarget(modifier, parameters);
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
@@ -207,10 +207,10 @@ namespace ModifierSystem
             //    RegisterModifier(Modifiers[modifier.Id]);
         }
 
-        public IEnumerable<Modifier> GetModifierAppliers()
+        public IEnumerable<Modifier> GetModifierAttackAppliers()
         {
             //Invalid target on appliers with self, so no need for extra checks rn
-            return Modifiers.Values.Where(m => m.IsApplierModifier && !m.IsConditionModifier);
+            return Modifiers.Values.Where(m => m.IsApplierModifier && m.ApplierType == ApplierType.Attack && !m.IsConditionModifier);
         }
 
         public override string ToString()

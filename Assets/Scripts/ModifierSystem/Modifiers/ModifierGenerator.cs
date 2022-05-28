@@ -79,6 +79,10 @@ namespace ModifierSystem
             if (properties.RefreshEffectType != RefreshEffectType.None)
                 modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
 
+            //---Cost---
+            if (properties.Cost.Item1 != CostType.None && properties.Cost.Item2 != 0)
+                modifier.AddComponent(new CostComponent(properties.Cost.Item1, properties.Cost.Item2));
+
             modifier.FinishSetup(properties.DamageData);
             //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
             return modifier;

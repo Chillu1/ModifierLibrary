@@ -35,4 +35,11 @@ namespace ModifierSystem
 
         All = Attack | Cast
     }
+
+    public enum CostType
+    {
+        None = 0,
+        Mana = 1,
+        Health = 2
+    }
 }

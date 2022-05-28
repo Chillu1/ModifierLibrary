@@ -16,7 +16,7 @@ namespace ModifierSystem
         public Being(BeingProperties beingProperties) : base(beingProperties)
         {
             ModifierController = new ModifierController(this, ElementController);
-            CastingController = new CastingController(ModifierController, StatusEffects);
+            CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
         }
 
         public bool CastModifier(Being target, string modifierId)
@@ -27,9 +27,9 @@ namespace ModifierSystem
         /// <summary>
         ///     Apply modifier appliers to target
         /// </summary>
-        private void ApplyModifiers(Being target)
+        private void ApplyAttackModifiers(Being target)
         {
-            foreach (var modifierApplier in ModifierController.GetModifierAppliers())
+            foreach (var modifierApplier in ModifierController.GetModifierAttackAppliers())
             {
                 //Debug.Log("Applying: " + modifierApplier);
                 modifierApplier.TryApply(target);
@@ -88,7 +88,7 @@ namespace ModifierSystem
             if (!attacker.StatusEffects.LegalActions.HasFlag(LegalAction.Act)) //Can't attack
                 return null;
 
-            attacker.ApplyModifiers(target);
+            attacker.ApplyAttackModifiers(target);
             var damageData = BaseBeing.Attack(target, attacker);
 
             //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?

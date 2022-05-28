@@ -1,4 +1,8 @@
 # TODO:  
+- [ ] **Cast Applier**
+  - [ ] New target = reset cast timer
+- [ ] Cost Component
+  - [ ] Specify cost on attack or cast?
 - [ ] StatusTags refactor
 - [ ] Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self

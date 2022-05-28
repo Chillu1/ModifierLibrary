@@ -26,6 +26,8 @@ namespace ModifierSystem
         [CanBeNull] private CleanUpComponent CleanUpComponent { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
+        [CanBeNull] private ICastComponent CastComponent { get; set; }
+        [CanBeNull] private ICostComponent CostComponent { get; set; }
 
         private bool _setupFinished;
 
@@ -78,6 +80,8 @@ namespace ModifierSystem
 
                 timeComponent.Update(deltaTime, multiplier);
             }
+
+            CastComponent?.Update(deltaTime);
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -149,11 +153,61 @@ namespace ModifierSystem
             RefreshComponent = refreshComponent;
         }
 
+        public void AddComponent(ICastComponent castComponent)
+        {
+            if (CastComponent != null)
+            {
+                Log.Error(Id + " already has a cast component", "modifiers");
+                return;
+            }
+
+            CastComponent = castComponent;
+        }
+
+        public void AddComponent(ICostComponent costComponent)
+        {
+            if (CostComponent != null)
+            {
+                Log.Error(Id + " already has a cost component", "modifiers");
+                return;
+            }
+
+            CostComponent = costComponent;
+        }
+
+        public void SetupOwner(Being owner)
+        {
+            TargetComponent.SetupOwner(owner);
+            CostComponent?.SetupOwner(owner);
+        }
+
+        public bool TryCast()
+        {
+            if (CastComponent == null)
+            {
+                Log.Error(Id + " can't cast a modifier without a cast component", "modifiers");
+                return false;
+            }
+
+            bool validCost = CostComponent == null || CostComponent.ContainsCost();
+            if (!validCost)
+                return false;
+
+            bool validCast = CastComponent.TryCast();
+
+            return validCast;
+        }
+
         public void TryApply(Being target)
         {
             bool validTarget = TargetComponent.SetTarget(target);
-            if (validTarget)
+            bool validCost = CostComponent == null || CostComponent.ContainsCost();
+
+            if (validTarget && validCost)
+            {
                 Apply();
+                CostComponent?.ApplyCost();
+            }
         }
 
         private void Apply()
