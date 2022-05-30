@@ -28,36 +28,6 @@ namespace ModifierSystem
             AddItem(modifier.Id, modifier);
         }
 
-        //Generic non-removable (permanent) applier, for now
-        public void SetupModifierApplier(TModifier appliedModifier, ApplierType applierType, (CostType, float) cost = default,
-            LegalTarget legalTarget = LegalTarget.Beings, float cooldown = -1, bool automaticCast = false)
-        {
-            var modifierApplier = new Modifier(appliedModifier.Id + "Applier", applierType);
-            var target = new TargetComponent(legalTarget, true);
-            var effect = new ApplierEffectComponent(appliedModifier);
-            effect.Setup(target);
-            var applier = new ApplierComponent(effect);
-            modifierApplier.AddComponent(applier);
-            modifierApplier.AddComponent(target);
-            if (cost.Item1 != CostType.None && cost.Item2 != 0)
-            {
-                var costComponent = new CostComponent(cost.Item1, cost.Item2);
-                modifierApplier.AddComponent(costComponent);
-            }
-
-            if (cooldown != -1)
-            {
-                var cooldownComponent = new CooldownComponent(cooldown);
-                modifierApplier.AddComponent(cooldownComponent);
-            }
-
-            if (automaticCast)
-                modifierApplier.SetAutomaticCast();
-
-            modifierApplier.FinishSetup(); //"No tags", for now?
-            AddModifier((TModifier)modifierApplier);
-        }
-
         [CanBeNull]
         public TModifier Get(string key)
         {
@@ -108,7 +78,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //SpiderPoison
@@ -121,7 +94,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //PassiveSelfHeal
@@ -141,8 +117,11 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
+
                 //Forever buff (applier), not refreshable or stackable (for now)
-                SetupModifierApplier(modifier, ApplierType.Cast, default, LegalTarget.DefaultFriendly);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Cast, LegalTarget.DefaultFriendly);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //BasicPoison
@@ -155,7 +134,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //BasicBleed
@@ -168,7 +150,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //MovementSpeedOfCat
@@ -199,7 +184,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Cast
@@ -210,7 +198,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Cast);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Cast);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Root timed modifier (enigma Q)
@@ -222,7 +213,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Delayed silence
@@ -233,7 +227,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Cast);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Cast);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //All possible tags
@@ -251,7 +248,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Damage on kill
@@ -363,7 +363,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Refresh duration DoT
@@ -377,7 +380,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Silence on 4 stacks
@@ -391,7 +397,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Apply a new modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
@@ -412,7 +421,10 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
             {
                 //Damage on low health
@@ -561,20 +573,44 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack, (CostType.Health, 10));
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetCost(CostType.Health, 10);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
 
             {
-                //IceboltDebuff that costs mana to cast
+                //IceboltDebuff cast that costs mana to cast
                 var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
-                var properties = new ModifierGenerationProperties("IceBoltManaCostTest");
+                var properties = new ModifierGenerationProperties("IceBoltCastManaCostTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Cast, (CostType.Mana, 10));
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Cast);
+                applierProperties.SetCost(CostType.Mana, 10);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
+            }
+            {
+                //IceboltDebuff attack that costs mana to cast
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltAttackManaCostTest");
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetCost(CostType.Mana, 10);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
 
             {
@@ -587,7 +623,11 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Attack, cooldown: 5);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetCooldown(5);
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
 
             {
@@ -600,7 +640,12 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Cast, cooldown: 1, automaticCast: true);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Cast);
+                applierProperties.SetCooldown(1);
+                applierProperties.SetAutomaticCast();
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
         }
 

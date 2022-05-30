@@ -20,8 +20,8 @@ namespace ModifierSystem
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
+        public bool IsAutomaticCasting { get; private set; }
 
-        private bool IsAutomaticCasting { get; set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }

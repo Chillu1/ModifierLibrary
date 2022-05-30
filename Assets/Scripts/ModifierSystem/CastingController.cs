@@ -24,7 +24,10 @@ namespace ModifierSystem
         public void Update(float deltaTime)
         {
             foreach (var castingModifier in _castModifiers)
-                castingModifier.TryCast((Being)TargetingSystem.CastTarget, true);
+            {
+                if (castingModifier.IsAutomaticCasting)
+                    castingModifier.TryCast((Being)TargetingSystem.CastTarget, true);
+            }
         }
 
         /// <summary>

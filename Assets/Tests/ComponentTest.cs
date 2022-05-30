@@ -104,11 +104,24 @@ namespace ModifierSystem.Tests
         [Test]
         public void ManaCost()
         {
-            var healthCostModifier = modifierPrototypes.Get("IceBoltManaCostTestApplier");
+            var healthCostModifier = modifierPrototypes.GetApplier("IceBoltCastManaCostTest");
             character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
 
             Assert.True(character.Stats.Mana.IsFull);
-            character.CastModifier(enemy, "IceBoltManaCostTestApplier");
+            character.CastModifier(enemy, "IceBoltCastManaCostTestApplier");
+
+            Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
+            Assert.False(character.Stats.Mana.IsFull);
+        }
+
+        [Test]
+        public void ManaCostAttack()
+        {
+            var healthCostModifier = modifierPrototypes.GetApplier("IceBoltAttackManaCostTest");
+            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+
+            Assert.True(character.Stats.Mana.IsFull);
+            character.Attack(enemy);
 
             Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
             Assert.False(character.Stats.Mana.IsFull);

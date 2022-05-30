@@ -4,7 +4,7 @@ namespace ModifierSystem
 {
     public static class ModifierGenerator
     {
-        public static ComboModifier GenerateComboModifier(ModifierGenerationProperties properties)
+        public static ComboModifier GenerateComboModifier(ComboModifierGenerationProperties properties)
         {
             return (ComboModifier)GenerateModifier(properties);
         }
@@ -85,6 +85,30 @@ namespace ModifierSystem
 
             modifier.FinishSetup(properties.DamageData);
             //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
+            return modifier;
+        }
+
+        public static Modifier GenerateApplierModifier(ApplierModifierGenerationProperties properties)
+        {
+            var modifier = new Modifier(properties.AppliedModifier.Id + "Applier", properties.ApplierType);
+
+            var target = new TargetComponent(properties.LegalTarget, true);
+            var effect = new ApplierEffectComponent(properties.AppliedModifier);
+            effect.Setup(target);
+            var applier = new ApplierComponent(effect);
+            modifier.AddComponent(applier);
+            modifier.AddComponent(target);
+
+            if (properties.CostType != CostType.None && properties.CostAmount != 0)
+                modifier.AddComponent(new CostComponent(properties.CostType, properties.CostAmount));
+            if (properties.Cooldown != -1)
+                modifier.AddComponent(new CooldownComponent(properties.Cooldown));
+
+            if (properties.AutomaticCast)
+                modifier.SetAutomaticCast();
+
+            modifier.FinishSetup(); //"No tags", for now?
+
             return modifier;
         }
     }
