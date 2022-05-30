@@ -81,7 +81,12 @@ namespace ModifierSystem
                 timeComponent.Update(deltaTime, multiplier);
             }
 
-            CastComponent?.Update(deltaTime);
+            if (CastComponent != null)
+            {
+                CastComponent.Update(deltaTime);
+                if (CastComponent.IsAutomaticCasting)
+                    TryCast(TargetComponent.Target); //TODO Check TargetComp correct approach
+            }
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -181,7 +186,7 @@ namespace ModifierSystem
             CostComponent?.SetupOwner(owner);
         }
 
-        public bool TryCast()
+        public bool TryCast(Being target)
         {
             if (CastComponent == null)
             {
@@ -189,11 +194,19 @@ namespace ModifierSystem
                 return false;
             }
 
+            if (target == null)
+            {
+                Log.Error("Can't cast a modifier on a null target", "modifiers");
+                return false;
+            }
+
             bool validCost = CostComponent == null || CostComponent.ContainsCost();
             if (!validCost)
                 return false;
 
-            bool validCast = CastComponent.TryCast();
+            bool validCast = CastComponent.CanCast();
+            if (validCast)
+                TryApply(target);
 
             return validCast;
         }

@@ -1,4 +1,5 @@
 using System;
+using BaseProject;
 
 namespace ModifierSystem
 {
@@ -39,7 +40,7 @@ namespace ModifierSystem
     public enum CostType
     {
         None = 0,
-        Mana = 1,
-        Health = 2
+        Mana = StatType.Mana,
+        Health = StatType.Health
     }
 }

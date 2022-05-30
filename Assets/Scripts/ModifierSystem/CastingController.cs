@@ -12,21 +12,17 @@ namespace ModifierSystem
         private StatusEffects StatusEffects { get; }
         private TargetingSystem TargetingSystem { get; }
 
-        private readonly List<Modifier> _castingModifiers;
-
         public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
         {
             ModifierController = modifierController;
             StatusEffects = statusEffects;
             TargetingSystem = targetingSystem;
-
-            _castingModifiers = new List<Modifier>();
         }
 
 
         public void Update(float deltaTime)
         {
-            foreach (var castingModifier in _castingModifiers)
+            //foreach (var castingModifier in _castingModifiers)
             {
                 //if mana?
                 //if cooldown
@@ -70,19 +66,10 @@ namespace ModifierSystem
             if (!StatusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
                 return false;
 
-            modifier.TryApply(target);
+            modifier.TryCast(target);
+            //modifier.TryApply(target);
 
             return true;
-        }
-
-        public void AddCastingModifier(Modifier modifier)
-        {
-            _castingModifiers.Add(modifier);
-        }
-
-        public void RemoveCastingModifier(Modifier modifier)
-        {
-            _castingModifiers.Remove(modifier);
         }
     }
 }

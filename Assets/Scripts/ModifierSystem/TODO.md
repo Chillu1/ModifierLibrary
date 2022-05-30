@@ -1,6 +1,18 @@
 # TODO:  
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
+- [ ] **CooldownComponent (separate from Cast Comp?)** 
+- [ ] CastComponent
+  - [ ] Cooldown test
+  - [ ] Automatic casting
+  - [ ] Cast on cooldown test
+- [ ] Attack Applier
+  - [ ] CD
+  - [ ] Mana cost
+- [ ] Better ModifierApplier setup 
+- [x] Mana
+  - [x] Mana regen
+  - [x] Mana cost
 - [ ] Cost Component
   - [ ] Specify cost on attack or cast?
 - [ ] StatusTags refactor
@@ -10,9 +22,8 @@
 - [ ] Refactor ModifierPrototypesBase all modifiers setup
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
-- [ ] Modifiers that need to be casted. With cooldown/mana?
 
-# #Lower prio
+## Lower prio
 
 - [ ] Sort ideas by prio
 - [ ] >Status effect to legal actions? (Replace?)

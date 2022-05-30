@@ -1,4 +1,3 @@
-using System;
 using BaseProject;
 
 namespace ModifierSystem
@@ -6,11 +5,11 @@ namespace ModifierSystem
     public class CostComponent : Component, ICostComponent
     {
         private CostType Type { get; }
-        private float Amount { get; }
+        private double Amount { get; }
 
         private Being _owner;
 
-        public CostComponent(CostType type, float amount)
+        public CostComponent(CostType type, double amount)
         {
             Type = type;
             Amount = amount;
@@ -26,9 +25,9 @@ namespace ModifierSystem
             switch (Type)
             {
                 case CostType.Mana:
-                    return true;
+                    return _owner.Stats.HasStat(StatType.Mana, Amount);
                 case CostType.Health:
-                    bool success = _owner.Stats.HasStat(StatType.Health, Amount, ComparisonCheck.Greater);
+                    bool success = _owner.Stats.HasStat(StatType.Health, Amount, ComparisonCheck.Greater); //Not lethal
                     //Log.Verbose("We have enough health stat: " + success, "modifiers");
                     return success;
                 default:
@@ -44,6 +43,7 @@ namespace ModifierSystem
             switch (Type)
             {
                 case CostType.Mana:
+                    _owner.Stats.Mana.Use(Amount);
                     break;
                 case CostType.Health:
                     //TODO TEMP DamageData

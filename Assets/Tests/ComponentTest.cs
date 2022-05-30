@@ -73,7 +73,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void HealthCostTest()
+        public void HealthCost()
         {
             //On attack, we should try to apply the modifier, check for cost, then apply, then take the cost.
             var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
@@ -87,7 +87,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void HealthCostNotLethalTest()
+        public void HealthCostNotLethal()
         {
             var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
             character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
@@ -99,6 +99,19 @@ namespace ModifierSystem.Tests
             }
 
             Assert.False(character.Stats.Health.IsDead);
+        }
+
+        [Test]
+        public void ManaCost()
+        {
+            var healthCostModifier = modifierPrototypes.Get("IceBoltManaCostTestApplier");
+            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+
+            Assert.True(character.Stats.Mana.IsFull);
+            character.CastModifier(enemy, "IceBoltManaCostTestApplier");
+
+            Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
+            Assert.False(character.Stats.Mana.IsFull);
         }
     }
 }

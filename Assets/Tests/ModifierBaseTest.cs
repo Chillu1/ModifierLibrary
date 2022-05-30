@@ -15,6 +15,7 @@ namespace ModifierSystem.Tests
 
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy;
         protected double initialDamageCharacter, initialDamageAlly, initialDamageEnemy;
+        protected double initialManaCharacter;
 
         protected const double Delta = 0.01d;
 
@@ -42,17 +43,17 @@ namespace ModifierSystem.Tests
             character = new Being(new BeingProperties
             {
                 Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                UnitType = UnitType.Ally
+                Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
             });
             ally = new Being(new BeingProperties
             {
                 Id = "ally", Health = 25, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                UnitType = UnitType.Ally
+                Mana = 50, ManaRegen = 10, UnitType = UnitType.Ally
             });
             enemy = new Being(new BeingProperties
             {
                 Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
-                UnitType = UnitType.Enemy
+                Mana = 20, ManaRegen = 5, UnitType = UnitType.Enemy
             });
             initialHealthCharacter = character.Stats.Health.CurrentHealth;
             initialHealthAlly = ally.Stats.Health.CurrentHealth;
@@ -60,6 +61,7 @@ namespace ModifierSystem.Tests
             initialDamageCharacter = character.Stats.Damage.DamageSum();
             initialDamageAlly = ally.Stats.Damage.DamageSum();
             initialDamageEnemy = enemy.Stats.Damage.DamageSum();
+            initialManaCharacter = character.Stats.Mana.CurrentMana;
 
             enemyDummies = new Being[5];
             for (int i = 0; i < 5; i++)

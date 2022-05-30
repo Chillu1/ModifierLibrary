@@ -30,7 +30,7 @@ namespace ModifierSystem
 
         //Generic non-removable (permanent) applier, for now
         public void SetupModifierApplier(TModifier appliedModifier, ApplierType applierType, (CostType, float) cost = default,
-            LegalTarget legalTarget = LegalTarget.Beings)
+            LegalTarget legalTarget = LegalTarget.Beings, float cooldown = 0)
         {
             var modifierApplier = new Modifier(appliedModifier.Id + "Applier", applierType);
             var target = new TargetComponent(legalTarget, true);
@@ -44,6 +44,9 @@ namespace ModifierSystem
                 var costComponent = new CostComponent(cost.Item1, cost.Item2);
                 modifierApplier.AddComponent(costComponent);
             }
+
+            if (applierType == ApplierType.Cast)
+                modifierApplier.AddComponent(new CastComponent(cooldown));
 
             modifierApplier.FinishSetup(); //"No tags", for now?
             AddModifier((TModifier)modifierApplier);
@@ -542,6 +545,19 @@ namespace ModifierSystem
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
                 SetupModifierApplier(modifier, ApplierType.Attack, (CostType.Health, 10));
+            }
+
+            {
+                //IceboltDebuff that costs mana to cast
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltManaCostTest");
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+                SetupModifierApplier(modifier, ApplierType.Cast, (CostType.Mana, 10), cooldown: 5);
             }
         }
 
