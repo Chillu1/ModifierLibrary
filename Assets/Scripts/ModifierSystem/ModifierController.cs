@@ -62,8 +62,10 @@ namespace ModifierSystem
             _secondTimer = 0f;
         }
 
-        public void TryAddModifier(Modifier modifier, AddModifierParameters parameters)
+        public bool TryAddModifier(Modifier modifier, AddModifierParameters parameters)
         {
+            bool modifierAdded;
+
             modifier.SetupOwner(_owner);
             HandleTarget(modifier, parameters);
 
@@ -77,6 +79,7 @@ namespace ModifierSystem
                 if (!stacked && !refreshed)
                     internalModifier.Init(); //Problem comes here, since the effect might not actually be in Init()
 
+                modifierAdded = false;
                 //Log.Verbose("HasModifier " + modifier.Id, "modifiers");
             }
             else
@@ -84,12 +87,15 @@ namespace ModifierSystem
                 if (modifier is ComboModifier && !ComboModifierCooldowns.ContainsKey(modifier.Id))
                     ComboModifierCooldowns.Add(modifier.Id, ((ComboModifier)modifier).Cooldown);
                 AddModifier(modifier);
+                modifierAdded = true;
             }
 
             if (parameters.HasFlag(AddModifierParameters.CheckRecipes))
             {
                 CheckForComboRecipes();
             }
+
+            return modifierAdded;
         }
 
         public void CheckForComboRecipes()
@@ -155,7 +161,6 @@ namespace ModifierSystem
         public bool ContainsModifier(Modifier modifier, out Modifier internalModifier)
         {
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
-            //return Modifiers.All(internalModifier => internalModifier.Id == modifier.Id && internalModifier.GetType() == modifier.GetType());
         }
 
         public void ListModifiers()

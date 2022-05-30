@@ -12,6 +12,8 @@ namespace ModifierSystem
         private StatusEffects StatusEffects { get; }
         private TargetingSystem TargetingSystem { get; }
 
+        private readonly List<Modifier> _castModifiers = new List<Modifier>();
+
         public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
         {
             ModifierController = modifierController;
@@ -19,23 +21,23 @@ namespace ModifierSystem
             TargetingSystem = targetingSystem;
         }
 
-
         public void Update(float deltaTime)
         {
-            //foreach (var castingModifier in _castingModifiers)
-            {
-                //if mana?
-                //if cooldown
-
-                //try cast
-            }
+            foreach (var castingModifier in _castModifiers)
+                castingModifier.TryCast((Being)TargetingSystem.CastTarget, true);
         }
 
+        /// <summary>
+        ///     Manual Cast
+        /// </summary>
         public bool CastModifier(string modifierId)
         {
             return CastModifier((Being)TargetingSystem.CastTarget, modifierId);
         }
 
+        /// <summary>
+        ///     Manual Cast
+        /// </summary>
         public bool CastModifier(Being target, string modifierId)
         {
             if (!ModifierController.ContainsModifier(modifierId, out var modifier))
@@ -67,9 +69,18 @@ namespace ModifierSystem
                 return false;
 
             modifier.TryCast(target);
-            //modifier.TryApply(target);
 
             return true;
+        }
+
+        public void AddCastModifier(Modifier modifier)
+        {
+            _castModifiers.Add(modifier);
+        }
+
+        public void RemoveCastModifier(Modifier modifier)
+        {
+            _castModifiers.Remove(modifier);
         }
     }
 }

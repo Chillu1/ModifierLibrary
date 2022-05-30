@@ -113,5 +113,33 @@ namespace ModifierSystem.Tests
             Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
             Assert.False(character.Stats.Mana.IsFull);
         }
+
+        [Test]
+        public void CheckCooldownTest()
+        {
+            double dmg = initialDamageCharacter;
+
+            var healthCostModifier = modifierPrototypes.GetApplier("IceBoltCooldownTest");
+            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+
+            Assert.True(enemy.Stats.Health.IsFull);
+
+            character.Attack(enemy); //CD is on
+            Assert.AreEqual(initialHealthEnemy - dmg - 2, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Attack(enemy); //CD is still active
+            Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Update(4); //CD is still active
+            character.Attack(enemy);
+            Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg - dmg, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Update(2); //CD is over
+            character.Attack(enemy);
+            Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg - dmg - dmg - 2, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Attack(enemy); //CD active again
+            Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg - dmg - dmg - 2 - dmg, enemy.Stats.Health.CurrentHealth, Delta);
+        }
     }
 }

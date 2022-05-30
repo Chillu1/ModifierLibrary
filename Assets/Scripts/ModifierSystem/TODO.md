@@ -1,7 +1,7 @@
 # TODO:  
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
-- [ ] **CooldownComponent (separate from Cast Comp?)** 
+- [x] **CooldownComponent (separate from Cast Comp?)** 
 - [ ] CastComponent
   - [ ] Cooldown test
   - [ ] Automatic casting
@@ -9,10 +9,7 @@
 - [ ] Attack Applier
   - [ ] CD
   - [ ] Mana cost
-- [ ] Better ModifierApplier setup 
-- [x] Mana
-  - [x] Mana regen
-  - [x] Mana cost
+- [ ] **Better ModifierApplier setup** (properties? Cost, cd, casting, etc) 
 - [ ] Cost Component
   - [ ] Specify cost on attack or cast?
 - [ ] StatusTags refactor

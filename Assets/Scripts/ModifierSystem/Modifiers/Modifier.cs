@@ -20,13 +20,15 @@ namespace ModifierSystem
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
+
+        private bool IsAutomaticCasting { get; set; }
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
         [CanBeNull] private List<ITimeComponent> TimeComponents { get; set; }
         [CanBeNull] private CleanUpComponent CleanUpComponent { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
-        [CanBeNull] private ICastComponent CastComponent { get; set; }
+        [CanBeNull] private ICooldownComponent CooldownComponent { get; set; }
         [CanBeNull] private ICostComponent CostComponent { get; set; }
 
         private bool _setupFinished;
@@ -81,12 +83,7 @@ namespace ModifierSystem
                 timeComponent.Update(deltaTime, multiplier);
             }
 
-            if (CastComponent != null)
-            {
-                CastComponent.Update(deltaTime);
-                if (CastComponent.IsAutomaticCasting)
-                    TryCast(TargetComponent.Target); //TODO Check TargetComp correct approach
-            }
+            CooldownComponent?.Update(deltaTime);
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -158,15 +155,15 @@ namespace ModifierSystem
             RefreshComponent = refreshComponent;
         }
 
-        public void AddComponent(ICastComponent castComponent)
+        public void AddComponent(ICooldownComponent cooldownComponent)
         {
-            if (CastComponent != null)
+            if (CooldownComponent != null)
             {
-                Log.Error(Id + " already has a cast component", "modifiers");
+                Log.Error(Id + " already has a cooldown component", "modifiers");
                 return;
             }
 
-            CastComponent = castComponent;
+            CooldownComponent = cooldownComponent;
         }
 
         public void AddComponent(ICostComponent costComponent)
@@ -186,41 +183,40 @@ namespace ModifierSystem
             CostComponent?.SetupOwner(owner);
         }
 
-        public bool TryCast(Being target)
+        public void SetAutomaticCast(bool automaticCast = true)
         {
-            if (CastComponent == null)
-            {
-                Log.Error(Id + " can't cast a modifier without a cast component", "modifiers");
-                return false;
-            }
+            IsAutomaticCasting = automaticCast;
+        }
 
-            if (target == null)
+        public bool TryCast(Being target, bool automaticCast = false)
+        {
+            if (target == null && !TargetComponent.LegalTarget.HasFlag(LegalTarget.Ground))
             {
+                if (automaticCast) //No target, delay casting
+                    return false;
+
                 Log.Error("Can't cast a modifier on a null target", "modifiers");
                 return false;
             }
 
-            bool validCost = CostComponent == null || CostComponent.ContainsCost();
-            if (!validCost)
-                return false;
-
-            bool validCast = CastComponent.CanCast();
-            if (validCast)
-                TryApply(target);
-
-            return validCast;
+            return TryApply(target);
         }
 
-        public void TryApply(Being target)
+        public bool TryApply(Being target)
         {
             bool validTarget = TargetComponent.SetTarget(target);
+            bool validCooldown = CooldownComponent == null || CooldownComponent.IsReady();
             bool validCost = CostComponent == null || CostComponent.ContainsCost();
 
-            if (validTarget && validCost)
+            if (validTarget && validCooldown && validCost)
             {
                 Apply();
+                CooldownComponent?.ResetTimer();
                 CostComponent?.ApplyCost();
+                return true;
             }
+
+            return false;
         }
 
         private void Apply()

@@ -38,7 +38,10 @@ namespace ModifierSystem
 
         public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
         {
-            ModifierController.TryAddModifier(modifier, parameters);
+            bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters);
+
+            if (modifierAdded && modifier.ApplierType.HasFlag(ApplierType.Cast))
+                CastingController.AddCastModifier(modifier);
         }
 
         public bool ContainsModifier(string id)
@@ -49,6 +52,13 @@ namespace ModifierSystem
         public bool ContainsModifier(Modifier modifier)
         {
             return ModifierController.ContainsModifier(modifier);
+        }
+
+        public void RemoveModifier(Modifier modifier)
+        {
+            ModifierController.RemoveModifier(modifier);
+            if (modifier.ApplierType.HasFlag(ApplierType.Cast))
+                CastingController.RemoveCastModifier(modifier);
         }
 
         public void CopyEvents(Being prototype)

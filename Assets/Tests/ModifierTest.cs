@@ -73,5 +73,37 @@ namespace ModifierSystem.Tests
             enemy.Update(6); //4 seconds left
             Assert.True(enemy.ContainsModifier(doTModifier));
         }
+
+        [Test]
+        public void AutomaticCasting()
+        {
+            var modifier = modifierPrototypes.GetApplier("IceBoltAutomaticCastTest");
+            character.AddModifier(modifier, AddModifierParameters.NullStartTarget);
+
+            character.TargetingSystem.SetCastTarget(enemy);
+
+            character.Update(0.1f);
+            Assert.AreEqual(initialHealthEnemy - 2, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Update(0.5f); //CD
+            Assert.AreEqual(initialHealthEnemy - 2, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Update(1f); //CD is over
+            Assert.AreEqual(initialHealthEnemy - 2 - 2, enemy.Stats.Health.CurrentHealth, Delta);
+
+            character.Update(0.5f); //CD Again
+            Assert.AreEqual(initialHealthEnemy - 2 - 2, enemy.Stats.Health.CurrentHealth, Delta);
+        }
+
+        [Test]
+        public void AutomaticCastingNoTarget()
+        {
+            var modifier = modifierPrototypes.GetApplier("IceBoltAutomaticCastTest");
+            character.AddModifier(modifier, AddModifierParameters.NullStartTarget);
+
+            character.Update(0.5f);
+
+            character.Update(1f);
+        }
     }
 }

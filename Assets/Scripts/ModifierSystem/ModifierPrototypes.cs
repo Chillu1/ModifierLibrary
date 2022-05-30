@@ -30,7 +30,7 @@ namespace ModifierSystem
 
         //Generic non-removable (permanent) applier, for now
         public void SetupModifierApplier(TModifier appliedModifier, ApplierType applierType, (CostType, float) cost = default,
-            LegalTarget legalTarget = LegalTarget.Beings, float cooldown = 0)
+            LegalTarget legalTarget = LegalTarget.Beings, float cooldown = -1, bool automaticCast = false)
         {
             var modifierApplier = new Modifier(appliedModifier.Id + "Applier", applierType);
             var target = new TargetComponent(legalTarget, true);
@@ -45,8 +45,14 @@ namespace ModifierSystem
                 modifierApplier.AddComponent(costComponent);
             }
 
-            if (applierType == ApplierType.Cast)
-                modifierApplier.AddComponent(new CastComponent(cooldown));
+            if (cooldown != -1)
+            {
+                var cooldownComponent = new CooldownComponent(cooldown);
+                modifierApplier.AddComponent(cooldownComponent);
+            }
+
+            if (automaticCast)
+                modifierApplier.SetAutomaticCast();
 
             modifierApplier.FinishSetup(); //"No tags", for now?
             AddModifier((TModifier)modifierApplier);
@@ -55,6 +61,17 @@ namespace ModifierSystem
         [CanBeNull]
         public TModifier Get(string key)
         {
+            var modifier = GetItem(key);
+            ValidateModifier(modifier);
+
+            return modifier;
+        }
+
+        public TModifier GetApplier(string key)
+        {
+            if (!key.EndsWith("Applier"))
+                key += "Applier";
+
             var modifier = GetItem(key);
             ValidateModifier(modifier);
 
@@ -557,7 +574,33 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
-                SetupModifierApplier(modifier, ApplierType.Cast, (CostType.Mana, 10), cooldown: 5);
+                SetupModifierApplier(modifier, ApplierType.Cast, (CostType.Mana, 10));
+            }
+
+            {
+                //IceboltDebuff that has a cooldown
+                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltCooldownTest");
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+                SetupModifierApplier(modifier, ApplierType.Attack, cooldown: 5);
+            }
+
+            {
+                //IceboltDebuff that is automatically cast
+                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltAutomaticCastTest");
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+                SetupModifierApplier(modifier, ApplierType.Cast, cooldown: 1, automaticCast: true);
             }
         }
 
