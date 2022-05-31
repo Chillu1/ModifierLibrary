@@ -2,9 +2,8 @@
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
-- [ ] **Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project**
+- [x] Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
-- [x] IEventCopy not needed at all? Deep Clone takes care of it?
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
 - [ ] Bench, what?

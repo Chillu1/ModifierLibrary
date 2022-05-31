@@ -434,3 +434,4 @@ InitTestScene*.unity
 *.vscode
 
 ModifierSystem/Library/*
+/.idea/
