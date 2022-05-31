@@ -432,3 +432,5 @@ InitTestScene*.unity
 
 # Custom
 *.vscode
+
+ModifierSystem/Library/*

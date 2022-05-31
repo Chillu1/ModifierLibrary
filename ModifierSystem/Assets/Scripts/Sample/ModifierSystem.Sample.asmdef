@@ -1,0 +1,17 @@
+{
+    "name": "ModifierSystem.Sample",
+    "rootNamespace": "ModifierSystem.Sample",
+    "references": [
+        "GUID:c100100d5d699bc52b3a6dc16b03725f",
+        "GUID:b77841bd4b683019ebdce558ba93802c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
