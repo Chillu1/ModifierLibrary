@@ -11,7 +11,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
-    public class Modifier : IEntity<string>, ICloneable, IEventCopy<Modifier>
+    public class Modifier : IEntity<string>, ICloneable
     {
         public string Id { get; private set; }
         public bool IsApplierModifier => ApplierType != ApplierType.None;
@@ -257,10 +257,6 @@ namespace ModifierSystem
         public void SetForRemoval()
         {
             ToRemove = true;
-        }
-
-        public void CopyEvents(Modifier prototype)
-        {
         }
 
         public virtual bool ValidatePrototypeSetup()

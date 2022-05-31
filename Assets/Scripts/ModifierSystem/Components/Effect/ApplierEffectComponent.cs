@@ -19,7 +19,6 @@ namespace ModifierSystem
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             var clonedModifier = (Modifier)Modifier.Clone();
-            clonedModifier.CopyEvents(Modifier);
             ((Being)receiver).AddModifier(clonedModifier, Parameters);
         }
 

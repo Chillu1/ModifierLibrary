@@ -66,9 +66,6 @@ namespace ModifierSystem
         {
             base.CopyEvents(prototype);
             ComboEvent = prototype.ComboEvent;
-            //Copy modifierEvents
-            //problem, we copy the event, but the target is wrong modifierController (old)
-            ModifierController.CopyEvents(prototype.ModifierController);
         }
 
         public override string ToString()
@@ -150,7 +147,10 @@ namespace ModifierSystem
 
         public override object Clone()
         {
-            return this.DeepClone();
+            var clone = this.DeepClone();
+            //clone.CopyEvents(this);//Doesn't work? + DeepClone does it instead?
+
+            return clone;
         }
 
         #endregion

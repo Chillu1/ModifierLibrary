@@ -6,7 +6,7 @@ using Random = System.Random;
 namespace ModifierSystem
 {
     public class ModifierPrototypes<TModifier> : BasePrototypeController<string, TModifier>
-        where TModifier : Modifier, IEventCopy<TModifier>
+        where TModifier : Modifier
     {
         public ModifierPrototypes(bool includeTest = false)
         {

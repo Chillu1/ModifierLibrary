@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class ModifierController : IEventCopy<ModifierController>
+    public class ModifierController
     {
         private readonly Being _owner;
         private ElementController ElementController { get; }
@@ -108,7 +108,6 @@ namespace ModifierSystem
 
         private void AddModifier(Modifier modifier)
         {
-            RegisterModifier(modifier);
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
             modifier.Stack(); //If has stack component, we will trigger it on add
@@ -199,17 +198,6 @@ namespace ModifierSystem
                     Log.Error("Non-applier modifier doesn't have a target. Owner isn't the target", "modifiers");
                 }
             }
-        }
-
-        private void RegisterModifier(Modifier modifier)
-        {
-            //modifier.Removed += modifierEventItem => Log.Verbose(modifierEventItem.Id + " removed", "modifiers");
-        }
-
-        public void CopyEvents(ModifierController modifierController)
-        {
-            //foreach (var modifier in modifierController.Modifiers.Values)
-            //    RegisterModifier(Modifiers[modifier.Id]);
         }
 
         public IEnumerable<Modifier> GetModifierAttackAppliers()
