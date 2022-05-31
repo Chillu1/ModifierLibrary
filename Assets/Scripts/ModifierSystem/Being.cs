@@ -1,4 +1,5 @@
 using BaseProject;
+using Force.DeepCloner;
 using UnityEngine;
 
 namespace ModifierSystem
@@ -145,6 +146,11 @@ namespace ModifierSystem
         {
             Stats.ChangeDamageStat(damageData);
             ModifierController.CheckForComboRecipes();
+        }
+
+        public override object Clone()
+        {
+            return this.DeepClone();
         }
 
         #endregion

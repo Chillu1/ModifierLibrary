@@ -1,5 +1,6 @@
 using System;
 using BaseProject.Utils;
+using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -9,7 +10,8 @@ namespace ModifierSystem
         /// <summary>
         ///     Possible recipes
         /// </summary>
-        [NotNull] public ComboRecipe[] Recipes;
+        [NotNull]
+        public ComboRecipe[] Recipes;
 
         public ComboRecipes([NotNull] ComboRecipe recipe)
         {
@@ -23,7 +25,7 @@ namespace ModifierSystem
 
         public object Clone()
         {
-            return this.Copy();
+            return this.DeepClone();
         }
     }
 }

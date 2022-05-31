@@ -1,6 +1,6 @@
 using System;
 using BaseProject;
-using BaseProject.Utils;
+using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -101,7 +101,7 @@ namespace ModifierSystem
 
         public object Clone()
         {
-            return this.Copy();
+            return this.DeepClone();
         }
     }
 }

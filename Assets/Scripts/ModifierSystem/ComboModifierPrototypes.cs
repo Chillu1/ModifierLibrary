@@ -68,7 +68,7 @@ namespace ModifierSystem
             HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
             if (_instance == null)
             {
-                Log.Warning("ComboModifier instance is null, this is bad, unless this is a unit test");
+                Log.Warning("ComboModifier instance is null, this is bad, unless this is a unit test", "modifiers");
                 return modifierToAdd;
             }
 

@@ -18,7 +18,7 @@ namespace ModifierSystem
         InitTime = Init | Time,
     }
 
-    public class ModifierGenerationProperties
+    public class ModifierGenerationProperties : IModifierGenerationProperties
     {
         public string Name { get; }
         public LegalTarget LegalTarget { get; }

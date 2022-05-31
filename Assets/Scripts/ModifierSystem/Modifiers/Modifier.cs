@@ -32,6 +32,7 @@ namespace ModifierSystem
         [CanBeNull] private ICostComponent CostComponent { get; set; }
 
         private bool _setupFinished;
+        private IModifierGenerationProperties Properties { get; set; }
 
         public Modifier(string id, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
         {
@@ -65,6 +66,11 @@ namespace ModifierSystem
 
             StatusTags = tempStatusTags.ToArray();
             _setupFinished = true;
+        }
+
+        public void AddProperties(IModifierGenerationProperties properties)
+        {
+            Properties = properties;
         }
 
         public void Update(float deltaTime, StatusResistances ownerStatusResistances)
@@ -309,10 +315,28 @@ namespace ModifierSystem
             CleanUpComponent ??= new CleanUpComponent();
         }
 
+        public virtual Modifier PropertyClone()
+        {
+            if (Properties == null)
+            {
+                Log.Error($"{Id} has no properties", "modifiers");
+                return null;
+            }
+
+            if (Properties is ComboModifierGenerationProperties comboProperties)
+                return ModifierGenerator.GenerateComboModifier(comboProperties);
+            if (Properties is ModifierGenerationProperties properties)
+                return ModifierGenerator.GenerateModifier(properties);
+            if (Properties is ApplierModifierGenerationProperties applierProperties)
+                return ModifierGenerator.GenerateApplierModifier(applierProperties);
+
+            Log.Error($"{Id} has unknown properties kind", "modifiers");
+            return null;
+        }
+
         public virtual object Clone()
         {
-            return this.DeepClone();
-            //return this.Copy();
+            return PropertyClone(); // this.DeepClone();
         }
 
         public override string ToString()

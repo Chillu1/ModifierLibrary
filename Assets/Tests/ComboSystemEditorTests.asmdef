@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "BaseProject",
-        "ModifierSystem"
+        "ModifierSystem",
+        "Unity.PerformanceTesting"
     ],
     "includePlatforms": [
         "Editor"

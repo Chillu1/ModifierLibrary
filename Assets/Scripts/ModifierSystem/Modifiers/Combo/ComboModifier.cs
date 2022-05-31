@@ -124,7 +124,6 @@ namespace ModifierSystem
         public override object Clone()
         {
             return this.DeepClone();
-            //return this.Copy();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace ModifierSystem.Tests
             Assert.AreEqual(initialHealthEnemy - 5, enemy.Stats.Health.CurrentHealth);
         }
 
-        [Test]
+        //[Test] //TODO make into a generated modifier
         public void ConditionApplyHealOnDeath()
         {
             var damageOnDeathModifier = modifierPrototypes.Get("HealOnDeathTest");

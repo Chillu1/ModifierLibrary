@@ -1,16 +1,6 @@
 # TODO:  
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
-- [x] **CooldownComponent (separate from Cast Comp?)** 
-- [x] CastComponent
-  - [x] Cooldown test
-  - [x] Automatic casting
-  - [x] Cast on cooldown test
-- [x] Attack Applier
-  - [x] CD
-  - [x] Mana cost
-- [x] **Better ModifierApplier setup** (properties? Cost, cd, casting, etc) 
-- [x] Cost Component
 - [ ] StatusTags refactor
 - [ ] Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
@@ -18,6 +8,7 @@
 - [ ] Refactor ModifierPrototypesBase all modifiers setup
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
+- [ ] Bench, what?
 
 ## Lower prio
 

@@ -84,6 +84,7 @@ namespace ModifierSystem
                 modifier.AddComponent(new CostComponent(properties.Cost.Item1, properties.Cost.Item2));
 
             modifier.FinishSetup(properties.DamageData);
+            modifier.AddProperties(properties);
             //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
             return modifier;
         }
@@ -108,6 +109,7 @@ namespace ModifierSystem
                 modifier.SetAutomaticCast();
 
             modifier.FinishSetup(); //"No tags", for now?
+            modifier.AddProperties(properties);
 
             return modifier;
         }

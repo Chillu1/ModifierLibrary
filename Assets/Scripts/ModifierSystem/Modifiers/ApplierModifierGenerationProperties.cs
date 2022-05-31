@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class ApplierModifierGenerationProperties
+    public class ApplierModifierGenerationProperties : IModifierGenerationProperties
     {
         public Modifier AppliedModifier { get; }
         public ApplierType ApplierType { get; }
