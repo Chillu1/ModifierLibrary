@@ -210,11 +210,25 @@ namespace ModifierSystem
 
         public bool TryApply(Being target)
         {
-            bool validTarget = TargetComponent.SetTarget(target);
-            bool validCooldown = CooldownComponent == null || CooldownComponent.IsReady();
-            bool validCost = CostComponent == null || CostComponent.ContainsCost();
+            bool validApply = true;
 
-            if (validTarget && validCooldown && validCost)
+            if (!TargetComponent.SetTarget(target))
+            {
+                validApply = false;
+                //Log.Error(Id + " can't apply to " + target.Id, "modifiers");
+            }
+            if (CooldownComponent != null && !CooldownComponent.IsReady())
+            {
+                validApply = false;
+                //Log.Error("Can't apply " + Id + " because it's on cooldown", "modifiers");
+            }
+            if (CostComponent != null && !CostComponent.ContainsCost())
+            {
+                validApply = false;
+                //Log.Error("Can't apply " + Id + " because it costs more than the owner has", "modifiers");
+            }
+
+            if (validApply)
             {
                 Apply();
                 CooldownComponent?.ResetTimer();

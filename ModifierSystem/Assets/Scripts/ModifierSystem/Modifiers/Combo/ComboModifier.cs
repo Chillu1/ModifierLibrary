@@ -48,6 +48,7 @@ namespace ModifierSystem
                     false; //Already contains this combo modifier, skip (try refresh & stack? Might be a problem without proper sophisticated cooldowns)
             }
 
+            //Log.Verbose("Checking recipes", "modifiers");
             foreach (var recipe in ComboRecipes.Recipes)
             {
                 //Go through all possible recipes
@@ -55,11 +56,13 @@ namespace ModifierSystem
                     return true; //If we found one, success
             }
 
+            //Log.Verbose("No recipe found", "modifiers");
             return false; //Didn't find a recipe
         }
 
         private bool CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
         {
+            //Log.Verbose("Id: " + Id, "modifiers");
             if (recipe.Id != null && recipe.Id.Length != 0)
             {
                 if (!CheckForIdConditions(recipe, modifierIds))

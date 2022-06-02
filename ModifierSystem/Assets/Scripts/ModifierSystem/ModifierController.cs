@@ -118,6 +118,7 @@ namespace ModifierSystem
         {
             foreach (var modifier in comboModifiers)
             {
+                //Log.Info("Added combo modifier " + modifier.Id, "modifiers");
                 TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
             }
 

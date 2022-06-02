@@ -151,7 +151,7 @@ namespace ModifierSystem.Tests
                     var character = new Being(new BeingProperties
                     {
                         Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                        Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
+                        Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                 })
                 .WarmupCount(10)
@@ -168,7 +168,7 @@ namespace ModifierSystem.Tests
             var character = new Being(new BeingProperties
             {
                 Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
+                Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
 
             Measure.Method(() =>
@@ -199,12 +199,12 @@ namespace ModifierSystem.Tests
                     character = new Being(new BeingProperties
                     {
                         Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                        Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
+                        Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                     enemy = new Being(new BeingProperties
                     {
                         Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
-                        Mana = 20, ManaRegen = 5, UnitType = UnitType.Enemy
+                        Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
                 .CleanUp(() =>
@@ -214,6 +214,8 @@ namespace ModifierSystem.Tests
                 })
                 .Run()
                 ;
+
+            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
         }
 
         [Test, Performance]
@@ -239,7 +241,7 @@ namespace ModifierSystem.Tests
                     enemy = new Being(new BeingProperties
                     {
                         Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
-                        Mana = 20, ManaRegen = 5, UnitType = UnitType.Enemy
+                        Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
                 .CleanUp(() =>
@@ -249,6 +251,8 @@ namespace ModifierSystem.Tests
                 })
                 .Run()
                 ;
+
+            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
         }
 
         [Test, Performance]
@@ -267,14 +271,14 @@ namespace ModifierSystem.Tests
                     character = new Being(new BeingProperties
                     {
                         Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                        Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
+                        Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                     character.AddModifier(_modifierPrototypesTest.GetApplier("DoTStackTest"));
                     character.AddModifier(_modifierPrototypesTest.GetApplier("SilenceXStacksTest"));
                     enemy = new Being(new BeingProperties
                     {
                         Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
-                        Mana = 20, ManaRegen = 5, UnitType = UnitType.Enemy
+                        Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
                 .CleanUp(() =>
@@ -284,6 +288,8 @@ namespace ModifierSystem.Tests
                 })
                 .Run()
                 ;
+
+            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
         }
 
         [Test, Performance]
@@ -304,7 +310,7 @@ namespace ModifierSystem.Tests
                     character = new Being(new BeingProperties
                     {
                         Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
-                        Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
+                        Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                 })
                 .CleanUp(() =>
@@ -314,6 +320,8 @@ namespace ModifierSystem.Tests
                 })
                 .Run()
                 ;
+
+            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
         }
     }
 }

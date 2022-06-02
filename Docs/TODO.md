@@ -2,10 +2,13 @@
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
-- [x] Move ComboSystemOutside dir, changed notes, todo, design dir outside unity project
+- [ ] **ComboModifiers values based on *in* values?**
+- [ ] **Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically**
+- [ ] *Multi Effect modifiers? (FireBall spell, initial dmg & DoT)*
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
+- [ ] Resource Refactor
 - [ ] Bench, what?
 
 ## Lower prio
