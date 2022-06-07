@@ -62,6 +62,11 @@ namespace ModifierSystem
                 CastingController.RemoveCastModifier(modifier);
         }
 
+        public void SetAutomaticCastAll(bool automaticCast = true)
+        {
+            ModifierController.SetAutomaticCastAll(automaticCast);
+        }
+
         public void CopyEvents(Being prototype)
         {
             base.CopyEvents(prototype);

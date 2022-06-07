@@ -1,3 +1,4 @@
+using BaseProject;
 using UnityEngine;
 
 namespace ModifierSystem
@@ -13,7 +14,7 @@ namespace ModifierSystem
         {
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
-                ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown)
+                ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown, comboProperties.Effect)
                 : new Modifier(properties.Name, properties.ApplierType, properties.HasConditionData);
 
             //---Components---
@@ -83,6 +84,10 @@ namespace ModifierSystem
             if (properties.Cost.Item1 != CostType.None && properties.Cost.Item2 != 0)
                 modifier.AddComponent(new CostComponent(properties.Cost.Item1, properties.Cost.Item2));
 
+            //---Chance---
+            if (properties.Chance != 0)
+                modifier.AddComponent(new ChanceComponent(properties.Chance));
+
             modifier.FinishSetup(properties.DamageData);
             modifier.AddProperties(properties);
             //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
@@ -107,6 +112,9 @@ namespace ModifierSystem
 
             if (properties.AutomaticCast)
                 modifier.SetAutomaticCast();
+
+            if (properties.Chance != 0)
+                modifier.AddComponent(new ChanceComponent(properties.Chance));
 
             modifier.FinishSetup(); //"No tags", for now?
             modifier.AddProperties(properties);

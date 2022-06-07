@@ -128,7 +128,7 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void CheckCooldownTest()
+        public void Cooldown()
         {
             double dmg = initialDamageCharacter;
 
@@ -153,6 +153,35 @@ namespace ModifierSystem.Tests
 
             character.Attack(enemy); //CD active again
             Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg - dmg - dmg - 2 - dmg, enemy.Stats.Health.CurrentHealth, Delta);
+        }
+
+        [Test]
+        public void ChanceHalfThorns()
+        {
+            var thornsOnHitModifier = modifierPrototypes.Get("ThornsOnHitChanceHalfTest");
+            character.AddModifier(thornsOnHitModifier);
+            enemy.Attack(character);
+
+            Assert.AreEqual(initialHealthEnemy - 1, enemy.Stats.Health.CurrentHealth);
+        }
+
+        [Test]
+        public void ChanceHalfHeal()
+        {
+            var healthCostModifier = modifierPrototypes.Get("HealOnHitHalfChanceTest");
+            character.AddModifier(healthCostModifier);
+            Log.Info(character.Stats.Health.CurrentHealth);
+            for (int i = 0; i < 10; i++)
+                enemy.Attack(character);
+            Log.Info(character.Stats.Health.CurrentHealth);
+            enemy.ChangeDamageStat(new DamageData(-1, DamageType.Physical));//Reduce dmg to 0
+            //try to heal 100 times, should have healed at least once
+            for (int i = 0; i < 100; i++)
+                enemy.Attack(character);
+            Log.Info(character.Stats.Health.CurrentHealth);
+
+            //Log.Info(character.Stats.Health.CurrentHealth+"_"+ (initialHealthCharacter - initialDamageEnemy * 10));
+            Assert.Greater(character.Stats.Health.CurrentHealth, initialHealthCharacter-initialDamageEnemy*10);
         }
     }
 }

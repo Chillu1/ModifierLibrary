@@ -141,6 +141,7 @@ namespace ModifierSystem.Tests
                     var damageData = new[]
                         { new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) };
                     var properties = new ComboModifierGenerationProperties("ComboInfectionTest");
+                    properties.AddDynamicEffect(damageData[0]);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[]
                         { new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5) })));
                     properties.SetCooldown(1);

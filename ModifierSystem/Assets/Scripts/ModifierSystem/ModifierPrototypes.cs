@@ -61,6 +61,7 @@ namespace ModifierSystem
         public TModifier GetRandomApplier(Random random)
         {
             var modifier = GetRandomItem(random, localModifier => localModifier.IsApplierModifier);
+            //Log.Info("GetRandomApplier: " + modifier, "modifiers");
             ValidateModifier(modifier);
 
             return modifier;
@@ -646,6 +647,28 @@ namespace ModifierSystem
                 applierProperties.SetAutomaticCast();
                 var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
                 AddModifier(applierModifier);
+            }
+
+            {
+                //ThornsOnHit 50% Chance
+                var damageData = new[] { new DamageData(1, DamageType.Physical) };
+                var properties = new ModifierGenerationProperties("ThornsOnHitChanceHalfTest", LegalTarget.Beings);
+                properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetChance(0.5);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+            }
+            {
+                //HealOnHit Chance
+                var properties = new ModifierGenerationProperties("HealOnHitHalfChanceTest");
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent);
+                properties.AddEffect(new HealComponent(1));
+                properties.SetChance(0.5);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
             }
         }
 

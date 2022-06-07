@@ -2,6 +2,10 @@
 
 ## Temp Notes
 
+ComboModifier:
+    Min ComboReqs
+    Dynamic Damage/Effect, based on Min amount of ComboReq
+
 CastComponent: Holds cooldown, mana. Gets fed: target, cd reduction, mana reduction.
 CostCOmponent: Mana, health, w/e.
 CastingController: ?

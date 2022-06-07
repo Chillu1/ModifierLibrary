@@ -33,6 +33,19 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
+        public void ComboModifierDoTInit()
+        {
+            //Attack with poison & bleed
+            var poisonAttackApplier = modifierPrototypes.Get("PoisonTestApplier"); //2 dmg per 2 secs
+            var bleedAttackApplier = modifierPrototypes.Get("BleedTestApplier"); //2 dmg per 2 secs
+            character.AddModifier(poisonAttackApplier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(bleedAttackApplier, AddModifierParameters.DefaultOffensive);
+            character.Attack(enemy); //1 damage physical, 2*2 damage with normal modifiers (init), 10 damage infection * multiplier (init)
+
+            Assert.AreEqual(initialHealthEnemy, enemy.Stats.Health.CurrentHealth+1+2*2+10*Curves.ComboElementMultiplier.Evaluate(5));
+        }
+
+        [Test]
         public void ComboModifierDoT()
         {
             //Attack with poison & bleed
@@ -43,7 +56,7 @@ namespace ModifierSystem.Tests
             character.Attack(enemy); //1 damage physical, 2*2 damage with normal modifiers (init), 10 damage infection (init)
             enemy.Update(2.1f); //infection, 10 damage (time), 2*2
 
-            Assert.AreEqual(29, initialHealthEnemy - enemy.Stats.Health.CurrentHealth);
+            Assert.Less(enemy.Stats.Health.CurrentHealth+1+2*2+2*2, initialHealthEnemy);
         }
 
         [Test]

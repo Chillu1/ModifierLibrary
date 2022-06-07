@@ -3,7 +3,7 @@ using Force.DeepCloner;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
 
-namespace ModifierSystem.Tests
+namespace ModifierSystem.Tests.Performance
 {
     public class PerformanceTest
     {

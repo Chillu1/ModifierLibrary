@@ -12,12 +12,15 @@ namespace ModifierSystem
     public sealed class ComboModifier : Modifier
     {
         private ComboRecipes ComboRecipes { get; }
-        public float Cooldown { get; }
 
-        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5) : base(id)
+        public float Cooldown { get; }
+        public IMultiplier Effect { get; }
+
+        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5, IMultiplier effect = null) : base(id)
         {
             ComboRecipes = comboRecipes;
             Cooldown = cooldown;
+            Effect = effect;
         }
 
         public override bool ValidatePrototypeSetup()
@@ -43,7 +46,7 @@ namespace ModifierSystem
         {
             if (modifierIds.Contains(Id))
             {
-                Log.Info($"Already contains {Id}, skipping", "modifiers");
+                //Log.Info($"Already contains {Id}, skipping", "modifiers");
                 return
                     false; //Already contains this combo modifier, skip (try refresh & stack? Might be a problem without proper sophisticated cooldowns)
             }
@@ -52,37 +55,46 @@ namespace ModifierSystem
             foreach (var recipe in ComboRecipes.Recipes)
             {
                 //Go through all possible recipes
-                if (CheckRecipe(recipe, modifierIds, elementController, stats))
+                (bool success, double multiplier) = CheckRecipe(recipe, modifierIds, elementController, stats);
+                if (success)
+                {
+                    if(Effect != null)
+                        Effect.SetMultiplier(multiplier);
                     return true; //If we found one, success
+                }
             }
 
             //Log.Verbose("No recipe found", "modifiers");
             return false; //Didn't find a recipe
         }
 
-        private bool CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
+        private (bool success, double multiplier) CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
         {
+            double multiplier = 1;//For now, we only support dynamic element combos
+
             //Log.Verbose("Id: " + Id, "modifiers");
             if (recipe.Id != null && recipe.Id.Length != 0)
             {
                 if (!CheckForIdConditions(recipe, modifierIds))
-                    return false;
+                    return (false, 0);
             }
 
             if (recipe.ElementalRecipe != null && recipe.ElementalRecipe.Length != 0)
             {
-                if (!CheckForElementalConditions(recipe, elementController))
-                    return false;
+                (bool exists, double eleMultiplier) = CheckForElementalConditions(recipe, elementController);
+                if (!exists)
+                    return (false, 0);
+                multiplier = eleMultiplier;
             }
 
             if (recipe.Stat != null && recipe.Stat.Length != 0)
             {
                 if (!CheckForStatConditions(recipe, stats))
-                    return false;
+                    return (false, 0);
             }
 
             //Found everything needed, add combo modifier
-            return true;
+            return (true, multiplier);
         }
 
         private bool CheckForIdConditions(ComboRecipe recipe, HashSet<string> ids)
@@ -96,15 +108,21 @@ namespace ModifierSystem
             return true;
         }
 
-        private bool CheckForElementalConditions(ComboRecipe recipe, ElementController elementController)
+        private (bool exists, double multiplier) CheckForElementalConditions(ComboRecipe recipe, ElementController elementController)
         {
+            double minElemental = double.MaxValue;
+
             foreach (var elementalRecipe in recipe.ElementalRecipe!)
             {
                 if (!elementController.HasIntensity(elementalRecipe.ElementalType, elementalRecipe.Intensity))
-                    return false;
+                    return (false, 0);
+
+                double intensity = elementController.GetIntensity(elementalRecipe.ElementalType);
+                if(intensity < minElemental)
+                    minElemental = intensity;
             }
 
-            return true;
+            return (true, Curves.ComboElementMultiplier.Evaluate(minElemental));
         }
 
         private bool CheckForStatConditions(ComboRecipe recipe, Stats stats)

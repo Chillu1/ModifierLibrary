@@ -13,6 +13,8 @@ namespace ModifierSystem
         private TargetingSystem TargetingSystem { get; }
 
         private readonly List<Modifier> _castModifiers = new List<Modifier>();
+        private float _castTimer = AutomaticCastCooldown;
+        private const float AutomaticCastCooldown = 0.1f;
 
         public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
         {
@@ -23,6 +25,12 @@ namespace ModifierSystem
 
         public void Update(float deltaTime)
         {
+            _castTimer -= deltaTime;
+            if (_castTimer > 0)
+                return;
+
+            _castTimer = AutomaticCastCooldown;
+
             foreach (var castingModifier in _castModifiers)
             {
                 if (castingModifier.IsAutomaticCasting)

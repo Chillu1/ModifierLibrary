@@ -52,7 +52,7 @@ namespace ModifierSystem
             //Log.Info(Modifiers.Count);
             foreach (var modifier in Modifiers.Values)
             {
-                modifier.Update(deltaTime, _owner.StatusResistances);
+                modifier.Update(_secondTimer, _owner.StatusResistances);
                 if (modifier.ToRemove)
                     MainModifierRemover.Add(modifier.Id);
             }
@@ -163,6 +163,18 @@ namespace ModifierSystem
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
         }
 
+        public void SetAutomaticCast(string modifierId, bool automaticCast = true)
+        {
+            if (ContainsModifier(modifierId, out var modifier))
+                modifier.SetAutomaticCast(automaticCast);
+        }
+
+        public void SetAutomaticCastAll(bool automaticCast = true)
+        {
+            foreach (var modifier in Modifiers.Values.Where(m => m.ApplierType == ApplierType.Cast))
+                modifier.SetAutomaticCast(automaticCast);
+        }
+
         public void ListModifiers()
         {
             ListModifiers(Modifiers.Values);
@@ -209,7 +221,7 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return string.Join(", ", Modifiers);
+            return "Modifiers: "+string.Join(", ", Modifiers);
         }
 
         private class ModifierRemover

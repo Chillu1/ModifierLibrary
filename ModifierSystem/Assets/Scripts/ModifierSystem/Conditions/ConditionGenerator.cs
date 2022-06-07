@@ -7,6 +7,7 @@ namespace ModifierSystem
     public static class ConditionGenerator
     {
         private static readonly BeingCondition healthIsLow = (receiver, acter) => receiver.Stats.Health.IsLow;
+        private static readonly BeingCondition healthIsHalf = (receiver, acter) => !receiver.Stats.Health.HasPercent(0.5);
         private static readonly BeingCondition healthIsFull = (receiver, acter) => receiver.Stats.Health.IsFull;
 
         public static BeingCondition GenerateBeingCondition(ConditionCheckData checkData)
@@ -17,6 +18,8 @@ namespace ModifierSystem
                 {
                     case ConditionBeingStatus.HealthIsLow:
                         return healthIsLow;
+                    case ConditionBeingStatus.HealthIsHalf:
+                        return healthIsHalf;
                     case ConditionBeingStatus.HealthIsFull:
                         return healthIsFull;
                 }

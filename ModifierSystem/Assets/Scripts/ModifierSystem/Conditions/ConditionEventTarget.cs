@@ -16,6 +16,8 @@ namespace ModifierSystem
         ActerSelf = 2,
         SelfSelf = 3,
         ActerActer = 4,
+
+        Default = SelfActer,
     }
 
     [Obsolete]

@@ -1,4 +1,9 @@
 # TODO:  
+- [x] **Dynamic ComboModifiers (temp)**
+- [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
+- [ ] Event naming convention for Conditional Modifiers
+- [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
+- [ ] BaseModifierProperties (for both normal & applier?)
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
@@ -7,6 +12,7 @@
 - [ ] *Multi Effect modifiers? (FireBall spell, initial dmg & DoT)*
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
+- [ ] Move ComboElementMultiplier to ModfieriSystem
 - [ ] ElementalDamage refactor
 - [ ] Resource Refactor
 - [ ] Bench, what?

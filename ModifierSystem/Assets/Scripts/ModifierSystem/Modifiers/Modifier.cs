@@ -30,6 +30,7 @@ namespace ModifierSystem
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
         [CanBeNull] private ICooldownComponent CooldownComponent { get; set; }
         [CanBeNull] private ICostComponent CostComponent { get; set; }
+        [CanBeNull] private IChanceComponent ChanceComponent { get; set; }
 
         private bool _setupFinished;
         private IModifierGenerationProperties Properties { get; set; }
@@ -183,6 +184,17 @@ namespace ModifierSystem
             CostComponent = costComponent;
         }
 
+        public void AddComponent(IChanceComponent chanceComponent)
+        {
+            if (ChanceComponent != null)
+            {
+                Log.Error(Id + " already has a chance component", "modifiers");
+                return;
+            }
+
+            ChanceComponent = chanceComponent;
+        }
+
         public void SetupOwner(Being owner)
         {
             TargetComponent.SetupOwner(owner);
@@ -196,6 +208,7 @@ namespace ModifierSystem
 
         public bool TryCast(Being target, bool automaticCast = false)
         {
+            //Log.Info($"{Id} is trying to cast", "modifiers");
             if (target == null && !TargetComponent.LegalTarget.HasFlag(LegalTarget.Ground))
             {
                 if (automaticCast) //No target, delay casting
@@ -208,6 +221,9 @@ namespace ModifierSystem
             return TryApply(target);
         }
 
+        /// <summary>
+        ///     All appliers (attack, cast). NOT conditional, etc
+        /// </summary>
         public bool TryApply(Being target)
         {
             bool validApply = true;
@@ -226,6 +242,11 @@ namespace ModifierSystem
             {
                 validApply = false;
                 //Log.Error("Can't apply " + Id + " because it costs more than the owner has", "modifiers");
+            }
+            if (ChanceComponent != null && !ChanceComponent.Roll())
+            {
+                validApply = false;
+                Log.Info("Can't apply " + Id + " because it failed the chance check", "modifiers");
             }
 
             if (validApply)
@@ -351,7 +372,7 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return string.Format("Id: {0}", Id);
+            return $"Id: {Id}";
         }
     }
 }

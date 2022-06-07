@@ -16,7 +16,7 @@ namespace ModifierSystem
 
         public void Update(float deltaTime) //TODO Cooldown reductions based on tag
         {
-            if (_timer <= 0)
+            if (_timer < 0)
                 return;
 
             _timer -= deltaTime;
@@ -27,7 +27,7 @@ namespace ModifierSystem
             if (_timer <= 0)
                 return true;
 
-            //Log.Info("Cooldown not ready");
+            //Log.Info("Cooldown not ready: " + _timer+"/"+_cooldown);
             return false;
         }
 
