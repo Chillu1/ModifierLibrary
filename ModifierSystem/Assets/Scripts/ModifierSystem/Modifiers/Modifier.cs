@@ -28,9 +28,7 @@ namespace ModifierSystem
         [CanBeNull] private CleanUpComponent CleanUpComponent { get; set; }
         [CanBeNull] private IStackComponent StackComponent { get; set; }
         [CanBeNull] private IRefreshComponent RefreshComponent { get; set; }
-        [CanBeNull] private ICooldownComponent CooldownComponent { get; set; }
-        [CanBeNull] private ICostComponent CostComponent { get; set; }
-        [CanBeNull] private IChanceComponent ChanceComponent { get; set; }
+        [CanBeNull] private ICheckComponent CheckComponent { get; set; }
 
         private bool _setupFinished;
         private IModifierGenerationProperties Properties { get; set; }
@@ -90,7 +88,7 @@ namespace ModifierSystem
                 timeComponent.Update(deltaTime, multiplier);
             }
 
-            CooldownComponent?.Update(deltaTime);
+            CheckComponent?.CooldownComponent?.Update(deltaTime);
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -162,43 +160,22 @@ namespace ModifierSystem
             RefreshComponent = refreshComponent;
         }
 
-        public void AddComponent(ICooldownComponent cooldownComponent)
+        //TODO Should never be directly added? Applier contains this?
+        public void AddComponent(ICheckComponent checkComponent)
         {
-            if (CooldownComponent != null)
+            if (CheckComponent != null)
             {
-                Log.Error(Id + " already has a cooldown component", "modifiers");
+                Log.Error(Id + " already has a check component", "modifiers");
                 return;
             }
 
-            CooldownComponent = cooldownComponent;
-        }
-
-        public void AddComponent(ICostComponent costComponent)
-        {
-            if (CostComponent != null)
-            {
-                Log.Error(Id + " already has a cost component", "modifiers");
-                return;
-            }
-
-            CostComponent = costComponent;
-        }
-
-        public void AddComponent(IChanceComponent chanceComponent)
-        {
-            if (ChanceComponent != null)
-            {
-                Log.Error(Id + " already has a chance component", "modifiers");
-                return;
-            }
-
-            ChanceComponent = chanceComponent;
+            CheckComponent = checkComponent;
         }
 
         public void SetupOwner(Being owner)
         {
             TargetComponent.SetupOwner(owner);
-            CostComponent?.SetupOwner(owner);
+            CheckComponent?.CostComponent?.SetupOwner(owner);
         }
 
         public void SetAutomaticCast(bool automaticCast = true)
@@ -233,27 +210,17 @@ namespace ModifierSystem
                 validApply = false;
                 //Log.Error(Id + " can't apply to " + target.Id, "modifiers");
             }
-            if (CooldownComponent != null && !CooldownComponent.IsReady())
+            if (CheckComponent != null && !CheckComponent.Check())
             {
                 validApply = false;
-                //Log.Error("Can't apply " + Id + " because it's on cooldown", "modifiers");
-            }
-            if (CostComponent != null && !CostComponent.ContainsCost())
-            {
-                validApply = false;
-                //Log.Error("Can't apply " + Id + " because it costs more than the owner has", "modifiers");
-            }
-            if (ChanceComponent != null && !ChanceComponent.Roll())
-            {
-                validApply = false;
-                Log.Info("Can't apply " + Id + " because it failed the chance check", "modifiers");
+                //Log.Error(Id + " failed check", "modifiers");
             }
 
             if (validApply)
             {
                 Apply();
-                CooldownComponent?.ResetTimer();
-                CostComponent?.ApplyCost();
+                CheckComponent?.CooldownComponent?.ResetTimer();
+                CheckComponent?.CostComponent?.ApplyCost();
                 return true;
             }
 

@@ -2,6 +2,12 @@
 
 ## Temp Notes
 
+EffectComp needs to be encapsulated in CheckComp
+ApplierEffectComp can be too, but we can also check in Check in modifier instead
+
+CheckComponent should not have effect when?:
+OnApplyModifiers?
+
 ComboModifier:
     Min ComboReqs
     Dynamic Damage/Effect, based on Min amount of ComboReq

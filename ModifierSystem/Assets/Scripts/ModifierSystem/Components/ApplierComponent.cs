@@ -2,15 +2,16 @@ namespace ModifierSystem
 {
     public class ApplierComponent : Component, IApplyComponent
     {
-        private readonly ApplierEffectComponent _effectComponent;
-        public ApplierComponent(ApplierEffectComponent applierEffectComponent)
+        private ICheckComponent CheckComponent { get; }
+
+        public ApplierComponent(ICheckComponent checkComponent)
         {
-            _effectComponent = applierEffectComponent;
+            CheckComponent = checkComponent;
         }
 
         public void Apply()
         {
-            _effectComponent.SimpleEffect();
+            CheckComponent.Effect();
         }
     }
 }

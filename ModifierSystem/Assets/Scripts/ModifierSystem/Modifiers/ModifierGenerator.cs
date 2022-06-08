@@ -27,6 +27,12 @@ namespace ModifierSystem
             EffectComponent effectComponent = properties.EffectComponent;
             effectComponent.Setup(targetComponent);
 
+            //---Check---
+            //TODO
+            CheckComponent checkComponent = new CheckComponent(effectComponent, null
+                , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
+                , properties.Chance != 0 ? new ChanceComponent(properties.Chance) : null);
+
             //---Apply---?
 
             //TODO, Specify if effect or remove component should be added to applyComponent
@@ -54,10 +60,11 @@ namespace ModifierSystem
             //---Finish Setup---
             //Add all components to modifier
             modifier.AddComponent(targetComponent);
+            modifier.AddComponent(checkComponent);
 
             if (properties.IsApplier && effectComponent is ApplierEffectComponent applier)
             {
-                var applierComponent = new ApplierComponent(applier);
+                var applierComponent = new ApplierComponent(checkComponent);
                 modifier.AddComponent(applierComponent);
             }
 
@@ -66,11 +73,11 @@ namespace ModifierSystem
 
             //Make rest of the component that won't be used by anything else
             if (properties.EffectOn.HasFlag(EffectOn.Init))
-                modifier.AddComponent(new InitComponent(effectComponent));
+                modifier.AddComponent(new InitComponent(checkComponent));
             if (properties.EffectOn.HasFlag(EffectOn.Apply) && conditionalApplyComponent != null)
                 modifier.AddComponent(new InitComponent(conditionalApplyComponent));
             if (properties.EffectOn.HasFlag(EffectOn.Time))
-                modifier.AddComponent(new TimeComponent(effectComponent, properties.EffectDuration, properties.ResetOnFinished));
+                modifier.AddComponent(new TimeComponent(checkComponent, properties.EffectDuration, properties.ResetOnFinished));
 
             //---Stack---
             if (effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
@@ -79,14 +86,6 @@ namespace ModifierSystem
             //---Refresh---
             if (properties.RefreshEffectType != RefreshEffectType.None)
                 modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
-
-            //---Cost---
-            if (properties.Cost.Item1 != CostType.None && properties.Cost.Item2 != 0)
-                modifier.AddComponent(new CostComponent(properties.Cost.Item1, properties.Cost.Item2));
-
-            //---Chance---
-            if (properties.Chance != 0)
-                modifier.AddComponent(new ChanceComponent(properties.Chance));
 
             modifier.FinishSetup(properties.DamageData);
             modifier.AddProperties(properties);
@@ -101,20 +100,17 @@ namespace ModifierSystem
             var target = new TargetComponent(properties.LegalTarget, true);
             var effect = new ApplierEffectComponent(properties.AppliedModifier);
             effect.Setup(target);
-            var applier = new ApplierComponent(effect);
-            modifier.AddComponent(applier);
+            var check = new CheckComponent(effect
+                , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
+                , properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null
+                , properties.Chance != 0 ? new ChanceComponent(properties.Chance) : null);
+            var applier = new ApplierComponent(check);
             modifier.AddComponent(target);
-
-            if (properties.CostType != CostType.None && properties.CostAmount != 0)
-                modifier.AddComponent(new CostComponent(properties.CostType, properties.CostAmount));
-            if (properties.Cooldown != -1)
-                modifier.AddComponent(new CooldownComponent(properties.Cooldown));
+            modifier.AddComponent(check);
+            modifier.AddComponent(applier);
 
             if (properties.AutomaticCast)
                 modifier.SetAutomaticCast();
-
-            if (properties.Chance != 0)
-                modifier.AddComponent(new ChanceComponent(properties.Chance));
 
             modifier.FinishSetup(); //"No tags", for now?
             modifier.AddProperties(properties);

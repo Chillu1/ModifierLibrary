@@ -8,13 +8,14 @@ namespace ModifierSystem
     {
         private bool ConditionBased { get; }
 
-        private readonly IEffectComponent[] _effectComponents;
+        private readonly ICheckComponent[] _checkComponent;
         private readonly IConditionalApplyComponent[] _applyComponents;
 
-        public InitComponent(params IEffectComponent[] effectComponents)
+        public InitComponent(params ICheckComponent[] checkComponent)
         {
-            _effectComponents = effectComponents;
+            _checkComponent = checkComponent;
         }
+
         /// <summary>
         ///     Condition based Init
         /// </summary>
@@ -33,8 +34,8 @@ namespace ModifierSystem
             }
             else
             {
-                foreach (var effectComponent in _effectComponents)
-                    effectComponent.SimpleEffect();
+                foreach (var checkComponent in _checkComponent)
+                    checkComponent.Effect();
             }
         }
 
@@ -52,9 +53,9 @@ namespace ModifierSystem
 
         private bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
-            foreach (var effectComponent in _effectComponents.EmptyIfNull())
+            foreach (var checkComponent in _checkComponent.EmptyIfNull())
             {
-                if (effectComponent.GetType() == typeof(T))
+                if (checkComponent.EffectComponentIsOfType<T>())
                     return true;
             }
 

@@ -20,6 +20,7 @@ namespace ModifierSystem
             var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add);
             effect.Setup(target);
+            var check = new CheckComponent(effect);
             var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
@@ -28,7 +29,7 @@ namespace ModifierSystem
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply, applyRemoval));
-            modifier.AddComponent(new TimeComponent(effect, 2, true));
+            modifier.AddComponent(new TimeComponent(check, 2, true));
             modifier.AddComponent(new StackComponent(effect, new StackComponentProperties() { Value = 5 }));
             modifier.AddComponent(new RefreshComponent(timeRemove, RefreshEffectType.RefreshDuration));
             modifier.FinishSetup(damageData);

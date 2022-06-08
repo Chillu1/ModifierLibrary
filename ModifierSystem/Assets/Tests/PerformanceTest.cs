@@ -29,8 +29,9 @@ namespace ModifierSystem.Tests.Performance
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData);
+                    var check = new CheckComponent(effect);
                     modifier.AddComponent(target);
-                    modifier.AddComponent(new InitComponent(effect));
+                    modifier.AddComponent(new InitComponent(check));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));
                     modifier.FinishSetup(damageData);
                 })

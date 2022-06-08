@@ -1,6 +1,6 @@
 # TODO:  
-- [x] **Dynamic ComboModifiers (temp)**
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
+- [ ] Fix Chance Tests 
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)

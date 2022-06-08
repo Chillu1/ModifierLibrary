@@ -17,7 +17,7 @@ namespace ModifierSystem
             ModifierPrototypes = new ModifierPrototypes<Modifier>(true);
 
             player = new Being(new BeingProperties()
-                { Id = "Player", DamageData = new DamageData(0, DamageType.Physical, null), Health = 150, UnitType = UnitType.Ally });
+                { Id = "Player", DamageData = new DamageData(0, DamageType.Physical, null), Health = 150, UnitType = UnitType.Ally, Mana = 100, ManaRegen = 10});
 
 
             _test = ModifierPrototypes.GetApplier("DoTStackTest");

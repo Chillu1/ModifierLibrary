@@ -9,15 +9,16 @@ namespace ModifierSystem
     public class TimeComponent : Component, ITimeComponent, IRefreshEffectComponent
     {
         public bool IsRemove { get; }
-        private IEffectComponent EffectComponent { get; }
-        private double Duration { get; set; }
+        private ICheckComponent CheckComponent { get; }
+        private RemoveComponent RemoveEffectComponent { get; }
+        private double Duration { get; }
         private bool ResetOnFinished { get; }
         private double _timer;
         private bool _finished;
 
-        public TimeComponent(IEffectComponent effectComponent, double duration, bool resetOnFinished = false)
+        public TimeComponent(ICheckComponent checkComponent, double duration, bool resetOnFinished = false)
         {
-            EffectComponent = effectComponent;
+            CheckComponent = checkComponent;
             Duration = duration;
             ResetOnFinished = resetOnFinished;
             IsRemove = false;
@@ -28,7 +29,7 @@ namespace ModifierSystem
         /// </summary>
         public TimeComponent(RemoveComponent removeComponent, double lingerDuration = 0.5d)
         {
-            EffectComponent = removeComponent;
+            RemoveEffectComponent = removeComponent;
             Duration = lingerDuration;
             ResetOnFinished = false;
             IsRemove = true;
@@ -38,11 +39,15 @@ namespace ModifierSystem
         {
             if (_finished)
                 return;
-            _timer += deltaTime;
+            _timer += deltaTime;//TODO / statusResistance instead? So it's a dynamic timer, and not a making it so players can switch between status res
             if (_timer >= Duration * statusResistance)
             {
                 //Log.Info(_timer + "_"+Duration * statusResistance);
-                EffectComponent.SimpleEffect();
+                if(IsRemove)
+                    RemoveEffectComponent.SimpleEffect();
+                else
+                    CheckComponent.Effect();
+
                 _finished = true;
 
                 if(ResetOnFinished)
@@ -92,10 +97,16 @@ namespace ModifierSystem
 
         private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent
         {
-            if(checkResetOnFinished)
-                return ResetOnFinished && EffectComponent.GetType() == typeof(T);
+            if (IsRemove)
+            {
+                return checkResetOnFinished
+                    ? ResetOnFinished && RemoveEffectComponent.GetType() == typeof(T)
+                    : RemoveEffectComponent.GetType() == typeof(T);
+            }
 
-            return EffectComponent.GetType() == typeof(T);
+            return checkResetOnFinished
+                ? ResetOnFinished && CheckComponent.EffectComponentIsOfType<T>()
+                : CheckComponent.EffectComponentIsOfType<T>();
         }
     }
 }
