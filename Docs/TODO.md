@@ -1,6 +1,7 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [ ] Fix Chance Tests 
+- [x] Fix Chance Tests
+- [x] More chance tests
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)

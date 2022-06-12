@@ -42,7 +42,7 @@ namespace ModifierSystem
         public StackComponentProperties StackComponentProperties { get; private set; }
         public RefreshEffectType RefreshEffectType { get; private set; }
         public (CostType, float) Cost { get; private set; }
-        public double Chance { get; private set; }
+        public double Chance { get; private set; } = -1;
 
         public ModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self)
         {

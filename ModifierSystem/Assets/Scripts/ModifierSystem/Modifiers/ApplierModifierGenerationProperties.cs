@@ -13,7 +13,7 @@ namespace ModifierSystem
 
         public float Cooldown { get; private set; } = -1;
         public bool AutomaticCast { get; private set; }
-        public double Chance { get; private set; }
+        public double Chance { get; private set; } = -1;
 
         public ApplierModifierGenerationProperties(Modifier appliedModifier, ApplierType applierType,
             LegalTarget legalTarget = LegalTarget.Beings)

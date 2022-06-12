@@ -1,4 +1,5 @@
 using BaseProject;
+using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
@@ -7,52 +8,48 @@ namespace ModifierSystem
     /// </summary>
     public class ConditionalApplyComponent : Component, IConditionalApplyComponent, ICleanUpComponent
     {
-        private ConditionEvent ConditionEvent { get; }
-        private ConditionBeingStatus Status { get; }
+        private readonly ConditionEvent _conditionEvent;
+        private readonly ConditionBeingStatus _status;
 
-        private readonly IConditionEffectComponent _conditionEffectComponent;
-        private readonly ITargetComponent _targetComponent;
-        //private readonly IValidatorComponent<object>[] _validatorComponents;
+        private IConditionEffectComponent ConditionEffectComponent { get; }
+        private ITargetComponent TargetComponent { get; }
+        [CanBeNull] private ICheckComponent CheckComponent { get; }
 
         public ConditionalApplyComponent(IConditionEffectComponent effectComponent, ITargetComponent targetComponent,
-            ConditionEvent conditionEvent)
+            ConditionEvent conditionEvent, ICheckComponent checkComponent = null)
         {
-            _conditionEffectComponent = effectComponent;
-            _targetComponent = targetComponent;
-            ConditionEvent = conditionEvent;
+            ConditionEffectComponent = effectComponent;
+            TargetComponent = targetComponent;
+            CheckComponent = checkComponent;
+            _conditionEvent = conditionEvent;
             Validate();
         }
 
         public void Apply()
         {
-            //for (int i = 0; i < _validatorComponents.Length; i++)
-            //{
-            //    _validatorComponents[i].Validate()
-            //}
-            //_targetComponent.Validate()
-
-            ConditionEvent.SetupBeingEvent(_targetComponent.Target, _conditionEffectComponent.ConditionEffect);
+            _conditionEvent.SetupBeingEvent(TargetComponent.Target, ConditionEffectCheck);
         }
 
         public void CleanUp()
         {
-            if (ConditionEvent == ConditionEvent.None)
+            if (_conditionEvent == ConditionEvent.None)
                 return;
 
-            if (_conditionEffectComponent == null)
+            if (ConditionEffectComponent == null)
             {
                 Log.Error("Condition effect component is null");
                 return;
             }
 
-            ConditionEvent.RemoveBeingEvent(_targetComponent.Target, _conditionEffectComponent.ConditionEffect);
+            //CleanUp/Remove shouldn't use Checks?
+            _conditionEvent.RemoveBeingEvent(TargetComponent.Target, ConditionEffectComponent.ConditionEffect);
         }
 
         private bool Validate()
         {
             bool success = true;
-            bool conditionEvent = ConditionEvent != ConditionEvent.None,
-                conditionTarget = _targetComponent.ConditionEventTarget != ConditionEventTarget.None;
+            bool conditionEvent = _conditionEvent != ConditionEvent.None,
+                conditionTarget = TargetComponent.ConditionEventTarget != ConditionEventTarget.None;
 
             if (conditionEvent)
             {
@@ -69,6 +66,12 @@ namespace ModifierSystem
             }
 
             return success;
+        }
+
+        private void ConditionEffectCheck(BaseBeing receiver, BaseBeing acter)
+        {
+            if (CheckComponent == null || CheckComponent.Check())
+                ConditionEffectComponent.ConditionEffect(receiver, acter);
         }
     }
 }

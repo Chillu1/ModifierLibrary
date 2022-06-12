@@ -5,12 +5,13 @@ namespace ModifierSystem
 {
     public class ChanceComponent : IChanceComponent
     {
-        public double Chance { get; }
+        private double Chance { get; }
 
         private readonly Random _random;
 
         public ChanceComponent(double chance)
         {
+            Validate();
             Chance = chance;
             _random = new Random();
         }
@@ -18,12 +19,30 @@ namespace ModifierSystem
         public bool Roll()
         {
             bool result = Roll(_random);
+            //Log.Info(this+"_"+result);
             return result;
         }
 
         public bool Roll(Random random)
         {
             return random.NextDouble() < Chance;
+        }
+
+        private bool Validate()
+        {
+            bool valid = true;
+            if (Chance < 0 || Chance > 1)
+            {
+                Log.Error(this + ": Chance is not between 0 and 1");
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        public override string ToString()
+        {
+            return $"Chance: {Chance}";
         }
     }
 }

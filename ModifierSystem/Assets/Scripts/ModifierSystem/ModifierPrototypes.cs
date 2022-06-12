@@ -650,11 +650,22 @@ namespace ModifierSystem
             }
 
             {
-                //ThornsOnHit 50% Chance
+                //ThornsOnHit 0% Chance
                 var damageData = new[] { new DamageData(1, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("ThornsOnHitChanceHalfTest", LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("ThornsOnHitChanceZeroTest", LegalTarget.Beings);
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetChance(0);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+            }
+            {
+                //IncreaseDmgOnHit 50% Chance
+                var damageData = new[] { new DamageData(1, DamageType.Physical) };
+                var properties = new ModifierGenerationProperties("IncreaseDmgHitHalfTest", LegalTarget.Beings);
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.HitEvent);
+                properties.AddEffect(new DamageStatComponent(damageData), damageData);
                 properties.SetChance(0.5);
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
@@ -669,6 +680,89 @@ namespace ModifierSystem
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
+            }
+            {
+                //IncreaseDmgOnHit 100% Chance
+                var damageData = new[] { new DamageData(1, DamageType.Physical) };
+                var properties = new ModifierGenerationProperties("IncreaseDmgHitFullTest", LegalTarget.Beings);
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.HitEvent);
+                properties.AddEffect(new DamageStatComponent(damageData), damageData);
+                properties.SetChance(1);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+            }
+            {
+                //FireAttack 50% chance to apply, 50% chance to "hit"
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitHalfTest", LegalTarget.Beings);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+                properties.SetChance(0.5);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetChance(0.5);
+
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
+            }
+            {
+                //FireAttack 0% chance to apply, 100% chance to "hit"
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullZeroTest", LegalTarget.Beings);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+                properties.SetChance(1);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetChance(0);
+
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
+            }
+            {
+                //FireAttack 100% chance to apply, 0% chance to "hit"
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitZeroFullTest", LegalTarget.Beings);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+                properties.SetChance(0);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetChance(1);
+
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
+            }
+            {
+                //FireAttack 100% chance to apply, 100% chance to "hit"
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullFullTest", LegalTarget.Beings);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+                properties.SetChance(1);
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+                applierProperties.SetChance(1);
+
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                AddModifier(applierModifier);
             }
         }
 

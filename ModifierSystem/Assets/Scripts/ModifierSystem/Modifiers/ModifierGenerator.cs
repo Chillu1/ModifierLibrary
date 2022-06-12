@@ -31,7 +31,7 @@ namespace ModifierSystem
             //TODO
             CheckComponent checkComponent = new CheckComponent(effectComponent, null
                 , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
-                , properties.Chance != 0 ? new ChanceComponent(properties.Chance) : null);
+                , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
 
             //---Apply---?
 
@@ -39,7 +39,8 @@ namespace ModifierSystem
             //---Conditional Apply---
             ConditionalApplyComponent conditionalApplyComponent = null;
             if (properties.HasConditionData)
-                conditionalApplyComponent = new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionEvent);
+                conditionalApplyComponent =
+                    new ConditionalApplyComponent(effectComponent, targetComponent, properties.ConditionEvent, checkComponent);
 
             //---CleanUp---
             //TODO ApplyComponent in cleanup
@@ -103,7 +104,7 @@ namespace ModifierSystem
             var check = new CheckComponent(effect
                 , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
                 , properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null
-                , properties.Chance != 0 ? new ChanceComponent(properties.Chance) : null);
+                , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
             var applier = new ApplierComponent(check);
             modifier.AddComponent(target);
             modifier.AddComponent(check);
