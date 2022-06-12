@@ -464,7 +464,7 @@ namespace ModifierSystem
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
                 properties.AddEffect(new DamageComponent(damageData,
                     conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
-                        Curves.ElementIntensity.Evaluate(900))), damageData);
+                        BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
 
                 var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
                 AddModifier(modifier);
@@ -763,6 +763,25 @@ namespace ModifierSystem
 
                 var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
                 AddModifier(applierModifier);
+            }
+
+            {
+                //FireBall with init dmg and DoT
+                var damageData = new[] { new DamageData(3, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullFullTest", LegalTarget.Beings);
+                properties.AddEffect(new DamageComponent(damageData), damageData);//Init
+                properties.AddEffect(new DamageComponent(damageData), damageData);//DoT
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                //AddModifier(modifier);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+
+
+                var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
+                //AddModifier(applierModifier);
             }
         }
 

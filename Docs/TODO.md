@@ -1,19 +1,17 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [x] Fix Chance Tests
-- [x] More chance tests
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)
 - [ ] **Cast Applier**
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
-- [ ] **ComboModifiers values based on *in* values?**
-- [ ] **Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically**
-- [ ] *Multi Effect modifiers? (FireBall spell, initial dmg & DoT)*
+- [ ] More ComboModifiers values based on *in* values?
+- [ ] >**Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically**
+- [ ] >**Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
-- [ ] Move ComboElementMultiplier to ModfieriSystem
+- [x] Move ComboElementMultiplier to ModfieriSystem
 - [ ] ElementalDamage refactor
 - [ ] Resource Refactor
 - [ ] Bench, what?
@@ -22,9 +20,8 @@
 
 - [ ] Sort ideas by prio
 - [ ] >Status effect to legal actions? (Replace?)
-- [ ] >Try to make an actual playable "game" out of it. Ex. a hero fighting against spawning enemies
 - [ ] Counter attack (onhit event? Or built-in)
-- [ ] Stack effect HasFlag instead of switch
+- [x] Stack effect HasFlag instead of switch
 - [ ] ComboAppliers?
 - [ ] >Ursa E (stackbased)
     Target is null on applier, but we're trying to setup a conditional

@@ -86,7 +86,7 @@ namespace ModifierSystem
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
-                    Curves.ElementIntensity.Evaluate(900))), damageData);
+                    BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);

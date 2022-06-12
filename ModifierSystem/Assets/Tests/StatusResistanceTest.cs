@@ -27,7 +27,7 @@ namespace ModifierSystem.Tests
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceValue);
             character.Attack(enemy);
-            enemy.Update((float)(10.1d * Curves.StatusResistance.Evaluate(ResistanceValue))); //Should remove modifier
+            enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue))); //Should remove modifier
 
             var doTModifier = modifierPrototypes.Get("SpiderPoisonTest");
             Assert.True(!enemy.ContainsModifier(doTModifier));
@@ -40,7 +40,7 @@ namespace ModifierSystem.Tests
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceMaxValue);
             character.Attack(enemy);
-            enemy.Update((float)(10.1d * Curves.StatusResistance.Evaluate(ResistanceMaxValue))); //Should remove modifier
+            enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceMaxValue))); //Should remove modifier
 
             var doTModifier = modifierPrototypes.Get("SpiderPoisonTest");
             Assert.True(!enemy.ContainsModifier(doTModifier));
@@ -55,9 +55,9 @@ namespace ModifierSystem.Tests
             enemy.StatusResistances.ChangeValue(DamageType.Physical, ResistanceValue);
             enemy.StatusResistances.ChangeValue(ElementalType.Poison, ResistanceValue);
             character.Attack(enemy);
-            enemy.Update((float)(10.1d * Curves.StatusResistance.Evaluate(ResistanceValue) *
-                                 Curves.StatusResistance.Evaluate(ResistanceValue) *
-                                 Curves.StatusResistance.Evaluate(ResistanceValue))); //Should remove modifier
+            enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue) *
+                                 BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue) *
+                                 BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue))); //Should remove modifier
 
             var doTModifier = modifierPrototypes.Get("SpiderPoisonTest");
             Assert.True(!enemy.ContainsModifier(doTModifier));

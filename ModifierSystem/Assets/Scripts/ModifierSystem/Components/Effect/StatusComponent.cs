@@ -24,14 +24,13 @@ namespace ModifierSystem
 
         public void StackEffect(int stacks, double value)
         {
-            switch (StackEffectType)
+            if (StackEffectType.HasFlag(StatusComponentStackEffect.Effect))
             {
-                case StatusComponentStackEffect.Effect:
-                    SimpleEffect();
-                    break;
-                default:
-                    Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
-                    return;
+                SimpleEffect();
+            }
+            else
+            {
+                Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
             }
         }
 
