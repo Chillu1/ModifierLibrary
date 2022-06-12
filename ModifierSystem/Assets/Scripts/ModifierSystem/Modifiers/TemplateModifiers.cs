@@ -68,8 +68,8 @@ namespace ModifierSystem
         {
             var damageData = new[] { new DamageData(double.MaxValue, DamageType.Magical) };
             var properties = new ModifierGenerationProperties("DamageOnDeath", LegalTarget.Beings);
-            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
             properties.AddEffect(new DamageComponent(damageData), damageData);
+            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
@@ -83,10 +83,10 @@ namespace ModifierSystem
             //If enemy is on fire, deal damage to him, on hit
             var damageData = new[] { new DamageData(10000, DamageType.Physical) };
             var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
-            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
                     BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
+            properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BaseProject;
 
 namespace ModifierSystem
@@ -20,7 +21,7 @@ namespace ModifierSystem
 
     public class ModifierGenerationProperties : IModifierGenerationProperties
     {
-        public string Name { get; }
+        public string Id { get; }
         public LegalTarget LegalTarget { get; }
         public bool IsApplier => ApplierType != ApplierType.None;
         public ApplierType ApplierType { get; private set; }
@@ -33,21 +34,18 @@ namespace ModifierSystem
         public bool Removable { get; private set; }
         public double RemoveDuration { get; private set; }
 
-        public EffectComponent EffectComponent { get; private set; }
-
-        public EffectOn EffectOn { get; private set; }
-        public bool ResetOnFinished { get; private set; }
-        public double EffectDuration { get; private set; }
-
+        public List<EffectPropertyInfo> EffectPropertyInfo { get; private set; }
+        private EffectPropertyInfo _currentEffectPropertyInfo;
         public StackComponentProperties StackComponentProperties { get; private set; }
         public RefreshEffectType RefreshEffectType { get; private set; }
         public (CostType, float) Cost { get; private set; }
         public double Chance { get; private set; } = -1;
 
-        public ModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self)
+        public ModifierGenerationProperties(string id, LegalTarget legalTarget = LegalTarget.Self)
         {
-            Name = name;
+            Id = id;
             LegalTarget = legalTarget;
+            EffectPropertyInfo = new List<EffectPropertyInfo>(2);
         }
 
         public void AddConditionData(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
@@ -70,22 +68,21 @@ namespace ModifierSystem
 
         public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
         {
-            EffectComponent = effectComponent;
+            _currentEffectPropertyInfo = new EffectPropertyInfo(effectComponent);
+            EffectPropertyInfo.Add(_currentEffectPropertyInfo);
             if (damageData != null)
                 DamageData = damageData;
         }
 
         public void SetEffectOnInit()
         {
-            EffectOn |= EffectOn.Init;
+            _currentEffectPropertyInfo.SetEffectOnInit();
         }
 
         /// <param name="resetOnFinished">Resets the timer after duration is finished (interval)</param>
         public void SetEffectOnTime(double duration, bool resetOnFinished)
         {
-            EffectOn |= EffectOn.Time;
-            EffectDuration = duration;
-            ResetOnFinished = resetOnFinished;
+            _currentEffectPropertyInfo.SetEffectOnTime(duration, resetOnFinished);
         }
 
         /// <summary>
@@ -93,7 +90,7 @@ namespace ModifierSystem
         /// </summary>
         private void SetEffectOnApply()
         {
-            EffectOn |= EffectOn.Apply;
+            _currentEffectPropertyInfo.SetEffectOnApply();
         }
 
         /// <summary>

@@ -14,8 +14,8 @@ namespace ModifierSystem
         {
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
-                ? new ComboModifier(comboProperties.Name, comboProperties.Recipes, comboProperties.Cooldown, comboProperties.Effect)
-                : new Modifier(properties.Name, properties.ApplierType, properties.HasConditionData);
+                ? new ComboModifier(comboProperties.Id, comboProperties.Recipes, comboProperties.Cooldown, comboProperties.Effect)
+                : new Modifier(properties.Id, properties.ApplierType, properties.HasConditionData);
 
             //---Components---
 
@@ -24,14 +24,24 @@ namespace ModifierSystem
                 : new TargetComponent(properties.LegalTarget, properties.IsApplier);
 
             //---Effect---
-            EffectComponent effectComponent = properties.EffectComponent;
+            EffectComponent effectComponent = properties.EffectPropertyInfo[0].EffectComponent;
             effectComponent.Setup(targetComponent);
 
+            EffectComponent effectComponentTwo = null;
+            if (properties.EffectPropertyInfo.Count > 1)
+            {
+                effectComponentTwo = properties.EffectPropertyInfo[1].EffectComponent;
+                effectComponentTwo.Setup(targetComponent);
+            }
+
             //---Check---
-            //TODO
-            CheckComponent checkComponent = new CheckComponent(effectComponent, null
-                , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
-                , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
+            CheckComponent checkComponent = effectComponentTwo == null
+                ? new CheckComponent(effectComponent, null
+                    , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
+                    , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null)
+                : new CheckComponent(new IEffectComponent[] { effectComponent, effectComponentTwo }, null
+                    , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
+                    , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
 
             //---Apply---?
 
@@ -45,7 +55,7 @@ namespace ModifierSystem
             //---CleanUp---
             //TODO ApplyComponent in cleanup
             CleanUpComponent cleanUpComponent = null;
-            if (properties.Removable && properties.EffectOn.HasFlag(EffectOn.Apply))
+            if (properties.Removable && properties.EffectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Apply))
                 cleanUpComponent = new CleanUpComponent(conditionalApplyComponent);
 
             //---Remove---
@@ -73,12 +83,9 @@ namespace ModifierSystem
                 modifier.AddComponent(removeTimeComponent);
 
             //Make rest of the component that won't be used by anything else
-            if (properties.EffectOn.HasFlag(EffectOn.Init))
-                modifier.AddComponent(new InitComponent(checkComponent));
-            if (properties.EffectOn.HasFlag(EffectOn.Apply) && conditionalApplyComponent != null)
-                modifier.AddComponent(new InitComponent(conditionalApplyComponent));
-            if (properties.EffectOn.HasFlag(EffectOn.Time))
-                modifier.AddComponent(new TimeComponent(checkComponent, properties.EffectDuration, properties.ResetOnFinished));
+            SetupEffectOn(modifier, properties.EffectPropertyInfo[0], checkComponent, conditionalApplyComponent);
+            if(effectComponentTwo != null)
+                SetupEffectOn(modifier, properties.EffectPropertyInfo[1], checkComponent, conditionalApplyComponent);
 
             //---Stack---
             if (effectComponent is IStackEffectComponent stackEffectComponent && properties.StackComponentProperties != null)
@@ -117,6 +124,17 @@ namespace ModifierSystem
             modifier.AddProperties(properties);
 
             return modifier;
+        }
+
+        private static void SetupEffectOn(Modifier modifier, EffectPropertyInfo propertyInfo, CheckComponent checkComponent,
+            ConditionalApplyComponent conditionalApplyComponent)
+        {
+            if (propertyInfo.EffectOn.HasFlag(EffectOn.Init))
+                modifier.AddComponent(new InitComponent(checkComponent));
+            if (propertyInfo.EffectOn.HasFlag(EffectOn.Apply) && conditionalApplyComponent != null)
+                modifier.AddComponent(new InitComponent(conditionalApplyComponent));
+            if (propertyInfo.EffectOn.HasFlag(EffectOn.Time))
+                modifier.AddComponent(new TimeComponent(checkComponent, propertyInfo.EffectDuration, propertyInfo.ResetOnFinished));
         }
     }
 }

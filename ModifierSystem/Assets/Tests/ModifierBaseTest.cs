@@ -129,8 +129,8 @@ namespace ModifierSystem.Tests
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })));
                     properties.SetCooldown(1);
 
-                    properties.SetEffectOnInit();
                     properties.AddEffect(new StatComponent(new[] { new Stat(StatType.MovementSpeed, 10) }));
+                    properties.SetEffectOnInit();
                     properties.SetRemovable(10);
 
                     var modifier = ModifierGenerator.GenerateComboModifier(properties);
@@ -146,11 +146,11 @@ namespace ModifierSystem.Tests
                         { new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5) })));
                     properties.SetCooldown(1);
 
-                    properties.SetEffectOnInit();
-                    properties.SetEffectOnTime(2, true);
                     properties.AddEffect(
                         new DamageComponent(
                             damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
+                    properties.SetEffectOnInit();
+                    properties.SetEffectOnTime(2, true);
                     properties.SetRemovable(10);
 
                     var modifier = ModifierGenerator.GenerateComboModifier(properties);
@@ -162,8 +162,8 @@ namespace ModifierSystem.Tests
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
                     properties.SetCooldown(PermanentComboModifierCooldown);
 
-                    properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
+                    properties.SetEffectOnInit();
 
                     var modifier = ModifierGenerator.GenerateComboModifier(properties);
                     AddModifier(modifier);
@@ -175,8 +175,8 @@ namespace ModifierSystem.Tests
                     properties.SetCooldown(PermanentComboModifierCooldown);
                     properties.SetRemovable(10);
 
-                    properties.SetEffectOnInit();
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
+                    properties.SetEffectOnInit();
 
                     var modifier = ModifierGenerator.GenerateComboModifier(properties);
                     AddModifier(modifier);

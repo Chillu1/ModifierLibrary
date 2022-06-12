@@ -7,7 +7,7 @@ namespace ModifierSystem
     /// </summary>
     public class CheckComponent : ICheckComponent
     {
-        private IEffectComponent EffectComponent { get; }
+        private IEffectComponent[] EffectComponents { get; }
 
         [CanBeNull] public ICooldownComponent CooldownComponent { get; }
         [CanBeNull] public ICostComponent CostComponent { get; }
@@ -16,7 +16,15 @@ namespace ModifierSystem
         public CheckComponent(IEffectComponent effectComponent, ICooldownComponent cooldownComponent = null, ICostComponent costComponent = null,
             IChanceComponent chanceComponent = null)
         {
-            EffectComponent = effectComponent;
+            EffectComponents = new[] { effectComponent };
+            CooldownComponent = cooldownComponent;
+            CostComponent = costComponent;
+            ChanceComponent = chanceComponent;
+        }
+        public CheckComponent(IEffectComponent[] effectComponents, ICooldownComponent cooldownComponent = null, ICostComponent costComponent = null,
+            IChanceComponent chanceComponent = null)
+        {
+            EffectComponents = effectComponents;
             CooldownComponent = cooldownComponent;
             CostComponent = costComponent;
             ChanceComponent = chanceComponent;
@@ -25,7 +33,10 @@ namespace ModifierSystem
         public void Effect()
         {
             if (Check())
-                EffectComponent.SimpleEffect();
+            {
+                foreach (var effectComponent in EffectComponents)
+                    effectComponent.SimpleEffect();
+            }
         }
 
         /// <summary>
@@ -57,7 +68,13 @@ namespace ModifierSystem
 
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
-            return EffectComponent.GetType() == typeof(T);
+            foreach (var effectComponent in EffectComponents)
+            {
+                if (effectComponent.GetType() == typeof(T))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

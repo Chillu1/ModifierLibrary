@@ -1,5 +1,6 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
+- [ ] Double Effect doesn't work yet because "CheckComponent" holds both effects, and triggers them no matter what ("propertyInfo.EffectOn.HasFlag(EffectOn.Time)")
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)
@@ -8,7 +9,7 @@
 - [ ] StatusTags refactor
 - [ ] More ComboModifiers values based on *in* values?
 - [ ] >**Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically**
-- [ ] >**Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
+- [ ] **Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
 - [x] Move ComboElementMultiplier to ModfieriSystem

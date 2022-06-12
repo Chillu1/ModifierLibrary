@@ -10,7 +10,7 @@ namespace ModifierSystem
         public IMultiplier Effect { get; private set; }
 
 
-        public ComboModifierGenerationProperties(string name, LegalTarget legalTarget = LegalTarget.Self) : base(name, legalTarget)
+        public ComboModifierGenerationProperties(string id, LegalTarget legalTarget = LegalTarget.Self) : base(id, legalTarget)
         {
         }
 

@@ -154,5 +154,21 @@ namespace ModifierSystem.Tests
             character.Attack(enemy); //CD active again
             Assert.AreEqual(initialHealthEnemy - dmg - 2 - dmg - dmg - dmg - 2 - dmg, enemy.Stats.Health.CurrentHealth, Delta);
         }
+
+        /*[Test]
+        public void TwoEffects()
+        {
+            var fireBallModifier = modifierPrototypes.GetApplier("FireBallTwoEffectTest");
+            character.AddModifier(fireBallModifier, AddModifierParameters.DefaultOffensive);
+
+            character.Attack(enemy);//1 auto attack, 10 init dmg, 3 dot
+
+            Assert.AreEqual(initialHealthEnemy - 14, enemy.Stats.Health.CurrentHealth, Delta);
+
+            enemy.Update(1.1f);
+
+            //TODO Not working because of double effect not working fully with Checkcomponent
+            Assert.AreEqual(initialHealthEnemy - 14 - 3, enemy.Stats.Health.CurrentHealth, Delta);
+        }*/
     }
 }
