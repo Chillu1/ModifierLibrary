@@ -66,6 +66,12 @@ namespace ModifierSystem
             return valid;
         }
 
+        public void Apply()
+        {
+            CostComponent?.ApplyCost();
+            CooldownComponent?.ResetTimer();
+        }
+
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
             foreach (var effectComponent in EffectComponents)

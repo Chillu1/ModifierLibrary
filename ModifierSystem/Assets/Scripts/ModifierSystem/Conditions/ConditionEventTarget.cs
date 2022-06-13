@@ -10,7 +10,7 @@ namespace ModifierSystem
     {
         None = 0,
         /// <summary>
-        ///     Owner/Retriever - Acter/Giver
+        ///     Default. Owner/Retriever - Acter/Giver
         /// </summary>
         SelfActer = 1,
         ActerSelf = 2,

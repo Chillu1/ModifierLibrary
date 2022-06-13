@@ -5,8 +5,17 @@ namespace ModifierSystem
     public class ApplierModifierGenerationProperties : IModifierGenerationProperties
     {
         public Modifier AppliedModifier { get; }
-        public ApplierType ApplierType { get; }
         public LegalTarget LegalTarget { get; }
+
+
+        public bool IsApplier => ApplierType != ApplierType.None;
+        public ApplierType ApplierType { get; private set; }
+        public bool HasConditionData { get; private set; }
+        public ConditionEventTarget ConditionEventTarget { get; private set; }
+        public ConditionEvent ConditionEvent { get; private set; }
+
+        public AddModifierParameters AddModifierParameters { get; private set; } = AddModifierParameters.Default;
+
 
         public CostType CostType { get; private set; }
         public float CostAmount { get; private set; }
@@ -21,6 +30,34 @@ namespace ModifierSystem
             AppliedModifier = appliedModifier;
             ApplierType = applierType;
             LegalTarget = legalTarget;
+        }
+
+        public void SetApplier(ApplierType applierType)
+        {
+            if(HasConditionData)
+                Log.Error("Cannot set applier type together with condition data");
+
+            ApplierType = applierType;
+        }
+
+        public void SetCondition(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
+        {
+            if(ApplierType != ApplierType.None)
+                Log.Error("ApplierType can't be set together with condition?");
+            if (conditionEventTarget == ConditionEventTarget.None)
+                Log.Error("Wrong ConditionTarget, None");
+            if (conditionEvent == ConditionEvent.None)
+                Log.Error("Wrong BeingConditionEvent, None");
+
+            HasConditionData = true;
+            ConditionEventTarget = conditionEventTarget;
+            ConditionEvent = conditionEvent;
+            //SetEffectOnApply(); //Always true?
+        }
+
+        public void SetAddModifierParameters(AddModifierParameters addModifierParameters)
+        {
+            AddModifierParameters = addModifierParameters;
         }
 
         public void SetCost(CostType costType, float costAmount)

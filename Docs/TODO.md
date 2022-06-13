@@ -1,5 +1,9 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
+- [x] **ApplierEffectComponent with AddConditionData in ApplierModifierGenerationProperties**
+- [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
+- [ ] **Have StatusResistances & ElementResistances use the same logic**
+- [ ] Status Res for combo element types
 - [ ] Double Effect doesn't work yet because "CheckComponent" holds both effects, and triggers them no matter what ("propertyInfo.EffectOn.HasFlag(EffectOn.Time)")
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
@@ -8,13 +12,13 @@
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
 - [ ] More ComboModifiers values based on *in* values?
-- [ ] >**Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically**
+- [x] Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically
 - [ ] **Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
-- [x] Move ComboElementMultiplier to ModfieriSystem
 - [ ] ElementalDamage refactor
 - [ ] Resource Refactor
+- [ ] **Damage Resistance not using "resource"**
 - [ ] Bench, what?
 
 ## Lower prio

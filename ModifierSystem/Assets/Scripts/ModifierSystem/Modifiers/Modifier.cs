@@ -219,8 +219,7 @@ namespace ModifierSystem
             if (validApply)
             {
                 Apply();
-                CheckComponent?.CooldownComponent?.ResetTimer();
-                CheckComponent?.CostComponent?.ApplyCost();
+                CheckComponent?.Apply();
                 return true;
             }
 
@@ -286,9 +285,9 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (Id.Contains("Applier") && !IsApplierModifier)
+            if (Id.Contains("Applier") && !IsApplierModifier && !IsConditionModifier)
             {
-                Log.Error("Id contains applier, but the flag isn't set", "modifiers");
+                Log.Error("Id contains applier, but the flag isn't set, and it's not a condition modifier", "modifiers");
                 valid = false;
             }
 

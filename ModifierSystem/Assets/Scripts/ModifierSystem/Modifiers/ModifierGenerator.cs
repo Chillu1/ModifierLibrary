@@ -103,16 +103,30 @@ namespace ModifierSystem
 
         public static Modifier GenerateApplierModifier(ApplierModifierGenerationProperties properties)
         {
-            var modifier = new Modifier(properties.AppliedModifier.Id + "Applier", properties.ApplierType);
+            var modifier = new Modifier(properties.AppliedModifier.Id + "Applier", properties.ApplierType, properties.HasConditionData);
 
-            var target = new TargetComponent(properties.LegalTarget, true);
-            var effect = new ApplierEffectComponent(properties.AppliedModifier);
+            var target = properties.HasConditionData
+                ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.IsApplier)
+                : new TargetComponent(properties.LegalTarget, properties.IsApplier);
+
+            var effect = new ApplierEffectComponent(properties.AppliedModifier, properties.AddModifierParameters);
             effect.Setup(target);
             var check = new CheckComponent(effect
                 , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
                 , properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null
                 , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
             var applier = new ApplierComponent(check);
+
+            ConditionalApplyComponent conditionalApplyComponent = null;
+            if (properties.HasConditionData)
+                conditionalApplyComponent = new ConditionalApplyComponent(effect, target, properties.ConditionEvent, check);
+
+            //TODO CleanUp
+
+            var propertyInfo = new EffectPropertyInfo(effect);
+            propertyInfo.SetEffectOnApply();
+            SetupEffectOn(modifier, propertyInfo, check, conditionalApplyComponent);
+
             modifier.AddComponent(target);
             modifier.AddComponent(check);
             modifier.AddComponent(applier);

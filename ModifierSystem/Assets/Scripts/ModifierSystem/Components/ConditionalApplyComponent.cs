@@ -71,7 +71,10 @@ namespace ModifierSystem
         private void ConditionEffectCheck(BaseBeing receiver, BaseBeing acter)
         {
             if (CheckComponent == null || CheckComponent.Check())
+            {
                 ConditionEffectComponent.ConditionEffect(receiver, acter);
+                CheckComponent?.Apply();
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace ModifierSystem
 
         void Effect();
         bool Check();
+        void Apply();
 
         bool EffectComponentIsOfType<T>() where T : IEffectComponent;
     }
