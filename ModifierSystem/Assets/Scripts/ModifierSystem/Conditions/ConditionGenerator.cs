@@ -32,11 +32,11 @@ namespace ModifierSystem
             if(!string.IsNullOrEmpty(checkData.ModifierId))
                 return (receiver, acter) => ((Being)receiver).ContainsModifier(checkData.ModifierId);
 
-            if(checkData.ElementalType != ElementalType.None)
+            if(checkData.ElementType != ElementType.None)
             {
                 return checkData.ElementalIntensityCheck
-                    ? (receiver, acter) => receiver.ElementController.HasIntensity(checkData.ElementalType, checkData.Value)
-                    : (receiver, acter) => receiver.ElementController.HasValue(checkData.ElementalType, checkData.Value);
+                    ? (receiver, acter) => receiver.ElementController.HasIntensity(checkData.ElementType, checkData.Value)
+                    : (receiver, acter) => receiver.ElementController.HasValue(checkData.ElementType, checkData.Value);
             }
 
             return delegate { return true; };

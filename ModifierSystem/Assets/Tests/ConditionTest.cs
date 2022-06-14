@@ -42,7 +42,7 @@ namespace ModifierSystem.Tests
             character.Attack(enemy);
             Assert.False(enemy.Stats.Health.IsDead);
 
-            character.ChangeDamageStat(new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Fire, 1000, 10)));
+            character.ChangeDamageStat(new DamageData(1, DamageType.Physical, new ElementData(ElementType.Fire, 1000, 10)));
             character.Attack(enemy);
 
             Assert.True(enemy.Stats.Health.IsDead);

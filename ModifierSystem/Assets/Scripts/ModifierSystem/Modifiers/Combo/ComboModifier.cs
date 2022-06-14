@@ -114,10 +114,10 @@ namespace ModifierSystem
 
             foreach (var elementalRecipe in recipe.ElementalRecipe!)
             {
-                if (!elementController.HasIntensity(elementalRecipe.ElementalType, elementalRecipe.Intensity))
+                if (!elementController.HasIntensity(elementalRecipe.elementType, elementalRecipe.Intensity))
                     return (false, 0);
 
-                double intensity = elementController.GetIntensity(elementalRecipe.ElementalType);
+                double intensity = elementController.GetIntensity(elementalRecipe.elementType);
                 if(intensity < minElemental)
                     minElemental = intensity;
             }

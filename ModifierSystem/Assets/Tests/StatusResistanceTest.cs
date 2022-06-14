@@ -53,7 +53,7 @@ namespace ModifierSystem.Tests
             character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceValue);
             enemy.StatusResistances.ChangeValue(DamageType.Physical, ResistanceValue);
-            enemy.StatusResistances.ChangeValue(ElementalType.Poison, ResistanceValue);
+            enemy.StatusResistances.ChangeValue(ElementType.Poison, ResistanceValue);
             character.Attack(enemy);
             enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue) *
                                  BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue) *

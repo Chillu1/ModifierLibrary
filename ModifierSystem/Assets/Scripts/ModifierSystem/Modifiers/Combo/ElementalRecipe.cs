@@ -4,12 +4,12 @@ namespace ModifierSystem
 {
     public class ElementalRecipe
     {
-        public ElementalType ElementalType;
+        public ElementType elementType;
         public double Intensity;
 
-        public ElementalRecipe(ElementalType elementalType, double intensity)
+        public ElementalRecipe(ElementType elementType, double intensity)
         {
-            ElementalType = elementalType;
+            this.elementType = elementType;
             Intensity = intensity;
         }
     }

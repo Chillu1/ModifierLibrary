@@ -12,6 +12,8 @@ namespace ModifierSystem
 
         public static Modifier GenerateModifier(ModifierGenerationProperties properties)
         {
+            ValidateProperties(properties);
+
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Id, comboProperties.Recipes, comboProperties.Cooldown, comboProperties.Effect)
@@ -138,6 +140,12 @@ namespace ModifierSystem
             modifier.AddProperties(properties);
 
             return modifier;
+        }
+
+        private static void ValidateProperties(ModifierGenerationProperties properties)
+        {
+            if (properties.EffectPropertyInfo[0].EffectOn == EffectOn.None && !properties.HasConditionData && properties.StackComponentProperties == null)
+                Log.Error("Properties have to have one of: EffectOn, ConditionData, StackComponentProperties");
         }
 
         private static void SetupEffectOn(Modifier modifier, EffectPropertyInfo propertyInfo, CheckComponent checkComponent,

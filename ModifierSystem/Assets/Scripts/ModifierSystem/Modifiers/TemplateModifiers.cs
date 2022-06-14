@@ -15,7 +15,7 @@ namespace ModifierSystem
         private void FullModifier()
         {
             var modifier = new Modifier("Full");
-            var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+            var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add);
@@ -46,7 +46,7 @@ namespace ModifierSystem
         private void DoTModifier()
         {
             //BasicPoison
-            var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+            var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var properties = new ModifierGenerationProperties("DoT");
             properties.AddEffect(new DamageComponent(damageData), damageData);
             properties.SetEffectOnInit();
@@ -84,7 +84,7 @@ namespace ModifierSystem
             var damageData = new[] { new DamageData(10000, DamageType.Physical) };
             var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
             properties.AddEffect(new DamageComponent(damageData,
-                conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
+                conditionCheckData: new ConditionCheckData(ElementType.Fire, ComparisonCheck.GreaterOrEqual,
                     BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
 

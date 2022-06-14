@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ModifierSystem
 {
-    public sealed class Being : BaseBeing
+    public class Being : BaseBeing
     {
         private ModifierController ModifierController { get; }
         private CastingController CastingController { get; }

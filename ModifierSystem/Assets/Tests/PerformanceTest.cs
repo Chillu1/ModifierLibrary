@@ -26,7 +26,7 @@ namespace ModifierSystem.Tests.Performance
             Measure.Method(() =>
                 {
                     var modifier = new Modifier("IceBoltTest");
-                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData);
                     var check = new CheckComponent(effect);
@@ -105,7 +105,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Measure.Method(() =>
                 {
-                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                     var properties = new ModifierGenerationProperties("IceBoltTest");
                     properties.AddEffect(new DamageComponent(damageData), damageData);
                     properties.SetEffectOnInit();
@@ -126,7 +126,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Measure.Method(() =>
                 {
-                    var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                    var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                     var properties = new ModifierGenerationProperties("DoTStackTest", LegalTarget.Beings);
                     properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
                     properties.SetEffectOnInit();
@@ -151,7 +151,7 @@ namespace ModifierSystem.Tests.Performance
                 {
                     var character = new Being(new BeingProperties
                     {
-                        Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                        Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                 })
@@ -168,7 +168,7 @@ namespace ModifierSystem.Tests.Performance
         {
             var character = new Being(new BeingProperties
             {
-                Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
 
@@ -199,12 +199,12 @@ namespace ModifierSystem.Tests.Performance
                 {
                     character = new Being(new BeingProperties
                     {
-                        Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                        Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                     enemy = new Being(new BeingProperties
                     {
-                        Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+                        Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
@@ -235,13 +235,13 @@ namespace ModifierSystem.Tests.Performance
                     character = new Being(new BeingProperties
                     {
                         Id = "player", Health = 50,
-                        DamageData = new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Fire, 20, 10)),
+                        Damage = new DamageData(1, DamageType.Physical, new ElementData(ElementType.Fire, 20, 10)),
                         MovementSpeed = 3,
                         Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
                     });
                     enemy = new Being(new BeingProperties
                     {
-                        Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+                        Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
@@ -271,14 +271,14 @@ namespace ModifierSystem.Tests.Performance
                 {
                     character = new Being(new BeingProperties
                     {
-                        Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                        Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                     character.AddModifier(_modifierPrototypesTest.GetApplier("DoTStackTest"));
                     character.AddModifier(_modifierPrototypesTest.GetApplier("SilenceXStacksTest"));
                     enemy = new Being(new BeingProperties
                     {
-                        Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+                        Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
                     });
                 })
@@ -310,7 +310,7 @@ namespace ModifierSystem.Tests.Performance
                     modifier = _modifierPrototypesTest.GetApplier("DoTStackTest");
                     character = new Being(new BeingProperties
                     {
-                        Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                        Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                 })

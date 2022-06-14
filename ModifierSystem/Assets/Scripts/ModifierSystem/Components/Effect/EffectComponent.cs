@@ -50,5 +50,9 @@ namespace ModifierSystem
         {
             _targetComponent.HandleTarget(receiver, acter, Effect);
         }
+
+        protected virtual void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        {
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace ModifierSystem
         {
             {
                 //IceboltDebuff
-                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -86,7 +86,7 @@ namespace ModifierSystem
             }
             {
                 //SpiderPoison
-                var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                 var properties = new ModifierGenerationProperties("SpiderPoisonTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -126,7 +126,7 @@ namespace ModifierSystem
             }
             {
                 //BasicPoison
-                var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Poison, 20, 20)) };
+                var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementType.Poison, 20, 20)) };
                 var properties = new ModifierGenerationProperties("PoisonTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -142,7 +142,7 @@ namespace ModifierSystem
             }
             {
                 //BasicBleed
-                var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementalType.Bleed, 20, 20)) };
+                var damageData = new[] { new DamageData(2, DamageType.Physical, new ElementData(ElementType.Bleed, 20, 20)) };
                 var properties = new ModifierGenerationProperties("BleedTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -237,9 +237,9 @@ namespace ModifierSystem
                 //All possible tags
                 var damageData = new[]
                 {
-                    new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Acid, 10, 20)),
-                    new DamageData(1, DamageType.Pure, new ElementData(ElementalType.Bleed, 10, 20)),
-                    new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Cold, 10, 20)),
+                    new DamageData(1, DamageType.Magical, new ElementData(ElementType.Acid, 10, 20)),
+                    new DamageData(1, DamageType.Pure, new ElementData(ElementType.Bleed, 10, 20)),
+                    new DamageData(1, DamageType.Physical, new ElementData(ElementType.Cold, 10, 20)),
                 };
                 var properties = new ModifierGenerationProperties("ManyTagsTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
@@ -354,7 +354,7 @@ namespace ModifierSystem
             }
             {
                 //Damage increased per stack dot
-                var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                 var properties = new ModifierGenerationProperties("DoTStackTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
                 properties.SetEffectOnInit();
@@ -371,7 +371,7 @@ namespace ModifierSystem
             }
             {
                 //Refresh duration DoT
-                var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementalType.Poison, 10, 20)) };
+                var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                 var properties = new ModifierGenerationProperties("DoTRefreshTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
                 properties.SetEffectOnInit();
@@ -462,7 +462,7 @@ namespace ModifierSystem
                 var damageData = new[] { new DamageData(10000, DamageType.Physical) };
                 var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData,
-                    conditionCheckData: new ConditionCheckData(ElementalType.Fire, ComparisonCheck.GreaterOrEqual,
+                    conditionCheckData: new ConditionCheckData(ElementType.Fire, ComparisonCheck.GreaterOrEqual,
                         BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
 
@@ -566,7 +566,7 @@ namespace ModifierSystem
 
             {
                 //IceboltDebuff that costs health
-                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltHealthCostTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -583,7 +583,7 @@ namespace ModifierSystem
 
             {
                 //IceboltDebuff cast that costs mana to cast
-                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltCastManaCostTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -599,7 +599,7 @@ namespace ModifierSystem
             }
             {
                 //IceboltDebuff attack that costs mana to cast
-                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltAttackManaCostTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -616,7 +616,7 @@ namespace ModifierSystem
 
             {
                 //IceboltDebuff that has a cooldown
-                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltCooldownTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -633,7 +633,7 @@ namespace ModifierSystem
 
             {
                 //IceboltDebuff that is automatically cast
-                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementalType.Cold, 20, 10)) };
+                var damageData = new[] { new DamageData(2, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltAutomaticCastTest");
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -694,7 +694,7 @@ namespace ModifierSystem
             }
             {
                 //FireAttack 50% chance to apply, 50% chance to "hit"
-                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireAttackChanceToHitHalfTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -712,7 +712,7 @@ namespace ModifierSystem
             }
             {
                 //FireAttack 0% chance to apply, 100% chance to "hit"
-                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullZeroTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -730,7 +730,7 @@ namespace ModifierSystem
             }
             {
                 //FireAttack 100% chance to apply, 0% chance to "hit"
-                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireAttackChanceToHitZeroFullTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -748,7 +748,7 @@ namespace ModifierSystem
             }
             {
                 //FireAttack 100% chance to apply, 100% chance to "hit"
-                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementalType.Fire, 20, 10)) };
+                var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullFullTest", LegalTarget.Beings);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
@@ -783,6 +783,25 @@ namespace ModifierSystem
                 var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(applierProperties);
                 AddModifier(applierModifier);
             }*/
+
+            {
+                //Permanent Fire Resistance
+                var properties = new ModifierGenerationProperties("ElementFireResistanceTest");
+                properties.AddEffect(new ElementResistanceComponent(ElementType.Fire, 1000));
+                properties.SetEffectOnInit();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+            }
+            {
+                //Permanent Physical Resistance
+                var properties = new ModifierGenerationProperties("DamagePhysicalResistanceTest");
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 1000));
+                properties.SetEffectOnInit();
+
+                var modifier = (TModifier)ModifierGenerator.GenerateModifier(properties);
+                AddModifier(modifier);
+            }
         }
 
         private bool ValidateModifier(Modifier modifier)

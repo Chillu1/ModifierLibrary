@@ -1,6 +1,8 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [x] **ApplierEffectComponent with AddConditionData in ApplierModifierGenerationProperties**
+- [ ] >**SetApplier in ApplierModifierGenerationProperties**
+- [ ] >**Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone**
+- [ ] Templates for basic modifiers: Permanent Resistance buffs/debuffs, etc.
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
 - [ ] Status Res for combo element types
@@ -12,13 +14,13 @@
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
 - [ ] More ComboModifiers values based on *in* values?
-- [x] Combined Status Res (Steam = Fire | Cold), take(/save) resistances dynamically
 - [ ] **Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor
 - [ ] Resource Refactor
 - [ ] **Damage Resistance not using "resource"**
+- [ ] ElementData Value making element damage be stronger 
 - [ ] Bench, what?
 
 ## Lower prio
@@ -26,7 +28,6 @@
 - [ ] Sort ideas by prio
 - [ ] >Status effect to legal actions? (Replace?)
 - [ ] Counter attack (onhit event? Or built-in)
-- [x] Stack effect HasFlag instead of switch
 - [ ] ComboAppliers?
 - [ ] >Ursa E (stackbased)
     Target is null on applier, but we're trying to setup a conditional

@@ -42,17 +42,17 @@ namespace ModifierSystem.Tests
         {
             character = new Being(new BeingProperties
             {
-                Id = "player", Health = 50, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
             ally = new Being(new BeingProperties
             {
-                Id = "ally", Health = 25, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                 Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
             });
             enemy = new Being(new BeingProperties
             {
-                Id = "enemy", Health = 30, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+                Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
             initialHealthCharacter = character.Stats.Health.CurrentHealth;
@@ -68,7 +68,7 @@ namespace ModifierSystem.Tests
             {
                 enemyDummies[0] = new Being(new BeingProperties()
                 {
-                    Id = "enemy", Health = 1, DamageData = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
+                    Id = "enemy", Health = 1, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
                     Mana = 50, ManaRegen = 100, UnitType = UnitType.Enemy
                 });
             }
@@ -139,11 +139,11 @@ namespace ModifierSystem.Tests
                 {
                     //Poison & bleed = infection
                     var damageData = new[]
-                        { new DamageData(10, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) };
+                        { new DamageData(10, DamageType.Physical, new ElementData(ElementType.Bleed | ElementType.Poison, 30, 50)) };
                     var properties = new ComboModifierGenerationProperties("ComboInfectionTest");
                     properties.AddDynamicEffect(damageData[0]);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[]
-                        { new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5) })));
+                        { new ElementalRecipe(ElementType.Poison, 5), new ElementalRecipe(ElementType.Bleed, 5) })));
                     properties.SetCooldown(1);
 
                     properties.AddEffect(

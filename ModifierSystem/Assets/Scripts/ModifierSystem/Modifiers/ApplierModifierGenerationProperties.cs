@@ -24,7 +24,7 @@ namespace ModifierSystem
         public bool AutomaticCast { get; private set; }
         public double Chance { get; private set; } = -1;
 
-        public ApplierModifierGenerationProperties(Modifier appliedModifier, ApplierType applierType,
+        public ApplierModifierGenerationProperties(Modifier appliedModifier, ApplierType applierType = ApplierType.None,
             LegalTarget legalTarget = LegalTarget.Beings)
         {
             AppliedModifier = appliedModifier;

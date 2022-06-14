@@ -25,7 +25,7 @@ namespace ModifierSystem.Tests
             for (int i = 0; i < tags.Length; i++)
             {
                 Assert.True(tags[i].Contains(DamageType.Physical) ||
-                            tags[i].Contains(ElementalType.Poison) ||
+                            tags[i].Contains(ElementType.Poison) ||
                             tags[i].Contains(StatusType.Element) ||
                             tags[i].Contains(StatusType.Duration) ||
                             tags[i].Contains(StatusType.DoT));
@@ -43,9 +43,9 @@ namespace ModifierSystem.Tests
                 Assert.True(tags[i].Contains(DamageType.Physical) ||
                             tags[i].Contains(DamageType.Magical) ||
                             tags[i].Contains(DamageType.Pure) ||
-                            tags[i].Contains(ElementalType.Acid) ||
-                            tags[i].Contains(ElementalType.Bleed) ||
-                            tags[i].Contains(ElementalType.Cold) ||
+                            tags[i].Contains(ElementType.Acid) ||
+                            tags[i].Contains(ElementType.Bleed) ||
+                            tags[i].Contains(ElementType.Cold) ||
                             tags[i].Contains(StatusType.Element) ||
                             tags[i].Contains(StatusType.Duration) ||
                             tags[i].Contains(StatusType.DoT));

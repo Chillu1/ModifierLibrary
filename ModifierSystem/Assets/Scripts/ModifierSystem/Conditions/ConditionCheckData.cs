@@ -11,7 +11,7 @@ namespace ModifierSystem
 
         public StatType StatType { get; }
         public string ModifierId { get; }
-        public ElementalType ElementalType { get; } = ElementalType.None;
+        public ElementType ElementType { get; } = ElementType.None;
         public bool ElementalIntensityCheck { get; }
 
         public ConditionCheckData(ConditionBeingStatus status)
@@ -29,10 +29,10 @@ namespace ModifierSystem
             Value = value;
         }
 
-        public ConditionCheckData(ElementalType elementalType, ComparisonCheck comparisonCheck, double value,
+        public ConditionCheckData(ElementType elementType, ComparisonCheck comparisonCheck, double value,
             bool elementalIntensityCheck = true)
         {
-            ElementalType = elementalType;
+            ElementType = elementType;
             ComparisonCheck = comparisonCheck;
             Value = value;
             ElementalIntensityCheck = elementalIntensityCheck;

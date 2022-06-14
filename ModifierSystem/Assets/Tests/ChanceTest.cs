@@ -87,7 +87,7 @@ namespace ModifierSystem.Tests
                 enemy.Attack(character);
             }
 
-            Assert.True(character.ElementController.HasAnyIntensity(ElementalType.Fire));
+            Assert.True(character.ElementController.HasAnyIntensity(ElementType.Fire));
 
             //20000 to 15000, 20000
             Assert.Less(character.Stats.Health.CurrentHealth, initialHealthCharacter+20000 - initialDamageEnemy * 5000);
@@ -110,7 +110,7 @@ namespace ModifierSystem.Tests
                 enemy.Attack(character);
             }
 
-            Assert.False(character.ElementController.HasAnyIntensity(ElementalType.Fire));
+            Assert.False(character.ElementController.HasAnyIntensity(ElementType.Fire));
             Assert.AreEqual(initialHealthCharacter+2000-500, character.Stats.Health.CurrentHealth, Delta);
         }
 
@@ -129,7 +129,7 @@ namespace ModifierSystem.Tests
                 enemy.Attack(character);
             }
 
-            Assert.False(character.ElementController.HasAnyIntensity(ElementalType.Fire));
+            Assert.False(character.ElementController.HasAnyIntensity(ElementType.Fire));
             Assert.AreEqual(initialHealthCharacter+2000-500, character.Stats.Health.CurrentHealth, Delta);
         }
 
@@ -148,7 +148,7 @@ namespace ModifierSystem.Tests
                 enemy.Attack(character);
             }
 
-            Assert.True(character.ElementController.HasAnyIntensity(ElementalType.Fire));
+            Assert.True(character.ElementController.HasAnyIntensity(ElementType.Fire));
             Assert.AreEqual(initialHealthCharacter+2000-1000, character.Stats.Health.CurrentHealth, Delta);
         }
     }
