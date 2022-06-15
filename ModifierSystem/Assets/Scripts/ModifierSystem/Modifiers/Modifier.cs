@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using BaseProject;
 using BaseProject.Utils;
 using Force.DeepCloner;
@@ -312,7 +313,7 @@ namespace ModifierSystem
             CleanUpComponent ??= new CleanUpComponent();
         }
 
-        public virtual Modifier PropertyClone()
+        public Modifier PropertyClone()
         {
             if (Properties == null)
             {
@@ -334,6 +335,24 @@ namespace ModifierSystem
         public virtual object Clone()
         {
             return PropertyClone(); // this.DeepClone();
+        }
+
+        public string DisplayText()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(ToString()+" ");
+            //TODO effect, etc.
+            CheckComponent?.DisplayText(builder);
+
+            if (TimeComponents != null && TimeComponents.Count > 0)
+            {
+                TimeComponents[0].DisplayText(builder);
+
+                if (TimeComponents.Count > 1)
+                    TimeComponents[1].DisplayText(builder);
+            }
+
+            return builder.ToString();
         }
 
         public override string ToString()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using BaseProject;
 
 namespace ModifierSystem
@@ -39,8 +40,8 @@ namespace ModifierSystem
         {
             if (_finished)
                 return;
-            _timer += deltaTime;//TODO / statusResistance instead? So it's a dynamic timer, and not a making it so players can switch between status res
-            if (_timer >= Duration * statusResistance)
+            _timer += deltaTime / statusResistance;// / timer instead. So it's a dynamic timer, and not making it so players can switch between status res
+            if (_timer >= Duration)
             {
                 //Log.Info(_timer + "_"+Duration * statusResistance);
                 if(IsRemove)
@@ -93,6 +94,22 @@ namespace ModifierSystem
             //if (timeComponent.EffectComponentIsOfType<SlowComponent>(true))
             //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
             return tempStatusTags;
+        }
+
+        public void DisplayText(StringBuilder builder)
+        {
+            if (IsRemove)
+            {
+                builder.Append("Remove in: ");
+                builder.Append((Duration - _timer).ToString("F2"));
+            }
+            else
+            {
+                builder.Append("Effect in: ");
+                builder.Append((Duration - _timer).ToString("F2"));
+            }
+
+            builder.AppendLine();
         }
 
         private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent

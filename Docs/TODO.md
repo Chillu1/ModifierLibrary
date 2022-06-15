@@ -2,7 +2,8 @@
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
 - [ ] >**SetApplier in ApplierModifierGenerationProperties**
 - [ ] >**Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone**
-- [ ] Templates for basic modifiers: Permanent Resistance buffs/debuffs, etc.
+- [ ] **Health Regen base project**
+- [x] Templates for basic modifiers: Permanent Resistance buffs/debuffs, etc.
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
 - [ ] Status Res for combo element types

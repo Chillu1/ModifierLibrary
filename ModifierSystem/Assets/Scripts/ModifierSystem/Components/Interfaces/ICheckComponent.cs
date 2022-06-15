@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public interface ICheckComponent
+    public interface ICheckComponent : IDisplay
     {
         ICooldownComponent CooldownComponent { get; }
         ICostComponent CostComponent { get; }

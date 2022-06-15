@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public interface ICooldownComponent
+    public interface ICooldownComponent : IDisplay
     {
         void Update(float deltaTime);
         bool IsReady();

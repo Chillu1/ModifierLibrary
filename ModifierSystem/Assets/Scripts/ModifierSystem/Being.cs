@@ -67,6 +67,11 @@ namespace ModifierSystem
             ModifierController.SetAutomaticCastAll(automaticCast);
         }
 
+        public Modifier[] GetModifiersInfo()
+        {
+            return ModifierController.GetModifiersInfo();
+        }
+
         public void CopyEvents(Being prototype)
         {
             base.CopyEvents(prototype);

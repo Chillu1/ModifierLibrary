@@ -1,3 +1,4 @@
+using System.Text;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -70,6 +71,18 @@ namespace ModifierSystem
         {
             CostComponent?.ApplyCost();
             CooldownComponent?.ResetTimer();
+        }
+
+        public void DisplayText(StringBuilder builder)
+        {
+            foreach (var effectComponent in EffectComponents)
+            {
+                //TODO Effect explanation on hover?
+                //effectComponent.DisplayText(builder);
+            }
+            CooldownComponent?.DisplayText(builder);
+            CostComponent?.DisplayText(builder);
+            ChanceComponent?.DisplayText(builder);
         }
 
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent

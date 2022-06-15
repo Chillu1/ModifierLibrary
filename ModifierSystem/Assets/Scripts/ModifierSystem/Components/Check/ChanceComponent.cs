@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using BaseProject;
 
 namespace ModifierSystem
@@ -38,6 +39,14 @@ namespace ModifierSystem
             }
 
             return valid;
+        }
+
+        public void DisplayText(StringBuilder builder)
+        {
+            builder.Append("Chance: ");
+            builder.Append(Chance*100d);
+            builder.Append("%");
+            builder.AppendLine();
         }
 
         public override string ToString()

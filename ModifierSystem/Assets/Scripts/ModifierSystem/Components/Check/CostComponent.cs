@@ -1,3 +1,4 @@
+using System.Text;
 using BaseProject;
 
 namespace ModifierSystem
@@ -54,6 +55,15 @@ namespace ModifierSystem
                     Log.Error($"CostComponent: {Type} is not a valid CostType", "modifiers");
                     break;
             }
+        }
+
+        public void DisplayText(StringBuilder builder)
+        {
+            builder.Append("Cost: ");
+            builder.Append(Amount);
+            builder.Append(" ");
+            builder.Append(Type);
+            builder.AppendLine();
         }
     }
 }

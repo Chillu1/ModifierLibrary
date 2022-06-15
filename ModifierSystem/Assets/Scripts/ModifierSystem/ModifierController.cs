@@ -175,6 +175,11 @@ namespace ModifierSystem
                 modifier.SetAutomaticCast(automaticCast);
         }
 
+        public Modifier[] GetModifiersInfo()
+        {
+            return Modifiers.Values.ToArray();
+        }
+
         public void ListModifiers()
         {
             ListModifiers(Modifiers.Values);
@@ -221,7 +226,7 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return "Modifiers: "+string.Join(", ", Modifiers);
+            return "Modifiers: "+string.Join(", ", Modifiers.Values);
         }
 
         private class ModifierRemover
