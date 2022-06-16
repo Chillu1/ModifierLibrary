@@ -1,6 +1,3 @@
-using System.Text;
-using BaseProject;
-
 namespace ModifierSystem
 {
     public class CooldownComponent : ICooldownComponent
@@ -9,6 +6,8 @@ namespace ModifierSystem
 
         private readonly float _cooldown; //Mby not readonly later on? Still prob better to hold a separate var to control cd reduction
         private float _timer;
+
+        private const string Info = "Cooldown: ";
 
         public CooldownComponent(float cooldown)
         {
@@ -39,13 +38,9 @@ namespace ModifierSystem
             _timer = _cooldown;
         }
 
-        public void DisplayText(StringBuilder builder)
+        public string DisplayText()
         {
-            builder.Append("Cooldown: ");
-            builder.Append((_timer).ToString("F2"));
-            builder.Append("/");
-            builder.Append(_cooldown.ToString("F2"));
-            builder.AppendLine();
+            return Info + $"{_timer.ToString("F2")}/{_cooldown.ToString("F2")}\n";
         }
     }
 }

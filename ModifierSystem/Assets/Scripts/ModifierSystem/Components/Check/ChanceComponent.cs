@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using BaseProject;
 
 namespace ModifierSystem
@@ -9,6 +8,8 @@ namespace ModifierSystem
         private double Chance { get; }
 
         private readonly Random _random;
+
+        private const string Info = "Chance: ";
 
         public ChanceComponent(double chance)
         {
@@ -41,12 +42,9 @@ namespace ModifierSystem
             return valid;
         }
 
-        public void DisplayText(StringBuilder builder)
+        public string DisplayText()
         {
-            builder.Append("Chance: ");
-            builder.Append(Chance*100d);
-            builder.Append("%");
-            builder.AppendLine();
+            return Info + $"{Chance*100d}%\n";
         }
 
         public override string ToString()

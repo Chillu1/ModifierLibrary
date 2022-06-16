@@ -1,4 +1,3 @@
-using System.Text;
 using BaseProject;
 
 namespace ModifierSystem
@@ -9,6 +8,8 @@ namespace ModifierSystem
         private double Amount { get; }
 
         private Being _owner;
+
+        private const string Info = "Cost: ";
 
         public CostComponent(CostType type, double amount)
         {
@@ -57,13 +58,9 @@ namespace ModifierSystem
             }
         }
 
-        public void DisplayText(StringBuilder builder)
+        public string DisplayText()
         {
-            builder.Append("Cost: ");
-            builder.Append(Amount);
-            builder.Append(" ");
-            builder.Append(Type);
-            builder.AppendLine();
+            return Info + $"{Amount} {Type}\n";
         }
     }
 }

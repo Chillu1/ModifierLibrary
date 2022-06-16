@@ -5,6 +5,7 @@ namespace ModifierSystem
     public class ApplierModifierGenerationProperties : IModifierGenerationProperties
     {
         public Modifier AppliedModifier { get; }
+        public ModifierInfo Info { get; }
         public LegalTarget LegalTarget { get; }
 
 
@@ -24,9 +25,10 @@ namespace ModifierSystem
         public bool AutomaticCast { get; private set; }
         public double Chance { get; private set; } = -1;
 
-        public ApplierModifierGenerationProperties(Modifier appliedModifier, ApplierType applierType = ApplierType.None,
+        public ApplierModifierGenerationProperties(Modifier appliedModifier, ModifierInfo info, ApplierType applierType = ApplierType.None,
             LegalTarget legalTarget = LegalTarget.Beings)
         {
+            Info = info;
             AppliedModifier = appliedModifier;
             ApplierType = applierType;
             LegalTarget = legalTarget;

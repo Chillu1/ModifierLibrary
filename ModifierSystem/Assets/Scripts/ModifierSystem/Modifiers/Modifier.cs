@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using BaseProject;
 using BaseProject.Utils;
-using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -14,7 +13,8 @@ namespace ModifierSystem
     /// </summary>
     public class Modifier : IEntity<string>, ICloneable
     {
-        public string Id { get; private set; }
+        public string Id { get; }
+        [CanBeNull] public ModifierInfo Info { get; }
         public bool IsApplierModifier => ApplierType != ApplierType.None;
         public ApplierType ApplierType { get; }
         public bool IsConditionModifier { get; }
@@ -34,9 +34,10 @@ namespace ModifierSystem
         private bool _setupFinished;
         private IModifierGenerationProperties Properties { get; set; }
 
-        public Modifier(string id, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
+        public Modifier(string id, ModifierInfo info, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
         {
             Id = id;
+            Info = info;
             if (applierType != ApplierType.None)
                 ApplierType = applierType;
 
@@ -90,6 +91,7 @@ namespace ModifierSystem
             }
 
             CheckComponent?.CooldownComponent?.Update(deltaTime);
+            Info?.Update(deltaTime);
         }
 
         public void AddComponent(IInitComponent initComponent)
@@ -169,6 +171,8 @@ namespace ModifierSystem
                 Log.Error(Id + " already has a check component", "modifiers");
                 return;
             }
+
+            Info?.Setup(checkComponent);
 
             CheckComponent = checkComponent;
         }
@@ -298,6 +302,12 @@ namespace ModifierSystem
                 valid = false;
             }
 
+            if (!Id.Contains("Test") && Info == null)
+            {
+                Log.Error("Non-test modifier need info", "modifiers");
+                valid = false;
+            }
+
             if (!_setupFinished || StatusTags == null)
             {
                 Log.Error("Setup has not been properly finished", "modifiers");
@@ -339,20 +349,18 @@ namespace ModifierSystem
 
         public string DisplayText()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(ToString()+" ");
-            //TODO effect, etc.
-            CheckComponent?.DisplayText(builder);
+            string info = "";
+            info += CheckComponent?.DisplayText();
 
             if (TimeComponents != null && TimeComponents.Count > 0)
             {
-                TimeComponents[0].DisplayText(builder);
+                info += TimeComponents[0].DisplayText();
 
                 if (TimeComponents.Count > 1)
-                    TimeComponents[1].DisplayText(builder);
+                    info += TimeComponents[1].DisplayText();
             }
 
-            return builder.ToString();
+            return info;
         }
 
         public override string ToString()

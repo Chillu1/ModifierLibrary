@@ -3,7 +3,7 @@
 - [ ] >**SetApplier in ApplierModifierGenerationProperties**
 - [ ] >**Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone**
 - [ ] **Health Regen base project**
-- [x] Templates for basic modifiers: Permanent Resistance buffs/debuffs, etc.
+- [ ] More Templates for basic modifiers
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
 - [ ] Status Res for combo element types

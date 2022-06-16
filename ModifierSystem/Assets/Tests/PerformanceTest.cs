@@ -25,7 +25,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Measure.Method(() =>
                 {
-                    var modifier = new Modifier("IceBoltTest");
+                    var modifier = new Modifier("IceBoltTest", null);
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData);
@@ -106,7 +106,7 @@ namespace ModifierSystem.Tests.Performance
             Measure.Method(() =>
                 {
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
-                    var properties = new ModifierGenerationProperties("IceBoltTest");
+                    var properties = new ModifierGenerationProperties("IceBoltTest", null);
                     properties.AddEffect(new DamageComponent(damageData), damageData);
                     properties.SetEffectOnInit();
                     properties.SetRemovable();
@@ -127,7 +127,7 @@ namespace ModifierSystem.Tests.Performance
             Measure.Method(() =>
                 {
                     var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
-                    var properties = new ModifierGenerationProperties("DoTStackTest", LegalTarget.Beings);
+                    var properties = new ModifierGenerationProperties("DoTStackTest", null, LegalTarget.Beings);
                     properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
                     properties.SetEffectOnInit();
                     properties.SetEffectOnTime(2, true);

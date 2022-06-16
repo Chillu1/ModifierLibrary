@@ -7,6 +7,6 @@ namespace ModifierSystem
     /// </summary>
     public interface IDisplay
     {
-        void DisplayText(StringBuilder builder);
+        string DisplayText();
     }
 }

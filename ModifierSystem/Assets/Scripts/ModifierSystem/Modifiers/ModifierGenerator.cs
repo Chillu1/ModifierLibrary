@@ -16,8 +16,9 @@ namespace ModifierSystem
 
             Modifier modifier;
             modifier = properties is ComboModifierGenerationProperties comboProperties
-                ? new ComboModifier(comboProperties.Id, comboProperties.Recipes, comboProperties.Cooldown, comboProperties.Effect)
-                : new Modifier(properties.Id, properties.ApplierType, properties.HasConditionData);
+                ? new ComboModifier(comboProperties.Id, properties.Info, comboProperties.Recipes, comboProperties.Cooldown,
+                    comboProperties.Effect)
+                : new Modifier(properties.Id, properties.Info, properties.ApplierType, properties.HasConditionData);
 
             //---Components---
 
@@ -38,11 +39,13 @@ namespace ModifierSystem
 
             //---Check---
             CheckComponent checkComponent = effectComponentTwo == null
-                ? new CheckComponent(effectComponent, null
+                ? new CheckComponent(effectComponent
                     , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
+                    , null
                     , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null)
-                : new CheckComponent(new IEffectComponent[] { effectComponent, effectComponentTwo }, null
+                : new CheckComponent(new IEffectComponent[] { effectComponent, effectComponentTwo }
                     , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
+                    , null
                     , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
 
             //---Apply---?
@@ -105,7 +108,8 @@ namespace ModifierSystem
 
         public static Modifier GenerateApplierModifier(ApplierModifierGenerationProperties properties)
         {
-            var modifier = new Modifier(properties.AppliedModifier.Id + "Applier", properties.ApplierType, properties.HasConditionData);
+            var modifier = new Modifier(properties.AppliedModifier.Id + "Applier", properties.Info, properties.ApplierType,
+                properties.HasConditionData);
 
             var target = properties.HasConditionData
                 ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.IsApplier)
@@ -114,8 +118,8 @@ namespace ModifierSystem
             var effect = new ApplierEffectComponent(properties.AppliedModifier, properties.AddModifierParameters);
             effect.Setup(target);
             var check = new CheckComponent(effect
-                , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
                 , properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null
+                , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
                 , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
             var applier = new ApplierComponent(check);
 

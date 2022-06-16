@@ -16,7 +16,8 @@ namespace ModifierSystem
         public float Cooldown { get; }
         public IMultiplier Effect { get; }
 
-        public ComboModifier(string id, ComboRecipes comboRecipes, float cooldown = 5, IMultiplier effect = null) : base(id)
+        public ComboModifier(string id, ModifierInfo info, ComboRecipes comboRecipes, float cooldown = 5, IMultiplier effect = null) :
+            base(id, info)
         {
             ComboRecipes = comboRecipes;
             Cooldown = cooldown;

@@ -125,7 +125,7 @@ namespace ModifierSystem.Tests
                 //Scope brackets so it's impossible to use a wrong component/modifier
                 {
                     //Aspect of the cat
-                    var properties = new ComboModifierGenerationProperties("ComboAspectOfTheCatTest");
+                    var properties = new ComboModifierGenerationProperties("ComboAspectOfTheCatTest", null);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })));
                     properties.SetCooldown(1);
 
@@ -140,7 +140,7 @@ namespace ModifierSystem.Tests
                     //Poison & bleed = infection
                     var damageData = new[]
                         { new DamageData(10, DamageType.Physical, new ElementData(ElementType.Bleed | ElementType.Poison, 30, 50)) };
-                    var properties = new ComboModifierGenerationProperties("ComboInfectionTest");
+                    var properties = new ComboModifierGenerationProperties("ComboInfectionTest", null);
                     properties.AddDynamicEffect(damageData[0]);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[]
                         { new ElementalRecipe(ElementType.Poison, 5), new ElementalRecipe(ElementType.Bleed, 5) })));
@@ -158,7 +158,7 @@ namespace ModifierSystem.Tests
                 }
                 {
                     //10k health = giant (physical res)
-                    var properties = new ComboModifierGenerationProperties("ComboGiantTest");
+                    var properties = new ComboModifierGenerationProperties("ComboGiantTest", null);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
                     properties.SetCooldown(PermanentComboModifierCooldown);
 
@@ -170,7 +170,7 @@ namespace ModifierSystem.Tests
                 }
                 {
                     //10k health = temporary giant (physical res)
-                    var properties = new ComboModifierGenerationProperties("ComboTimedGiantTest");
+                    var properties = new ComboModifierGenerationProperties("ComboTimedGiantTest", null);
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
                     properties.SetCooldown(PermanentComboModifierCooldown);
                     properties.SetRemovable(10);

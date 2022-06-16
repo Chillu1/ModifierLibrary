@@ -22,6 +22,7 @@ namespace ModifierSystem
     public class ModifierGenerationProperties : IModifierGenerationProperties
     {
         public string Id { get; }
+        public ModifierInfo Info { get; }
         public LegalTarget LegalTarget { get; }
         public bool IsApplier => ApplierType != ApplierType.None;
         public ApplierType ApplierType { get; private set; }
@@ -41,9 +42,10 @@ namespace ModifierSystem
         public (CostType, float) Cost { get; private set; }
         public double Chance { get; private set; } = -1;
 
-        public ModifierGenerationProperties(string id, LegalTarget legalTarget = LegalTarget.Self)
+        public ModifierGenerationProperties(string id, ModifierInfo info, LegalTarget legalTarget = LegalTarget.Self)
         {
             Id = id;
+            Info = info;
             LegalTarget = legalTarget;
             EffectPropertyInfo = new List<EffectPropertyInfo>(2);
         }

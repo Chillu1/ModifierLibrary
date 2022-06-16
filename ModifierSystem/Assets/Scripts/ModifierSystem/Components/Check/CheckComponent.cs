@@ -1,4 +1,3 @@
-using System.Text;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -10,24 +9,24 @@ namespace ModifierSystem
     {
         private IEffectComponent[] EffectComponents { get; }
 
-        [CanBeNull] public ICooldownComponent CooldownComponent { get; }
         [CanBeNull] public ICostComponent CostComponent { get; }
+        [CanBeNull] public ICooldownComponent CooldownComponent { get; }
         [CanBeNull] public IChanceComponent ChanceComponent { get; }
 
-        public CheckComponent(IEffectComponent effectComponent, ICooldownComponent cooldownComponent = null, ICostComponent costComponent = null,
+        public CheckComponent(IEffectComponent effectComponent, ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null,
             IChanceComponent chanceComponent = null)
         {
             EffectComponents = new[] { effectComponent };
-            CooldownComponent = cooldownComponent;
             CostComponent = costComponent;
+            CooldownComponent = cooldownComponent;
             ChanceComponent = chanceComponent;
         }
-        public CheckComponent(IEffectComponent[] effectComponents, ICooldownComponent cooldownComponent = null, ICostComponent costComponent = null,
+        public CheckComponent(IEffectComponent[] effectComponents, ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null,
             IChanceComponent chanceComponent = null)
         {
             EffectComponents = effectComponents;
-            CooldownComponent = cooldownComponent;
             CostComponent = costComponent;
+            CooldownComponent = cooldownComponent;
             ChanceComponent = chanceComponent;
         }
 
@@ -73,16 +72,14 @@ namespace ModifierSystem
             CooldownComponent?.ResetTimer();
         }
 
-        public void DisplayText(StringBuilder builder)
+        public string DisplayText()
         {
             foreach (var effectComponent in EffectComponents)
             {
                 //TODO Effect explanation on hover?
-                //effectComponent.DisplayText(builder);
+                //effectComponent.DisplayText();
             }
-            CooldownComponent?.DisplayText(builder);
-            CostComponent?.DisplayText(builder);
-            ChanceComponent?.DisplayText(builder);
+            return CostComponent?.DisplayText() + CooldownComponent?.DisplayText() + ChanceComponent?.DisplayText();
         }
 
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent

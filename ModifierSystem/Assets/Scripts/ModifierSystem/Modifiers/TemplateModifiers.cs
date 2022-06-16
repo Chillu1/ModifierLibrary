@@ -14,7 +14,7 @@ namespace ModifierSystem
         /// </summary>
         private void FullModifier()
         {
-            var modifier = new Modifier("Full");
+            var modifier = new Modifier("FullTest", null);
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
@@ -35,7 +35,7 @@ namespace ModifierSystem
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);
 
-            var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+            var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
             var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
             _modifierPrototypes.AddModifier(applierModifier);
         }
@@ -47,7 +47,7 @@ namespace ModifierSystem
         {
             //BasicPoison
             var damageData = new[] { new DamageData(5, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
-            var properties = new ModifierGenerationProperties("DoT");
+            var properties = new ModifierGenerationProperties("DoTTest", null);
             properties.AddEffect(new DamageComponent(damageData), damageData);
             properties.SetEffectOnInit();
             properties.SetEffectOnTime(2, true);
@@ -56,7 +56,7 @@ namespace ModifierSystem
             var modifier = ModifierGenerator.GenerateModifier(properties);
             _modifierPrototypes.AddModifier(modifier);
 
-            var applierProperties = new ApplierModifierGenerationProperties(modifier, ApplierType.Attack);
+            var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
             var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
             _modifierPrototypes.AddModifier(applierModifier);
         }
@@ -67,7 +67,7 @@ namespace ModifierSystem
         private void ConditionModifier()
         {
             var damageData = new[] { new DamageData(double.MaxValue, DamageType.Magical) };
-            var properties = new ModifierGenerationProperties("DamageOnDeath", LegalTarget.Beings);
+            var properties = new ModifierGenerationProperties("DamageOnDeathTest", null, LegalTarget.Beings);
             properties.AddEffect(new DamageComponent(damageData), damageData);
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
 
@@ -82,7 +82,7 @@ namespace ModifierSystem
         {
             //If enemy is on fire, deal damage to him, on hit
             var damageData = new[] { new DamageData(10000, DamageType.Physical) };
-            var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", LegalTarget.Beings);
+            var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", null, LegalTarget.Beings);
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementType.Fire, ComparisonCheck.GreaterOrEqual,
                     BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);

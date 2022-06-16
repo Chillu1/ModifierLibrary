@@ -17,6 +17,9 @@ namespace ModifierSystem
         private double _timer;
         private bool _finished;
 
+        private const string InfoEffect = "Effect in: ";
+        private const string InfoRemove = "Remove in: ";
+
         public TimeComponent(ICheckComponent checkComponent, double duration, bool resetOnFinished = false)
         {
             CheckComponent = checkComponent;
@@ -96,20 +99,10 @@ namespace ModifierSystem
             return tempStatusTags;
         }
 
-        public void DisplayText(StringBuilder builder)
+        public string DisplayText()
         {
-            if (IsRemove)
-            {
-                builder.Append("Remove in: ");
-                builder.Append((Duration - _timer).ToString("F2"));
-            }
-            else
-            {
-                builder.Append("Effect in: ");
-                builder.Append((Duration - _timer).ToString("F2"));
-            }
-
-            builder.AppendLine();
+            //TODO Temp if
+            return IsRemove ? InfoRemove + $"{(Duration - _timer).ToString("F2")}" : InfoEffect + $"{(Duration - _timer).ToString("F2")}";
         }
 
         private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent
