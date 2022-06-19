@@ -37,6 +37,7 @@ namespace ModifierSystem
             return modifier;
         }
 
+        [CanBeNull]
         public TModifier GetApplier(string key)
         {
             if (!key.EndsWith("Applier"))

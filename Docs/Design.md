@@ -379,3 +379,4 @@ Remove all base resistances & armor
 Stop "time" for X seconds  
 When close to dying, shadow grave, duration based on skill cooldown.  
 Anti perma-stun  
+Massive amounts of mana = Mana Giant/Golem

@@ -43,7 +43,8 @@ namespace ModifierSystem
         public static Modifier PermanentElementResistance(string id, ElementType elementType, float value)
         {
             var properties = new ModifierGenerationProperties(id,
-                new ModifierInfo(elementType + " Resistance", elementType + " attacks and spells have reduced effectiveness"));
+                new ModifierInfo(elementType + " Resistance", elementType + " attacks and spells have reduced effectiveness",
+                    elementType + "Resistance"));
             properties.AddEffect(new ElementResistanceComponent(elementType, value));
             properties.SetEffectOnInit();
 
@@ -52,7 +53,8 @@ namespace ModifierSystem
         public static Modifier PermanentDamageResistance(string id, ModifierInfo info, DamageType damageType, float value)
         {
             var properties = new ModifierGenerationProperties(id,
-                new ModifierInfo(damageType + " Resistance", damageType + " attacks and spells have reduced effectiveness"));
+                new ModifierInfo(damageType + " Resistance", damageType + " attacks and spells have reduced effectiveness",
+                    damageType + "Resistance"));
             properties.AddEffect(new DamageResistanceComponent(damageType, value));
             properties.SetEffectOnInit();
 

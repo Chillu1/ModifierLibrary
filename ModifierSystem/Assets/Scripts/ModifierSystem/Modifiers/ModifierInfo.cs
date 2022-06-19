@@ -9,16 +9,18 @@ namespace ModifierSystem
     {
         public string DisplayName { get; }
         private string Description { get; }
+        public string ModifierTextureId { get; }
 
         private string BaseInfo { get; set; }
-        private string CheckInfo { get; set; } = "";
+        public string CheckInfo { get; set; } = "";
 
         private ICheckComponent _checkComponent;
 
-        public ModifierInfo(string displayName, string description)
+        public ModifierInfo(string displayName, string description, string modifierTextureId = "")
         {
             DisplayName = displayName;
             Description = description;
+            ModifierTextureId = modifierTextureId;
 
             BaseInfo = $"{DisplayName}\n{Description}\n";
         }

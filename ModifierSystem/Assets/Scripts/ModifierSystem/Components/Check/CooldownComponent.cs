@@ -1,3 +1,5 @@
+using BaseProject;
+
 namespace ModifierSystem
 {
     public class CooldownComponent : ICooldownComponent
@@ -16,6 +18,7 @@ namespace ModifierSystem
 
         public void Update(float deltaTime) //TODO Cooldown reductions based on tag
         {
+            //Log.Info(_timer+"/"+_cooldown);
             if (_timer <= 0)
                 return;
 

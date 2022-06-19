@@ -65,6 +65,7 @@ namespace ModifierSystem
         public void SetAutomaticCastAll(bool automaticCast = true)
         {
             ModifierController.SetAutomaticCastAll(automaticCast);
+            CastingController.SetAutomaticCastAll(automaticCast);
         }
 
         public Modifier[] GetModifiersInfo()

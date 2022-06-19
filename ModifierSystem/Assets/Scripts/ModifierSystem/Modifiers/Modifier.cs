@@ -11,7 +11,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
-    public class Modifier : IEntity<string>, ICloneable
+    public class Modifier : IEntity<string>, ICloneable, IDisplay
     {
         public string Id { get; }
         [CanBeNull] public ModifierInfo Info { get; }
@@ -115,8 +115,8 @@ namespace ModifierSystem
 
             if (applyComponent is IConditionalApplyComponent cond)
             {
-                SetupCleanUpComponent();
-                CleanUpComponent!.AddComponent((ConditionalApplyComponent)cond);
+                CleanUpComponent ??= new CleanUpComponent();
+                CleanUpComponent.AddComponent((ConditionalApplyComponent)cond);
             }
 
             ApplyComponent = applyComponent;
@@ -318,9 +318,21 @@ namespace ModifierSystem
             return valid;
         }
 
-        private void SetupCleanUpComponent()
+        public string DisplayText()
         {
-            CleanUpComponent ??= new CleanUpComponent();
+            string info = Info == null ? ToString() : Info.DisplayName;
+            info += "\n";
+            info += Info?.CheckInfo;
+
+            if (TimeComponents != null && TimeComponents.Count > 0)
+            {
+                info += TimeComponents[0].DisplayText();
+
+                if (TimeComponents.Count > 1)
+                    info += TimeComponents[1].DisplayText();
+            }
+
+            return info;
         }
 
         public Modifier PropertyClone()
@@ -345,22 +357,6 @@ namespace ModifierSystem
         public virtual object Clone()
         {
             return PropertyClone(); // this.DeepClone();
-        }
-
-        public string DisplayText()
-        {
-            string info = "";
-            info += CheckComponent?.DisplayText();
-
-            if (TimeComponents != null && TimeComponents.Count > 0)
-            {
-                info += TimeComponents[0].DisplayText();
-
-                if (TimeComponents.Count > 1)
-                    info += TimeComponents[1].DisplayText();
-            }
-
-            return info;
         }
 
         public override string ToString()

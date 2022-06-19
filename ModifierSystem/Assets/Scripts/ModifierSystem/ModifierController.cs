@@ -95,6 +95,7 @@ namespace ModifierSystem
                 CheckForComboRecipes();
             }
 
+            //Log.Info("Added modifier " + modifier + ". Success: "+modifierAdded, "modifiers");
             return modifierAdded;
         }
 

@@ -16,6 +16,8 @@ namespace ModifierSystem
         private float _castTimer = AutomaticCastCooldown;
         private const float AutomaticCastCooldown = 0.1f;
 
+        private bool _globalAutomaticCast;
+
         public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
         {
             ModifierController = modifierController;
@@ -33,7 +35,7 @@ namespace ModifierSystem
 
             foreach (var castingModifier in _castModifiers)
             {
-                if (castingModifier.IsAutomaticCasting)
+                if (castingModifier.IsAutomaticCasting || _globalAutomaticCast)
                     castingModifier.TryCast((Being)TargetingSystem.CastTarget, true);
             }
         }
@@ -92,6 +94,11 @@ namespace ModifierSystem
         public void RemoveCastModifier(Modifier modifier)
         {
             _castModifiers.Remove(modifier);
+        }
+
+        public void SetAutomaticCastAll(bool automaticCast = true)
+        {
+            _globalAutomaticCast = automaticCast;
         }
     }
 }
