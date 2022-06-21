@@ -25,13 +25,13 @@ namespace ModifierSystem
                 return;
             }
 
-            AddItem(modifier.Id, modifier);
+            Add(modifier.Id, modifier);
         }
 
         [CanBeNull]
-        public TModifier Get(string key)
+        public new TModifier Get(string key)
         {
-            var modifier = GetItem(key);
+            var modifier = base.Get(key);
             ValidateModifier(modifier);
 
             return modifier;
@@ -43,7 +43,7 @@ namespace ModifierSystem
             if (!key.EndsWith("Applier"))
                 key += "Applier";
 
-            var modifier = GetItem(key);
+            var modifier = base.Get(key);
             ValidateModifier(modifier);
 
             return modifier;

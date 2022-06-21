@@ -1,10 +1,5 @@
 namespace ModifierSystem
 {
-    public class ApplierModifierInfo
-    {
-
-    }
-
     public class ModifierInfo
     {
         public string DisplayName { get; }
