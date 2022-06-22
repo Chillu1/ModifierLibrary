@@ -11,7 +11,7 @@ namespace ModifierSystem
     /// <summary>
     ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
-    public class Modifier : IEntity<string>, ICloneable, IDisplay
+    public class Modifier : IEntity<string>, ICloneable, IFullDisplay
     {
         public string Id { get; }
         [CanBeNull] public ModifierInfo Info { get; }
@@ -322,6 +322,22 @@ namespace ModifierSystem
         {
             string info = Info == null ? ToString() : Info.DisplayName;
             info += "\n";
+            info += Info?.CheckInfo;
+
+            if (TimeComponents != null && TimeComponents.Count > 0)
+            {
+                info += TimeComponents[0].DisplayText();
+
+                if (TimeComponents.Count > 1)
+                    info += TimeComponents[1].DisplayText();
+            }
+
+            return info;
+        }
+
+        public string FullText()
+        {
+            string info = Info == null ? ToString() : Info.GetInfo();
             info += Info?.CheckInfo;
 
             if (TimeComponents != null && TimeComponents.Count > 0)
