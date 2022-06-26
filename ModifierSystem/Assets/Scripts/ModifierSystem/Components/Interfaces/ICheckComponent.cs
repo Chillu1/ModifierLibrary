@@ -7,6 +7,7 @@ namespace ModifierSystem
         IChanceComponent ChanceComponent { get; }
 
         void Effect();
+        void EffectTime();
         bool Check();
         void Apply();
 

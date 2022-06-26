@@ -51,7 +51,7 @@ namespace ModifierSystem.Sample
             _enemySpawnTimer = 0;
             _enemyProperties.Id = "Enemy #" + _enemyCount;
             _enemyProperties.Health = GlobalRandom.Next(10, 100);
-            _enemyProperties.DamageData = new DamageData(GlobalRandom.Next(5, 25), DamageType.Physical);
+            _enemyProperties.Damage = new DamageData(GlobalRandom.Next(5, 25), DamageType.Physical);
             var enemy = (Being)SpawnBaseBeing(_enemyProperties, true);
 
             var thornsModifier = _modifiers.Get("ThornsOnHitTest");

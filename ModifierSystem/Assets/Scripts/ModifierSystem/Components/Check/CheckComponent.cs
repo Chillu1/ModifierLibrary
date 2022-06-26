@@ -1,3 +1,4 @@
+using BaseProject.Utils;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -8,22 +9,16 @@ namespace ModifierSystem
     public class CheckComponent : ICheckComponent
     {
         private IEffectComponent[] EffectComponents { get; }
+        private IEffectComponent[] TimeEffectComponents { get; }
 
         [CanBeNull] public ICostComponent CostComponent { get; }
         [CanBeNull] public ICooldownComponent CooldownComponent { get; }
         [CanBeNull] public IChanceComponent ChanceComponent { get; }
 
-        public CheckComponent(IEffectComponent effectComponent, ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null,
-            IChanceComponent chanceComponent = null)
+        public CheckComponent(IEffectComponent[] effectComponents, IEffectComponent[] effectTimeComponents = null,
+            ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null, IChanceComponent chanceComponent = null)
         {
-            EffectComponents = new[] { effectComponent };
-            CostComponent = costComponent;
-            CooldownComponent = cooldownComponent;
-            ChanceComponent = chanceComponent;
-        }
-        public CheckComponent(IEffectComponent[] effectComponents, ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null,
-            IChanceComponent chanceComponent = null)
-        {
+            TimeEffectComponents = effectTimeComponents;
             EffectComponents = effectComponents;
             CostComponent = costComponent;
             CooldownComponent = cooldownComponent;
@@ -34,7 +29,16 @@ namespace ModifierSystem
         {
             if (Check())
             {
-                foreach (var effectComponent in EffectComponents)
+                foreach (var effectComponent in EffectComponents.EmptyIfNull())
+                    effectComponent.SimpleEffect();
+            }
+        }
+
+        public void EffectTime()
+        {
+            if (Check())
+            {
+                foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
                     effectComponent.SimpleEffect();
             }
         }
@@ -52,11 +56,13 @@ namespace ModifierSystem
                 valid = false;
                 //Log.Error("Can't apply " + Id + " because it's on cooldown", "modifiers");
             }
+
             if (CostComponent != null && !CostComponent.ContainsCost())
             {
                 valid = false;
                 //Log.Error("Can't apply " + Id + " because it costs more than the owner has", "modifiers");
             }
+
             if (ChanceComponent != null && !ChanceComponent.Roll())
             {
                 valid = false;
@@ -79,6 +85,7 @@ namespace ModifierSystem
                 //TODO Effect explanation on hover?
                 //effectComponent.DisplayText();
             }
+
             return CostComponent?.DisplayText() + CooldownComponent?.DisplayText() + ChanceComponent?.DisplayText();
         }
 

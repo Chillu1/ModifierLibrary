@@ -120,6 +120,13 @@ namespace ModifierSystem.Tests
                 SetupModifierPrototypes();
             }
 
+            public ComboModifier AddModifier(ComboModifierGenerationProperties properties)
+            {
+                var comboModifier = ModifierGenerator.GenerateComboModifier(properties);
+                AddModifier(comboModifier);
+                return comboModifier;
+            }
+
             private void SetupModifierPrototypes()
             {
                 //Scope brackets so it's impossible to use a wrong component/modifier
@@ -133,8 +140,7 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnInit();
                     properties.SetRemovable(10);
 
-                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
-                    AddModifier(modifier);
+                    AddModifier(properties);
                 }
                 {
                     //Poison & bleed = infection
@@ -153,8 +159,7 @@ namespace ModifierSystem.Tests
                     properties.SetEffectOnTime(2, true);
                     properties.SetRemovable(10);
 
-                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
-                    AddModifier(modifier);
+                    AddModifier(properties);
                 }
                 {
                     //10k health = giant (physical res)
@@ -165,8 +170,7 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
                     properties.SetEffectOnInit();
 
-                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
-                    AddModifier(modifier);
+                    AddModifier(properties);
                 }
                 {
                     //10k health = temporary giant (physical res)
@@ -178,8 +182,7 @@ namespace ModifierSystem.Tests
                     properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
                     properties.SetEffectOnInit();
 
-                    var modifier = ModifierGenerator.GenerateComboModifier(properties);
-                    AddModifier(modifier);
+                    AddModifier(properties);
                 }
             }
 

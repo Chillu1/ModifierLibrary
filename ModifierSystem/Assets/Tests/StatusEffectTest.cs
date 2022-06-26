@@ -69,5 +69,32 @@ namespace ModifierSystem.Tests
             enemy.Update(1f);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
         }
+
+        [Test]
+        public void TwoEffectsSilenceDisarm()
+        {
+            var disarmModifierApplier = modifierPrototypes.GetApplier("SilenceDisarmTwoEffectTest");
+            character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
+            enemy.AddModifier(modifierPrototypes.GetApplier("SilenceDisarmTwoEffectTest"), AddModifierParameters.NullStartTarget);
+
+            Assert.True(enemy.StatusEffects.LegalActions == LegalAction.All);
+
+            character.CastModifier(enemy, "SilenceDisarmTwoEffectTestApplier");
+
+            Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
+            Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
+
+            enemy.Attack(character); //Shouldn't do anything (disarmed)
+            Assert.True(character.Stats.Health.IsFull);
+
+            enemy.CastModifier(character, "SilenceDisarmTwoEffectTestApplier"); //Shouldn't do anything (silenced)
+            Assert.True(character.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
+            Assert.True(character.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
+
+            enemy.Update(1.2f);
+
+            enemy.Attack(character);
+            Assert.False(character.Stats.Health.IsFull);
+        }
     }
 }

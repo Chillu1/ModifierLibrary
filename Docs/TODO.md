@@ -7,7 +7,7 @@
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
 - [ ] Status Res for combo element types
-- [ ] Double Effect doesn't work yet because "CheckComponent" holds both effects, and triggers them no matter what ("propertyInfo.EffectOn.HasFlag(EffectOn.Time)")
+- [x] Double Effect doesn't work yet because "CheckComponent" holds both effects, and triggers them no matter what ("propertyInfo.EffectOn.HasFlag(EffectOn.Time)")
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)

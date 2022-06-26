@@ -29,7 +29,7 @@ namespace ModifierSystem.Sample
             _beingController = new BeingController(_modifiers);
             _character = (Being)_beingController.SpawnBaseBeing(new BeingProperties()
             {
-                Id = "Player", DamageData = new DamageData(20, DamageType.Physical, new ElementData(ElementalType.Fire, 10, 10)),
+                Id = "Player", Damage = new DamageData(20, DamageType.Physical, new ElementData(ElementType.Fire, 10, 10)),
                 Health = 50_000_000, UnitType = UnitType.Ally
             }, false);
             //TODO Add random modifier to player, then enemies

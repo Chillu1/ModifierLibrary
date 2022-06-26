@@ -20,7 +20,7 @@ namespace ModifierSystem
             var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add);
             effect.Setup(target);
-            var check = new CheckComponent(effect);
+            var check = new CheckComponent(new IEffectComponent[] { effect });
             var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
@@ -36,8 +36,7 @@ namespace ModifierSystem
             _modifierPrototypes.AddModifier(modifier);
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
-            var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
-            _modifierPrototypes.AddModifier(applierModifier);
+            _modifierPrototypes.AddModifier(applierProperties);
         }
 
         /// <summary>
@@ -53,12 +52,10 @@ namespace ModifierSystem
             properties.SetEffectOnTime(2, true);
             properties.SetRemovable(10);
 
-            var modifier = ModifierGenerator.GenerateModifier(properties);
-            _modifierPrototypes.AddModifier(modifier);
+            var modifier = _modifierPrototypes.AddModifier(properties);
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
-            var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
-            _modifierPrototypes.AddModifier(applierModifier);
+            _modifierPrototypes.AddModifier(applierProperties);
         }
 
         /// <summary>
@@ -71,8 +68,7 @@ namespace ModifierSystem
             properties.AddEffect(new DamageComponent(damageData), damageData);
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
 
-            var modifier = ModifierGenerator.GenerateModifier(properties);
-            _modifierPrototypes.AddModifier(modifier);
+            _modifierPrototypes.AddModifier(properties);
         }
 
         /// <summary>
@@ -88,8 +84,7 @@ namespace ModifierSystem
                     BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.HitEvent);
 
-            var modifier = ModifierGenerator.GenerateModifier(properties);
-            _modifierPrototypes.AddModifier(modifier);
+            _modifierPrototypes.AddModifier(properties);
         }
     }
 }

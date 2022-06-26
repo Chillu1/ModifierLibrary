@@ -50,7 +50,7 @@ namespace ModifierSystem
                 if(IsRemove)
                     RemoveEffectComponent.SimpleEffect();
                 else
-                    CheckComponent.Effect();
+                    CheckComponent.EffectTime();
 
                 _finished = true;
 

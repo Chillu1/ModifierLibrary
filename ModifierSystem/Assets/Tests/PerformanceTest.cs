@@ -29,7 +29,7 @@ namespace ModifierSystem.Tests.Performance
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData);
-                    var check = new CheckComponent(effect);
+                    var check = new CheckComponent(new IEffectComponent[] { effect });
                     modifier.AddComponent(target);
                     modifier.AddComponent(new InitComponent(check));
                     modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier)));

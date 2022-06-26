@@ -98,7 +98,7 @@ namespace ModifierSystem
         {
             if (InitComponent != null)
             {
-                Log.Error(Id + " already has a init component", "modifiers");
+                Log.Warning(Id + " already has an init component, skipping", "modifiers");
                 return;
             }
 
@@ -109,7 +109,7 @@ namespace ModifierSystem
         {
             if (ApplyComponent != null)
             {
-                Log.Error(Id + " already has a apply component", "modifiers");
+                Log.Error(Id + " already has an apply component", "modifiers");
                 return;
             }
 

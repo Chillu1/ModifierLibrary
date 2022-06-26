@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BaseProject;
 using UnityEngine;
 
@@ -38,15 +39,22 @@ namespace ModifierSystem
             }
 
             //---Check---
-            CheckComponent checkComponent = effectComponentTwo == null
-                ? new CheckComponent(effectComponent
-                    , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
-                    , null
-                    , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null)
-                : new CheckComponent(new IEffectComponent[] { effectComponent, effectComponentTwo }
-                    , properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null
-                    , null
-                    , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
+            var effects = new List<IEffectComponent>();
+            var timeEffects = new List<IEffectComponent>();
+            foreach (var propertyInfo in properties.EffectPropertyInfo)
+            {
+                if (propertyInfo.EffectOn.HasFlag(EffectOn.Time))
+                    timeEffects.Add(propertyInfo.EffectComponent);
+                if (propertyInfo.EffectOn.HasFlag(EffectOn.Init) || propertyInfo.EffectOn.HasFlag(EffectOn.Apply))
+                    effects.Add(propertyInfo.EffectComponent);
+            }
+
+            CheckComponent checkComponent = new CheckComponent(
+                effects.ToArray(),
+                timeEffects.ToArray(),
+                properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null,
+                null,
+                properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
 
             //---Apply---?
 
@@ -89,7 +97,7 @@ namespace ModifierSystem
 
             //Make rest of the component that won't be used by anything else
             SetupEffectOn(modifier, properties.EffectPropertyInfo[0], checkComponent, conditionalApplyComponent);
-            if(effectComponentTwo != null)
+            if (effectComponentTwo != null)
                 SetupEffectOn(modifier, properties.EffectPropertyInfo[1], checkComponent, conditionalApplyComponent);
 
             //---Stack---
@@ -117,10 +125,12 @@ namespace ModifierSystem
 
             var effect = new ApplierEffectComponent(properties.AppliedModifier, properties.AddModifierParameters);
             effect.Setup(target);
-            var check = new CheckComponent(effect
-                , properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null
-                , properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null
-                , properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
+            var check = new CheckComponent(
+                new IEffectComponent[] { effect },
+                null, //new IEffectComponent[] { effect },
+                properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null,
+                properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null,
+                properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
             var applier = new ApplierComponent(check);
 
             ConditionalApplyComponent conditionalApplyComponent = null;
@@ -148,7 +158,8 @@ namespace ModifierSystem
 
         private static void ValidateProperties(ModifierGenerationProperties properties)
         {
-            if (properties.EffectPropertyInfo[0].EffectOn == EffectOn.None && !properties.HasConditionData && properties.StackComponentProperties == null)
+            if (properties.EffectPropertyInfo[0].EffectOn == EffectOn.None && !properties.HasConditionData &&
+                properties.StackComponentProperties == null)
                 Log.Error("Properties have to have one of: EffectOn, ConditionData, StackComponentProperties");
         }
 
@@ -156,7 +167,7 @@ namespace ModifierSystem
             ConditionalApplyComponent conditionalApplyComponent)
         {
             if (propertyInfo.EffectOn.HasFlag(EffectOn.Init))
-                modifier.AddComponent(new InitComponent(checkComponent));
+                modifier.AddComponent(new InitComponent(checkComponent));//Gives a warning on multiple init components
             if (propertyInfo.EffectOn.HasFlag(EffectOn.Apply) && conditionalApplyComponent != null)
                 modifier.AddComponent(new InitComponent(conditionalApplyComponent));
             if (propertyInfo.EffectOn.HasFlag(EffectOn.Time))
