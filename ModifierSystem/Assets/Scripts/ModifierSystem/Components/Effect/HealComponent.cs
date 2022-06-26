@@ -15,5 +15,10 @@ namespace ModifierSystem
         {
             receiver.Stats.Health.Heal(Heal);
         }
+
+        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        {
+            receiver.Stats.Health.Heal(-Heal);
+        }
     }
 }

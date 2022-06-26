@@ -51,6 +51,11 @@ namespace ModifierSystem
             _targetComponent.HandleTarget(receiver, acter, Effect);
         }
 
+        public void RemoveEffect()
+        {
+            RemoveEffect(_targetComponent.Target, _targetComponent.Owner);
+        }
+
         protected virtual void RemoveEffect(BaseBeing receiver, BaseBeing acter)
         {
         }

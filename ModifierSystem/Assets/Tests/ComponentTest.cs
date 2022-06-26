@@ -184,5 +184,38 @@ namespace ModifierSystem.Tests
 
             Assert.AreEqual(initialHealthEnemy - 14 - 3, enemy.Stats.Health.CurrentHealth, Delta);
         }
+
+        [Test]
+        public void TemporaryDamageResistance()
+        {
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+
+            var modifier = modifierPrototypes.Get("TemporaryPhysicalResistanceTest");
+            character.AddModifier(modifier);
+
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+
+            character.Update(1.1f);
+
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+        }
+
+        [Test]
+        public void TemporaryDamageBuff()
+        {
+            Assert.AreEqual(initialDamageCharacter, character.Stats.Damage.DamageSum(), Delta);
+
+            var modifier = modifierPrototypes.Get("TemporaryDamageBuffTest");
+            character.AddModifier(modifier);
+
+            Assert.AreEqual(initialDamageCharacter+10, character.Stats.Damage.DamageSum(), Delta);
+
+            character.Update(11f);
+
+            Assert.AreEqual(initialDamageCharacter, character.Stats.Damage.DamageSum(), Delta);
+        }
     }
 }

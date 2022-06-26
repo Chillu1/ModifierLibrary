@@ -115,8 +115,7 @@ namespace ModifierSystem
 
             if (applyComponent is IConditionalApplyComponent cond)
             {
-                CleanUpComponent ??= new CleanUpComponent();
-                CleanUpComponent.AddComponent((ConditionalApplyComponent)cond);
+                CleanUpComponent ??= new CleanUpComponent((ConditionalApplyComponent)cond);
             }
 
             ApplyComponent = applyComponent;

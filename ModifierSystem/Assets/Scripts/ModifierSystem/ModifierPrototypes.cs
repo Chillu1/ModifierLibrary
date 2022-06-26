@@ -769,6 +769,26 @@ namespace ModifierSystem
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
                 AddModifier(applierProperties);
             }
+
+            {
+                //Temporary resistance buff
+                var properties = new ModifierGenerationProperties("TemporaryPhysicalResistanceTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(1d);
+
+                AddModifier(properties);
+            }
+            {
+                //Temporary damage buff
+                var damageData = new[] { new DamageData(10, DamageType.Physical) };
+                var properties = new ModifierGenerationProperties("TemporaryDamageBuffTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageStatComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable(10d);
+
+                AddModifier(properties);
+            }
         }
 
         private bool ValidateModifier(Modifier modifier)

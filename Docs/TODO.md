@@ -1,13 +1,13 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
 - [ ] >**SetApplier in ApplierModifierGenerationProperties**
-- [ ] >**Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone**
-- [ ] **Health Regen base project**
+- [ ] **Optional RemoveEffect, ex. HealComponent. We don't want to always nullify our logic**
+- [x] Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone
+    - [x] Refactor CleanUpComponent to also work with Init/non-apply modifiers
 - [ ] More Templates for basic modifiers
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
 - [ ] Status Res for combo element types
-- [x] Double Effect doesn't work yet because "CheckComponent" holds both effects, and triggers them no matter what ("propertyInfo.EffectOn.HasFlag(EffectOn.Time)")
 - [ ] Event naming convention for Conditional Modifiers
 - [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
 - [ ] BaseModifierProperties (for both normal & applier?)
@@ -15,7 +15,6 @@
   - [ ] New target = reset cast timer
 - [ ] StatusTags refactor
 - [ ] More ComboModifiers values based on *in* values?
-- [ ] **Multi Effect modifiers? (FireBall spell, initial dmg & DoT)**
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 - [ ] DamageData refactor
 - [ ] ElementalDamage refactor

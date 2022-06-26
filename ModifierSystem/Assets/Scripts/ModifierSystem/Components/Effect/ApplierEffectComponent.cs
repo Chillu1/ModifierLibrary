@@ -18,8 +18,7 @@ namespace ModifierSystem
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
-            var clonedModifier = (Modifier)Modifier.Clone();
-            ((Being)receiver).AddModifier(clonedModifier, Parameters);
+            ((Being)receiver).AddModifier((Modifier)Modifier.Clone(), Parameters);
         }
 
         public void StackEffect(int stacks, double value)

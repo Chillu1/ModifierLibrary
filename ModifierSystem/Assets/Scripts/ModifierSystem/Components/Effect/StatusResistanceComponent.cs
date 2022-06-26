@@ -1,3 +1,4 @@
+using System.Linq;
 using BaseProject;
 
 namespace ModifierSystem
@@ -19,6 +20,11 @@ namespace ModifierSystem
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values);
+        }
+
+        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        {
+            ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values.Select(v => -v).ToArray());
         }
     }
 }

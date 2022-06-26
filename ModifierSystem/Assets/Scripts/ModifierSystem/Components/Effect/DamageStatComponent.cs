@@ -19,7 +19,11 @@ namespace ModifierSystem
 
         protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
         {
-            ((Being)receiver).ChangeDamageStat(DamageData.Select(d => { d.BaseDamage = -d.BaseDamage; return d; }).ToArray());
+            ((Being)receiver).ChangeDamageStat(DamageData.Select(d =>
+            {
+                d.BaseDamage = -d.BaseDamage;
+                return d;
+            }).ToArray());
         }
     }
 }

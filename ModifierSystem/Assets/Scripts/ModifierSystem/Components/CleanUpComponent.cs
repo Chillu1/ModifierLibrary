@@ -1,3 +1,4 @@
+using BaseProject.Utils;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -8,21 +9,21 @@ namespace ModifierSystem
     public class CleanUpComponent : Component, ICleanUpComponent
     {
         [CanBeNull]
-        private ConditionalApplyComponent _applyComponent;
+        private readonly ConditionalApplyComponent _applyComponent;
+        [CanBeNull]
+        private readonly EffectComponent[] _effectComponents;
 
-        public CleanUpComponent([CanBeNull] ConditionalApplyComponent applyComponent = null)
+        public CleanUpComponent(ConditionalApplyComponent applyComponent = null, EffectComponent[] effectComponents = null)
         {
             _applyComponent = applyComponent;
-        }
-
-        public void AddComponent(ConditionalApplyComponent component)
-        {
-            _applyComponent = component;
+            _effectComponents = effectComponents;
         }
 
         public void CleanUp()
         {
             _applyComponent?.CleanUp();
+            foreach (var effectComponent in _effectComponents.EmptyIfNull())
+                effectComponent.RemoveEffect();
         }
     }
 }

@@ -22,6 +22,11 @@ namespace ModifierSystem
             receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
+        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        {
+            receiver.StatusEffects.DecreasesStatusEffect(StatusEffect, Duration);
+        }
+
         public void StackEffect(int stacks, double value)
         {
             if (StackEffectType.HasFlag(StatusComponentStackEffect.Effect))

@@ -2,6 +2,13 @@
 
 ## Temp Notes
 
+Temp DamageResistance
+    Add Res
+    Wait 1s
+    Remove Res
+    Remove Mod
+Temporary damage buff
+
 EffectComp needs to be encapsulated in CheckComp
 ApplierEffectComp can be too, but we can also check in Check in modifier instead
 

@@ -8,10 +8,10 @@ namespace ModifierSystem
     {
         private bool ConditionBased { get; }
 
-        private readonly ICheckComponent[] _checkComponent;
+        private readonly ICheckComponent _checkComponent;
         private readonly IConditionalApplyComponent[] _applyComponents;
 
-        public InitComponent(params ICheckComponent[] checkComponent)
+        public InitComponent(ICheckComponent checkComponent)
         {
             _checkComponent = checkComponent;
         }
@@ -27,15 +27,14 @@ namespace ModifierSystem
 
         public void Init()
         {
-            if(ConditionBased)
+            if (ConditionBased)
             {
                 foreach (var applyComponent in _applyComponents)
                     applyComponent.Apply();
             }
             else
             {
-                foreach (var checkComponent in _checkComponent)
-                    checkComponent.Effect();
+                _checkComponent.Effect();
             }
         }
 
@@ -45,7 +44,7 @@ namespace ModifierSystem
             if (EffectComponentIsOfType<StatusComponent>())
                 tempStatusTags.Add(new StatusTag(StatusType.Stun));
             if (EffectComponentIsOfType<StatusResistanceComponent>())
-                tempStatusTags.Add(new StatusTag(StatusType.Resistance));//Res? Recursion?
+                tempStatusTags.Add(new StatusTag(StatusType.Resistance)); //Res? Recursion?
             //if (EffectComponentIsOfType<SlowComponent>())
             //    tempStatusTags.Add(new StatusTag(StatusType.Slow));
             return tempStatusTags;
@@ -53,13 +52,7 @@ namespace ModifierSystem
 
         private bool EffectComponentIsOfType<T>() where T : IEffectComponent
         {
-            foreach (var checkComponent in _checkComponent.EmptyIfNull())
-            {
-                if (checkComponent.EffectComponentIsOfType<T>())
-                    return true;
-            }
-
-            return false;
+            return _checkComponent != null && _checkComponent.EffectComponentIsOfType<T>();
         }
     }
 }

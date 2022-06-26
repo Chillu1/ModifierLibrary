@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using BaseProject;
 using UnityEngine;
 
@@ -68,8 +70,9 @@ namespace ModifierSystem
             //---CleanUp---
             //TODO ApplyComponent in cleanup
             CleanUpComponent cleanUpComponent = null;
-            if (properties.Removable && properties.EffectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Apply))
-                cleanUpComponent = new CleanUpComponent(conditionalApplyComponent);
+            if (properties.Removable && (properties.EffectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Apply) ||
+                                         properties.EffectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Init)))
+                cleanUpComponent = new CleanUpComponent(conditionalApplyComponent, effects.Cast<EffectComponent>().ToArray());//EffectTime can't be remove based, for now?
 
             //---Remove---
             //---TimeRemove--- //TODO & ConditionalApplyComponent(remove)

@@ -1,3 +1,4 @@
+using System.Linq;
 using BaseProject;
 
 namespace ModifierSystem
@@ -15,5 +16,10 @@ namespace ModifierSystem
         {
             ((Being)receiver).ChangeStat(Stats);
         }
+
+        //protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        //{
+        //    ((Being)receiver).ChangeStat(Stats.Select(s => s.BaseValue = -s.BaseValue));
+        //}
     }
 }
