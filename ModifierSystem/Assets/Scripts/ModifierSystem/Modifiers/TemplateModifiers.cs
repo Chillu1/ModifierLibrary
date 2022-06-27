@@ -35,7 +35,8 @@ namespace ModifierSystem
             modifier.FinishSetup(damageData);
             _modifierPrototypes.AddModifier(modifier);
 
-            var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+            var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+            applierProperties.SetApplier(ApplierType.Attack);
             _modifierPrototypes.AddModifier(applierProperties);
         }
 
@@ -54,7 +55,8 @@ namespace ModifierSystem
 
             var modifier = _modifierPrototypes.AddModifier(properties);
 
-            var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+            var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+            applierProperties.SetApplier(ApplierType.Attack);
             _modifierPrototypes.AddModifier(applierProperties);
         }
 

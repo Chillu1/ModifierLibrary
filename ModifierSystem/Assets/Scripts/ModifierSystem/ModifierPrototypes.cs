@@ -93,7 +93,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -107,7 +108,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -128,7 +130,8 @@ namespace ModifierSystem
                 var modifier = AddModifier(properties);
 
                 //Forever buff (applier), not refreshable or stackable (for now)
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast, LegalTarget.DefaultFriendly);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.DefaultFriendly);
+                applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
             {
@@ -142,7 +145,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -156,7 +160,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -186,7 +191,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -198,7 +204,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
             {
@@ -211,7 +218,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -223,7 +231,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
             {
@@ -242,7 +251,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -347,7 +357,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -362,7 +373,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -377,7 +389,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -397,7 +410,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -535,7 +549,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetCost(CostType.Health, 10);
                 AddModifier(applierProperties);
             }
@@ -550,7 +565,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
                 applierProperties.SetCost(CostType.Mana, 10);
                 AddModifier(applierProperties);
             }
@@ -564,7 +580,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetCost(CostType.Mana, 10);
                 AddModifier(applierProperties);
             }
@@ -579,7 +596,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetCooldown(5);
                 AddModifier(applierProperties);
             }
@@ -594,7 +612,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
                 applierProperties.SetCooldown(1);
                 applierProperties.SetAutomaticCast();
                 AddModifier(applierProperties);
@@ -650,7 +669,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetChance(0.5);
 
                 AddModifier(applierProperties);
@@ -666,7 +686,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetChance(0);
 
                 AddModifier(applierProperties);
@@ -682,7 +703,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetChance(1);
 
                 AddModifier(applierProperties);
@@ -698,7 +720,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetChance(1);
 
                 AddModifier(applierProperties);
@@ -717,7 +740,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
             {
@@ -734,7 +758,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Attack);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Attack);
                 AddModifier(applierProperties);
             }
 
@@ -766,7 +791,8 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, ApplierType.Cast);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
 

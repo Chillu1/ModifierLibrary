@@ -96,6 +96,11 @@ namespace ModifierSystem
                 if (effectComponent.GetType() == typeof(T))
                     return true;
             }
+            foreach (var effectComponent in TimeEffectComponents)
+            {
+                if (effectComponent.GetType() == typeof(T))
+                    return true;
+            }
 
             return false;
         }

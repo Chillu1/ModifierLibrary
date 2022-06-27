@@ -25,12 +25,11 @@ namespace ModifierSystem
         public bool AutomaticCast { get; private set; }
         public double Chance { get; private set; } = -1;
 
-        public ApplierModifierGenerationProperties(Modifier appliedModifier, ModifierInfo info, ApplierType applierType = ApplierType.None,
+        public ApplierModifierGenerationProperties(Modifier appliedModifier, ModifierInfo info,
             LegalTarget legalTarget = LegalTarget.Beings)
         {
             Info = info;
             AppliedModifier = appliedModifier;
-            ApplierType = applierType;
             LegalTarget = legalTarget;
         }
 

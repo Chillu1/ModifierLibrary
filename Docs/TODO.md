@@ -1,9 +1,6 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [ ] >**SetApplier in ApplierModifierGenerationProperties**
 - [ ] **Optional RemoveEffect, ex. HealComponent. We don't want to always nullify our logic**
-- [x] Remove Effect (cleanUp). Ex. Dmg buff that goes away when buff is gone
-    - [x] Refactor CleanUpComponent to also work with Init/non-apply modifiers
 - [ ] More Templates for basic modifiers
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
