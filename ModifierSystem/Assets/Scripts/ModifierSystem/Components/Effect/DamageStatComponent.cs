@@ -7,7 +7,8 @@ namespace ModifierSystem
     {
         private DamageData[] DamageData { get; }
 
-        public DamageStatComponent(DamageData[] damageData, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public DamageStatComponent(DamageData[] damageData, ConditionCheckData conditionCheckData = null, bool isRevertible = false) :
+            base(conditionCheckData, isRevertible)
         {
             DamageData = damageData;
         }
@@ -17,7 +18,7 @@ namespace ModifierSystem
             ((Being)receiver).ChangeDamageStat(DamageData);
         }
 
-        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).ChangeDamageStat(DamageData.Select(d =>
             {

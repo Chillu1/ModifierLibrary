@@ -7,8 +7,8 @@ namespace ModifierSystem
         private DamageType DamageType { get; }
         private float Value { get; }
 
-        public DamageResistanceComponent(DamageType damageType, float value, ConditionCheckData conditionCheckData = null)
-            : base(conditionCheckData)
+        public DamageResistanceComponent(DamageType damageType, float value, ConditionCheckData conditionCheckData = null,
+            bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             DamageType = damageType;
             Value = value;
@@ -19,7 +19,7 @@ namespace ModifierSystem
             receiver.DamageTypeDamageResistances.ChangeValue(DamageType, Value);
         }
 
-        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.DamageTypeDamageResistances.ChangeValue(DamageType, -Value);
         }

@@ -1,6 +1,5 @@
 # TODO:  
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [ ] **Optional RemoveEffect, ex. HealComponent. We don't want to always nullify our logic**
 - [ ] More Templates for basic modifiers
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**

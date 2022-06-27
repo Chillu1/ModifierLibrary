@@ -23,7 +23,7 @@ namespace ModifierSystem
         {
             _applyComponent?.CleanUp();
             foreach (var effectComponent in _effectComponents.EmptyIfNull())
-                effectComponent.RemoveEffect();
+                effectComponent.RevertEffect();
         }
     }
 }

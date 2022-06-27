@@ -6,11 +6,13 @@ namespace ModifierSystem
     public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent
     {
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
+        private bool IsRevertible { get; }
         private ITargetComponent _targetComponent;
 
-        protected EffectComponent(ConditionCheckData conditionCheckData = null)
+        protected EffectComponent(ConditionCheckData conditionCheckData = null, bool isRevertible = false)
         {
             ConditionCheckData = conditionCheckData;
+            IsRevertible = isRevertible;
         }
 
         public void Setup(ITargetComponent targetComponent)
@@ -51,12 +53,13 @@ namespace ModifierSystem
             _targetComponent.HandleTarget(receiver, acter, Effect);
         }
 
-        public void RemoveEffect()
+        public void RevertEffect()
         {
-            RemoveEffect(_targetComponent.Target, _targetComponent.Owner);
+            if (IsRevertible)
+                RevertEffect(_targetComponent.Target, _targetComponent.Owner);
         }
 
-        protected virtual void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected virtual void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
         }
     }

@@ -6,7 +6,8 @@ namespace ModifierSystem
     {
         public double Heal { get; private set; }
 
-        public HealComponent(double heal, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public HealComponent(double heal, ConditionCheckData conditionCheckData = null, bool isRevertible = false) : base(conditionCheckData,
+            isRevertible)
         {
             Heal = heal;
         }
@@ -16,7 +17,7 @@ namespace ModifierSystem
             receiver.Stats.Health.Heal(Heal);
         }
 
-        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.Stats.Health.Heal(-Heal);
         }

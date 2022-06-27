@@ -34,6 +34,7 @@ namespace ModifierSystem
             AddModifier(modifier);
             return modifier;
         }
+
         public TModifier AddModifier(ApplierModifierGenerationProperties properties)
         {
             var applierModifier = (TModifier)ModifierGenerator.GenerateApplierModifier(properties);
@@ -732,9 +733,9 @@ namespace ModifierSystem
                 var initDamageData = new[] { new DamageData(10, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var timeDamageData = new[] { new DamageData(3, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireBallTwoEffectTest", null, LegalTarget.Beings);
-                properties.AddEffect(new DamageComponent(initDamageData), initDamageData);//Init
+                properties.AddEffect(new DamageComponent(initDamageData), initDamageData); //Init
                 properties.SetEffectOnInit();
-                properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData);//DoT
+                properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData); //DoT
                 properties.SetEffectOnTime(1, true);
                 properties.SetRemovable(5);
 
@@ -749,9 +750,9 @@ namespace ModifierSystem
                 var initDamageData = new[] { new DamageData(10, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var timeDamageData = new[] { new DamageData(3, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var properties = new ModifierGenerationProperties("FireBallTwoEffectInitTest", null, LegalTarget.Beings);
-                properties.AddEffect(new DamageComponent(initDamageData), initDamageData);//Init
+                properties.AddEffect(new DamageComponent(initDamageData), initDamageData); //Init
                 properties.SetEffectOnInit();
-                properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData);//DoT
+                properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData); //DoT
                 properties.SetEffectOnInit();
                 properties.SetEffectOnTime(1, true);
                 properties.SetRemovable(5);
@@ -799,7 +800,7 @@ namespace ModifierSystem
             {
                 //Temporary resistance buff
                 var properties = new ModifierGenerationProperties("TemporaryPhysicalResistanceTest", null, LegalTarget.Self);
-                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100));
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
                 properties.SetEffectOnInit();
                 properties.SetRemovable(1d);
 
@@ -809,7 +810,7 @@ namespace ModifierSystem
                 //Temporary damage buff
                 var damageData = new[] { new DamageData(10, DamageType.Physical) };
                 var properties = new ModifierGenerationProperties("TemporaryDamageBuffTest", null, LegalTarget.Self);
-                properties.AddEffect(new DamageStatComponent(damageData), damageData);
+                properties.AddEffect(new DamageStatComponent(damageData, isRevertible: true), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10d);
 

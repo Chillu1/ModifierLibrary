@@ -9,8 +9,8 @@ namespace ModifierSystem
         private StatusComponentStackEffect StackEffectType { get; }
 
         public StatusComponent(StatusEffect statusEffect, float duration,
-            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None, ConditionCheckData conditionCheckData = null) :
-            base(conditionCheckData)
+            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None, ConditionCheckData conditionCheckData = null,
+            bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             StatusEffect = statusEffect;
             Duration = duration;
@@ -22,7 +22,7 @@ namespace ModifierSystem
             receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
-        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.StatusEffects.DecreasesStatusEffect(StatusEffect, Duration);
         }

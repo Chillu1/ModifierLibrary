@@ -7,8 +7,8 @@ namespace ModifierSystem
         private ElementType ElementType { get; }
         private float Value { get; }
 
-        public ElementResistanceComponent(ElementType elementType, float value, ConditionCheckData conditionCheckData = null)
-            : base(conditionCheckData)
+        public ElementResistanceComponent(ElementType elementType, float value, ConditionCheckData conditionCheckData = null,
+            bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             ElementType = elementType;
             Value = value;
@@ -19,7 +19,7 @@ namespace ModifierSystem
             receiver.ElementalDamageResistances.ChangeValue(ElementType, Value);
         }
 
-        protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.ElementalDamageResistances.ChangeValue(ElementType, -Value);
         }
