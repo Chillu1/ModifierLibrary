@@ -12,6 +12,8 @@ namespace ModifierSystem
         {
             ElementType = elementType;
             Value = value;
+
+            Info = $"Resistance: {elementType} {value}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

@@ -162,7 +162,6 @@ namespace ModifierSystem
             RefreshComponent = refreshComponent;
         }
 
-        //TODO Should never be directly added? Applier contains this?
         public void AddComponent(ICheckComponent checkComponent)
         {
             if (CheckComponent != null)

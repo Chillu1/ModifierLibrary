@@ -6,6 +6,7 @@ namespace ModifierSystem
     {
         public HealStatBasedComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
+            Info = $"HealAct\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

@@ -6,6 +6,7 @@ namespace ModifierSystem
     {
         public AttackComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
+            Info = "Attack\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

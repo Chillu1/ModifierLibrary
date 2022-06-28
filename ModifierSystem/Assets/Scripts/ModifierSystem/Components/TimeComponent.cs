@@ -102,7 +102,7 @@ namespace ModifierSystem
         public string DisplayText()
         {
             //TODO Temp if
-            return IsRemove ? InfoRemove + $"{(Duration - _timer).ToString("F2")}" : InfoEffect + $"{(Duration - _timer).ToString("F2")}";
+            return IsRemove ? InfoRemove + $"{(Duration - _timer).ToString("F2")}\n" : InfoEffect + $"{(Duration - _timer).ToString("F2")}\n";
         }
 
         private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent

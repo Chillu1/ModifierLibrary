@@ -7,6 +7,7 @@ namespace ModifierSystem
         public string ModifierTextureId { get; }
 
         private string BaseInfo { get; set; }
+        private string EffectInfo { get; set; } = "";
         public string CheckInfo { get; set; } = "";
 
         private ICheckComponent _checkComponent;
@@ -23,6 +24,7 @@ namespace ModifierSystem
         public void Setup(ICheckComponent checkComponent)
         {
             _checkComponent = checkComponent;
+            EffectInfo = _checkComponent.Info;
         }
 
         public void Update(float dt)
@@ -33,7 +35,7 @@ namespace ModifierSystem
         public string GetInfo()
         {
             //TODO EffectInfo, Damage, etc
-            return BaseInfo+CheckInfo;
+            return BaseInfo+EffectInfo+CheckInfo;
         }
 
         public void UpdateInfo()

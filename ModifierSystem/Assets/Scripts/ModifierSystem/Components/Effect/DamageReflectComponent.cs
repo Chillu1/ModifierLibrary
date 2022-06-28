@@ -10,6 +10,8 @@ namespace ModifierSystem
         public DamageReflectComponent(double percentage, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Percentage = percentage;
+
+            Info = $"Damage Reflect: {percentage*100d}%\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

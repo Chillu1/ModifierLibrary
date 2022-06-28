@@ -14,6 +14,8 @@ namespace ModifierSystem
             Modifier = modifier;
             Parameters = parameters;
             IsStackEffect = isStackEffect;
+
+            Info = $"Applies: {Modifier}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

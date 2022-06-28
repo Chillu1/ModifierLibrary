@@ -11,6 +11,8 @@ namespace ModifierSystem
             base(conditionCheckData, isRevertible)
         {
             DamageData = damageData;
+
+            Info = $"DamageStat: {string.Join<DamageData>(", ", damageData)}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

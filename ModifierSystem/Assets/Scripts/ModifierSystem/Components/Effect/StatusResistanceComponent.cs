@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using BaseProject;
 
@@ -15,6 +16,8 @@ namespace ModifierSystem
                 Log.Error("Status tags wrong length for tags/values", "modifiers");
             StatusTags = statusTags;
             Values = values;
+
+            Info = $"StatusResistance: {string.Join<StatusTag>(", ", StatusTags)}{string.Join(", ", Values)}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

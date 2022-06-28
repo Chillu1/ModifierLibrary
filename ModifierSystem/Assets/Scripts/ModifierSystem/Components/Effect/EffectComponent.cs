@@ -9,10 +9,14 @@ namespace ModifierSystem
         private bool IsRevertible { get; }
         private ITargetComponent _targetComponent;
 
+        public string Info { get; protected set; }
+
         protected EffectComponent(ConditionCheckData conditionCheckData = null, bool isRevertible = false)
         {
             ConditionCheckData = conditionCheckData;
             IsRevertible = isRevertible;
+
+            Info = "Unset effect data " + "\n";
         }
 
         public void Setup(ITargetComponent targetComponent)

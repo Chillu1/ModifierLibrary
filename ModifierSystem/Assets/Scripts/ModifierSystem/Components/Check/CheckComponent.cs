@@ -15,6 +15,8 @@ namespace ModifierSystem
         [CanBeNull] public ICooldownComponent CooldownComponent { get; }
         [CanBeNull] public IChanceComponent ChanceComponent { get; }
 
+        public string Info { get; }
+
         public CheckComponent(IEffectComponent[] effectComponents, IEffectComponent[] effectTimeComponents = null,
             ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null, IChanceComponent chanceComponent = null)
         {
@@ -23,6 +25,14 @@ namespace ModifierSystem
             CostComponent = costComponent;
             CooldownComponent = cooldownComponent;
             ChanceComponent = chanceComponent;
+
+            string text = "";
+            foreach (var effectComponent in EffectComponents.EmptyIfNull())
+                text += effectComponent.Info;
+            foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
+                text += effectComponent.Info;
+
+            Info = text;
         }
 
         public void Effect()
@@ -80,13 +90,15 @@ namespace ModifierSystem
 
         public string DisplayText()
         {
-            foreach (var effectComponent in EffectComponents)
-            {
-                //TODO Effect explanation on hover?
-                //effectComponent.DisplayText();
-            }
+            string text = "";
+            //foreach (var effectComponent in EffectComponents.EmptyIfNull())
+            //    text += effectComponent.Info;
+            //foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
+            //    text += effectComponent.Info;
 
-            return CostComponent?.DisplayText() + CooldownComponent?.DisplayText() + ChanceComponent?.DisplayText();
+            text += CostComponent?.DisplayText() + CooldownComponent?.DisplayText() + ChanceComponent?.DisplayText();
+
+            return text;
         }
 
         public bool EffectComponentIsOfType<T>() where T : IEffectComponent

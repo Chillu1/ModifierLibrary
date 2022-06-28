@@ -70,7 +70,7 @@ namespace ModifierSystem
         }
 
         /// <summary>
-        ///     FireBall, FireAttack, etc
+        ///     IceBolt, FireAttack, etc
         /// </summary>
         public static (Modifier modifier, Modifier applier) PermanentActApplierDamageLinger(string id,
             ModifierInfo effectInfo, ModifierInfo applierInfo,
@@ -102,6 +102,31 @@ namespace ModifierSystem
             var properties = new ModifierGenerationProperties(id, effectInfo);
             properties.AddEffect(new DamageComponent(damage), damage);
             properties.SetEffectOnInit();
+            properties.SetEffectOnTime(overTime.Interval, true);
+            properties.SetRemovable(overTime.Duration);
+
+            var modifier = ModifierGenerator.GenerateModifier(properties);
+
+            var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
+            applierProperties.SetApplier(applierType);
+            if(check.Cost.Type != CostType.None)
+                applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
+            if(check.Cooldown != 0)
+                applierProperties.SetCooldown(check.Cooldown);
+
+            var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
+
+            return (modifier, applierModifier);
+        }
+
+        public static (Modifier modifier, Modifier applier) PermanentActApplierDamageInitDoT(string id,
+            ModifierInfo effectInfo, ModifierInfo applierInfo,
+            ApplierType applierType, DamageData[] initDamage, DamageData[] dotDamage, CheckProperties check, OverTimeProperties overTime)
+        {
+            var properties = new ModifierGenerationProperties(id, effectInfo);
+            properties.AddEffect(new DamageComponent(initDamage), initDamage);
+            properties.SetEffectOnInit();
+            properties.AddEffect(new DamageComponent(dotDamage), dotDamage);
             properties.SetEffectOnTime(overTime.Interval, true);
             properties.SetRemovable(overTime.Duration);
 

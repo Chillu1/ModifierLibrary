@@ -12,6 +12,8 @@ namespace ModifierSystem
         {
             DamageType = damageType;
             Value = value;
+
+            Info = $"Damage Resistance: {damageType} {value}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

@@ -10,6 +10,8 @@ namespace ModifierSystem
             isRevertible)
         {
             Heal = heal;
+
+            Info = $"Heal: {Heal}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

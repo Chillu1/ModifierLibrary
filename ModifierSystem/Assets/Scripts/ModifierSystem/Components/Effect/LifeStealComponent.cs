@@ -9,16 +9,18 @@ namespace ModifierSystem
     public class LifeStealComponent : EffectComponent
     {
         //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Being class instead
-        private DamageData[] Damage { get; }
+        //private DamageData[] Damage { get; }
         private double SummedDamage { get; }
         private double Percentage { get; }
 
         public LifeStealComponent(DamageData[] damage, double percentage, ConditionCheckData conditionCheckData = null) : base(
             conditionCheckData)
         {
-            Damage = damage;
+            //Damage = damage;
             Percentage = percentage;
-            SummedDamage = Damage.Sum(d => d.Damage);
+            SummedDamage = damage.Sum(d => d.Damage);
+
+            Info = $"LifeSteal: {SummedDamage} damage, {Percentage*100d}%\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

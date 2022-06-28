@@ -15,6 +15,8 @@ namespace ModifierSystem
             StatusEffect = statusEffect;
             Duration = duration;
             StackEffectType = stackEffectType;
+
+            Info = $"Status: {StatusEffect}, duration: {Duration}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

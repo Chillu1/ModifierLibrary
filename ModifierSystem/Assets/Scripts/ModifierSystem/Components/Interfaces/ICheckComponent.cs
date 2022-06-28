@@ -5,6 +5,7 @@ namespace ModifierSystem
         ICooldownComponent CooldownComponent { get; }
         ICostComponent CostComponent { get; }
         IChanceComponent ChanceComponent { get; }
+        string Info { get; }
 
         void Effect();
         void EffectTime();

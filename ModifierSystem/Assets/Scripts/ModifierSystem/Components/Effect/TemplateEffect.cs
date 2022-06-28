@@ -9,6 +9,8 @@ namespace ModifierSystem
         public TemplateEffect(double foo, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Foo = foo;
+
+            Info = $"Template: {Foo}\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
