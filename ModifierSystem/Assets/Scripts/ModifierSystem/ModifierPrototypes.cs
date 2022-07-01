@@ -51,6 +51,25 @@ namespace ModifierSystem
             return modifier;
         }
 
+        /// <summary>
+        ///     Used for displaying stored modifiers UI
+        /// </summary>
+        public TModifier[] GetPrototypes(string[] prototypeIds)
+        {
+            var prototypes = new TModifier[prototypeIds.Length];
+            for (int i = 0; i < prototypeIds.Length; i++)
+            {
+                string prototypeId = prototypeIds[i];
+                var prototype = GetPrototype(prototypeId);
+                if (prototype == null)
+                    continue;
+
+                prototypes[i] = prototype;
+            }
+
+            return prototypes;
+        }
+
         [CanBeNull]
         public TModifier GetApplier(string key)
         {

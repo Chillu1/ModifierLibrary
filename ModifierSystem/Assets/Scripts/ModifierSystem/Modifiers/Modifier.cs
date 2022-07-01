@@ -76,7 +76,7 @@ namespace ModifierSystem
 
         public void Update(float deltaTime, StatusResistances ownerStatusResistances)
         {
-            //Log.Info(TimeComponents?.Count +" ID: "+Id);
+            //Log.Info(Id);
             for (int i = 0; i < TimeComponents?.Count; i++)
             {
                 var timeComponent = TimeComponents[i];
