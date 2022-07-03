@@ -41,7 +41,7 @@ namespace ModifierSystem
         {
             bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters, sourceBeing);
 
-            if (modifierAdded && modifier.ApplierType.HasFlag(ApplierType.Cast))
+            if (modifierAdded && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
                 CastingController.AddCastModifier(modifier);
         }
 
@@ -57,8 +57,8 @@ namespace ModifierSystem
 
         public void RemoveModifier(Modifier modifier)
         {
-            ModifierController.RemoveModifier(modifier);
-            if (modifier.ApplierType.HasFlag(ApplierType.Cast))
+            bool modifierRemoved = ModifierController.RemoveModifier(modifier);
+            if (modifierRemoved && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
                 CastingController.RemoveCastModifier(modifier);
         }
 

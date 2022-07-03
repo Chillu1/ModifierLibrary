@@ -33,8 +33,10 @@ namespace ModifierSystem
         None = 0,
         Attack = 1,
         Cast = 2,
-
-        All = Attack | Cast
+        /// <summary>
+        ///     Automatically castable
+        /// </summary>
+        Aura = 4,
     }
 
     public enum CostType

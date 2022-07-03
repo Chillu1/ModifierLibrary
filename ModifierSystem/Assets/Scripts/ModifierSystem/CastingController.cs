@@ -12,9 +12,12 @@ namespace ModifierSystem
         private StatusEffects StatusEffects { get; }
         private TargetingSystem TargetingSystem { get; }
 
-        private readonly List<Modifier> _castModifiers = new List<Modifier>();
+        private readonly List<Modifier> _castModifiers;
+        private readonly List<Modifier> _allyAuraCastModifiers;
+        private readonly List<Modifier> _enemyAuraCastModifiers;
+
         private float _castTimer = AutomaticCastCooldown;
-        private const float AutomaticCastCooldown = 0.1f;
+        public const float AutomaticCastCooldown = 0.1f;
 
         private bool _globalAutomaticCast;
 
@@ -23,6 +26,10 @@ namespace ModifierSystem
             ModifierController = modifierController;
             StatusEffects = statusEffects;
             TargetingSystem = targetingSystem;
+
+            _castModifiers = new List<Modifier>();
+            _allyAuraCastModifiers = new List<Modifier>();
+            _enemyAuraCastModifiers = new List<Modifier>();
         }
 
         public void Update(float deltaTime)
@@ -32,11 +39,33 @@ namespace ModifierSystem
                 return;
 
             _castTimer = AutomaticCastCooldown;
+            //Log.Info(_castModifiers.Count + " cast modifiers. " + _allyAuraCastModifiers.Count + " ally aura cast modifiers. " +
+            //         _enemyAuraCastModifiers.Count + " enemy aura cast modifiers.");
+            //Log.Info(TargetingSystem.AllyAuraTargets.Count + " ally aura targets. " + TargetingSystem.EnemyAuraTargets.Count +
+            //         " enemy aura targets.");
 
-            foreach (var castingModifier in _castModifiers)
+            foreach (var castModifier in _castModifiers)
             {
-                if (castingModifier.IsAutomaticCasting || _globalAutomaticCast)
-                    castingModifier.TryCast((Being)TargetingSystem.CastTarget, true);
+                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                    castModifier.TryCast((Being)TargetingSystem.CastTarget, true);
+            }
+
+            foreach (var castModifier in _allyAuraCastModifiers)
+            {
+                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                {
+                    foreach (var allyTarget in TargetingSystem.AllyAuraTargets)
+                        castModifier.TryCast((Being)allyTarget, true);
+                }
+            }
+
+            foreach (var castModifier in _enemyAuraCastModifiers)
+            {
+                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                {
+                    foreach (var enemyTarget in TargetingSystem.EnemyAuraTargets)
+                        castModifier.TryCast((Being)enemyTarget, true);
+                }
             }
         }
 
@@ -53,7 +82,43 @@ namespace ModifierSystem
         /// </summary>
         public bool CastModifier(Being target, string modifierId)
         {
-            if (!ModifierController.ContainsModifier(modifierId, out var modifier))
+            bool valid = ValidateCast(modifierId, out var modifier);
+            if (!valid)
+                return false;
+
+            modifier.TryCast(target);
+
+            return true;
+        }
+
+        public void AddCastModifier(Modifier modifier)
+        {
+            if (modifier.ApplierType.HasFlag(ApplierType.Cast))
+                _castModifiers.Add(modifier);
+            if (!modifier.ApplierType.HasFlag(ApplierType.Aura))
+                return;
+
+            if (modifier.TargetComponent.LegalTarget.HasFlag(LegalTarget.Same))
+                _allyAuraCastModifiers.Add(modifier);
+            if (modifier.TargetComponent.LegalTarget.HasFlag(LegalTarget.Opposite))
+                _enemyAuraCastModifiers.Add(modifier);
+        }
+
+        public void RemoveCastModifier(Modifier modifier)
+        {
+            _castModifiers.Remove(modifier);
+            _allyAuraCastModifiers.Remove(modifier);
+            _enemyAuraCastModifiers.Remove(modifier);
+        }
+
+        public void SetAutomaticCastAll(bool automaticCast = true)
+        {
+            _globalAutomaticCast = automaticCast;
+        }
+
+        private bool ValidateCast(string modifierId, out Modifier modifier)
+        {
+            if (!ModifierController.ContainsModifier(modifierId, out modifier))
             {
                 Log.Error("Modifier " + modifierId + " not present in collection", "modifiers");
                 return false;
@@ -81,24 +146,7 @@ namespace ModifierSystem
             if (!StatusEffects.LegalActions.HasFlag(LegalAction.Cast)) //Can't cast
                 return false;
 
-            modifier.TryCast(target);
-
             return true;
-        }
-
-        public void AddCastModifier(Modifier modifier)
-        {
-            _castModifiers.Add(modifier);
-        }
-
-        public void RemoveCastModifier(Modifier modifier)
-        {
-            _castModifiers.Remove(modifier);
-        }
-
-        public void SetAutomaticCastAll(bool automaticCast = true)
-        {
-            _globalAutomaticCast = automaticCast;
         }
     }
 }

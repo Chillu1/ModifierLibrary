@@ -64,10 +64,10 @@ namespace ModifierSystem
             if (LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
                 return true;
 
-            if (LegalTarget.HasFlag(LegalTarget.Ally) && target.UnitType == UnitType.Ally)
+            if (LegalTarget.HasFlag(LegalTarget.Same) && target.UnitType == Owner.UnitType)
                 return true;
 
-            if (LegalTarget.HasFlag(LegalTarget.Enemy) && target.UnitType == UnitType.Enemy)
+            if (LegalTarget.HasFlag(LegalTarget.Opposite) && target.UnitType != Owner.UnitType)
                 return true;
 
             Log.Error("LegalTargets are: " + LegalTarget + ". But our unit type is: " + target.UnitType);

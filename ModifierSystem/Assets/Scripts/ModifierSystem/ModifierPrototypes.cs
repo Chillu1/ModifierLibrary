@@ -150,7 +150,7 @@ namespace ModifierSystem
                 var modifier = AddModifier(properties);
 
                 //Forever buff (applier), not refreshable or stackable (for now)
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.DefaultFriendly);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Same);
                 applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
@@ -861,6 +861,46 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
                 applierProperties.SetApplier(ApplierType.Cast);
+                AddModifier(applierProperties);
+            }
+
+            {
+                //Friendly Physical damage resistance, for aura testing
+                var properties = new ModifierGenerationProperties("FriendlyPhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(2);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Same);
+                applierProperties.SetApplier(ApplierType.Aura);
+                AddModifier(applierProperties);
+            }
+            {
+                //Opposite Physical damage resistance, for aura testing
+                var properties = new ModifierGenerationProperties("OppositePhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(2);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Opposite);
+                applierProperties.SetApplier(ApplierType.Aura);
+                AddModifier(applierProperties);
+            }
+            {
+                //Everyone Physical damage resistance, for aura testing
+                var properties = new ModifierGenerationProperties("EveryonePhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(2);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
+                applierProperties.SetApplier(ApplierType.Aura);
                 AddModifier(applierProperties);
             }
         }

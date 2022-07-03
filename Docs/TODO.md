@@ -1,7 +1,5 @@
 # TODO:  
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
-* >**Taunt (targeting system, change target)**
-* >**Multi-target/Aura**?
 * More Templates for basic modifiers
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 * **Have StatusResistances & ElementResistances use the same logic**
@@ -13,7 +11,6 @@
   * New target = reset cast timer
 * StatusTags refactor
 * More ComboModifiers values based on *in* values?
-* UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
 * **DamageData refactor**
 * ElementalDamage refactor
 * Resource Refactor
@@ -36,7 +33,6 @@
     SetRemovable ICleanUpComponent
 - [ ] Shield absorption (Abaddon W) (Subscribing to takeDmg event, then getting data (dmg taken) from that event?)
 - [ ] >Better naming for Condition stuff
-- [ ] Proper LegalTarget(ing)
 - [ ] More Applier shenanigans, not permanent modifiers, etc
   - [ ] Condition Applier (IConditionEffectComponent)
 - [ ] More StackComponent Modifiers & Unit Tests
@@ -44,7 +40,7 @@
 - [ ] Conditional modifiers
   - [ ] IBaseBeing instead of BaseBeing in events? 
 - [ ] Make lifeSteal component part of actual baseProject.Being class instead
-- [ ] Mutlitarget? Modifier, for AoE?
+- [ ] **Mutlitarget? Modifier, for AoE?**
 - [ ] TimeComp Slow (veno gale)
 - [ ] Stats StatusTag (stats change)
 - [ ] Improve & update modifier decision flow chart (generator)
