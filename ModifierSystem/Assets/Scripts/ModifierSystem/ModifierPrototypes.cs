@@ -187,7 +187,7 @@ namespace ModifierSystem
             {
                 //MovementSpeedOfCat
                 var properties = new ModifierGenerationProperties("MovementSpeedOfCatTest", null);
-                properties.AddEffect(new StatComponent(new[] { new Stat(StatType.MovementSpeed, 5) }));
+                properties.AddEffect(new StatComponent(StatType.MovementSpeed, 5));
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 
@@ -196,7 +196,7 @@ namespace ModifierSystem
             {
                 //AttackSpeedOfCatTest
                 var properties = new ModifierGenerationProperties("AttackSpeedOfCatTest", null);
-                properties.AddEffect(new StatComponent(new[] { new Stat(StatType.AttackSpeed, 5) }));
+                properties.AddEffect(new StatComponent(StatType.AttackSpeed, 5));
                 properties.SetEffectOnInit();
                 properties.SetRemovable(10);
 

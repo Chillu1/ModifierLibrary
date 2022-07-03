@@ -40,7 +40,7 @@ namespace ModifierSystem
     public enum CostType
     {
         None = 0,
-        Mana = StatType.Mana,
-        Health = StatType.Health
+        Health = StatType.Health,
+        Mana = StatType.Mana
     }
 }

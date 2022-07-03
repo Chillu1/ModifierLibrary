@@ -1,5 +1,8 @@
 # TODO:  
+- [ ] >**Combo Property Clone**
 - [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
+- [ ] >**Taunt (targeting system, change target)**
+- [ ] >?Multi-target/Aura
 - [ ] More Templates for basic modifiers
 - [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 - [ ] **Have StatusResistances & ElementResistances use the same logic**
@@ -12,7 +15,7 @@
 - [ ] StatusTags refactor
 - [ ] More ComboModifiers values based on *in* values?
 - [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
-- [ ] DamageData refactor
+- [ ] **DamageData refactor**
 - [ ] ElementalDamage refactor
 - [ ] Resource Refactor
 - [ ] **Damage Resistance not using "resource"**

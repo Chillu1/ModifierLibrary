@@ -14,13 +14,13 @@ namespace ModifierSystem
         }
     }
 
-    public class CheckProperties//TODO Rename
+    public class CheckProperties //TODO Rename
     {
         public Cost Cost;
         public float Cooldown;
     }
 
-    public class CheckChanceProperties : CheckProperties//TODO Rename
+    public class CheckChanceProperties : CheckProperties //TODO Rename
     {
         public double Chance;
     }
@@ -40,7 +40,7 @@ namespace ModifierSystem
     /// </summary>
     public static class TemplateModifierGenerator
     {
-        public static Modifier PermanentElementResistance(string id, ElementType elementType, float value)
+        public static Modifier PermanentElementResistance(string id, ElementType elementType, double value)
         {
             var properties = new ModifierGenerationProperties(id,
                 new ModifierInfo(elementType + " Resistance", elementType + " attacks and spells have reduced effectiveness",
@@ -50,7 +50,8 @@ namespace ModifierSystem
 
             return ModifierGenerator.GenerateModifier(properties);
         }
-        public static Modifier PermanentDamageResistance(string id, ModifierInfo info, DamageType damageType, float value)
+
+        public static Modifier PermanentDamageResistance(string id, DamageType damageType, double value)
         {
             var properties = new ModifierGenerationProperties(id,
                 new ModifierInfo(damageType + " Resistance", damageType + " attacks and spells have reduced effectiveness",
@@ -60,10 +61,35 @@ namespace ModifierSystem
 
             return ModifierGenerator.GenerateModifier(properties);
         }
+
         public static Modifier PermanentStatusResistance(string id, ModifierInfo info, StatusTag[] statusTags, double[] values)
         {
             var properties = new ModifierGenerationProperties(id, info);
             properties.AddEffect(new StatusResistanceComponent(statusTags, values));
+            properties.SetEffectOnInit();
+
+            return ModifierGenerator.GenerateModifier(properties);
+        }
+
+        public static Modifier PermanentRegen(string id, RegenType regenType, double value)
+        {
+            var properties = new ModifierGenerationProperties(id,
+                new ModifierInfo(regenType + "Regen", regenType + " regeneration", regenType + "Regen"));
+            properties.AddEffect(new StatComponent((StatType)(int)regenType, value));
+            properties.SetEffectOnInit();
+
+            return ModifierGenerator.GenerateModifier(properties);
+        }
+
+        public static Modifier PermanentDoubleRegen(string id, double healthRegen, double manaRegen)
+        {
+            var properties = new ModifierGenerationProperties(id,
+                new ModifierInfo("Health & Mana Regen", "", "MixedRegen"));
+            properties.AddEffect(new StatComponent(new[]
+            {
+                (StatType.HealthRegen, healthRegen),
+                (StatType.ManaRegen, manaRegen)
+            }));
             properties.SetEffectOnInit();
 
             return ModifierGenerator.GenerateModifier(properties);
@@ -85,9 +111,9 @@ namespace ModifierSystem
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if(check.Cost.Type != CostType.None)
+            if (check.Cost.Type != CostType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
-            if(check.Cooldown != 0)
+            if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);
 
             var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
@@ -109,9 +135,9 @@ namespace ModifierSystem
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if(check.Cost.Type != CostType.None)
+            if (check.Cost.Type != CostType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
-            if(check.Cooldown != 0)
+            if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);
 
             var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
@@ -134,9 +160,9 @@ namespace ModifierSystem
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if(check.Cost.Type != CostType.None)
+            if (check.Cost.Type != CostType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
-            if(check.Cooldown != 0)
+            if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);
 
             var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);

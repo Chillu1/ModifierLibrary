@@ -71,7 +71,7 @@ namespace ModifierSystem.Tests
         public void ConditionApplyHealOnDeath()
         {
             var damageOnDeathModifier = modifierPrototypes.Get("HealOnDeathTest");
-            character.ChangeStat(new Stat(StatType.Heal, 10));
+            character.ChangeStat(StatType.Heal, 10);
             Assert.AreEqual(initialHealthAlly, ally.Stats.Health.CurrentHealth, Delta);
 
             enemy.ChangeDamageStat(new DamageData(1000, DamageType.Physical));

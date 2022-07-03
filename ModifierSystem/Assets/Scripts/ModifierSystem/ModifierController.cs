@@ -44,7 +44,7 @@ namespace ModifierSystem
                 _timer = 0;
             }
 
-            if (_secondTimer < 0.2f)
+            if (_secondTimer < 0.2f) //TODO Think about this/check this
                 return;
 
             CooldownModifierRemover.Update(ComboModifierCooldowns);

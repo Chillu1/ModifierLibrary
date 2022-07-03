@@ -136,7 +136,7 @@ namespace ModifierSystem.Tests
                     properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })));
                     properties.SetCooldown(1);
 
-                    properties.AddEffect(new StatComponent(new[] { new Stat(StatType.MovementSpeed, 10) }));
+                    properties.AddEffect(new StatComponent(StatType.MovementSpeed, 10));
                     properties.SetEffectOnInit();
                     properties.SetRemovable(10);
 

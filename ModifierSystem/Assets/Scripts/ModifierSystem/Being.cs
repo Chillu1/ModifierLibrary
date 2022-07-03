@@ -125,22 +125,28 @@ namespace ModifierSystem
             ModifierController.CheckForComboRecipes(); //Elemental, so we check for combos
             return damageData;
         }
-
-        public void ChangeStat(Stat[] stats)
+        
+        public void ChangeStat((StatType type, double value)[] stats)
         {
             Stats.ChangeStat(stats);
-            ModifierController.CheckForComboRecipes();
-        }
-
-        public void ChangeStat(Stat stat)
-        {
-            Stats.ChangeStat(stat);
             ModifierController.CheckForComboRecipes();
         }
 
         public void ChangeStat(StatType statType, double value)
         {
             Stats.ChangeStat(statType, value);
+            ModifierController.CheckForComboRecipes();
+        }
+        
+        public void ChangeStatMultiplier((StatType type, double multiplier)[] stats)
+        {
+            Stats.ChangeStatMultiplier(stats);
+            ModifierController.CheckForComboRecipes();
+        }
+
+        public void ChangeStatMultiplier(StatType statType, double multiplier)
+        {
+            Stats.ChangeStatMultiplier(statType, multiplier);
             ModifierController.CheckForComboRecipes();
         }
 

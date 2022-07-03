@@ -3,13 +3,22 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatComponent : EffectComponent
+    public sealed class StatComponent : EffectComponent
     {
-        private Stat[] Stats { get; }
+        private (StatType type, double value)[] Stats { get; }
 
-        public StatComponent(Stat[] stats, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public StatComponent(StatType type, double value, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        {
+            Stats = new[] { (type, value) };
+
+            Info = $"Stat: {Stats[0].type} {Stats[0].value}";
+        }
+
+        public StatComponent((StatType type, double value)[] stats, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {
             Stats = stats;
+
+            Info = $"Stats: {string.Join(", ", Stats.Select(t => $"{t.type} {t.value}"))}";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
@@ -17,9 +26,9 @@ namespace ModifierSystem
             ((Being)receiver).ChangeStat(Stats);
         }
 
-        //protected override void RemoveEffect(BaseBeing receiver, BaseBeing acter)
+        //protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         //{
-        //    ((Being)receiver).ChangeStat(Stats.Select(s => s.BaseValue = -s.BaseValue));
+        //    ((Being)receiver).ChangeStat(Stats.Select(t => t.value = -t.value).Cast<(StatType type, double value)>().ToArray());
         //}
     }
 }

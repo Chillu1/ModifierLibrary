@@ -5,9 +5,9 @@ namespace ModifierSystem
     public sealed class ElementResistanceComponent : EffectComponent
     {
         private ElementType ElementType { get; }
-        private float Value { get; }
+        private double Value { get; }
 
-        public ElementResistanceComponent(ElementType elementType, float value, ConditionCheckData conditionCheckData = null,
+        public ElementResistanceComponent(ElementType elementType, double value, ConditionCheckData conditionCheckData = null,
             bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             ElementType = elementType;

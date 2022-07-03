@@ -5,9 +5,9 @@ namespace ModifierSystem
     public sealed class DamageResistanceComponent : EffectComponent
     {
         private DamageType DamageType { get; }
-        private float Value { get; }
+        private double Value { get; }
 
-        public DamageResistanceComponent(DamageType damageType, float value, ConditionCheckData conditionCheckData = null,
+        public DamageResistanceComponent(DamageType damageType, double value, ConditionCheckData conditionCheckData = null,
             bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             DamageType = damageType;

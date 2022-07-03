@@ -16,7 +16,7 @@ namespace ModifierSystem
             Damage = damage;
             StackEffectType = stackEffectType;
 
-            Info = "Damage: "+string.Join<DamageData>(" ", Damage) + "\n";
+            Info = "Damage: " + string.Join<DamageData>(" ", Damage) + "\n";
         }
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)

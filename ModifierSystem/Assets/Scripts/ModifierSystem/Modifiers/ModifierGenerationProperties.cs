@@ -110,9 +110,9 @@ namespace ModifierSystem
             StackComponentProperties = stackComponentProperties;
         }
 
-        public void SetRefreshable(RefreshEffectType refreshDuration)
+        public void SetRefreshable(RefreshEffectType refreshEffectType = RefreshEffectType.RefreshDuration)
         {
-            RefreshEffectType = refreshDuration;
+            RefreshEffectType = refreshEffectType;
         }
 
         public void SetCost(CostType costType, int amount)
