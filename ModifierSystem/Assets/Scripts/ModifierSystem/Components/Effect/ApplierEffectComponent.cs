@@ -20,7 +20,7 @@ namespace ModifierSystem
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
-            ((Being)receiver).AddModifier((Modifier)Modifier.Clone(), Parameters);
+            ((Being)receiver).AddModifier((Modifier)Modifier.Clone(), Parameters, (Being)acter);
         }
 
         public void StackEffect(int stacks, double value)

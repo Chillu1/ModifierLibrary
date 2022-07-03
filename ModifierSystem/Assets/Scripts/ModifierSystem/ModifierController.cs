@@ -62,11 +62,12 @@ namespace ModifierSystem
             _secondTimer = 0f;
         }
 
-        public bool TryAddModifier(Modifier modifier, AddModifierParameters parameters)
+        public bool TryAddModifier(Modifier modifier, AddModifierParameters parameters, Being sourceBeing = null)
         {
             bool modifierAdded;
 
             modifier.SetupOwner(_owner);
+            modifier.SetupApplierOwner(modifier.IsApplierModifier ? _owner : sourceBeing);
             HandleTarget(modifier, parameters);
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
@@ -120,7 +121,7 @@ namespace ModifierSystem
             foreach (var modifier in comboModifiers)
             {
                 //Log.Info("Added combo modifier " + modifier.Id, "modifiers");
-                TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget);
+                TryAddModifier(modifier, AddModifierParameters.OwnerIsTarget, _owner);
             }
 
             //Check for recipes after adding all modifiers

@@ -37,9 +37,9 @@ namespace ModifierSystem
             }
         }
 
-        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default)
+        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, Being sourceBeing = null)
         {
-            bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters);
+            bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters, sourceBeing);
 
             if (modifierAdded && modifier.ApplierType.HasFlag(ApplierType.Cast))
                 CastingController.AddCastModifier(modifier);

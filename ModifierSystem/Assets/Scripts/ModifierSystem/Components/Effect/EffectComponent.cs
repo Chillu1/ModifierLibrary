@@ -8,6 +8,7 @@ namespace ModifierSystem
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
         private bool IsRevertible { get; }
         private ITargetComponent _targetComponent;
+        protected Being ApplierOwner => _targetComponent.ApplierOwner;//TODO TEMP, to make Taunt work... Feeding original applier
 
         public string Info { get; protected set; }
 

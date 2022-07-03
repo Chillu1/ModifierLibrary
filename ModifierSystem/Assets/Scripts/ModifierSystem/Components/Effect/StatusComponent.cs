@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusComponent : EffectComponent, IStackEffectComponent
+    public sealed class StatusComponent : EffectComponent, IStackEffectComponent
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
@@ -21,12 +21,21 @@ namespace ModifierSystem
 
         protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
         {
-            receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
+            if (StatusEffect == StatusEffect.Taunt)
+            {
+                BaseBeing tauntTarget = receiver == acter ? ApplierOwner : acter;
+                receiver.StatusEffects.ChangeTauntEffect(Duration, tauntTarget);
+            }
+            else
+                receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
         protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
-            receiver.StatusEffects.DecreasesStatusEffect(StatusEffect, Duration);
+            if (StatusEffect == StatusEffect.Taunt)
+                receiver.StatusEffects.DecreaseTauntEffect(Duration);
+            else
+                receiver.StatusEffects.DecreaseStatusEffect(StatusEffect, Duration);
         }
 
         public void StackEffect(int stacks, double value)

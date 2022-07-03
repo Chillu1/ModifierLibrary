@@ -96,5 +96,27 @@ namespace ModifierSystem.Tests
             enemy.Attack(character);
             Assert.False(character.Stats.Health.IsFull);
         }
+
+        [Test]
+        public void TauntStatusEffect()
+        {
+            var tauntModifierApplier = modifierPrototypes.GetApplier("TauntTest");
+            var basicDamageModifierApplier = modifierPrototypes.GetApplier("IceBoltCastTest");
+            character.AddModifier(tauntModifierApplier, AddModifierParameters.NullStartTarget);
+            enemy.AddModifier(basicDamageModifierApplier, AddModifierParameters.NullStartTarget);
+            Assert.True(enemy.StatusEffects.LegalActions == LegalAction.All);
+
+            enemy.TargetingSystem.SetAttackTarget(ally);
+            character.CastModifier(enemy, "TauntTestApplier");
+
+            Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
+            enemy.Update(1.1f);//Should attack new taunted target, not old ally target
+
+            Assert.False(character.Stats.Health.IsFull);
+            Assert.AreEqual(initialHealthAlly, ally.Stats.Health.CurrentHealth, Delta);
+
+            enemy.CastModifier(ally, "IceBoltCastTestApplier"); //Shouldn't do anything, can't cast while taunted
+            Assert.AreEqual(initialHealthAlly, ally.Stats.Health.CurrentHealth, Delta);
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace ModifierSystem
         [CanBeNull] private ICheckComponent CheckComponent { get; set; }
 
         private bool _setupFinished;
-        private IModifierGenerationProperties Properties { get; set; }
+        protected IModifierGenerationProperties Properties { get; private set; }
 
         public Modifier(string id, ModifierInfo info, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
         {
@@ -179,6 +179,11 @@ namespace ModifierSystem
         {
             TargetComponent.SetupOwner(owner);
             CheckComponent?.CostComponent?.SetupOwner(owner);
+        }
+
+        public void SetupApplierOwner(Being owner)
+        {
+            TargetComponent.SetupApplierOwner(owner);
         }
 
         public void SetAutomaticCast(bool automaticCast = true)
@@ -370,7 +375,7 @@ namespace ModifierSystem
 
         public virtual object Clone()
         {
-            return PropertyClone(); // this.DeepClone();
+            return PropertyClone();
         }
 
         public override string ToString()

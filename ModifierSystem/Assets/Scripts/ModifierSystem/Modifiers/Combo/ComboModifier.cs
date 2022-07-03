@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using BaseProject;
-using BaseProject.Utils;
-using Force.DeepCloner;
 
 namespace ModifierSystem
 {
@@ -59,7 +56,7 @@ namespace ModifierSystem
                 (bool success, double multiplier) = CheckRecipe(recipe, modifierIds, elementController, stats);
                 if (success)
                 {
-                    if(Effect != null)
+                    if (Effect != null)
                         Effect.SetMultiplier(multiplier);
                     return true; //If we found one, success
                 }
@@ -69,9 +66,10 @@ namespace ModifierSystem
             return false; //Didn't find a recipe
         }
 
-        private (bool success, double multiplier) CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds, ElementController elementController, Stats stats)
+        private (bool success, double multiplier) CheckRecipe(ComboRecipe recipe, HashSet<string> modifierIds,
+            ElementController elementController, Stats stats)
         {
-            double multiplier = 1;//For now, we only support dynamic element combos
+            double multiplier = 1; //For now, we only support dynamic element combos
 
             //Log.Verbose("Id: " + Id, "modifiers");
             if (recipe.Id != null && recipe.Id.Length != 0)
@@ -119,7 +117,7 @@ namespace ModifierSystem
                     return (false, 0);
 
                 double intensity = elementController.GetIntensity(elementalRecipe.elementType);
-                if(intensity < minElemental)
+                if (intensity < minElemental)
                     minElemental = intensity;
             }
 
@@ -136,11 +134,6 @@ namespace ModifierSystem
             }
 
             return true;
-        }
-
-        public override object Clone()
-        {
-            return this.DeepClone();
         }
     }
 }

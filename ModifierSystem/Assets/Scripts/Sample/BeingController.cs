@@ -71,12 +71,12 @@ namespace ModifierSystem.Sample
 
             if (isEnemy)
             {
-                being.TargetingSystem.SetupTargets(GetRandomCharacterTarget, GetRandomCharacterTarget, GlobalRandom.NextFloat(0.05f, 0.3f));
+                being.TargetingSystem.SetupTargets(GetRandomCharacterTarget, GetRandomCharacterTarget);
                 _enemies.Add(being);
             }
             else
             {
-                being.TargetingSystem.SetupTargets(GetRandomEnemyTarget, GetRandomEnemyTarget, GlobalRandom.NextFloat(0.05f, 0.3f));
+                being.TargetingSystem.SetupTargets(GetRandomEnemyTarget, GetRandomEnemyTarget);
                 _characters.Add(being);
             }
 

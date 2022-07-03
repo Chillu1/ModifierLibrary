@@ -835,6 +835,34 @@ namespace ModifierSystem
 
                 AddModifier(properties);
             }
+
+            {
+                //Taunt
+                var properties = new ModifierGenerationProperties("TauntTest", null);
+                properties.AddEffect(new StatusComponent(StatusEffect.Taunt, 2f));
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
+                AddModifier(applierProperties);
+            }
+            {
+                //Basic cold damage cast
+                var damageData = new[] { new DamageData(5, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltCastTest", null);
+                properties.AddEffect(new DamageComponent(damageData), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                applierProperties.SetApplier(ApplierType.Cast);
+                AddModifier(applierProperties);
+            }
         }
 
         private bool ValidateModifier(Modifier modifier)

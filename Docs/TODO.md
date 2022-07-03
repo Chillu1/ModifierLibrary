@@ -1,26 +1,25 @@
 # TODO:  
-- [ ] >**Combo Property Clone**
-- [ ] **Effect should be gated by Cost,CD, Chance. Not Apply**
-- [ ] >**Taunt (targeting system, change target)**
-- [ ] >?Multi-target/Aura
-- [ ] More Templates for basic modifiers
-- [ ] Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
-- [ ] **Have StatusResistances & ElementResistances use the same logic**
-- [ ] Status Res for combo element types
-- [ ] Event naming convention for Conditional Modifiers
-- [ ] Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
-- [ ] BaseModifierProperties (for both normal & applier?)
-- [ ] **Cast Applier**
-  - [ ] New target = reset cast timer
-- [ ] StatusTags refactor
-- [ ] More ComboModifiers values based on *in* values?
-- [ ] UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
-- [ ] **DamageData refactor**
-- [ ] ElementalDamage refactor
-- [ ] Resource Refactor
-- [ ] **Damage Resistance not using "resource"**
-- [ ] ElementData Value making element damage be stronger 
-- [ ] Bench, what?
+* **Effect should be gated by Cost,CD, Chance. Not Apply**
+* >**Taunt (targeting system, change target)**
+* >**Multi-target/Aura**?
+* More Templates for basic modifiers
+* Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
+* **Have StatusResistances & ElementResistances use the same logic**
+* Status Res for combo element types
+* Event naming convention for Conditional Modifiers
+* Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
+* BaseModifierProperties (for both normal & applier?)
+* **Cast Applier**
+  * New target = reset cast timer
+* StatusTags refactor
+* More ComboModifiers values based on *in* values?
+* UnitType => Ally/Enemy. TargetType? Ally/Enemy/Self
+* **DamageData refactor**
+* ElementalDamage refactor
+* Resource Refactor
+* **Damage Resistance not using "resource"**
+* ElementData Value making element damage be stronger 
+* Bench, what?
 
 ## Lower prio
 

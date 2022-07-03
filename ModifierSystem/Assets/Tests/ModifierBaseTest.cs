@@ -42,17 +42,17 @@ namespace ModifierSystem.Tests
         {
             character = new Being(new BeingProperties
             {
-                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
             ally = new Being(new BeingProperties
             {
-                Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 3,
                 Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
             });
             enemy = new Being(new BeingProperties
             {
-                Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+                Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
             initialHealthCharacter = character.Stats.Health.CurrentHealth;

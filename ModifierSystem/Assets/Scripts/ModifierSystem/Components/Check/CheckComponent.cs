@@ -9,7 +9,7 @@ namespace ModifierSystem
     public class CheckComponent : ICheckComponent
     {
         private IEffectComponent[] EffectComponents { get; }
-        private IEffectComponent[] TimeEffectComponents { get; }
+        [CanBeNull] private IEffectComponent[] TimeEffectComponents { get; }
 
         [CanBeNull] public ICostComponent CostComponent { get; }
         [CanBeNull] public ICooldownComponent CooldownComponent { get; }
@@ -20,8 +20,8 @@ namespace ModifierSystem
         public CheckComponent(IEffectComponent[] effectComponents, IEffectComponent[] effectTimeComponents = null,
             ICostComponent costComponent = null, ICooldownComponent cooldownComponent = null, IChanceComponent chanceComponent = null)
         {
-            TimeEffectComponents = effectTimeComponents;
             EffectComponents = effectComponents;
+            TimeEffectComponents = effectTimeComponents;
             CostComponent = costComponent;
             CooldownComponent = cooldownComponent;
             ChanceComponent = chanceComponent;
@@ -108,7 +108,7 @@ namespace ModifierSystem
                 if (effectComponent.GetType() == typeof(T))
                     return true;
             }
-            foreach (var effectComponent in TimeEffectComponents)
+            foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
             {
                 if (effectComponent.GetType() == typeof(T))
                     return true;

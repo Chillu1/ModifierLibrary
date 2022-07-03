@@ -12,7 +12,14 @@ namespace ModifierSystem
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
 
+        /// <summary>
+        ///     Current owner of this modifier
+        /// </summary>
         public Being Owner { get; private set; }
+        /// <summary>
+        ///     Being that applied this modifier to current being
+        /// </summary>
+        public Being ApplierOwner { get; private set; }
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
@@ -38,6 +45,11 @@ namespace ModifierSystem
         public void SetupOwner(Being owner)
         {
             Owner = owner;
+        }
+
+        public void SetupApplierOwner(Being owner)
+        {
+            ApplierOwner = owner;
         }
 
         public bool ValidateTarget(Being target)

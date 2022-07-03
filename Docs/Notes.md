@@ -2,6 +2,12 @@
 
 ## Temp Notes
 
+Aura:
+    1. Everyone has a list of allies & enemies in map, that auras should affect.
+        More power with who we can target with each aura.
+    2. Map list of all allies & enemies, & we loop through it with each being.
+        Less redundancy & data with each being.
+
 Temp DamageResistance
     Add Res
     Wait 1s
