@@ -16,7 +16,7 @@ namespace ModifierSystem.Tests
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
             character.SetAutomaticCastAll();
-            character.Update(CastingController.AutomaticCastCooldown);
+            character.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
                 character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
@@ -39,7 +39,7 @@ namespace ModifierSystem.Tests
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
             enemy.SetAutomaticCastAll();
 
-            enemy.Update(CastingController.AutomaticCastCooldown);
+            enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
                 enemy.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
@@ -64,7 +64,7 @@ namespace ModifierSystem.Tests
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
             enemy.SetAutomaticCastAll();
 
-            enemy.Update(CastingController.AutomaticCastCooldown);
+            enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
                 enemy.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
@@ -89,7 +89,7 @@ namespace ModifierSystem.Tests
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
             enemy.SetAutomaticCastAll();
 
-            enemy.Update(CastingController.AutomaticCastCooldown);
+            enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
                 enemy.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);

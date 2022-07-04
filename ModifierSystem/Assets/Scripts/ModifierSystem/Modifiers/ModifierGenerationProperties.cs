@@ -30,13 +30,13 @@ namespace ModifierSystem
         public ConditionEventTarget ConditionEventTarget { get; private set; }
         public ConditionEvent ConditionEvent { get; private set; }
 
-        public DamageData[] DamageData { get; private set; }
+        public DamageData[] DamageData { get; protected set; }
 
         public bool Removable { get; private set; }
         public double RemoveDuration { get; private set; }
 
         public List<EffectPropertyInfo> EffectPropertyInfo { get; private set; }
-        private EffectPropertyInfo _currentEffectPropertyInfo;
+        protected EffectPropertyInfo currentEffectPropertyInfo;
         public StackComponentProperties StackComponentProperties { get; private set; }
         public RefreshEffectType RefreshEffectType { get; private set; }
         public (CostType, float) Cost { get; private set; }
@@ -70,21 +70,21 @@ namespace ModifierSystem
 
         public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
         {
-            _currentEffectPropertyInfo = new EffectPropertyInfo(effectComponent);
-            EffectPropertyInfo.Add(_currentEffectPropertyInfo);
+            currentEffectPropertyInfo = new EffectPropertyInfo(effectComponent);
+            EffectPropertyInfo.Add(currentEffectPropertyInfo);
             if (damageData != null)
                 DamageData = damageData;
         }
 
         public void SetEffectOnInit()
         {
-            _currentEffectPropertyInfo.SetEffectOnInit();
+            currentEffectPropertyInfo.SetEffectOnInit();
         }
 
         /// <param name="resetOnFinished">Resets the timer after duration is finished (interval)</param>
         public void SetEffectOnTime(double duration, bool resetOnFinished)
         {
-            _currentEffectPropertyInfo.SetEffectOnTime(duration, resetOnFinished);
+            currentEffectPropertyInfo.SetEffectOnTime(duration, resetOnFinished);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace ModifierSystem
         /// </summary>
         private void SetEffectOnApply()
         {
-            _currentEffectPropertyInfo.SetEffectOnApply();
+            currentEffectPropertyInfo.SetEffectOnApply();
         }
 
         /// <summary>

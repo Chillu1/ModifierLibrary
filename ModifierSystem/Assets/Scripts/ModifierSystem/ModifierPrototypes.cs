@@ -866,10 +866,8 @@ namespace ModifierSystem
 
             {
                 //Friendly Physical damage resistance, for aura testing
-                var properties = new ModifierGenerationProperties("FriendlyPhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                var properties = new AuraEffectModifierGenerationProperties("FriendlyPhysicalDamageResistanceAuraTest", null);
                 properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
-                properties.SetEffectOnInit();
-                properties.SetRemovable(2);
 
                 var modifier = AddModifier(properties);
 
@@ -879,10 +877,8 @@ namespace ModifierSystem
             }
             {
                 //Opposite Physical damage resistance, for aura testing
-                var properties = new ModifierGenerationProperties("OppositePhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                var properties = new AuraEffectModifierGenerationProperties("OppositePhysicalDamageResistanceAuraTest", null);
                 properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
-                properties.SetEffectOnInit();
-                properties.SetRemovable(2);
 
                 var modifier = AddModifier(properties);
 
@@ -892,10 +888,8 @@ namespace ModifierSystem
             }
             {
                 //Everyone Physical damage resistance, for aura testing
-                var properties = new ModifierGenerationProperties("EveryonePhysicalDamageResistanceAuraTest", null, LegalTarget.Self);
+                var properties = new AuraEffectModifierGenerationProperties("EveryonePhysicalDamageResistanceAuraTest", null);
                 properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
-                properties.SetEffectOnInit();
-                properties.SetRemovable(2);
 
                 var modifier = AddModifier(properties);
 

@@ -17,7 +17,9 @@ namespace ModifierSystem
         private readonly List<Modifier> _enemyAuraCastModifiers;
 
         private float _castTimer = AutomaticCastCooldown;
+        private float _auraCastTimer = AutomaticAuraCastCooldown;
         public const float AutomaticCastCooldown = 0.1f;
+        public const float AutomaticAuraCastCooldown = 1.0f;
 
         private bool _globalAutomaticCast;
 
@@ -35,36 +37,41 @@ namespace ModifierSystem
         public void Update(float deltaTime)
         {
             _castTimer -= deltaTime;
-            if (_castTimer > 0)
-                return;
+            _auraCastTimer -= deltaTime;
 
-            _castTimer = AutomaticCastCooldown;
             //Log.Info(_castModifiers.Count + " cast modifiers. " + _allyAuraCastModifiers.Count + " ally aura cast modifiers. " +
             //         _enemyAuraCastModifiers.Count + " enemy aura cast modifiers.");
             //Log.Info(TargetingSystem.AllyAuraTargets.Count + " ally aura targets. " + TargetingSystem.EnemyAuraTargets.Count +
             //         " enemy aura targets.");
 
-            foreach (var castModifier in _castModifiers)
+            if (_castTimer <= 0)
             {
-                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
-                    castModifier.TryCast((Being)TargetingSystem.CastTarget, true);
-            }
+                _castTimer = AutomaticCastCooldown;
 
-            foreach (var castModifier in _allyAuraCastModifiers)
-            {
-                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                foreach (var castModifier in _castModifiers)
                 {
-                    foreach (var allyTarget in TargetingSystem.AllyAuraTargets)
-                        castModifier.TryCast((Being)allyTarget, true);
+                    if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                        castModifier.TryCast((Being)TargetingSystem.CastTarget, true);
                 }
             }
 
-            foreach (var castModifier in _enemyAuraCastModifiers)
+            if (_auraCastTimer > 0)
+                return;
+
+            _auraCastTimer = AutomaticAuraCastCooldown;
+
+            AuraCast(_allyAuraCastModifiers, TargetingSystem.AllyAuraTargets);
+            AuraCast(_enemyAuraCastModifiers, TargetingSystem.EnemyAuraTargets);
+
+            void AuraCast(List<Modifier> modifiers, List<BaseBeing> targets)
             {
-                if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                foreach (var castModifier in modifiers)
                 {
-                    foreach (var enemyTarget in TargetingSystem.EnemyAuraTargets)
-                        castModifier.TryCast((Being)enemyTarget, true);
+                    if (!castModifier.IsAutomaticCasting && !_globalAutomaticCast)
+                        continue;
+
+                    foreach (var target in targets)
+                        castModifier.TryCast((Being)target, true);
                 }
             }
         }

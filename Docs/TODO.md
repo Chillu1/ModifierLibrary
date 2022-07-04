@@ -1,4 +1,5 @@
 # TODO:  
+* **Dynamic AddModifierProperties, if applier = nullstartvaluetarget**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * More Templates for basic modifiers
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
