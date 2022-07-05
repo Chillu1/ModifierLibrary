@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using Force.DeepCloner;
-using UnityEngine;
 
 namespace ModifierSystem
 {
@@ -18,45 +16,35 @@ namespace ModifierSystem
         {
             ValidateProperties(properties);
 
-            Modifier modifier;
-            modifier = properties is ComboModifierGenerationProperties comboProperties
+            Modifier modifier = properties is ComboModifierGenerationProperties comboProperties
                 ? new ComboModifier(comboProperties.Id, properties.Info, comboProperties.Recipes, comboProperties.Cooldown,
                     comboProperties.Effect)
                 : new Modifier(properties.Id, properties.Info, properties.AddModifierParameters, properties.ApplierType,
                     properties.HasConditionData);
 
             //---Components---
-
-            var targetComponent = properties.HasConditionData
+            TargetComponent targetComponent = properties.HasConditionData
                 ? new TargetComponent(properties.LegalTarget, properties.ConditionEventTarget, properties.IsApplier)
                 : new TargetComponent(properties.LegalTarget, properties.IsApplier);
 
             //---Effect---
-            //TODO We have to deep clone effect so it can be reused without multiple targets holding the same effect, and overwriting each other
-            //  Not ideal, best to have some sort of data-only in Properties, and then make a new effect class here
-            EffectPropertyInfo effectPropertyInfo = properties.EffectPropertyInfo[0].DeepClone();
-            effectPropertyInfo.EffectComponent.Setup(targetComponent);
+            //We have to deep clone effect so it can be reused without multiple targets holding the same effect, and overwriting each other, Hopefully TEMP
+            EffectPropertyInfo[] effectPropertyInfo = new EffectPropertyInfo[properties.EffectPropertyInfo.Count];
+            for (int i = 0; i < properties.EffectPropertyInfo.Count; i++)
+                effectPropertyInfo[i] = properties.EffectPropertyInfo[i].DeepClone();
 
-            EffectPropertyInfo effectPropertyInfoTwo = null;
-            if (properties.EffectPropertyInfo.Count > 1)
-            {
-                effectPropertyInfoTwo = properties.EffectPropertyInfo[1].DeepClone();
-                effectPropertyInfoTwo.EffectComponent.Setup(targetComponent);
-            }
+            foreach (var propertyInfo in effectPropertyInfo)
+                propertyInfo.EffectComponent.Setup(targetComponent);
 
             //---Check---
             var effects = new List<IEffectComponent>();
             var timeEffects = new List<IEffectComponent>();
-            if (effectPropertyInfo.EffectOn.HasFlag(EffectOn.Time))
-                timeEffects.Add(effectPropertyInfo.EffectComponent);
-            if (effectPropertyInfo.EffectOn.HasFlag(EffectOn.Init) || effectPropertyInfo.EffectOn.HasFlag(EffectOn.Apply))
-                effects.Add(effectPropertyInfo.EffectComponent);
-            if (effectPropertyInfoTwo != null)
+            foreach (var propertyInfo in effectPropertyInfo)
             {
-                if (effectPropertyInfoTwo.EffectOn.HasFlag(EffectOn.Time))
-                    timeEffects.Add(effectPropertyInfoTwo.EffectComponent);
-                if (effectPropertyInfoTwo.EffectOn.HasFlag(EffectOn.Init) || effectPropertyInfoTwo.EffectOn.HasFlag(EffectOn.Apply))
-                    effects.Add(effectPropertyInfoTwo.EffectComponent);
+                if (propertyInfo.EffectOn.HasFlag(EffectOn.Time))
+                    timeEffects.Add(propertyInfo.EffectComponent);
+                if (propertyInfo.EffectOn.HasFlag(EffectOn.Init) || propertyInfo.EffectOn.HasFlag(EffectOn.Apply))
+                    effects.Add(propertyInfo.EffectComponent);
             }
 
             CheckComponent checkComponent = new CheckComponent(
@@ -72,18 +60,18 @@ namespace ModifierSystem
             //---Conditional Apply---
             ConditionalApplyComponent conditionalApplyComponent = null;
             if (properties.HasConditionData)
-                conditionalApplyComponent =
-                    new ConditionalApplyComponent(effectPropertyInfo.EffectComponent, targetComponent, properties.ConditionEvent,
-                        checkComponent);
+                conditionalApplyComponent = new ConditionalApplyComponent(effectPropertyInfo[0].EffectComponent,
+                    targetComponent, properties.ConditionEvent, checkComponent);
 
             //---CleanUp---
             //TODO ApplyComponent in cleanup
             CleanUpComponent cleanUpComponent = null;
-            if (properties.Removable && (effectPropertyInfo.EffectOn.HasFlag(EffectOn.Apply) ||
-                                         effectPropertyInfo.EffectOn.HasFlag(EffectOn.Init)))
-                cleanUpComponent =
-                    new CleanUpComponent(conditionalApplyComponent,
-                        effects.Cast<EffectComponent>().ToArray()); //EffectTime can't be remove based, for now?
+            if (properties.Removable && (effectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Apply) ||
+                                         effectPropertyInfo[0].EffectOn.HasFlag(EffectOn.Init)))
+            {
+                //EffectTime can't be remove based, for now?
+                cleanUpComponent = new CleanUpComponent(conditionalApplyComponent, effects.Cast<EffectComponent>().ToArray());
+            }
 
             //---Remove---
             //---TimeRemove--- //TODO & ConditionalApplyComponent(remove)
@@ -100,7 +88,7 @@ namespace ModifierSystem
             modifier.AddComponent(targetComponent);
             modifier.AddComponent(checkComponent);
 
-            if (properties.IsApplier && effectPropertyInfo.EffectComponent is ApplierEffectComponent applier)
+            if (properties.IsApplier && effectPropertyInfo[0].EffectComponent is ApplierEffectComponent applier)
             {
                 var applierComponent = new ApplierComponent(checkComponent);
                 modifier.AddComponent(applierComponent);
@@ -109,21 +97,21 @@ namespace ModifierSystem
             if (removeTimeComponent != null)
                 modifier.AddComponent(removeTimeComponent);
 
+            foreach (var propertyInfo in effectPropertyInfo)
+                SetupEffectOn(modifier, propertyInfo, checkComponent, conditionalApplyComponent);
+
             //Make rest of the component that won't be used by anything else
-            SetupEffectOn(modifier, effectPropertyInfo, checkComponent, conditionalApplyComponent);
-            if (effectPropertyInfoTwo != null)
-                SetupEffectOn(modifier, effectPropertyInfoTwo, checkComponent, conditionalApplyComponent);
 
             //---Stack---
-            if (effectPropertyInfo.EffectComponent is IStackEffectComponent stackEffectComponent &&
+            if (effectPropertyInfo[0].EffectComponent is IStackEffectComponent stackEffectComponent &&
                 properties.StackComponentProperties != null)
-                modifier.AddComponent(new StackComponent(stackEffectComponent, properties.StackComponentProperties.DeepClone()));
+                modifier.AddComponent(new StackComponent(stackEffectComponent, properties.StackComponentProperties));
 
             //---Refresh---
             if (properties.RefreshEffectType != RefreshEffectType.None)
                 modifier.AddComponent(new RefreshComponent(removeTimeComponent, properties.RefreshEffectType));
 
-            modifier.FinishSetup(properties.DamageData.DeepClone());
+            modifier.FinishSetup(properties.DamageData);
             modifier.AddProperties(properties);
             //Debug.Log(modifier.GetType() + "_ " + typeof(TModifier));
             return modifier;

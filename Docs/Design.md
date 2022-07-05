@@ -64,6 +64,10 @@ Applier
 
 
 # Design questions
+* We have to deep clone effect in EffectPropertyInfo so it can be reused without multiple targets holding the same effect, and overwriting each other
+    Not ideal, best to have some sort of data-only in Properties, and then make a new effect class here.
+    Problem with that, is that we'll need to make a new effect using reflection?
+    Or a centralized method to make new effects, that needs to be updated for each new effect... Both, bad solutions...
 * Either all buffs need to be refreshable, or we need a special check if something is a buff effect, to not apply it again on init
 * First being events have priority rn over all the other ones, so their calls will take over other events counters, ex, AttackEvent heal 1 health, will take over next event that is ex. HitEvent heal 100 health
   * We could maybe set some sort of priority to all events? Or give everyone a fair shot/fair deal instead of limiting every event?

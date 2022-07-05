@@ -1,8 +1,9 @@
-# TODO:  
-* >**EffectComponent data in ModifierGenerationProperties, instead of actual EffectComponent (we might be able to make internal properties for each effectComponent, then save that and use it instead?**
+# TODO:
+
 * **DamageStatComponent might have some bad/improper logic on reverting**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * More Templates for basic modifiers
+* Improved GenerateModifier, multi effects, etc.
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
 * **Have StatusResistances & ElementResistances use the same logic**
 * Status Res for combo element types
