@@ -15,7 +15,7 @@ namespace ModifierSystem.Tests
         // public void TargetNotValidAlly()
         // {
         //     var damageModifierApplier = modifierPrototypes.GetItem("IceBoltTestApplier");
-        //     character.AddModifier(damageModifierApplier, AddModifierParameters.NullStartTarget);
+        //     character.AddModifier(damageModifierApplier);
         //     //We can attack our own allies, but we shouldn't apply modifiers that aren't for our allies
         //     character.Attack(ally);
         //     Assert.AreEqual(initialHealthAlly - initialDamageAlly, ally.Stats.Health.CurrentHealth, Delta);
@@ -25,7 +25,7 @@ namespace ModifierSystem.Tests
         public void RemoveComponentContains()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy);
             enemy.Update(9.9f);
 
@@ -37,7 +37,7 @@ namespace ModifierSystem.Tests
         public void RemoveComponentEffect()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy);
             enemy.Update(10.1f);
 
@@ -49,7 +49,7 @@ namespace ModifierSystem.Tests
         public void RemoveComponentLingerEffect()
         {
             var doTModifierApplier = modifierPrototypes.Get("IceBoltTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy);
             enemy.Update(0.4f);
             var doTModifier = modifierPrototypes.Get("IceBoltTest");
@@ -77,7 +77,7 @@ namespace ModifierSystem.Tests
         {
             //On attack, we should try to apply the modifier, check for cost, then apply, then take the cost.
             var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
-            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(healthCostModifier);
 
             Assert.True(character.Stats.Health.IsFull);
             character.Attack(enemy);
@@ -90,7 +90,7 @@ namespace ModifierSystem.Tests
         public void HealthCostNotLethal()
         {
             var healthCostModifier = modifierPrototypes.Get("IceBoltHealthCostTestApplier");
-            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(healthCostModifier);
 
             Assert.True(character.Stats.Health.IsFull);
             for (int i = 0; i < 7; i++)
@@ -105,7 +105,7 @@ namespace ModifierSystem.Tests
         public void ManaCost()
         {
             var healthCostModifier = modifierPrototypes.GetApplier("IceBoltCastManaCostTest");
-            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(healthCostModifier);
 
             Assert.True(character.Stats.Mana.IsFull);
             character.CastModifier(enemy, "IceBoltCastManaCostTestApplier");
@@ -118,7 +118,7 @@ namespace ModifierSystem.Tests
         public void ManaCostAttack()
         {
             var healthCostModifier = modifierPrototypes.GetApplier("IceBoltAttackManaCostTest");
-            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(healthCostModifier);
 
             Assert.True(character.Stats.Mana.IsFull);
             character.Attack(enemy);
@@ -133,7 +133,7 @@ namespace ModifierSystem.Tests
             double dmg = initialDamageCharacter;
 
             var healthCostModifier = modifierPrototypes.GetApplier("IceBoltCooldownTest");
-            character.AddModifier(healthCostModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(healthCostModifier);
 
             Assert.True(enemy.Stats.Health.IsFull);
 
@@ -159,7 +159,7 @@ namespace ModifierSystem.Tests
         public void TwoEffects()
         {
             var fireBallModifier = modifierPrototypes.GetApplier("FireBallTwoEffectTest");
-            character.AddModifier(fireBallModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(fireBallModifier);
 
             character.Attack(enemy);//1 auto attack, 10 init dmg
 
@@ -174,7 +174,7 @@ namespace ModifierSystem.Tests
         public void TwoEffectsInitDot()
         {
             var fireBallModifier = modifierPrototypes.GetApplier("FireBallTwoEffectInitTest");
-            character.AddModifier(fireBallModifier, AddModifierParameters.DefaultOffensive);
+            character.AddModifier(fireBallModifier);
 
             character.Attack(enemy);//1 auto attack, 10 init dmg, 3 dot
 
@@ -216,6 +216,33 @@ namespace ModifierSystem.Tests
             character.Update(11f);
 
             Assert.AreEqual(initialDamageCharacter, character.Stats.Damage.DamageSum(), Delta);
+        }
+
+        [Test]
+        public void RevertibleDamageResistanceBuff()
+        {
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+
+            var modifierApplier = modifierPrototypes.GetApplier("TemporaryAlliedDamageResistanceBuffTest");
+            ally.AddModifier(modifierApplier);
+            
+            ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
+            ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
+
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+
+            character.Update(11f);
+
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            
+            ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
+            character.Update(8f);
+
+            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
+                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
         }
     }
 }

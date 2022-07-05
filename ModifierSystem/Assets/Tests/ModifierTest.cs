@@ -17,7 +17,7 @@ namespace ModifierSystem.Tests
         public void DamageDealt()
         {
             var damageModifierApplier = modifierPrototypes.Get("IceBoltTestApplier");
-            character.AddModifier(damageModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(damageModifierApplier);
             character.Attack(enemy);
             character.Attack(enemy);
             character.Attack(enemy);
@@ -32,7 +32,7 @@ namespace ModifierSystem.Tests
         public void AllyHeal()
         {
             var healModifierApplier = modifierPrototypes.Get("AllyHealTestApplier");
-            character.AddModifier(healModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(healModifierApplier);
             enemy.ChangeDamageStat(new DamageData(9, DamageType.Physical, null)); //10 dmg
             enemy.Attack(ally);
             character.CastModifier(ally, "AllyHealTestApplier");
@@ -50,7 +50,7 @@ namespace ModifierSystem.Tests
         public void DoTDamage()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy); //1 phys dmg, 5 poison dmg
             enemy.Update(2); //5 dmg
             enemy.Update(2); //5 dmg
@@ -64,7 +64,7 @@ namespace ModifierSystem.Tests
         public void DoTRefresh()
         {
             var doTModifierApplier = modifierPrototypes.Get("DoTRefreshTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             var doTModifier = modifierPrototypes.Get("DoTRefreshTest");
             character.Attack(enemy);
             Assert.True(enemy.ContainsModifier(doTModifier));
@@ -78,7 +78,7 @@ namespace ModifierSystem.Tests
         public void AutomaticCasting()
         {
             var modifier = modifierPrototypes.GetApplier("IceBoltAutomaticCastTest");
-            character.AddModifier(modifier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(modifier);
 
             character.TargetingSystem.SetCastTarget(enemy);
 
@@ -99,7 +99,7 @@ namespace ModifierSystem.Tests
         public void AutomaticCastingNoTarget()
         {
             var modifier = modifierPrototypes.GetApplier("IceBoltAutomaticCastTest");
-            character.AddModifier(modifier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(modifier);
 
             character.Update(0.5f);
 

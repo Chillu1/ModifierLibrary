@@ -12,7 +12,7 @@ namespace ModifierSystem.Tests
         public void NoStatusResDuration()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy);
             enemy.Update(10.1f); //Should remove modifier
 
@@ -24,7 +24,7 @@ namespace ModifierSystem.Tests
         public void StatusResDuration()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceValue);
             character.Attack(enemy);
             enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceValue))); //Should remove modifier
@@ -37,7 +37,7 @@ namespace ModifierSystem.Tests
         public void StatusResMaxDuration()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceMaxValue);
             character.Attack(enemy);
             enemy.Update((float)(10.1d * BaseProject.Curves.StatusResistance.Evaluate(ResistanceMaxValue))); //Should remove modifier
@@ -50,7 +50,7 @@ namespace ModifierSystem.Tests
         public void StatusResCombinationDuration()
         {
             var doTModifierApplier = modifierPrototypes.Get("SpiderPoisonTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             enemy.StatusResistances.ChangeValue(StatusType.DoT, ResistanceValue);
             enemy.StatusResistances.ChangeValue(DamageType.Physical, ResistanceValue);
             enemy.StatusResistances.ChangeValue(ElementType.Poison, ResistanceValue);

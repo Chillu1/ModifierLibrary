@@ -15,9 +15,11 @@ namespace ModifierSystem
     {
         public string Id { get; }
         [CanBeNull] public ModifierInfo Info { get; }
+        public AddModifierParameters Parameters { get; }
         public bool IsApplierModifier => ApplierType != ApplierType.None;
         public ApplierType ApplierType { get; }
         public bool IsConditionModifier { get; }
+        //public bool IsComboPart { get; private set; }
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
@@ -34,10 +36,12 @@ namespace ModifierSystem
         private bool _setupFinished;
         protected IModifierGenerationProperties Properties { get; private set; }
 
-        public Modifier(string id, ModifierInfo info, ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
+        public Modifier(string id, ModifierInfo info, AddModifierParameters parameters,
+            ApplierType applierType = ApplierType.None, bool isConditionModifier = false)
         {
             Id = id;
             Info = info;
+            Parameters = parameters;
             if (applierType != ApplierType.None)
                 ApplierType = applierType;
 
@@ -364,6 +368,8 @@ namespace ModifierSystem
 
             if (Properties is ComboModifierGenerationProperties comboProperties)
                 return ModifierGenerator.GenerateComboModifier(comboProperties);
+            if (Properties is AuraEffectModifierGenerationProperties auraProperties)
+                return ModifierGenerator.GenerateModifier(auraProperties);
             if (Properties is ModifierGenerationProperties properties)
                 return ModifierGenerator.GenerateModifier(properties);
             if (Properties is ApplierModifierGenerationProperties applierProperties)

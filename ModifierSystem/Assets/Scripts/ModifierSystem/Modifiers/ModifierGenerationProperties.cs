@@ -29,6 +29,7 @@ namespace ModifierSystem
         public bool HasConditionData { get; private set; }
         public ConditionEventTarget ConditionEventTarget { get; private set; }
         public ConditionEvent ConditionEvent { get; private set; }
+        public AddModifierParameters AddModifierParameters { get; private set; } = AddModifierParameters.OwnerIsTarget;
 
         public DamageData[] DamageData { get; protected set; }
 
@@ -62,6 +63,11 @@ namespace ModifierSystem
             ConditionEvent = conditionEvent;
             SetEffectOnApply(); //Always true?
         }
+        
+        //public void SetAddModifierParameters(AddModifierParameters addModifierParameters)
+        //{
+        //    AddModifierParameters = addModifierParameters;
+        //}
 
         public void SetApplier(ApplierType applierType)
         {

@@ -6,12 +6,15 @@ namespace ModifierSystem
 {
     public class ComboModifierPrototypes : ModifierPrototypes<ComboModifier>, IComboModifierPrototypes
     {
+        //PermanentMods might be able to be stripped/removed later, does it matter?
+        private const float PermanentComboModifierCooldown = 60;
         private static IComboModifierPrototypes _instance;
 
-        public ComboModifierPrototypes()
+        public ComboModifierPrototypes(bool includeTest = false)
         {
             _instance = this;
-            SetupModifierPrototypes();
+            if (includeTest)
+                SetupTestComboModifiers();
         }
 
         public static void SetUnitTestInstance(IComboModifierPrototypes instance)
@@ -19,47 +22,11 @@ namespace ModifierSystem
             _instance = instance;
         }
 
-        private void SetupModifierPrototypes()
+        public ComboModifier AddModifier(ComboModifierGenerationProperties properties)
         {
-            //Scope brackets so it's impossible to use a wrong component/modifier
-            /*{
-                //Aspect of the cat
-                var modifier = new Modifier("AspectOfTheCat");
-                var target = new TargetComponent(LegalTarget.Self);
-                var effect = new StatComponent(new []{new Stat(StatType.MovementSpeed){baseValue = 5}}, target);
-                modifier.AddComponent(target);
-                modifier.AddComponent(new InitComponent(effect));
-                modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
-                var comboModifier = new ComboModifier(modifier,
-                    new ComboRecipes(new ComboRecipe(new[] { "Dexterity", "Speed" })),
-                    1);
-                ModifierPrototypes.AddModifier(comboModifier);
-            }
-            {
-                //Poison & bleed = infection
-                var modifier = new Modifier("Infection");
-                var target = new TargetComponent(LegalTarget.Self);
-                var effect = new DamageComponent(new[]
-                        { new DamageData(20, DamageType.Physical, new ElementData(ElementalType.Bleed | ElementalType.Poison, 30, 50)) },
-                        target);
-                modifier.AddComponent(target);
-                modifier.AddComponent(new InitComponent(effect));
-                modifier.AddComponent(new TimeComponent(effect, 2, true));
-                modifier.AddComponent(new TimeComponent(new RemoveComponent(modifier), 10));
-                var comboModifier = new ComboModifier(modifier,
-                    new ComboRecipes(new ComboRecipe(
-                        new[]{new ElementalRecipe(ElementalType.Poison, 5), new ElementalRecipe(ElementalType.Bleed, 5)})),
-                    1);
-                ModifierPrototypes.AddModifier(comboModifier);
-            }*/
-        }
-
-        //public new Dictionary<string, IComboModifier>.ValueCollection Values => base.Values;
-
-        [CanBeNull]
-        public new ComboModifier Get(string key)
-        {
-            return base.Get(key);
+            var comboModifier = ModifierGenerator.GenerateComboModifier(properties);
+            AddModifier(comboModifier);
+            return comboModifier;
         }
 
         public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds,
@@ -81,6 +48,64 @@ namespace ModifierSystem
             }
 
             return modifierToAdd;
+        }
+
+        private void SetupTestComboModifiers()
+        {
+            {
+                //Aspect of the cat
+                var properties = new ComboModifierGenerationProperties("ComboAspectOfTheCatTest", null);
+                properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })));
+                properties.SetCooldown(1);
+
+                properties.AddEffect(new StatComponent(StatType.MovementSpeed, 10));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(10);
+
+                AddModifier(properties);
+            }
+            {
+                //Poison & bleed = infection
+                var damageData = new[]
+                    { new DamageData(10, DamageType.Physical, new ElementData(ElementType.Bleed | ElementType.Poison, 30, 50)) };
+                var properties = new ComboModifierGenerationProperties("ComboInfectionTest", null);
+                properties.AddDynamicEffect(damageData[0]);
+                properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[]
+                    { new ElementalRecipe(ElementType.Poison, 5), new ElementalRecipe(ElementType.Bleed, 5) })));
+                properties.SetCooldown(1);
+
+                properties.AddEffect(
+                    new DamageComponent(
+                        damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
+                properties.SetEffectOnInit();
+                properties.SetEffectOnTime(2, true);
+                properties.SetRemovable(10);
+
+                AddModifier(properties);
+            }
+            {
+                //10k health = giant (physical res)
+                var properties = new ComboModifierGenerationProperties("ComboGiantTest", null);
+                properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
+                properties.SetCooldown(PermanentComboModifierCooldown);
+
+                properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
+                properties.SetEffectOnInit();
+
+                AddModifier(properties);
+            }
+            {
+                //10k health = temporary giant (physical res)
+                var properties = new ComboModifierGenerationProperties("ComboTimedGiantTest", null);
+                properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
+                properties.SetCooldown(PermanentComboModifierCooldown);
+                properties.SetRemovable(10);
+
+                properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
+                properties.SetEffectOnInit();
+
+                AddModifier(properties);
+            }
         }
     }
 }

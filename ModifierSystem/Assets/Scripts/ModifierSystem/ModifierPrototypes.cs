@@ -42,8 +42,7 @@ namespace ModifierSystem
             return applierModifier;
         }
 
-        [CanBeNull]
-        public new TModifier Get(string key)
+        public override TModifier Get(string key)
         {
             var modifier = base.Get(key);
             ValidateModifier(modifier);
@@ -334,7 +333,7 @@ namespace ModifierSystem
             {
                 //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
                 //Heal on death, once
-                var modifier = new Modifier("HealOnDeathTest", null);
+                var modifier = new Modifier("HealOnDeathTest", null, AddModifierParameters.OwnerIsTarget);
                 var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
                 var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
                 var effect = new HealComponent(10);
@@ -359,7 +358,7 @@ namespace ModifierSystem
             }
             {
                 //Heal yourself on healing someone else
-                var properties = new ModifierGenerationProperties("HealOnHealTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("HealOnHealTest", null, LegalTarget.FriendlyBuff);
                 properties.AddEffect(new HealStatBasedComponent());
                 properties.AddConditionData(ConditionEventTarget.SelfSelf, ConditionEvent.HealEvent);
 
@@ -368,7 +367,7 @@ namespace ModifierSystem
             {
                 //Damage increased per stack dot
                 var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
-                var properties = new ModifierGenerationProperties("DoTStackTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DoTStackTest", null);
                 properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
                 properties.SetEffectOnInit();
                 properties.SetEffectOnTime(2, true);
@@ -414,7 +413,7 @@ namespace ModifierSystem
                 AddModifier(applierProperties);
             }
             {
-                //Apply a new modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
+                //Apply a new buff modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
                 var stunProperties = new ModifierGenerationProperties("GenericStunModifierTest", null);
                 stunProperties.AddEffect(new StatusComponent(StatusEffect.Stun, 2));
                 stunProperties.SetEffectOnInit();
@@ -534,11 +533,8 @@ namespace ModifierSystem
 
                 var flagModifier = AddModifier(flagProperties);
 
-                var properties = new ModifierGenerationProperties("DamagePerStackTestApplier", null, LegalTarget.Beings);
+                var properties = new ApplierModifierGenerationProperties(flagModifier, null, LegalTarget.Beings);
                 properties.SetApplier(ApplierType.Attack);
-                properties.AddEffect(new ApplierEffectComponent(flagModifier));
-                properties.AddConditionData(ConditionEventTarget.ActerSelf,
-                    ConditionEvent.HitEvent); //This is optional, we can always apply on attack instead
 
                 AddModifier(properties);
             }
@@ -871,7 +867,7 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Same);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.FriendlyBuff);
                 applierProperties.SetApplier(ApplierType.Aura);
                 AddModifier(applierProperties);
             }
@@ -895,6 +891,21 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
                 applierProperties.SetApplier(ApplierType.Aura);
+                AddModifier(applierProperties);
+            }
+            
+            {
+                //Temporary allied damage resistance buff
+                var properties = new ModifierGenerationProperties("TemporaryAlliedDamageResistanceBuffTest", null, LegalTarget.Self);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.SetEffectOnInit();
+                properties.SetRefreshable();
+                properties.SetRemovable(10d);
+
+                var modifier = AddModifier(properties);
+                
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Same);
+                applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }
         }

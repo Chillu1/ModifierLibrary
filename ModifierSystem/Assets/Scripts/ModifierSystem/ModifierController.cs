@@ -66,9 +66,11 @@ namespace ModifierSystem
         {
             bool modifierAdded;
 
+            //Log.Info("ModifierId: " + modifier.Id + ". BeingId: " + _owner.Id + " Parameters: " + parameters);
             modifier.SetupOwner(_owner);
             modifier.SetupApplierOwner(modifier.IsApplierModifier ? _owner : sourceBeing);
             HandleTarget(modifier, parameters);
+            //Log.Info("Owner: "+modifier.TargetComponent.Owner.Id+ ". Target: " + modifier.TargetComponent.Target?.Id, "modifiers");
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
             {
@@ -77,7 +79,7 @@ namespace ModifierSystem
                 stacked = internalModifier.Stack();
                 refreshed = internalModifier.Refresh();
                 //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
-                if (!stacked && !refreshed)
+                if (!stacked && !refreshed/* && internalModifier.RepeatInitEffect*/) //Aura effects shouldn't be applied multiple times, if we didn't make a cast applier refreshable, this will trigger again, needs to be fixed//TODO
                     internalModifier.Init(); //Problem comes here, since the effect might not actually be in Init()
 
                 modifierAdded = false;
@@ -198,6 +200,9 @@ namespace ModifierSystem
         {
             if (parameters.HasFlag(AddModifierParameters.OwnerIsTarget))
             {
+                if (parameters.HasFlag(AddModifierParameters.NullStartTarget))
+                    Log.Error("Parameters can't have both OwnerIsTarget and NullStartTarget", "modifiers");
+
                 if (modifier.TargetComponent.Target == null)
                 {
                     modifier.TargetComponent.SetTarget(_owner);
@@ -209,11 +214,15 @@ namespace ModifierSystem
                     modifier.TargetComponent.SetTarget(_owner);
                 }
             }
-            else
+            else if (parameters.HasFlag(AddModifierParameters.NullStartTarget))
             {
+                if (modifier.TargetComponent.Target != null)
+                {
+                    Log.Error("Start target should be null, but isn't. For modifier " + modifier.Id, "modifiers");
+                }
+
                 //Modifier appliers dont need a target at ctor. Extra check
-                if (modifier.TargetComponent.Target == null && parameters.HasFlag(AddModifierParameters.NullStartTarget) &&
-                    !modifier.IsApplierModifier)
+                if (modifier.TargetComponent.Target == null && !modifier.IsApplierModifier)
                 {
                     Log.Error("Non-applier modifier doesn't have a target. Owner isn't the target", "modifiers");
                 }
@@ -228,7 +237,7 @@ namespace ModifierSystem
 
         public override string ToString()
         {
-            return "Modifiers: "+string.Join(", ", Modifiers.Values);
+            return "Modifiers: " + string.Join(", ", Modifiers.Values);
         }
 
         private class ModifierRemover

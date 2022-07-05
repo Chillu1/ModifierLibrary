@@ -9,7 +9,7 @@ namespace ModifierSystem.Tests
         public void DoTStackingDamage()
         {
             var doTModifierApplier = modifierPrototypes.Get("DoTStackTestApplier");
-            character.AddModifier(doTModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(doTModifierApplier);
             character.Attack(enemy); //1 phys dmg, 1 poison dmg(init), stack (+2 poison dmg)
             enemy.Update(2.1f); //3 poison damage
             character.Attack(enemy); //1 phys, stack (+2 poison dmg)
@@ -24,7 +24,7 @@ namespace ModifierSystem.Tests
         public void SilenceXStacks()
         {
             var silenceModifierApplier = modifierPrototypes.Get("SilenceXStacksTestApplier");
-            character.AddModifier(silenceModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(silenceModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             character.Attack(enemy); //1
             enemy.Update(8.1f);
@@ -44,7 +44,7 @@ namespace ModifierSystem.Tests
             var applyStunModifierApplier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplierApplier");
             var applyStunModifier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplier");
             var stunModifier = modifierPrototypes.Get("GenericStunModifierTest");
-            character.AddModifier(applyStunModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(applyStunModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
             character.Attack(enemy); //1
             Assert.True(enemy.ContainsModifier(applyStunModifier));

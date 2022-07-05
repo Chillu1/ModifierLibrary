@@ -14,7 +14,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.Stats.HasStat(StatType.MovementSpeed, 5));
             character.AddModifier(attackSpeedOfCat);
 
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.Get("ComboAspectOfTheCatTest")));
+            Assert.True(character.ContainsModifier(comboModifierPrototypes.Get("ComboAspectOfTheCatTest")));
             Assert.True(character.Stats.HasStat(StatType.MovementSpeed, 15));
         }
 
@@ -24,8 +24,8 @@ namespace ModifierSystem.Tests
             //Attack with poison & bleed
             var poisonAttackApplier = modifierPrototypes.Get("PoisonTestApplier");
             var bleedAttackApplier = modifierPrototypes.Get("BleedTestApplier");
-            character.AddModifier(poisonAttackApplier, AddModifierParameters.DefaultOffensive);
-            character.AddModifier(bleedAttackApplier, AddModifierParameters.DefaultOffensive);
+            character.AddModifierWithParameters(poisonAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
+            character.AddModifierWithParameters(bleedAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
             character.Attack(enemy);
 
             //Check for infected comboMod
@@ -38,8 +38,8 @@ namespace ModifierSystem.Tests
             //Attack with poison & bleed
             var poisonAttackApplier = modifierPrototypes.Get("PoisonTestApplier"); //2 dmg per 2 secs
             var bleedAttackApplier = modifierPrototypes.Get("BleedTestApplier"); //2 dmg per 2 secs
-            character.AddModifier(poisonAttackApplier, AddModifierParameters.DefaultOffensive);
-            character.AddModifier(bleedAttackApplier, AddModifierParameters.DefaultOffensive);
+            character.AddModifierWithParameters(poisonAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
+            character.AddModifierWithParameters(bleedAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
             character.Attack(enemy); //1 damage physical, 2*2 damage with normal modifiers (init), 10 damage infection * multiplier (init)
 
             Assert.AreEqual(initialHealthEnemy, enemy.Stats.Health.CurrentHealth+1+2*2+10*Curves.ComboElementMultiplier.Evaluate(5));
@@ -51,8 +51,8 @@ namespace ModifierSystem.Tests
             //Attack with poison & bleed
             var poisonAttackApplier = modifierPrototypes.Get("PoisonTestApplier"); //2 dmg per 2 secs
             var bleedAttackApplier = modifierPrototypes.Get("BleedTestApplier"); //2 dmg per 2 secs
-            character.AddModifier(poisonAttackApplier, AddModifierParameters.DefaultOffensive);
-            character.AddModifier(bleedAttackApplier, AddModifierParameters.DefaultOffensive);
+            character.AddModifierWithParameters(poisonAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
+            character.AddModifierWithParameters(bleedAttackApplier, AddModifierParameters.CheckRecipes | AddModifierParameters.NullStartTarget);
             character.Attack(enemy); //1 damage physical, 2*2 damage with normal modifiers (init), 10 damage infection (init)
             enemy.Update(2.1f); //infection, 10 damage (time), 2*2
 
@@ -63,13 +63,13 @@ namespace ModifierSystem.Tests
         public void ComboModifierStats()
         {
             character.ChangeStat(StatType.Health, 10000);
-            Assert.True(character.ContainsModifier(comboModifierPrototypesTest.Get("ComboGiantTest")));
+            Assert.True(character.ContainsModifier(comboModifierPrototypes.Get("ComboGiantTest")));
         }
 
         [Test]
         public void ComboModifierCooldown()
         {
-            var timedGiantComboModifier = comboModifierPrototypesTest.Get("ComboTimedGiantTest");
+            var timedGiantComboModifier = comboModifierPrototypes.Get("ComboTimedGiantTest");
             character.ChangeStat(StatType.Health, 10000);
             Assert.True(character.ContainsModifier(timedGiantComboModifier));
             character.Update(PermanentComboModifierCooldown / 2);

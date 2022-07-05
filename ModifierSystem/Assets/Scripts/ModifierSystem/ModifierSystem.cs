@@ -4,7 +4,7 @@ using BaseProject;
 namespace ModifierSystem
 {
     [Flags]
-    public enum AddModifierParameters : byte
+    public enum AddModifierParameters
     {
         None = 0,
 
@@ -14,17 +14,14 @@ namespace ModifierSystem
         OwnerIsTarget = 1,
 
         /// <summary>
-        ///     Check combo recipes on apply
-        /// </summary>
-        CheckRecipes = 2,
-
-        /// <summary>
         ///     Starts with no targets (ex. damage buff towards enemies), probably all appliers
         /// </summary>
-        NullStartTarget = 4,
+        NullStartTarget = 2,
 
-        DefaultOffensive = CheckRecipes | NullStartTarget,
-        Default = OwnerIsTarget | CheckRecipes
+        /// <summary>
+        ///     Check combo recipes on apply
+        /// </summary>
+        CheckRecipes = 4,
     }
 
     [Flags]

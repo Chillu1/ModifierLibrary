@@ -15,8 +15,7 @@ namespace ModifierSystem
         public ConditionEventTarget ConditionEventTarget { get; private set; }
         public ConditionEvent ConditionEvent { get; private set; }
 
-        public AddModifierParameters AddModifierParameters { get; private set; } = AddModifierParameters.Default;
-
+        public AddModifierParameters AddModifierParameters { get; private set; } = AddModifierParameters.NullStartTarget;
 
         public CostType CostType { get; private set; }
         public float CostAmount { get; private set; }
@@ -35,7 +34,7 @@ namespace ModifierSystem
 
         public void SetApplier(ApplierType applierType)
         {
-            if(HasConditionData)
+            if (HasConditionData)
                 Log.Error("Cannot set applier type together with condition data");
 
             ApplierType = applierType;
@@ -43,7 +42,7 @@ namespace ModifierSystem
 
         public void SetCondition(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
         {
-            if(ApplierType != ApplierType.None)
+            if (ApplierType != ApplierType.None)
                 Log.Error("ApplierType can't be set together with condition?");
             if (conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
@@ -54,11 +53,6 @@ namespace ModifierSystem
             ConditionEventTarget = conditionEventTarget;
             ConditionEvent = conditionEvent;
             //SetEffectOnApply(); //Always true?
-        }
-
-        public void SetAddModifierParameters(AddModifierParameters addModifierParameters)
-        {
-            AddModifierParameters = addModifierParameters;
         }
 
         public void SetCost(CostType costType, float costAmount)

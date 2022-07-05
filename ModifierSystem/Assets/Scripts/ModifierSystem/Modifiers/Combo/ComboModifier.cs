@@ -14,7 +14,7 @@ namespace ModifierSystem
         public IMultiplier Effect { get; }
 
         public ComboModifier(string id, ModifierInfo info, ComboRecipes comboRecipes, float cooldown = 5, IMultiplier effect = null) :
-            base(id, info)
+            base(id, info, AddModifierParameters.OwnerIsTarget)//TODO Combo always owner is target?
         {
             ComboRecipes = comboRecipes;
             Cooldown = cooldown;
@@ -38,6 +38,21 @@ namespace ModifierSystem
             }
 
             return valid;
+        }
+        
+        public bool CheckRecipeId(string modifierId)
+        {
+            foreach (var recipe in ComboRecipes.Recipes)
+            {
+                if (recipe.Id == null)
+                    continue;
+                
+                foreach (string recipeId in recipe.Id)
+                    if (recipeId == modifierId)
+                        return true;
+            }
+
+            return false;
         }
 
         public bool CheckRecipes(HashSet<string> modifierIds, ElementController elementController, Stats stats)

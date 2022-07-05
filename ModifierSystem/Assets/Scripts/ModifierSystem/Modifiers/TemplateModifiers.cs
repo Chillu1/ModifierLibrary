@@ -14,7 +14,7 @@ namespace ModifierSystem
         /// </summary>
         private void FullModifier()
         {
-            var modifier = new Modifier("FullTest", null);
+            var modifier = new Modifier("FullTest", null, AddModifierParameters.OwnerIsTarget);
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
             var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);

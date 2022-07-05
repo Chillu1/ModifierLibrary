@@ -25,7 +25,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Measure.Method(() =>
                 {
-                    var modifier = new Modifier("IceBoltTest", null);
+                    var modifier = new Modifier("IceBoltTest", null, AddModifierParameters.OwnerIsTarget);
                     var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                     var target = new TargetComponent();
                     var effect = new DamageComponent(damageData);
@@ -101,7 +101,7 @@ namespace ModifierSystem.Tests.Performance
         }
 
         [Test, Performance]
-        public void BenchNewModifierGeneration()
+        public void BenchNewModifierGenerationPropertiesOnly()
         {
             Measure.Method(() =>
                 {
@@ -110,13 +110,36 @@ namespace ModifierSystem.Tests.Performance
                     properties.AddEffect(new DamageComponent(damageData), damageData);
                     properties.SetEffectOnInit();
                     properties.SetRemovable();
-
+                })
+                .WarmupCount(10)
+                .MeasurementCount(20)
+                .IterationsPerMeasurement(Iterations)
+                .GC()
+                .Run()
+                ;
+        }
+        
+        [Test, Performance]
+        public void BenchNewModifierGenerationOnly()
+        {
+            ModifierGenerationProperties properties = null;
+            Measure.Method(() =>
+                {
                     var modifier = ModifierGenerator.GenerateModifier(properties);
                 })
                 .WarmupCount(10)
                 .MeasurementCount(20)
                 .IterationsPerMeasurement(Iterations)
                 .GC()
+                .SetUp(() =>
+                {
+                    var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
+                    properties = new ModifierGenerationProperties("IceBoltTest", null);
+                    properties.AddEffect(new DamageComponent(damageData), damageData);
+                    properties.SetEffectOnInit();
+                    properties.SetRemovable();
+                })
+                .CleanUp(() => { properties = null; })
                 .Run()
                 ;
         }

@@ -25,15 +25,15 @@ namespace ModifierSystem.Tests
 
         protected ModifierPrototypesTest modifierPrototypes;
 
-        protected ComboModifierPrototypesTest comboModifierPrototypesTest;
+        protected ComboModifierPrototypesTest comboModifierPrototypes;
         //protected ComboModifierPrototypesTest comboModifierPrototypes;
 
         [OneTimeSetUp]
         public void OneTimeInit()
         {
             modifierPrototypes = new ModifierPrototypesTest();
-            comboModifierPrototypesTest = new ComboModifierPrototypesTest();
-            ComboModifierPrototypes.SetUnitTestInstance(comboModifierPrototypesTest);
+            comboModifierPrototypes = new ComboModifierPrototypesTest();
+            ComboModifierPrototypes.SetUnitTestInstance(comboModifierPrototypes);
             //comboModifierPrototypes = new ComboModifierPrototypesTest();
             //comboModifierPrototypes.AddTestModifiers();
         }
@@ -43,22 +43,22 @@ namespace ModifierSystem.Tests
         {
             character = new Being(new BeingProperties
             {
-                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 3,
+                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
             ally = new Being(new BeingProperties
             {
-                Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 3,
+                Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
             });
             enemy = new Being(new BeingProperties
             {
-                Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 2,
+                Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
             enemyAlly = new Being(new BeingProperties
             {
-                Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1 , MovementSpeed = 2,
+                Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
             initialHealthCharacter = character.Stats.Health.CurrentHealth;
@@ -117,106 +117,21 @@ namespace ModifierSystem.Tests
             }
         }
 
-        public class ComboModifierPrototypesTest : ModifierPrototypes<ComboModifier>, IComboModifierPrototypes
+        public class ComboModifierPrototypesTest : ComboModifierPrototypes
         {
-            private static ComboModifierPrototypesTest _instance;
-
-            public ComboModifierPrototypesTest()
+            public ComboModifierPrototypesTest() : base(true)
             {
-                _instance = this;
-                SetupModifierPrototypes();
             }
 
-            public ComboModifier AddModifier(ComboModifierGenerationProperties properties)
+            public override ComboModifier Get(string key)
             {
-                var comboModifier = ModifierGenerator.GenerateComboModifier(properties);
-                AddModifier(comboModifier);
-                return comboModifier;
-            }
-
-            private void SetupModifierPrototypes()
-            {
-                //Scope brackets so it's impossible to use a wrong component/modifier
+                if (!key.EndsWith("Test"))
                 {
-                    //Aspect of the cat
-                    var properties = new ComboModifierGenerationProperties("ComboAspectOfTheCatTest", null);
-                    properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { "MovementSpeedOfCatTest", "AttackSpeedOfCatTest" })));
-                    properties.SetCooldown(1);
-
-                    properties.AddEffect(new StatComponent(StatType.MovementSpeed, 10));
-                    properties.SetEffectOnInit();
-                    properties.SetRemovable(10);
-
-                    AddModifier(properties);
+                    Log.Error("Invalid modifier Id, it has to include 'Test' for unit tests");
+                    return null;
                 }
-                {
-                    //Poison & bleed = infection
-                    var damageData = new[]
-                        { new DamageData(10, DamageType.Physical, new ElementData(ElementType.Bleed | ElementType.Poison, 30, 50)) };
-                    var properties = new ComboModifierGenerationProperties("ComboInfectionTest", null);
-                    properties.AddDynamicEffect(damageData[0]);
-                    properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[]
-                        { new ElementalRecipe(ElementType.Poison, 5), new ElementalRecipe(ElementType.Bleed, 5) })));
-                    properties.SetCooldown(1);
 
-                    properties.AddEffect(
-                        new DamageComponent(
-                            damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
-                    properties.SetEffectOnInit();
-                    properties.SetEffectOnTime(2, true);
-                    properties.SetRemovable(10);
-
-                    AddModifier(properties);
-                }
-                {
-                    //10k health = giant (physical res)
-                    var properties = new ComboModifierGenerationProperties("ComboGiantTest", null);
-                    properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
-                    properties.SetCooldown(PermanentComboModifierCooldown);
-
-                    properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
-                    properties.SetEffectOnInit();
-
-                    AddModifier(properties);
-                }
-                {
-                    //10k health = temporary giant (physical res)
-                    var properties = new ComboModifierGenerationProperties("ComboTimedGiantTest", null);
-                    properties.AddRecipes(new ComboRecipes(new ComboRecipe(new[] { new Stat(StatType.Health, 10000) })));
-                    properties.SetCooldown(PermanentComboModifierCooldown);
-                    properties.SetRemovable(10);
-
-                    properties.AddEffect(new StatusResistanceComponent(new[] { new StatusTag(DamageType.Physical) }, new[] { 1000d }));
-                    properties.SetEffectOnInit();
-
-                    AddModifier(properties);
-                }
-            }
-
-
-            [CanBeNull]
-            public new ComboModifier Get(string key)
-            {
                 return base.Get(key);
-            }
-
-            public static HashSet<ComboModifier> CheckForComboRecipes(HashSet<string> modifierIds, ElementController elementController,
-                Stats stats)
-            {
-                HashSet<ComboModifier> modifierToAdd = new HashSet<ComboModifier>();
-                if (_instance == null)
-                {
-                    Log.Warning("ComboModifier instance is null, this is bad, unless this is a unit test");
-                    return modifierToAdd;
-                }
-
-                foreach (var comboModifier in _instance.Values)
-                {
-                    if (comboModifier.CheckRecipes(modifierIds, elementController, stats))
-                        modifierToAdd.Add(comboModifier);
-                }
-
-                return modifierToAdd;
             }
         }
     }

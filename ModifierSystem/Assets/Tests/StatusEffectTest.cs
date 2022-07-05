@@ -9,7 +9,7 @@ namespace ModifierSystem.Tests
         public void ActAttackStatusEffect()
         {
             var disarmModifierApplier = modifierPrototypes.Get("DisarmModifierTestApplier");
-            character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(disarmModifierApplier);
             character.Attack(enemy);
 
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
@@ -23,8 +23,8 @@ namespace ModifierSystem.Tests
         public void CastSilenceStatusEffect()
         {
             var disarmModifierApplier = modifierPrototypes.Get("SilenceModifierTestApplier");
-            character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.AddModifier(modifierPrototypes.Get("SilenceModifierTestApplier"), AddModifierParameters.NullStartTarget);
+            character.AddModifier(disarmModifierApplier);
+            enemy.AddModifier(modifierPrototypes.Get("SilenceModifierTestApplier"));
             character.CastModifier(enemy, "SilenceModifierTestApplier");
 
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
@@ -39,7 +39,7 @@ namespace ModifierSystem.Tests
         public void TimedStatusEffect()
         {
             var rootModifierApplier = modifierPrototypes.Get("RootTimedModifierTestApplier");
-            character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(rootModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Move));
             enemy.Update(0.01f);
             enemy.Update(0.01f);
@@ -58,7 +58,7 @@ namespace ModifierSystem.Tests
         public void DelayedStatusEffect()
         {
             var rootModifierApplier = modifierPrototypes.Get("DelayedSilenceModifierTestApplier");
-            character.AddModifier(rootModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(rootModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
             character.CastModifier(enemy, "DelayedSilenceModifierTestApplier");
             Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
@@ -74,8 +74,8 @@ namespace ModifierSystem.Tests
         public void TwoEffectsSilenceDisarm()
         {
             var disarmModifierApplier = modifierPrototypes.GetApplier("SilenceDisarmTwoEffectTest");
-            character.AddModifier(disarmModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.AddModifier(modifierPrototypes.GetApplier("SilenceDisarmTwoEffectTest"), AddModifierParameters.NullStartTarget);
+            character.AddModifier(disarmModifierApplier);
+            enemy.AddModifier(modifierPrototypes.GetApplier("SilenceDisarmTwoEffectTest"));
 
             Assert.True(enemy.StatusEffects.LegalActions == LegalAction.All);
 
@@ -102,8 +102,8 @@ namespace ModifierSystem.Tests
         {
             var tauntModifierApplier = modifierPrototypes.GetApplier("TauntTest");
             var basicDamageModifierApplier = modifierPrototypes.GetApplier("IceBoltCastTest");
-            character.AddModifier(tauntModifierApplier, AddModifierParameters.NullStartTarget);
-            enemy.AddModifier(basicDamageModifierApplier, AddModifierParameters.NullStartTarget);
+            character.AddModifier(tauntModifierApplier);
+            enemy.AddModifier(basicDamageModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions == LegalAction.All);
 
             enemy.TargetingSystem.SetAttackTarget(ally);

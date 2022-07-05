@@ -64,6 +64,7 @@ Applier
 
 
 # Design questions
+* Either all buffs need to be refreshable, or we need a special check if something is a buff effect, to not apply it again on init
 * First being events have priority rn over all the other ones, so their calls will take over other events counters, ex, AttackEvent heal 1 health, will take over next event that is ex. HitEvent heal 100 health
   * We could maybe set some sort of priority to all events? Or give everyone a fair shot/fair deal instead of limiting every event?
 * How to check for ConditionCheck applies? Through a special timeComponent logic? That checks every X, if true, effect. If effect passed, wait. Better than OnDamagedEvent and such?

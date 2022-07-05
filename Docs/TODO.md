@@ -1,5 +1,6 @@
 # TODO:  
-* **Dynamic AddModifierProperties, if applier = nullstartvaluetarget**
+* >**EffectComponent data in ModifierGenerationProperties, instead of actual EffectComponent (we might be able to make internal properties for each effectComponent, then save that and use it instead?**
+* **DamageStatComponent might have some bad/improper logic on reverting**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * More Templates for basic modifiers
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc

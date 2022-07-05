@@ -19,6 +19,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Being that applied this modifier to current being
         /// </summary>
+        [CanBeNull]
         public Being ApplierOwner { get; private set; }
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
@@ -60,9 +61,22 @@ namespace ModifierSystem
             if (target.UnitType == UnitType.None)
                 Log.Error("Illegal UnitType on: " + target.Id, "modifiers");
 
+            if (Owner == null)
+            {
+                Log.Warning("Owner is null, if this isn't an unit test. This is bad", "modifiers");
+                return true;
+            }
+
             //Check if target is self
             if (LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
                 return true;
+
+            //If target is self, and we are not allowed to target self
+            if (!LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
+            {
+                Log.Error("Targeting ourselves, while legalTarget doesn't have self as a valid target", "modifiers");
+                return false;
+            }
 
             if (LegalTarget.HasFlag(LegalTarget.Same) && target.UnitType == Owner.UnitType)
                 return true;
@@ -114,6 +128,11 @@ namespace ModifierSystem
         public object Clone()
         {
             return this.DeepClone();
+        }
+
+        public override string ToString()
+        {
+            return $"LegalTarget: {LegalTarget}.Target: {Target?.Id}. Owner: {Owner?.Id}. ApplierOwner: {ApplierOwner?.Id}";
         }
     }
 }

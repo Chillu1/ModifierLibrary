@@ -36,8 +36,21 @@ namespace ModifierSystem
                 modifierApplier.TryApply(target);
             }
         }
+        
+        /// <summary>
+        ///     Only set sourceBeing when modifier has a taunt effect (not ideal obvs)
+        /// </summary>
+        public void AddModifier(Modifier modifier, Being sourceBeing = null)
+        {
+            AddModifier(modifier, modifier.Parameters, sourceBeing);
+        }
 
-        public void AddModifier(Modifier modifier, AddModifierParameters parameters = AddModifierParameters.Default, Being sourceBeing = null)
+        public void AddModifierWithParameters(Modifier modifier, AddModifierParameters parameters, Being sourceBeing = null)
+        {
+            AddModifier(modifier, parameters, sourceBeing);
+        }
+
+        private void AddModifier(Modifier modifier, AddModifierParameters parameters, Being sourceBeing = null)
         {
             bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters, sourceBeing);
 
