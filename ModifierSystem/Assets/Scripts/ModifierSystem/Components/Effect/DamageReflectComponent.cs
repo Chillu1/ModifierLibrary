@@ -14,7 +14,7 @@ namespace ModifierSystem
             Info = $"Damage Reflect: {percentage*100d}%\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             var reflectDamage = receiver.Stats.Damage.ToDamageData().ToArray();
             foreach (var data in reflectDamage)

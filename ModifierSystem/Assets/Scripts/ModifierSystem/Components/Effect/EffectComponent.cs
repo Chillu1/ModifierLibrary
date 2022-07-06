@@ -25,20 +25,20 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        protected abstract void ActualEffect(BaseBeing receiver, BaseBeing acter);
+        protected abstract void Effect(BaseBeing receiver, BaseBeing acter);
 
         /// <summary>
         ///     No conditions, just effect
         /// </summary>
         public void SimpleEffect()
         {
-            Effect(_targetComponent.Target, _targetComponent.Owner);
+            TryEffect(_targetComponent.Target, _targetComponent.Owner);
         }
 
         /// <summary>
         ///     Main effect helper, checks for CheckCondition
         /// </summary>
-        private void Effect(BaseBeing receiver, BaseBeing acter)
+        private void TryEffect(BaseBeing receiver, BaseBeing acter)
         {
             if (ConditionCheckData != null)
             {
@@ -47,7 +47,7 @@ namespace ModifierSystem
                     return;
             }
 
-            ActualEffect(receiver, acter);
+            Effect(receiver, acter);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ModifierSystem
         /// </summary>
         public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
         {
-            _targetComponent.HandleTarget(receiver, acter, Effect);
+            _targetComponent.HandleTarget(receiver, acter, TryEffect);
         }
 
         public void RevertEffect()

@@ -1,5 +1,7 @@
 # TODO:
 
+* >**Mana burn mechanic**
+* >**Missdirection/confusion attack/cast on ally mechanic**
 * **DamageStatComponent might have some bad/improper logic on reverting**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * More Templates for basic modifiers

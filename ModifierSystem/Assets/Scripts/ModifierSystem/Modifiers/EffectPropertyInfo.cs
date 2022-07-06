@@ -8,7 +8,7 @@ namespace ModifierSystem
 
         //Time based
 
-        public bool ResetOnFinished { get; private set; }
+        public bool RepeatOnFinished { get; private set; }
 
         public double EffectDuration { get; private set; }
 
@@ -22,11 +22,11 @@ namespace ModifierSystem
             EffectOn |= EffectOn.Init;
         }
 
-        public void SetEffectOnTime(double duration, bool resetOnFinished)
+        public void SetEffectOnTime(double duration, bool repeatOnFinished)
         {
             EffectOn |= EffectOn.Time;
             EffectDuration = duration;
-            ResetOnFinished = resetOnFinished;
+            RepeatOnFinished = repeatOnFinished;
         }
 
         public void SetEffectOnApply()

@@ -368,7 +368,7 @@ namespace ModifierSystem
                 //Damage increased per stack dot
                 var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                 var properties = new ModifierGenerationProperties("DoTStackTest", null);
-                properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
+                properties.AddEffect(new DamageComponent(damageData, DamageComponent.StackEffectType.Add), damageData);
                 properties.SetEffectOnInit();
                 properties.SetEffectOnTime(2, true);
                 properties.SetEffectOnStack(new StackComponentProperties() { Value = 2, MaxStacks = 1000 });
@@ -384,7 +384,7 @@ namespace ModifierSystem
                 //Refresh duration DoT
                 var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                 var properties = new ModifierGenerationProperties("DoTRefreshTest", null, LegalTarget.Beings);
-                properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
+                properties.AddEffect(new DamageComponent(damageData, DamageComponent.StackEffectType.Add), damageData);
                 properties.SetEffectOnInit();
                 properties.SetEffectOnTime(2, true);
                 properties.SetRefreshable(RefreshEffectType.RefreshDuration);
@@ -399,7 +399,7 @@ namespace ModifierSystem
             {
                 //Silence on 4 stacks
                 var properties = new ModifierGenerationProperties("SilenceXStacksTest", null, LegalTarget.Beings);
-                properties.AddEffect(new StatusComponent(StatusEffect.Silence, 4, StatusComponent.StatusComponentStackEffect.Effect));
+                properties.AddEffect(new StatusComponent(StatusEffect.Silence, 4, StatusComponent.StackEffectType.Effect));
                 properties.SetEffectOnInit();
                 properties.SetEffectOnStack(new StackComponentProperties()
                     { WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 4 });
@@ -524,8 +524,8 @@ namespace ModifierSystem
                 var flagProperties = new ModifierGenerationProperties("DamagePerStackTest", null);
                 flagProperties.AddEffect(
                     new DamageComponent(damageData,
-                        DamageComponent.DamageComponentStackEffect.Effect |
-                        DamageComponent.DamageComponentStackEffect.SetMultiplierStacksBased), damageData);
+                        DamageComponent.StackEffectType.Effect |
+                        DamageComponent.StackEffectType.SetMultiplierStacksBased), damageData);
                 flagProperties.SetEffectOnStack(new StackComponentProperties()
                     { WhenStackEffect = WhenStackEffect.Always, MaxStacks = 100 });
                 flagProperties.SetRefreshable(RefreshEffectType.RefreshDuration);
@@ -567,7 +567,7 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
                 applierProperties.SetApplier(ApplierType.Attack);
-                applierProperties.SetCost(CostType.Health, 10);
+                applierProperties.SetCost(PoolStatType.Health, 10);
                 AddModifier(applierProperties);
             }
 
@@ -583,7 +583,7 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
                 applierProperties.SetApplier(ApplierType.Cast);
-                applierProperties.SetCost(CostType.Mana, 10);
+                applierProperties.SetCost(PoolStatType.Mana, 10);
                 AddModifier(applierProperties);
             }
             {
@@ -598,7 +598,7 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
                 applierProperties.SetApplier(ApplierType.Attack);
-                applierProperties.SetCost(CostType.Mana, 10);
+                applierProperties.SetCost(PoolStatType.Mana, 10);
                 AddModifier(applierProperties);
             }
 

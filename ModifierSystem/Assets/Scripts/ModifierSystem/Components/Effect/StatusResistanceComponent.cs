@@ -20,7 +20,7 @@ namespace ModifierSystem
             Info = $"StatusResistance: {string.Join<StatusTag>(", ", StatusTags)}{string.Join(", ", Values)}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values);
         }

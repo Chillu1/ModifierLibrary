@@ -30,16 +30,10 @@ namespace ModifierSystem
         None = 0,
         Attack = 1,
         Cast = 2,
+
         /// <summary>
         ///     Automatically castable
         /// </summary>
         Aura = 4,
-    }
-
-    public enum CostType
-    {
-        None = 0,
-        Health = StatType.Health,
-        Mana = StatType.Mana
     }
 }

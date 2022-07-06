@@ -21,7 +21,7 @@ namespace ModifierSystem
             Info = $"Stats: {string.Join(", ", Stats.Select(t => $"{t.type} {t.value}"))}";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).ChangeStat(Stats);
         }

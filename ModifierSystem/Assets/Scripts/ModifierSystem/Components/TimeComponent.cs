@@ -13,18 +13,18 @@ namespace ModifierSystem
         private ICheckComponent CheckComponent { get; }
         private RemoveComponent RemoveEffectComponent { get; }
         private double Duration { get; }
-        private bool ResetOnFinished { get; }
+        private bool RepeatOnFinished { get; }
         private double _timer;
         private bool _finished;
 
         private const string InfoEffect = "Effect in: ";
         private const string InfoRemove = "Remove in: ";
 
-        public TimeComponent(ICheckComponent checkComponent, double duration, bool resetOnFinished = false)
+        public TimeComponent(ICheckComponent checkComponent, double duration, bool repeatOnFinished = false)
         {
             CheckComponent = checkComponent;
             Duration = duration;
-            ResetOnFinished = resetOnFinished;
+            RepeatOnFinished = repeatOnFinished;
             IsRemove = false;
         }
 
@@ -35,7 +35,7 @@ namespace ModifierSystem
         {
             RemoveEffectComponent = removeComponent;
             Duration = lingerDuration;
-            ResetOnFinished = false;
+            RepeatOnFinished = false;
             IsRemove = true;
         }
 
@@ -54,7 +54,7 @@ namespace ModifierSystem
 
                 _finished = true;
 
-                if(ResetOnFinished)
+                if(RepeatOnFinished)
                 {
                     _timer = 0;
                     _finished = false;
@@ -110,12 +110,12 @@ namespace ModifierSystem
             if (IsRemove)
             {
                 return checkResetOnFinished
-                    ? ResetOnFinished && RemoveEffectComponent.GetType() == typeof(T)
+                    ? RepeatOnFinished && RemoveEffectComponent.GetType() == typeof(T)
                     : RemoveEffectComponent.GetType() == typeof(T);
             }
 
             return checkResetOnFinished
-                ? ResetOnFinished && CheckComponent.EffectComponentIsOfType<T>()
+                ? RepeatOnFinished && CheckComponent.EffectComponentIsOfType<T>()
                 : CheckComponent.EffectComponentIsOfType<T>();
         }
     }

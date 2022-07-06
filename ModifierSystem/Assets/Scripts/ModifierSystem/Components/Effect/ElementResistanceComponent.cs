@@ -16,7 +16,7 @@ namespace ModifierSystem
             Info = $"Resistance: {elementType} {value}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.ElementalDamageResistances.ChangeValue(ElementType, Value);
         }

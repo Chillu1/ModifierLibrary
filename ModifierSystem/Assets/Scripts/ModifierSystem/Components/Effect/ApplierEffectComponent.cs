@@ -16,7 +16,7 @@ namespace ModifierSystem
             Info = $"Applies: {Modifier}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).AddModifier((Modifier)Modifier.Clone(), (Being)acter);
         }

@@ -15,7 +15,7 @@ namespace ModifierSystem
             Info = $"DamageStat: {string.Join<DamageData>(", ", damageData)}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             ((Being)receiver).ChangeDamageStat(DamageData);
         }

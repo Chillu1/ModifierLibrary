@@ -6,20 +6,20 @@ namespace ModifierSystem
     {
         private StatusEffect StatusEffect { get; }
         private float Duration { get; }
-        private StatusComponentStackEffect StackEffectType { get; }
+        private StackEffectType StackType { get; }
 
         public StatusComponent(StatusEffect statusEffect, float duration,
-            StatusComponentStackEffect stackEffectType = StatusComponentStackEffect.None, ConditionCheckData conditionCheckData = null,
+            StackEffectType stackType = StackEffectType.None, ConditionCheckData conditionCheckData = null,
             bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             StatusEffect = statusEffect;
             Duration = duration;
-            StackEffectType = stackEffectType;
+            StackType = stackType;
 
             Info = $"Status: {StatusEffect}, duration: {Duration}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             if (StatusEffect == StatusEffect.Taunt)
             {
@@ -40,17 +40,11 @@ namespace ModifierSystem
 
         public void StackEffect(int stacks, double value)
         {
-            if (StackEffectType.HasFlag(StatusComponentStackEffect.Effect))
-            {
+            if (StackType.HasFlag(StackEffectType.Effect))
                 SimpleEffect();
-            }
-            else
-            {
-                Log.Error($"StackEffectType {StackEffectType} unsupported for {GetType()}");
-            }
         }
 
-        public enum StatusComponentStackEffect
+        public enum StackEffectType
         {
             None = 0,
             Effect,

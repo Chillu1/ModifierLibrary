@@ -14,7 +14,7 @@ namespace ModifierSystem
             Info = $"Heal: {Heal}\n";
         }
 
-        protected override void ActualEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseBeing receiver, BaseBeing acter)
         {
             receiver.Stats.Health.Heal(Heal);
         }

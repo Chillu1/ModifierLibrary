@@ -17,8 +17,7 @@ namespace ModifierSystem
 
         public AddModifierParameters AddModifierParameters { get; private set; } = AddModifierParameters.NullStartTarget;
 
-        public CostType CostType { get; private set; }
-        public float CostAmount { get; private set; }
+        public (PoolStatType Type, double Value) Cost { get; private set; }
 
         public float Cooldown { get; private set; } = -1;
         public bool AutomaticCast { get; private set; }
@@ -55,10 +54,9 @@ namespace ModifierSystem
             //SetEffectOnApply(); //Always true?
         }
 
-        public void SetCost(CostType costType, float costAmount)
+        public void SetCost(PoolStatType costType, double costAmount)
         {
-            CostType = costType;
-            CostAmount = costAmount;
+            Cost = (costType, costAmount);
         }
 
         public void SetCooldown(float cooldown)

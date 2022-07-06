@@ -4,14 +4,14 @@ namespace ModifierSystem
 {
     public class CostComponent : Component, ICostComponent
     {
-        private CostType Type { get; }
+        private PoolStatType Type { get; }
         private double Amount { get; }
 
         private Being _owner;
 
         private const string Info = "Cost: ";
 
-        public CostComponent(CostType type, double amount)
+        public CostComponent(PoolStatType type, double amount)
         {
             Type = type;
             Amount = amount;
@@ -26,9 +26,9 @@ namespace ModifierSystem
         {
             switch (Type)
             {
-                case CostType.Mana:
+                case PoolStatType.Mana:
                     return _owner.Stats.HasStat(StatType.Mana, Amount);
-                case CostType.Health:
+                case PoolStatType.Health:
                     bool success = _owner.Stats.HasStat(StatType.Health, Amount, ComparisonCheck.Greater); //Not lethal
                     //Log.Verbose("We have enough health stat: " + success, "modifiers");
                     return success;
@@ -44,10 +44,10 @@ namespace ModifierSystem
         {
             switch (Type)
             {
-                case CostType.Mana:
+                case PoolStatType.Mana:
                     _owner.Stats.Mana.Use(Amount);
                     break;
-                case CostType.Health:
+                case PoolStatType.Health:
                     //TODO TEMP DamageData
                     //Log.Verbose("Applying health cost: " + Amount, "modifiers");
                     _owner.DealDamage(new[] { new DamageData(Amount, DamageType.Physical) }, _owner, AttackType.Internal);

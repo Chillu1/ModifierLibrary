@@ -40,7 +40,7 @@ namespace ModifierSystem
         protected EffectPropertyInfo currentEffectPropertyInfo;
         public StackComponentProperties StackComponentProperties { get; private set; }
         public RefreshEffectType RefreshEffectType { get; private set; }
-        public (CostType, float) Cost { get; private set; }
+        public (PoolStatType Type, double Value) Cost { get; private set; }
         public double Chance { get; private set; } = -1;
 
         public ModifierGenerationProperties(string id, ModifierInfo info, LegalTarget legalTarget = LegalTarget.Self)
@@ -87,10 +87,10 @@ namespace ModifierSystem
             currentEffectPropertyInfo.SetEffectOnInit();
         }
 
-        /// <param name="resetOnFinished">Resets the timer after duration is finished (interval)</param>
-        public void SetEffectOnTime(double duration, bool resetOnFinished)
+        /// <param name="repeatOnFinished">Resets the timer after duration is finished (interval)</param>
+        public void SetEffectOnTime(double duration, bool repeatOnFinished)
         {
-            currentEffectPropertyInfo.SetEffectOnTime(duration, resetOnFinished);
+            currentEffectPropertyInfo.SetEffectOnTime(duration, repeatOnFinished);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace ModifierSystem
             RefreshEffectType = refreshEffectType;
         }
 
-        public void SetCost(CostType costType, int amount)
+        public void SetCost(PoolStatType costType, int amount)
         {
             Cost = (costType, amount);
         }

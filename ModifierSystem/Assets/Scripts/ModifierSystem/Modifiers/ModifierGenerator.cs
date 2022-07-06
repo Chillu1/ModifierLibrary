@@ -50,7 +50,7 @@ namespace ModifierSystem
             CheckComponent checkComponent = new CheckComponent(
                 effects.ToArray(),
                 timeEffects.ToArray(),
-                properties.Cost.Item1 != CostType.None ? new CostComponent(properties.Cost.Item1, properties.Cost.Item2) : null,
+                properties.Cost.Type != PoolStatType.None ? new CostComponent(properties.Cost.Type, properties.Cost.Value) : null,
                 null,
                 properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
 
@@ -131,7 +131,7 @@ namespace ModifierSystem
             var check = new CheckComponent(
                 new IEffectComponent[] { effect },
                 null, //new IEffectComponent[] { effect },
-                properties.CostType != CostType.None ? new CostComponent(properties.CostType, properties.CostAmount) : null,
+                properties.Cost.Type != PoolStatType.None ? new CostComponent(properties.Cost.Type, properties.Cost.Value) : null,
                 properties.Cooldown != -1 ? new CooldownComponent(properties.Cooldown) : null,
                 properties.Chance != -1 ? new ChanceComponent(properties.Chance) : null);
             var applier = new ApplierComponent(check);
@@ -174,7 +174,7 @@ namespace ModifierSystem
             if (propertyInfo.EffectOn.HasFlag(EffectOn.Apply) && conditionalApplyComponent != null)
                 modifier.AddComponent(new InitComponent(conditionalApplyComponent));
             if (propertyInfo.EffectOn.HasFlag(EffectOn.Time))
-                modifier.AddComponent(new TimeComponent(checkComponent, propertyInfo.EffectDuration, propertyInfo.ResetOnFinished));
+                modifier.AddComponent(new TimeComponent(checkComponent, propertyInfo.EffectDuration, propertyInfo.RepeatOnFinished));
         }
     }
 }

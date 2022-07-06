@@ -2,21 +2,9 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public struct Cost
-    {
-        public CostType Type;
-        public float Value;
-
-        public Cost(CostType type, float value)
-        {
-            Type = type;
-            Value = value;
-        }
-    }
-
     public class CheckProperties //TODO Rename
     {
-        public Cost Cost;
+        public (PoolStatType Type, double Value) Cost;
         public float Cooldown;
     }
 
@@ -111,7 +99,7 @@ namespace ModifierSystem
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if (check.Cost.Type != CostType.None)
+            if (check.Cost.Type != PoolStatType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
             if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);
@@ -135,7 +123,7 @@ namespace ModifierSystem
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if (check.Cost.Type != CostType.None)
+            if (check.Cost.Type != PoolStatType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
             if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);
@@ -154,13 +142,14 @@ namespace ModifierSystem
             properties.SetEffectOnInit();
             properties.AddEffect(new DamageComponent(dotDamage), dotDamage);
             properties.SetEffectOnTime(overTime.Interval, true);
+            properties.SetRefreshable();
             properties.SetRemovable(overTime.Duration);
 
             var modifier = ModifierGenerator.GenerateModifier(properties);
 
             var applierProperties = new ApplierModifierGenerationProperties(modifier, applierInfo);
             applierProperties.SetApplier(applierType);
-            if (check.Cost.Type != CostType.None)
+            if (check.Cost.Type != PoolStatType.None)
                 applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
             if (check.Cooldown != 0)
                 applierProperties.SetCooldown(check.Cooldown);

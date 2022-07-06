@@ -151,7 +151,7 @@ namespace ModifierSystem.Tests.Performance
                 {
                     var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
                     var properties = new ModifierGenerationProperties("DoTStackTest", null, LegalTarget.Beings);
-                    properties.AddEffect(new DamageComponent(damageData, DamageComponent.DamageComponentStackEffect.Add), damageData);
+                    properties.AddEffect(new DamageComponent(damageData, DamageComponent.StackEffectType.Add), damageData);
                     properties.SetEffectOnInit();
                     properties.SetEffectOnTime(2, true);
                     properties.SetEffectOnStack(new StackComponentProperties() { Value = 2, MaxStacks = 1000 });

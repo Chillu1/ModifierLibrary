@@ -56,8 +56,8 @@ namespace ModifierSystem
                     }
 
                     break;
-                case WhenStackEffect.None:
-                    Log.Error($"StackEffectType {WhenStackEffect.None} illegal");
+                default:
+                    Log.Error($"Invalid {WhenStackEffect} WhenStackEffect");
                     return;
             }
 
@@ -83,8 +83,8 @@ namespace ModifierSystem
                     if (Stacks == 0)
                         StackEffectComponent.StackEffect(Stacks, Value);
                     break;
-                case WhenStackEffect.None:
-                    Log.Error($"StackEffectType {WhenStackEffect.None} illegal");
+                default:
+                    Log.Error($"Invalid {WhenStackEffect} WhenStackEffect");
                     return;
             }
         }
@@ -129,15 +129,5 @@ namespace ModifierSystem
 
             return valid;
         }
-    }
-
-    public enum GenericValueBasedStackEffects
-    {
-        None = 0,
-        Effect,
-        Add,
-        AddStacksBased,
-        Multiply,
-        MultiplyStacksBased,
     }
 }
