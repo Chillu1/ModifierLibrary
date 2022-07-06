@@ -5,22 +5,22 @@ using JetBrains.Annotations;
 
 namespace ModifierSystem
 {
-    public class TargetComponent : Component, IValidatorComponent<Being>, ITargetComponent, ICloneable
+    public class TargetComponent : Component, IValidatorComponent<Unit>, ITargetComponent, ICloneable
     {
         public ConditionEventTarget ConditionEventTarget { get; private set; }
-        [CanBeNull] public Being Target { get; private set; }
+        [CanBeNull] public Unit Target { get; private set; }
         public LegalTarget LegalTarget { get; }
         private bool Applier { get; }
 
         /// <summary>
         ///     Current owner of this modifier
         /// </summary>
-        public Being Owner { get; private set; }
+        public Unit Owner { get; private set; }
         /// <summary>
-        ///     Being that applied this modifier to current being
+        ///     Unit that applied this modifier to current being
         /// </summary>
         [CanBeNull]
-        public Being ApplierOwner { get; private set; }
+        public Unit ApplierOwner { get; private set; }
 
         public TargetComponent(LegalTarget legalTarget = LegalTarget.Self, bool applier = false)
         {
@@ -43,17 +43,17 @@ namespace ModifierSystem
             Applier = applier;
         }
 
-        public void SetupOwner(Being owner)
+        public void SetupOwner(Unit owner)
         {
             Owner = owner;
         }
 
-        public void SetupApplierOwner(Being owner)
+        public void SetupApplierOwner(Unit owner)
         {
             ApplierOwner = owner;
         }
 
-        public bool ValidateTarget(Being target)
+        public bool ValidateTarget(Unit target)
         {
             if (target == null)
                 return LegalTarget.HasFlag(LegalTarget.Ground);
@@ -91,7 +91,7 @@ namespace ModifierSystem
             return false;
         }
 
-        public bool SetTarget(Being target)
+        public bool SetTarget(Unit target)
         {
             if (!Applier && Target != null)
             {
@@ -109,7 +109,7 @@ namespace ModifierSystem
             return true;
         }
 
-        public void HandleTarget(BaseBeing receiver, BaseBeing acter, BaseBeingEvent effect)
+        public void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, BaseBeingEvent effect)
         {
             switch (ConditionEventTarget)
             {

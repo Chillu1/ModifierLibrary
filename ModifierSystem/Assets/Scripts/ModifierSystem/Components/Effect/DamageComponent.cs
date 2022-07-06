@@ -19,7 +19,7 @@ namespace ModifierSystem
             Info = "Damage: " + string.Join<DamageData>(" ", Damage) + "\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.DealDamage(Damage, acter);
         }

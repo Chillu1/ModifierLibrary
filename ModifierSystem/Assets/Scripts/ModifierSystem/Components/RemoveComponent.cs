@@ -24,7 +24,7 @@ namespace ModifierSystem
             _modifier.SetForRemoval();
         }
 
-        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)//Can't make it proper, because BaseBeing and not Being
+        public void ConditionEffect(BaseProject.Unit receiver, BaseProject.Unit acter)//Can't make it proper, because Unit and not Unit
         {
             SimpleEffect();
         }

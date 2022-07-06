@@ -14,12 +14,12 @@ namespace ModifierSystem
             Info = $"DamageStat: {string.Join<DamageData>(", ", damageData)}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            ((Being)receiver).ChangeDamageStat(DamageData);
+            ((Unit)receiver).ChangeDamageStat(DamageData);
         }
 
-        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             var test = new DamageData[DamageData.Length];
             for (int i = 0; i < DamageData.Length; i++)
@@ -27,7 +27,7 @@ namespace ModifierSystem
                 var damageData = DamageData[i];
                 test[i] = new DamageData(-damageData.BaseDamage, damageData.DamageType, damageData.ElementData);
             }
-            ((Being)receiver).ChangeDamageStat(test);
+            ((Unit)receiver).ChangeDamageStat(test);
         }
     }
 }

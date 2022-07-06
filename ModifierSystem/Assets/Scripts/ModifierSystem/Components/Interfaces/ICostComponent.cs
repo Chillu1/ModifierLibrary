@@ -4,6 +4,6 @@ namespace ModifierSystem
     {
         bool ContainsCost();
         void ApplyCost();
-        void SetupOwner(Being owner);
+        void SetupOwner(Unit owner);
     }
 }

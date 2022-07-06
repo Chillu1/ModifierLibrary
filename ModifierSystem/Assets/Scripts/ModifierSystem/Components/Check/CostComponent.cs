@@ -7,7 +7,7 @@ namespace ModifierSystem
         private PoolStatType Type { get; }
         private double Amount { get; }
 
-        private Being _owner;
+        private Unit _owner;
 
         private const string Info = "Cost: ";
 
@@ -17,7 +17,7 @@ namespace ModifierSystem
             Amount = amount;
         }
 
-        public void SetupOwner(Being owner)
+        public void SetupOwner(Unit owner)
         {
             _owner = owner;
         }

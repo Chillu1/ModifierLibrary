@@ -36,7 +36,7 @@ namespace ModifierSystem
             }
         }
         
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.Stats.BurnStat(StatType, Value, StatBurnType);
         }

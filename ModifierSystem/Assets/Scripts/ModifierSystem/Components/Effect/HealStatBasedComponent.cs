@@ -9,9 +9,9 @@ namespace ModifierSystem
             Info = $"HealAct\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            BaseBeing.Heal(receiver, acter);
+            BaseProject.Unit.Heal(receiver, acter);
         }
     }
 }

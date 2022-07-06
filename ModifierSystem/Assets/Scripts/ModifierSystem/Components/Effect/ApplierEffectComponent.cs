@@ -16,9 +16,9 @@ namespace ModifierSystem
             Info = $"Applies: {Modifier}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            ((Being)receiver).AddModifier((Modifier)Modifier.Clone(), (Being)acter);
+            ((Unit)receiver).AddModifier((Modifier)Modifier.Clone(), (Unit)acter);
         }
 
         public void StackEffect(int stacks, double value)

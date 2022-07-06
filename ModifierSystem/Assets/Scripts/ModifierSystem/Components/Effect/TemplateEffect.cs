@@ -13,7 +13,7 @@ namespace ModifierSystem
             Info = $"Template: {Foo}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             //receiver.Function(Foo, acter);
         }

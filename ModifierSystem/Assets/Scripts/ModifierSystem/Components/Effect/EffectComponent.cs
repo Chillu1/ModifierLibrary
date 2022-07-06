@@ -8,7 +8,7 @@ namespace ModifierSystem
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
         private bool IsRevertible { get; }
         private ITargetComponent _targetComponent;
-        protected Being ApplierOwner => _targetComponent.ApplierOwner;//TODO TEMP, to make Taunt work... Feeding original applier
+        protected Unit ApplierOwner => _targetComponent.ApplierOwner;//TODO TEMP, to make Taunt work... Feeding original applier
 
         public string Info { get; protected set; }
 
@@ -25,7 +25,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        protected abstract void Effect(BaseBeing receiver, BaseBeing acter);
+        protected abstract void Effect(BaseProject.Unit receiver, BaseProject.Unit acter);
 
         /// <summary>
         ///     No conditions, just effect
@@ -38,7 +38,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Main effect helper, checks for CheckCondition
         /// </summary>
-        private void TryEffect(BaseBeing receiver, BaseBeing acter)
+        private void TryEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             if (ConditionCheckData != null)
             {
@@ -51,9 +51,9 @@ namespace ModifierSystem
         }
 
         /// <summary>
-        ///     Being Event based condition effect
+        ///     Unit Event based condition effect
         /// </summary>
-        public void ConditionEffect(BaseBeing receiver, BaseBeing acter)
+        public void ConditionEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             _targetComponent.HandleTarget(receiver, acter, TryEffect);
         }
@@ -64,7 +64,7 @@ namespace ModifierSystem
                 RevertEffect(_targetComponent.Target, _targetComponent.Owner);
         }
 
-        protected virtual void RevertEffect(BaseBeing receiver, BaseBeing acter)
+        protected virtual void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             Log.Error("RevertEffect not overridden, but we're trying to use IsRevertible logic");
         }

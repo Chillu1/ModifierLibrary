@@ -180,13 +180,13 @@ namespace ModifierSystem
             CheckComponent = checkComponent;
         }
 
-        public void SetupOwner(Being owner)
+        public void SetupOwner(Unit owner)
         {
             TargetComponent.SetupOwner(owner);
             CheckComponent?.CostComponent?.SetupOwner(owner);
         }
 
-        public void SetupApplierOwner(Being owner)
+        public void SetupApplierOwner(Unit owner)
         {
             TargetComponent.SetupApplierOwner(owner);
         }
@@ -196,7 +196,7 @@ namespace ModifierSystem
             IsAutomaticCasting = automaticCast;
         }
 
-        public bool TryCast(Being target, bool automaticCast = false)
+        public bool TryCast(Unit target, bool automaticCast = false)
         {
             //Log.Info($"{Id} is trying to cast", "modifiers");
             if (target == null && !TargetComponent.LegalTarget.HasFlag(LegalTarget.Ground))
@@ -214,7 +214,7 @@ namespace ModifierSystem
         /// <summary>
         ///     All appliers (attack, cast). NOT conditional, etc
         /// </summary>
-        public bool TryApply(Being target)
+        public bool TryApply(Unit target)
         {
             bool validApply = true;
 

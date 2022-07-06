@@ -172,7 +172,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Measure.Method(() =>
                 {
-                    var character = new Being(new BeingProperties
+                    var character = new Unit(new BeingProperties
                     {
                         Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
@@ -189,7 +189,7 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchNewBeingClone()
         {
-            var character = new Being(new BeingProperties
+            var character = new Unit(new BeingProperties
             {
                 Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
@@ -197,7 +197,7 @@ namespace ModifierSystem.Tests.Performance
 
             Measure.Method(() =>
                 {
-                    var clonedBeing = (Being)character.Clone();
+                    var clonedBeing = (Unit)character.Clone();
                 })
                 .WarmupCount(10)
                 .MeasurementCount(10)
@@ -210,7 +210,7 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchBeingNormalAttack()
         {
-            Being character = null, enemy = null;
+            Unit character = null, enemy = null;
             var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
@@ -220,12 +220,12 @@ namespace ModifierSystem.Tests.Performance
                 .GC()
                 .SetUp(() =>
                 {
-                    character = new Being(new BeingProperties
+                    character = new Unit(new BeingProperties
                     {
                         Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
-                    enemy = new Being(new BeingProperties
+                    enemy = new Unit(new BeingProperties
                     {
                         Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
@@ -245,7 +245,7 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchBeingElementAttack()
         {
-            Being character = null, enemy = null;
+            Unit character = null, enemy = null;
             var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
@@ -255,14 +255,14 @@ namespace ModifierSystem.Tests.Performance
                 .GC()
                 .SetUp(() =>
                 {
-                    character = new Being(new BeingProperties
+                    character = new Unit(new BeingProperties
                     {
                         Id = "player", Health = 50,
                         Damage = new DamageData(1, DamageType.Physical, new ElementData(ElementType.Fire, 20, 10)),
                         MovementSpeed = 3,
                         Mana = 100, ManaRegen = 50, UnitType = UnitType.Ally
                     });
-                    enemy = new Being(new BeingProperties
+                    enemy = new Unit(new BeingProperties
                     {
                         Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
@@ -282,7 +282,7 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchBeingNormalAttackWithAppliers()
         {
-            Being character = null, enemy = null;
+            Unit character = null, enemy = null;
             var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
@@ -292,14 +292,14 @@ namespace ModifierSystem.Tests.Performance
                 .GC()
                 .SetUp(() =>
                 {
-                    character = new Being(new BeingProperties
+                    character = new Unit(new BeingProperties
                     {
                         Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
                     });
                     character.AddModifier(_modifierPrototypesTest.GetApplier("DoTStackTest"));
                     character.AddModifier(_modifierPrototypesTest.GetApplier("SilenceXStacksTest"));
-                    enemy = new Being(new BeingProperties
+                    enemy = new Unit(new BeingProperties
                     {
                         Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
                         Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
@@ -320,7 +320,7 @@ namespace ModifierSystem.Tests.Performance
         public void BenchApplyModifier()
         {
             Modifier modifier = null;
-            Being character = null;
+            Unit character = null;
             var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { modifier!.TryApply(character); })
@@ -331,7 +331,7 @@ namespace ModifierSystem.Tests.Performance
                 .SetUp(() =>
                 {
                     modifier = _modifierPrototypesTest.GetApplier("DoTStackTest");
-                    character = new Being(new BeingProperties
+                    character = new Unit(new BeingProperties
                     {
                         Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
                         Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally

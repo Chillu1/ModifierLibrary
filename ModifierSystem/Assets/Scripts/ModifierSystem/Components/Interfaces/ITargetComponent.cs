@@ -6,10 +6,10 @@ namespace ModifierSystem
     public interface ITargetComponent
     {
         ConditionEventTarget ConditionEventTarget { get; }
-        Being Target { get; }
-        Being Owner { get; }
-        Being ApplierOwner { get; }
-        bool SetTarget(Being target);
-        void HandleTarget(BaseBeing receiver, BaseBeing acter, BaseBeingEvent effect);
+        Unit Target { get; }
+        Unit Owner { get; }
+        Unit ApplierOwner { get; }
+        bool SetTarget(Unit target);
+        void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, BaseBeingEvent effect);
     }
 }

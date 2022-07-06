@@ -16,12 +16,12 @@ namespace ModifierSystem
             Info = $"Resistance: {elementType} {value}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.ElementalDamageResistances.ChangeValue(ElementType, Value);
         }
 
-        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.ElementalDamageResistances.ChangeValue(ElementType, -Value);
         }

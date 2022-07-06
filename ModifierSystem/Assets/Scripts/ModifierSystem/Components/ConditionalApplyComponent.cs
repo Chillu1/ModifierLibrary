@@ -67,7 +67,7 @@ namespace ModifierSystem
             return success;
         }
 
-        private void ConditionEffectCheck(BaseBeing receiver, BaseBeing acter)
+        private void ConditionEffectCheck(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             if (CheckComponent == null || CheckComponent.Check())
             {

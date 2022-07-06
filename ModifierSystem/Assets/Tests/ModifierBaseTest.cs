@@ -8,11 +8,11 @@ namespace ModifierSystem.Tests
 {
     public abstract class ModifierBaseTest
     {
-        protected Being character;
-        protected Being ally;
-        protected Being enemy;
-        protected Being enemyAlly;
-        protected Being[] enemyDummies;
+        protected Unit character;
+        protected Unit ally;
+        protected Unit enemy;
+        protected Unit enemyAlly;
+        protected Unit[] enemyDummies;
 
         protected double initialHealthCharacter, initialHealthAlly, initialHealthEnemy, initialHealthEnemyAlly;
         protected double initialDamageCharacter, initialDamageAlly, initialDamageEnemy;
@@ -41,22 +41,22 @@ namespace ModifierSystem.Tests
         [SetUp]
         public void Init()
         {
-            character = new Being(new BeingProperties
+            character = new Unit(new BeingProperties
             {
                 Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
-            ally = new Being(new BeingProperties
+            ally = new Unit(new BeingProperties
             {
                 Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
             });
-            enemy = new Being(new BeingProperties
+            enemy = new Unit(new BeingProperties
             {
                 Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
-            enemyAlly = new Being(new BeingProperties
+            enemyAlly = new Unit(new BeingProperties
             {
                 Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
@@ -70,10 +70,10 @@ namespace ModifierSystem.Tests
             initialDamageEnemy = enemy.Stats.Damage.DamageSum();
             initialManaCharacter = character.Stats.Mana.CurrentMana;
 
-            enemyDummies = new Being[5];
+            enemyDummies = new Unit[5];
             for (int i = 0; i < 5; i++)
             {
-                enemyDummies[0] = new Being(new BeingProperties()
+                enemyDummies[0] = new Unit(new BeingProperties()
                 {
                     Id = "enemy", Health = 1, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
                     Mana = 50, ManaRegen = 100, UnitType = UnitType.Enemy

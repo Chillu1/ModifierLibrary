@@ -7,7 +7,7 @@ namespace ModifierSystem
 {
     public class ModifierController
     {
-        private readonly Being _owner;
+        private readonly Unit _owner;
         private ElementController ElementController { get; }
 
         private Dictionary<string, Modifier> Modifiers { get; }
@@ -17,7 +17,7 @@ namespace ModifierSystem
         private float _timer;
         private float _secondTimer;
 
-        public ModifierController(Being owner, ElementController elementController)
+        public ModifierController(Unit owner, ElementController elementController)
         {
             _owner = owner;
             ElementController = elementController;
@@ -62,13 +62,13 @@ namespace ModifierSystem
             _secondTimer = 0f;
         }
 
-        public bool TryAddModifier(Modifier modifier, AddModifierParameters parameters, Being sourceBeing = null)
+        public bool TryAddModifier(Modifier modifier, AddModifierParameters parameters, Unit sourceUnit = null)
         {
             bool modifierAdded;
 
             //Log.Info("ModifierId: " + modifier.Id + ". BeingId: " + _owner.Id + " Parameters: " + parameters);
             modifier.SetupOwner(_owner);
-            modifier.SetupApplierOwner(modifier.IsApplierModifier ? _owner : sourceBeing);
+            modifier.SetupApplierOwner(modifier.IsApplierModifier ? _owner : sourceUnit);
             HandleTarget(modifier, parameters);
             //Log.Info("Owner: "+modifier.TargetComponent.Owner.Id+ ". Target: " + modifier.TargetComponent.Target?.Id, "modifiers");
 
@@ -115,7 +115,7 @@ namespace ModifierSystem
             Modifiers.Add(modifier.Id, modifier);
             modifier.Init();
             modifier.Stack(); //If has stack component, we will trigger it on add
-            //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.BaseBeing.Id, "modifiers");
+            //Log.Verbose("Added modifier " + modifier.GetType().Name +" with target: " + modifier.TargetComponent.Target?.Unit.Id, "modifiers");
         }
 
         private void AddComboModifiers(HashSet<ComboModifier> comboModifiers)

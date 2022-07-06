@@ -51,7 +51,7 @@ namespace ModifierSystem
                 foreach (var castModifier in _castModifiers)
                 {
                     if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
-                        castModifier.TryCast((Being)TargetingSystem.CastTarget, true);
+                        castModifier.TryCast((Unit)TargetingSystem.CastTarget, true);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace ModifierSystem
             AuraCast(_allyAuraCastModifiers, TargetingSystem.AllyAuraTargets);
             AuraCast(_enemyAuraCastModifiers, TargetingSystem.EnemyAuraTargets);
 
-            void AuraCast(List<Modifier> modifiers, List<BaseBeing> targets)
+            void AuraCast(List<Modifier> modifiers, List<BaseProject.Unit> targets)
             {
                 foreach (var castModifier in modifiers)
                 {
@@ -71,7 +71,7 @@ namespace ModifierSystem
                         continue;
 
                     foreach (var target in targets)
-                        castModifier.TryCast((Being)target, true);
+                        castModifier.TryCast((Unit)target, true);
                 }
             }
         }
@@ -81,13 +81,13 @@ namespace ModifierSystem
         /// </summary>
         public bool CastModifier(string modifierId)
         {
-            return CastModifier((Being)TargetingSystem.CastTarget, modifierId);
+            return CastModifier((Unit)TargetingSystem.CastTarget, modifierId);
         }
 
         /// <summary>
         ///     Manual Cast
         /// </summary>
-        public bool CastModifier(Being target, string modifierId)
+        public bool CastModifier(Unit target, string modifierId)
         {
             bool valid = ValidateCast(modifierId, out var modifier);
             if (!valid)

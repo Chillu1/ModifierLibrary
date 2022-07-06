@@ -9,9 +9,9 @@ namespace ModifierSystem
             Info = "Attack\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            Being.Attack((Being)receiver, (Being)acter); //TODO Not sure about this
+            Unit.Attack((Unit)receiver, (Unit)acter); //TODO Not sure about this
         }
     }
 }

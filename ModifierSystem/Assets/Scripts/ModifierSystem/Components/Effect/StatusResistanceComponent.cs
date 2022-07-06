@@ -20,14 +20,14 @@ namespace ModifierSystem
             Info = $"StatusResistance: {string.Join<StatusTag>(", ", StatusTags)}{string.Join(", ", Values)}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values);
+            ((Unit)receiver).StatusResistances.ChangeValue(StatusTags, Values);
         }
 
-        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
-            ((Being)receiver).StatusResistances.ChangeValue(StatusTags, Values.Select(v => -v).ToArray());
+            ((Unit)receiver).StatusResistances.ChangeValue(StatusTags, Values.Select(v => -v).ToArray());
         }
     }
 }

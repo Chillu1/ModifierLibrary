@@ -2,7 +2,6 @@
 
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Change BaseBeing/Being to Unit/Entity**
-* >**GetDamageMultiplier unit tests to IsValue**
 * >**Health DamageTaken as Mana**
 * Remove/CleanUp doesn't revert ConditionEvents? (ConditionTimedDamageOnKill) 
 * More Templates for basic modifiers

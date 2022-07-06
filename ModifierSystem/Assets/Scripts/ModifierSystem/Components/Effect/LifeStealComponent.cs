@@ -8,7 +8,7 @@ namespace ModifierSystem
     /// </summary>
     public sealed class LifeStealComponent : EffectComponent
     {
-        //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Being class instead
+        //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Unit class instead
         //private DamageData[] Damage { get; }
         private double SummedDamage { get; }
         private double Percentage { get; }
@@ -23,7 +23,7 @@ namespace ModifierSystem
             Info = $"LifeSteal: {SummedDamage} damage, {Percentage*100d}%\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.Stats.Health.Heal(SummedDamage * Percentage);
         }

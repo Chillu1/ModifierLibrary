@@ -14,12 +14,12 @@ namespace ModifierSystem
             Info = $"Heal: {Heal}\n";
         }
 
-        protected override void Effect(BaseBeing receiver, BaseBeing acter)
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.Stats.Health.Heal(Heal);
         }
 
-        protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
+        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
         {
             receiver.Stats.Health.Heal(-Heal);
         }
