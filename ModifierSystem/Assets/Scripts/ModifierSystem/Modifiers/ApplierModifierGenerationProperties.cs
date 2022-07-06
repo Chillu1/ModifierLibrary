@@ -73,5 +73,10 @@ namespace ModifierSystem
         {
             Chance = chance;
         }
+
+        public void SetAddModifierParameters(AddModifierParameters parameters)
+        {
+            AddModifierParameters = parameters;
+        }
     }
 }

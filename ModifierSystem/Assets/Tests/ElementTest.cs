@@ -8,25 +8,23 @@ namespace ModifierSystem.Tests
         [Test]
         public void ElementResistanceComponent()
         {
-            Assert.True(character.ElementalDamageResistances.HasValue(ElementType.Fire, 0));
+            Assert.True(character.ElementalDamageResistances.IsValue(ElementType.Fire, 0));
 
             var elementModifier = modifierPrototypes.Get("ElementFireResistanceTest");
             character.AddModifier(elementModifier);
 
-            Assert.AreEqual(BaseProject.Curves.DamageResistance.Evaluate(1000),
-                character.ElementalDamageResistances.GetDamageMultiplier(ElementType.Fire), Delta);
+            Assert.True(character.ElementalDamageResistances.IsValue(ElementType.Fire, 1000));
         }
 
         [Test]
         public void DamageResistanceComponent()
         {
-            Assert.True(character.DamageTypeDamageResistances.HasValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             var physicalModifier = modifierPrototypes.Get("DamagePhysicalResistanceTest");
             character.AddModifier(physicalModifier);
 
-            Assert.AreEqual(BaseProject.Curves.DamageResistance.Evaluate(1000),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 1000));
         }
     }
 }

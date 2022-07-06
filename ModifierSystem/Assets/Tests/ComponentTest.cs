@@ -188,19 +188,16 @@ namespace ModifierSystem.Tests
         [Test]
         public void TemporaryDamageResistance()
         {
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             var modifier = modifierPrototypes.Get("TemporaryPhysicalResistanceTest");
             character.AddModifier(modifier);
 
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
 
             character.Update(1.1f);
 
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
         }
 
         [Test]
@@ -221,8 +218,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void RevertibleDamageResistanceBuff()
         {
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             var modifierApplier = modifierPrototypes.GetApplier("TemporaryAlliedDamageResistanceBuffTest");
             ally.AddModifier(modifierApplier);
@@ -230,19 +226,16 @@ namespace ModifierSystem.Tests
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
 
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
 
             character.Update(11f);
 
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(0),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
             
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
             character.Update(8f);
 
-            Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
-                character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
         }
     }
 }

@@ -64,6 +64,7 @@ Applier
 
 
 # Design questions
+* EffectStacking, with Value changing. Ex. DamageRes, stacking. Makes it so we can't easily revert if atter the buff is gone. Aka we can't feed stacks values to revertEffect in a clean way 
 * ApplyAttackModifiers iteration, needs a copy, beceause attacking might lead to a new modifier being added. Have a separate list of keys of appliers?
     Or make new logic that ads the modifier after we have fully iterated through it (might not be ideal).
 * We have to deep clone effect in EffectPropertyInfo so it can be reused without multiple targets holding the same effect, and overwriting each other

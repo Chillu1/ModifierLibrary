@@ -1,4 +1,3 @@
-using System.Linq;
 using BaseProject;
 
 namespace ModifierSystem
@@ -22,11 +21,13 @@ namespace ModifierSystem
 
         protected override void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
-            ((Being)receiver).ChangeDamageStat(DamageData.Select(d =>
+            var test = new DamageData[DamageData.Length];
+            for (int i = 0; i < DamageData.Length; i++)
             {
-                d.BaseDamage = -d.BaseDamage;
-                return d;
-            }).ToArray());
+                var damageData = DamageData[i];
+                test[i] = new DamageData(-damageData.BaseDamage, damageData.DamageType, damageData.ElementData);
+            }
+            ((Being)receiver).ChangeDamageStat(test);
         }
     }
 }

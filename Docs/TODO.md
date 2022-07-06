@@ -1,7 +1,10 @@
 # TODO:
 
-* **DamageStatComponent might have some bad/improper logic on reverting**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
+* >**Change BaseBeing/Being to Unit/Entity**
+* >**GetDamageMultiplier unit tests to IsValue**
+* >**Health DamageTaken as Mana**
+* Remove/CleanUp doesn't revert ConditionEvents? (ConditionTimedDamageOnKill) 
 * More Templates for basic modifiers
 * Improved GenerateModifier, multi effects, etc.
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc

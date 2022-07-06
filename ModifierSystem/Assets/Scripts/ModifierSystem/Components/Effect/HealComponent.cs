@@ -6,8 +6,8 @@ namespace ModifierSystem
     {
         public double Heal { get; private set; }
 
-        public HealComponent(double heal, ConditionCheckData conditionCheckData = null, bool isRevertible = false) : base(conditionCheckData,
-            isRevertible)
+        public HealComponent(double heal, ConditionCheckData conditionCheckData = null, bool isRevertible = false)
+            : base(conditionCheckData, isRevertible)
         {
             Heal = heal;
 

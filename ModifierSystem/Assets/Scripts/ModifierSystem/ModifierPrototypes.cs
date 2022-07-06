@@ -301,17 +301,16 @@ namespace ModifierSystem
 
                 AddModifier(properties);
             }
-            /*{//TODOPRIO FIXME
+            {
                 //Timed damage on kill
                 var damageData = new[] { new DamageData(2, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("TimedDamageOnKillTest", LegalTarget.Beings);
-                properties.AddConditionData(new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent));
-                properties.AddEffect(new DamageStatComponent(damageData), damageData);
-
+                var properties = new ModifierGenerationProperties("TimedDamageOnKillTest", null);
+                properties.AddEffect(new DamageStatComponent(damageData, isRevertible: true), damageData);
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
                 properties.SetRemovable(5);
 
                 AddModifier(properties);
-            }*/
+            }
             {
                 //Thorns on hit
                 var damageData = new[] { new DamageData(5, DamageType.Physical) };
@@ -325,10 +324,11 @@ namespace ModifierSystem
                 //TODO Implement a generation of the modifier below
                 //TODO We might come into trouble with multiple target components, since rn we rely on having only one in modifier
                 //Heal on death, once
-                var properties = new ModifierGenerationProperties("HealOnDeathTest", LegalTarget.Beings);
-                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
+                var properties = new ModifierGenerationProperties("HealOnDeathTest", null);
                 properties.AddEffect(new HealComponent(10));
-
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
+                properties.AddEffect(new RemoveComponent(modifier));
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
 
                 AddModifier(properties);
             }*/
@@ -957,6 +957,32 @@ namespace ModifierSystem
 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
                 applierProperties.SetApplier(ApplierType.Cast);
+                AddModifier(applierProperties);
+            }
+
+            {
+                //One time conditional remove damage resistance
+                var properties = new ModifierGenerationProperties("ConditionRemoveTest", null);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnAttackedEvent);
+                properties.SetRefreshable();
+                properties.SetRemovable(5);
+                
+                var modifier = AddModifier(properties);
+            }
+            {
+                //Conditional remove damage resistance with applier instead
+                var properties = new ModifierGenerationProperties("ConditionRemoveApplierTest", null);
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+                properties.SetEffectOnInit();
+                properties.SetRefreshable();
+                properties.SetRemovable(5);
+                
+                var modifier = AddModifier(properties);
+                
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Self);
+                applierProperties.SetCondition(ConditionEventTarget.SelfActer, ConditionEvent.OnAttackedEvent);
+                applierProperties.SetAddModifierParameters(AddModifierParameters.OwnerIsTarget);
                 AddModifier(applierProperties);
             }
         }

@@ -41,8 +41,7 @@ namespace ModifierSystem
                 return;
             }
 
-            //CleanUp/Remove shouldn't use Checks?
-            _conditionEvent.RemoveBeingEvent(TargetComponent.Target, ConditionEffectComponent.ConditionEffect);
+            _conditionEvent.RemoveBeingEvent(TargetComponent.Target, ConditionEffectCheck);
         }
 
         private bool Validate()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BaseProject;
 using BaseProject.Utils;
+using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierSystem
@@ -282,11 +283,12 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (IsApplierModifier || Id.Contains("Applier"))
+            if (IsApplierModifier || Id.EndsWith("Applier"))
             {
-                if (ApplyComponent == null && StackComponent == null)
+                if (ApplyComponent == null && StackComponent == null && !IsConditionModifier)
                 {
-                    Log.Error("ModifierApplier needs an ApplyComponent or StackComponent", "modifiers");
+                    Log.Info(Id+"_"+IsConditionModifier);
+                    Log.Error("ModifierApplier needs an ApplyComponent, StackComponent or has to be condition based", "modifiers");
                     valid = false;
                 }
             }
@@ -297,13 +299,13 @@ namespace ModifierSystem
                 valid = false;
             }
 
-            if (Id.Contains("Applier") && !IsApplierModifier && !IsConditionModifier)
+            if (Id.EndsWith("Applier") && !IsApplierModifier && !IsConditionModifier)
             {
                 Log.Error("Id contains applier, but the flag isn't set, and it's not a condition modifier", "modifiers");
                 valid = false;
             }
 
-            if (!Id.Contains("Applier") && IsApplierModifier)
+            if (!Id.EndsWith("Applier") && IsApplierModifier)
             {
                 Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
                 valid = false;
@@ -362,8 +364,8 @@ namespace ModifierSystem
         {
             if (Properties == null)
             {
-                Log.Error($"{Id} has no properties", "modifiers");
-                return null;
+                Log.Error($"{Id} has no properties, falling back to deep clone", "modifiers");
+                return this.DeepClone();
             }
 
             if (Properties is ComboModifierGenerationProperties comboProperties)
@@ -375,8 +377,8 @@ namespace ModifierSystem
             if (Properties is ApplierModifierGenerationProperties applierProperties)
                 return ModifierGenerator.GenerateApplierModifier(applierProperties);
 
-            Log.Error($"{Id} has unknown properties kind", "modifiers");
-            return null;
+            Log.Error($"{Id} has unknown properties kind, falling back to deep clone", "modifiers");
+            return this.DeepClone();
         }
 
         public virtual object Clone()
