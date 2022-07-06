@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class HealComponent : EffectComponent
+    public sealed class HealComponent : EffectComponent
     {
         public double Heal { get; private set; }
 

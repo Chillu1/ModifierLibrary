@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class AttackComponent : EffectComponent
+    public sealed class AttackComponent : EffectComponent
     {
         public AttackComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {

@@ -106,17 +106,34 @@ namespace ModifierSystem.Tests
             enemy.AddModifier(basicDamageModifierApplier);
             Assert.True(enemy.StatusEffects.LegalActions == LegalAction.All);
 
-            enemy.TargetingSystem.SetAttackTarget(ally);
+            enemy.TargetingSystem.SetTarget(TargetType.Attack, ally);
             character.CastModifier(enemy, "TauntTestApplier");
 
             Assert.False(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Cast));
-            enemy.Update(1.1f);//Should attack new taunted target, not old ally target
+            enemy.Update(1.1f); //Should attack new taunted target, not old ally target
 
             Assert.False(character.Stats.Health.IsFull);
             Assert.AreEqual(initialHealthAlly, ally.Stats.Health.CurrentHealth, Delta);
 
             enemy.CastModifier(ally, "IceBoltCastTestApplier"); //Shouldn't do anything, can't cast while taunted
             Assert.AreEqual(initialHealthAlly, ally.Stats.Health.CurrentHealth, Delta);
+        }
+
+        [Test]
+        public void ConfuseStatusAttackSelf()
+        {
+            var modifierApplier = modifierPrototypes.GetApplier("ConfuseCastSelfTest");
+            character.AddModifier(modifierApplier);
+
+            enemy.TargetingSystem.SetTarget(TargetType.Attack, character);
+
+            character.CastModifier(enemy, "ConfuseCastSelfTestApplier");
+            Assert.True(enemy.StatusEffects.HasEffect(StatusEffect.Confuse));
+
+            enemy.Update((float)enemy.Stats.AttackSpeed);
+
+            Assert.True(character.Stats.Health.IsFull);
+            Assert.AreEqual(initialHealthEnemy - initialDamageEnemy, enemy.Stats.Health.CurrentHealth, Delta);
         }
     }
 }

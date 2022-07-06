@@ -3,7 +3,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageStatComponent : EffectComponent
+    public sealed class DamageStatComponent : EffectComponent
     {
         private DamageData[] DamageData { get; }
 

@@ -3,7 +3,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class DamageReflectComponent : EffectComponent
+    public sealed class DamageReflectComponent : EffectComponent
     {
         private double Percentage { get; }
 

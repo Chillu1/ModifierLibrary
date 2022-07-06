@@ -1,7 +1,5 @@
 # TODO:
 
-* >**Mana burn mechanic**
-* >**Missdirection/confusion attack/cast on ally mechanic**
 * **DamageStatComponent might have some bad/improper logic on reverting**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * More Templates for basic modifiers
@@ -26,6 +24,7 @@
 ## Lower prio
 
 - [ ] Sort ideas by prio
+- [ ] TargetingSystem.GetPossibleTarget StatusEffect Confuse unit tests
 - [ ] >Status effect to legal actions? (Replace?)
 - [ ] Counter attack (onhit event? Or built-in)
 - [ ] ComboAppliers?

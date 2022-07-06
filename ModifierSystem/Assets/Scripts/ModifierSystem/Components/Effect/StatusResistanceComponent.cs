@@ -4,7 +4,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class StatusResistanceComponent : EffectComponent
+    public sealed class StatusResistanceComponent : EffectComponent
     {
         private StatusTag[] StatusTags { get; }
         private double[] Values { get; }

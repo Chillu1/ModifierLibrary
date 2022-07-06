@@ -57,6 +57,8 @@ namespace ModifierSystem
         {
             if (target == null)
                 return LegalTarget.HasFlag(LegalTarget.Ground);
+            
+            //Log.Info($"LegalTarget: {LegalTarget}. TargetType: {target.UnitType}. OwnerType: {Owner.UnitType}", "modifiers");
 
             if (target.UnitType == UnitType.None)
                 Log.Error("Illegal UnitType on: " + target.Id, "modifiers");
@@ -74,7 +76,8 @@ namespace ModifierSystem
             //If target is self, and we are not allowed to target self
             if (!LegalTarget.HasFlag(LegalTarget.Self) && Owner == target)
             {
-                Log.Error("Targeting ourselves, while legalTarget doesn't have self as a valid target", "modifiers");
+                //TODO Won't be an error with the new targeting self/allies mechanic, still should be checked & logged in case a modifier has been setup wrong
+                Log.Error("Targeting ourselves, while legalTarget doesn't have self as a valid target. Target: "+target.Id, "modifiers");
                 return false;
             }
 
@@ -98,7 +101,7 @@ namespace ModifierSystem
 
             if (!ValidateTarget(target))
             {
-                Log.Error("Target is not valid, id: " + target?.Id, "modifiers");
+                //Log.Error("Target is not valid, id: " + target?.Id, "modifiers");
                 return false;
             }
 

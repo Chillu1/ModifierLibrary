@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class TemplateEffect : EffectComponent
+    public sealed class TemplateEffect : EffectComponent
     {
         public double Foo { get; }
 

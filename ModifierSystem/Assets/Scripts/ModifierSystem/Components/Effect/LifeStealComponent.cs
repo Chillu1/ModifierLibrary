@@ -6,7 +6,7 @@ namespace ModifierSystem
     /// <summary>
     ///     LifeSteal before reduction (ignores resistances)
     /// </summary>
-    public class LifeStealComponent : EffectComponent
+    public sealed class LifeStealComponent : EffectComponent
     {
         //TODO Might be smart to make lifeSteal mechanic part of actual baseProject.Being class instead
         //private DamageData[] Damage { get; }

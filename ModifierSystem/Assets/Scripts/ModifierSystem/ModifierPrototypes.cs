@@ -12,6 +12,8 @@ namespace ModifierSystem
         {
             if (includeTest)
                 SetupTestModifiers();
+
+            Log.Verbose($"Loaded {Count} modifiers", "modifiers");
         }
 
         public void AddModifier(TModifier modifier)
@@ -905,6 +907,55 @@ namespace ModifierSystem
                 var modifier = AddModifier(properties);
                 
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Same);
+                applierProperties.SetApplier(ApplierType.Cast);
+                AddModifier(applierProperties);
+            }
+            
+            {
+                //Percent mana burn init, Time flat mana burn
+                var properties = new ModifierGenerationProperties("TimePercentFlatManaBurnBeingsTest", null);
+                properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 10, StatBurnType.Percent));
+                properties.SetEffectOnInit();
+                properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 2));
+                properties.SetEffectOnTime(1, true);
+                properties.SetRefreshable();
+                properties.SetRemovable(4);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
+                applierProperties.SetApplier(ApplierType.Attack);
+                applierProperties.SetCooldown(5);
+                AddModifier(applierProperties);
+            }
+            {
+                //Percent mana burn init, Time flat mana burn
+                var properties = new ModifierGenerationProperties("TimePercentFlatManaBurnOppositeTest", null);
+                properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 10, StatBurnType.Percent));
+                properties.SetEffectOnInit();
+                properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 2));
+                properties.SetEffectOnTime(1, true);
+                properties.SetRefreshable();
+                properties.SetRemovable(4);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Opposite);
+                applierProperties.SetApplier(ApplierType.Attack);
+                applierProperties.SetCooldown(5);
+                AddModifier(applierProperties);
+            }
+            
+            {
+                //Confuse enemy on cast, to attack self
+                var properties = new ModifierGenerationProperties("ConfuseCastSelfTest", null);
+                properties.AddEffect(new StatusConfuseComponent(2, TargetType.Attack, ConfuseType.Self));
+                properties.SetEffectOnInit();
+                properties.SetRemovable(2);
+
+                var modifier = AddModifier(properties);
+
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
                 applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }

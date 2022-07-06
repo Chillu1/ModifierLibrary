@@ -1,3 +1,4 @@
+using System.Linq;
 using BaseProject;
 using Force.DeepCloner;
 using UnityEngine;
@@ -30,7 +31,8 @@ namespace ModifierSystem
         /// </summary>
         private void ApplyAttackModifiers(Being target)
         {
-            foreach (var modifierApplier in ModifierController.GetModifierAttackAppliers())
+            //TODO To array because the list might be modified during iteration, might be smart to have a separate hashset of keys of AttackAppliers,
+            foreach (var modifierApplier in ModifierController.GetModifierAttackAppliers().ToArray())
             {
                 //Debug.Log("Applying: " + modifierApplier);
                 modifierApplier.TryApply(target);

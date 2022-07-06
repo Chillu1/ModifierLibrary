@@ -1,5 +1,8 @@
+using System.Text.RegularExpressions;
 using BaseProject;
 using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace ModifierSystem.Tests
 {
@@ -179,6 +182,37 @@ namespace ModifierSystem.Tests
                 character.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
             Assert.AreEqual(1d - BaseProject.Curves.DamageResistance.Evaluate(100),
                 ally.DamageTypeDamageResistances.GetDamageMultiplier(DamageType.Physical), Delta);
+        }
+
+        [Test]
+        public void SelfManaBurnBeings()
+        {
+            var applier = modifierPrototypes.GetApplier("TimePercentFlatManaBurnBeingsTest");
+            character.AddModifier(applier);
+
+            Assert.True(character.Stats.Mana.IsFull);
+
+            character.TargetingSystem.SetTarget(TargetType.Attack, character);
+            character.Update((float)character.Stats.AttackSpeed);
+            
+            Assert.False(character.Stats.Health.IsFull);
+            Assert.False(character.Stats.Mana.IsFull);
+        }
+        
+        [Test]
+        public void SelfManaBurnOpposite()
+        {
+            var applier = modifierPrototypes.GetApplier("TimePercentFlatManaBurnOppositeTest");
+            character.AddModifier(applier);
+
+            Assert.True(character.Stats.Mana.IsFull);
+
+            character.TargetingSystem.SetTarget(TargetType.Attack, character);
+            character.Update((float)character.Stats.AttackSpeed);
+            
+            Assert.False(character.Stats.Health.IsFull);
+            LogAssert.Expect(LogType.Error, new Regex("Targeting ourselves*"));
+            Assert.True(character.Stats.Mana.IsFull);//Applier doesn't work on self
         }
     }
 }

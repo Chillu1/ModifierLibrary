@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public class HealStatBasedComponent : EffectComponent
+    public sealed class HealStatBasedComponent : EffectComponent
     {
         public HealStatBasedComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
         {

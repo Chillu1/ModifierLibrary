@@ -64,6 +64,8 @@ Applier
 
 
 # Design questions
+* ApplyAttackModifiers iteration, needs a copy, beceause attacking might lead to a new modifier being added. Have a separate list of keys of appliers?
+    Or make new logic that ads the modifier after we have fully iterated through it (might not be ideal).
 * We have to deep clone effect in EffectPropertyInfo so it can be reused without multiple targets holding the same effect, and overwriting each other
     Not ideal, best to have some sort of data-only in Properties, and then make a new effect class here.
     Problem with that, is that we'll need to make a new effect using reflection?

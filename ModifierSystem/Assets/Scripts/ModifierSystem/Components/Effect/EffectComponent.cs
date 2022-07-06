@@ -66,6 +66,7 @@ namespace ModifierSystem
 
         protected virtual void RevertEffect(BaseBeing receiver, BaseBeing acter)
         {
+            Log.Error("RevertEffect not overridden, but we're trying to use IsRevertible logic");
         }
     }
 }

@@ -211,7 +211,7 @@ namespace ModifierSystem.Tests.Performance
         public void BenchBeingNormalAttack()
         {
             Being character = null, enemy = null;
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
+            var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
                 .WarmupCount(10)
@@ -239,14 +239,14 @@ namespace ModifierSystem.Tests.Performance
                 .Run()
                 ;
 
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
+            Log.ChangeCategoryLogLevel("modifiers", logLevel);
         }
 
         [Test, Performance]
         public void BenchBeingElementAttack()
         {
             Being character = null, enemy = null;
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
+            var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
                 .WarmupCount(10)
@@ -276,14 +276,14 @@ namespace ModifierSystem.Tests.Performance
                 .Run()
                 ;
 
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
+            Log.ChangeCategoryLogLevel("modifiers", logLevel);
         }
 
         [Test, Performance]
         public void BenchBeingNormalAttackWithAppliers()
         {
             Being character = null, enemy = null;
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
+            var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { character!.Attack(enemy); })
                 .WarmupCount(10)
@@ -313,7 +313,7 @@ namespace ModifierSystem.Tests.Performance
                 .Run()
                 ;
 
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
+            Log.ChangeCategoryLogLevel("modifiers", logLevel);
         }
 
         [Test, Performance]
@@ -321,7 +321,7 @@ namespace ModifierSystem.Tests.Performance
         {
             Modifier modifier = null;
             Being character = null;
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
+            var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
 
             Measure.Method(() => { modifier!.TryApply(character); })
                 .WarmupCount(10)
@@ -345,7 +345,26 @@ namespace ModifierSystem.Tests.Performance
                 .Run()
                 ;
 
-            Log.ChangeCategoryLogLevel("modifiers", LogLevel.Verbose);
+            Log.ChangeCategoryLogLevel("modifiers", logLevel);
+        }
+
+        [Test, Performance]
+        public void BenchModifierPrototypesSetup()
+        {
+            var logLevel = Log.ChangeCategoryLogLevel("modifiers", LogLevel.Error);
+            
+            Measure.Method(() =>
+                {
+                    var modifierPrototypes = new ModifierPrototypes<Modifier>(true);
+                })
+                .WarmupCount(10)
+                .MeasurementCount(5)
+                .IterationsPerMeasurement(100)
+                .GC()
+                .Run()
+                ;
+            
+            Log.ChangeCategoryLogLevel("modifiers", logLevel);
         }
     }
 }

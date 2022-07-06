@@ -80,7 +80,7 @@ namespace ModifierSystem.Tests
             var modifier = modifierPrototypes.GetApplier("IceBoltAutomaticCastTest");
             character.AddModifier(modifier);
 
-            character.TargetingSystem.SetCastTarget(enemy);
+            character.TargetingSystem.SetTarget(TargetType.Cast, enemy);
 
             character.Update(0.1f);
             Assert.AreEqual(initialHealthEnemy - 2, enemy.Stats.Health.CurrentHealth, Delta);

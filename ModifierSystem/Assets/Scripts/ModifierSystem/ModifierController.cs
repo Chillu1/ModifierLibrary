@@ -232,7 +232,7 @@ namespace ModifierSystem
         public IEnumerable<Modifier> GetModifierAttackAppliers()
         {
             //Invalid target on appliers with self, so no need for extra checks rn
-            return Modifiers.Values.Where(m => m.IsApplierModifier && m.ApplierType == ApplierType.Attack && !m.IsConditionModifier);
+            return Modifiers.Values.Where(m => m.ApplierType == ApplierType.Attack && !m.IsConditionModifier);
         }
 
         public override string ToString()
