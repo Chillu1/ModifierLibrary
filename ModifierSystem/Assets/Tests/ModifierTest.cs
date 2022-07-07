@@ -105,5 +105,18 @@ namespace ModifierSystem.Tests
 
             character.Update(1f);
         }
+        
+        [Test]
+        public void PropertyEffect()
+        {
+            var healProperties = new HealComponent.Properties(5);
+            var baseProperties = new EffectComponent.BaseProperties();
+
+            //var effect = EffectComponentFactory.CreateEffectComponent(new DamageResistanceComponent.Properties(DamageType.Physical, 1000));
+            var effect = EffectComponentFactory.CreateEffectComponent(healProperties, baseProperties);
+            Log.Info(effect.GetType());
+            effect = EffectComponentFactory.CreateEffectComponent(healProperties, baseProperties);
+            Log.Info(effect.GetType());
+        }
     }
 }

@@ -791,8 +791,11 @@ namespace ModifierSystem
             }
             {
                 //Permanent Physical Resistance
+                //var properties = new ModifierGenerationProperties("DamagePhysicalResistanceTest", null);
+                //properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 1000));
                 var properties = new ModifierGenerationProperties("DamagePhysicalResistanceTest", null);
-                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 1000));
+                properties.AddEffect(new DamageResistanceComponent(new DamageResistanceComponent.Properties(DamageType.Physical, 1000),
+                    new EffectComponent.BaseProperties()));
                 properties.SetEffectOnInit();
 
                 AddModifier(properties);

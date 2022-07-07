@@ -377,16 +377,38 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchEffectComponentConstructor()
         {
+            var properties = new DamageResistanceComponent.Properties(DamageType.Physical, 1000);
+            var baseProperties = new EffectComponent.BaseProperties();
             var damageType = DamageType.Physical;
             double value = 10d;
 
             Measure.Method(() =>
                 {
-                    var _ = new TestEffect(damageType, value);
+                    var _ = new DamageResistanceComponent(properties, baseProperties);
                 })
                 .WarmupCount(10)
                 .MeasurementCount(20)
-                .IterationsPerMeasurement(1000)
+                .IterationsPerMeasurement(200)
+                .GC()
+                .Run()
+                ;
+        }
+
+        [Test, Performance]
+        public void BenchEffectComponentEffectFactory()
+        {
+            var properties = new DamageResistanceComponent.Properties(DamageType.Physical, 1000);
+            var healProperties = new HealComponent.Properties(5);
+            var baseProperties = new EffectComponent.BaseProperties();
+            var _ = EffectComponentFactory.CreateEffectComponent(healProperties, baseProperties);
+
+            Measure.Method(() =>
+                {
+                    var h = EffectComponentFactory.CreateEffectComponent(healProperties, baseProperties);
+                })
+                .WarmupCount(10)
+                .MeasurementCount(20)
+                .IterationsPerMeasurement(200)
                 .GC()
                 .Run()
                 ;
@@ -395,47 +417,31 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchEffectComponentLambdaExpression()
         {
-            //var ctorInfo1 = typeof(DamageResistanceComponent).GetConstructor(new Type[] {
-            //    typeof(DamageType), typeof(double), typeof(ConditionCheckData), typeof(bool)
-            //});
-            //
-            //ParameterExpression paramA = Expression.Parameter(typeof(DamageType)/*, "damageType"*/);
-            //ParameterExpression paramB = Expression.Parameter(typeof(double)/*, "value"*/);
-            //ParameterExpression paramC = Expression.Parameter(typeof(ConditionCheckData)/*, "value"*/);
-            //ParameterExpression paramD = Expression.Parameter(typeof(bool)/*, "value"*/);
-            //
-            //Func<DamageType, double, ConditionCheckData, bool, DamageResistanceComponent> testEffectGen =
-            //    Expression.Lambda<Func<DamageType, double, ConditionCheckData, bool, DamageResistanceComponent>>(Expression.New(ctorInfo1, new[]
-            //{
-            //    paramA, paramB, paramC, paramD
-            //}), paramA, paramB, paramC, paramD).Compile();
-
-            var ctorInfo1 = typeof(TestEffect).GetConstructor(new Type[]
+            var ctorInfo1 = typeof(DamageResistanceComponent).GetConstructor(new Type[]
             {
-                typeof(DamageType), typeof(double)//, typeof(ConditionCheckData)
+                typeof(DamageResistanceComponent.Properties), typeof(IBaseEffectProperties)
             });
 
-            ParameterExpression paramA = Expression.Parameter(typeof(DamageType) /*, "damageType"*/);
-            ParameterExpression paramB = Expression.Parameter(typeof(double) /*, "value"*/);
-            //ParameterExpression paramC = Expression.Parameter(typeof(ConditionCheckData) /*, "value"*/);
+            ParameterExpression paramA = Expression.Parameter(typeof(DamageResistanceComponent.Properties) /*, "damageType"*/);
+            ParameterExpression paramB = Expression.Parameter(typeof(IBaseEffectProperties) /*, "value"*/);
 
-            Func<DamageType, double, TestEffect> testEffectGen =
-                Expression.Lambda<Func<DamageType, double, TestEffect>>(Expression.New(ctorInfo1, new[]
-                {
-                    paramA, paramB
-                }), paramA, paramB).Compile();
+            Func<DamageResistanceComponent.Properties, IBaseEffectProperties, DamageResistanceComponent> testEffectGen =
+                Expression.Lambda<Func<DamageResistanceComponent.Properties, IBaseEffectProperties, DamageResistanceComponent>>(
+                    Expression.New(ctorInfo1, new[]
+                    {
+                        paramA, paramB
+                    }), paramA, paramB).Compile();
 
-            var type = typeof(DamageResistanceComponent);
-            var damageType = DamageType.Physical;
-            double value = 10d;
+            var properties = new DamageResistanceComponent.Properties(DamageType.Physical, 1000);
+            var baseProperties = new EffectComponent.BaseProperties();
 
             Measure.Method(() =>
                 {
-                    var _ = testEffectGen(damageType, value);
+                    var _ = testEffectGen(properties, baseProperties);
                 })
                 .WarmupCount(10)
                 .MeasurementCount(20)
-                .IterationsPerMeasurement(1000)
+                .IterationsPerMeasurement(200)
                 .GC()
                 .Run()
                 ;
@@ -444,17 +450,17 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchEffectComponentInstanceFactory()
         {
-            var damageType = DamageType.Physical;
-            double value = 10d;
-            var _ = InstanceFactory.CreateInstance(typeof(TestEffect), damageType, value);
+            var properties = new DamageResistanceComponent.Properties(DamageType.Physical, 1000);
+            var baseProperties = new EffectComponent.BaseProperties();
+            var _ = InstanceFactory.CreateInstance(typeof(DamageResistanceComponent), properties, baseProperties);
 
             Measure.Method(() =>
                 {
-                    var _ = InstanceFactory.CreateInstance(typeof(TestEffect), damageType, value);
+                    var _ = InstanceFactory.CreateInstance(typeof(DamageResistanceComponent), properties, baseProperties);
                 })
                 .WarmupCount(10)
                 .MeasurementCount(20)
-                .IterationsPerMeasurement(1000)
+                .IterationsPerMeasurement(100)
                 .GC()
                 .Run()
                 ;
@@ -463,22 +469,21 @@ namespace ModifierSystem.Tests.Performance
         [Test, Performance]
         public void BenchEffectComponentActivator()
         {
-            var damageType = DamageType.Physical;
-            double value = 10d;
-            
+            var properties = new DamageResistanceComponent.Properties(DamageType.Physical, 1000);
+            var baseProperties = new EffectComponent.BaseProperties();
+
             Measure.Method(() =>
                 {
-                    var _ = Activator.CreateInstance(typeof(TestEffect),
+                    var _ = Activator.CreateInstance(typeof(DamageResistanceComponent),
                         BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance, null,
-                        new object[] { damageType, value }, CultureInfo.CurrentCulture);
+                        new object[] { properties, baseProperties }, CultureInfo.CurrentCulture);
                 })
                 .WarmupCount(10)
                 .MeasurementCount(20)
-                .IterationsPerMeasurement(100)
+                .IterationsPerMeasurement(200)
                 .GC()
                 .Run()
                 ;
-            
         }
     }
 
