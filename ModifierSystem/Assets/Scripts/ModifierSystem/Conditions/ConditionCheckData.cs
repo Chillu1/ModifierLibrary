@@ -4,7 +4,7 @@ namespace ModifierSystem
 {
     public class ConditionCheckData
     {
-        public ConditionBeingStatus Status { get; } = ConditionBeingStatus.None;
+        public ConditionUnitStatus Status { get; } = ConditionUnitStatus.None;
 
         public ComparisonCheck ComparisonCheck { get; } = ComparisonCheck.None;
         public double Value { get; }
@@ -14,7 +14,7 @@ namespace ModifierSystem
         public ElementType ElementType { get; } = ElementType.None;
         public bool ElementalIntensityCheck { get; }
 
-        public ConditionCheckData(ConditionBeingStatus status)
+        public ConditionCheckData(ConditionUnitStatus status)
         {
             Status = status;
         }

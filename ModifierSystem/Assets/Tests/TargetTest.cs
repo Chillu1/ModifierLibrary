@@ -149,9 +149,9 @@ namespace ModifierSystem.Tests
         }
 
         [Test]
-        public void SelfManaBurnBeings()
+        public void SelfManaBurnUnits()
         {
-            var applier = modifierPrototypes.GetApplier("TimePercentFlatManaBurnBeingsTest");
+            var applier = modifierPrototypes.GetApplier("TimePercentFlatManaBurnUnitsTest");
             character.AddModifier(applier);
 
             Assert.True(character.Stats.Mana.IsFull);

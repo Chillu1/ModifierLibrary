@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace ModifierSystem
 {
     /// <summary>
-    ///     Responsible for cleaning up (removing) being event
+    ///     Responsible for cleaning up (removing) unit event
     /// </summary>
     public class CleanUpComponent : Component, ICleanUpComponent
     {

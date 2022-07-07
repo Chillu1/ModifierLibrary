@@ -56,7 +56,7 @@ namespace ModifierSystem
             if (conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
             if (conditionEvent == ConditionEvent.None)
-                Log.Error("Wrong BeingConditionEvent, None");
+                Log.Error("Wrong UnitConditionEvent, None");
 
             HasConditionData = true;
             ConditionEventTarget = conditionEventTarget;

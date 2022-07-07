@@ -2,25 +2,25 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public delegate bool BeingCondition(BaseProject.Unit receiver, BaseProject.Unit acter);
+    public delegate bool UnitCondition(BaseProject.Unit receiver, BaseProject.Unit acter);
 
     public static class ConditionGenerator
     {
-        private static readonly BeingCondition healthIsLow = (receiver, acter) => receiver.Stats.Health.IsLow;
-        private static readonly BeingCondition healthIsHalf = (receiver, acter) => !receiver.Stats.Health.HasPercent(0.5);
-        private static readonly BeingCondition healthIsFull = (receiver, acter) => receiver.Stats.Health.IsFull;
+        private static readonly UnitCondition healthIsLow = (receiver, acter) => receiver.Stats.Health.IsLow;
+        private static readonly UnitCondition healthIsHalf = (receiver, acter) => !receiver.Stats.Health.HasPercent(0.5);
+        private static readonly UnitCondition healthIsFull = (receiver, acter) => receiver.Stats.Health.IsFull;
 
-        public static BeingCondition GenerateBeingCondition(ConditionCheckData checkData)
+        public static UnitCondition GenerateUnitCondition(ConditionCheckData checkData)
         {
-            if (checkData.Status != ConditionBeingStatus.None)
+            if (checkData.Status != ConditionUnitStatus.None)
             {
                 switch (checkData.Status)
                 {
-                    case ConditionBeingStatus.HealthIsLow:
+                    case ConditionUnitStatus.HealthIsLow:
                         return healthIsLow;
-                    case ConditionBeingStatus.HealthIsHalf:
+                    case ConditionUnitStatus.HealthIsHalf:
                         return healthIsHalf;
-                    case ConditionBeingStatus.HealthIsFull:
+                    case ConditionUnitStatus.HealthIsFull:
                         return healthIsFull;
                 }
             }

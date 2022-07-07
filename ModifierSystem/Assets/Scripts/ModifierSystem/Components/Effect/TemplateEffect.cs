@@ -18,4 +18,15 @@ namespace ModifierSystem
             //receiver.Function(Foo, acter);
         }
     }
+
+    public sealed class TestEffect : EffectComponent
+    {
+        public TestEffect(DamageType damageType, double value/*, ConditionCheckData data = null*/) : base(null, false)
+        {
+        }
+
+        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        {
+        }
+    }
 }

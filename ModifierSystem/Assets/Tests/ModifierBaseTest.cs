@@ -41,22 +41,22 @@ namespace ModifierSystem.Tests
         [SetUp]
         public void Init()
         {
-            character = new Unit(new BeingProperties
+            character = new Unit(new UnitProperties
             {
                 Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
             });
-            ally = new Unit(new BeingProperties
+            ally = new Unit(new UnitProperties
             {
                 Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
                 Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
             });
-            enemy = new Unit(new BeingProperties
+            enemy = new Unit(new UnitProperties
             {
                 Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
             });
-            enemyAlly = new Unit(new BeingProperties
+            enemyAlly = new Unit(new UnitProperties
             {
                 Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
                 Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
@@ -73,7 +73,7 @@ namespace ModifierSystem.Tests
             enemyDummies = new Unit[5];
             for (int i = 0; i < 5; i++)
             {
-                enemyDummies[0] = new Unit(new BeingProperties()
+                enemyDummies[0] = new Unit(new UnitProperties()
                 {
                     Id = "enemy", Health = 1, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
                     Mana = 50, ManaRegen = 100, UnitType = UnitType.Enemy

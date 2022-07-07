@@ -34,7 +34,7 @@ namespace ModifierSystem
             if(this.conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
             if(this.conditionEvent == ConditionEvent.None)
-                Log.Error("Wrong BeingConditionEvent, None");
+                Log.Error("Wrong UnitConditionEvent, None");
         }
     }
 }

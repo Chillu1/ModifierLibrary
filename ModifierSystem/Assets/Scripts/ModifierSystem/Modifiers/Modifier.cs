@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace ModifierSystem
 {
     /// <summary>
-    ///     Buff/Debuff on beings, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
+    ///     Buff/Debuff on units, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
     public class Modifier : IEntity<string>, ICloneable, IFullDisplay
     {

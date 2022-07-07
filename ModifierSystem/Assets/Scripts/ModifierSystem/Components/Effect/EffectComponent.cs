@@ -42,8 +42,8 @@ namespace ModifierSystem
         {
             if (ConditionCheckData != null)
             {
-                var beingCondition = ConditionGenerator.GenerateBeingCondition(ConditionCheckData);
-                if (!beingCondition(receiver, acter))
+                var unitCondition = ConditionGenerator.GenerateUnitCondition(ConditionCheckData);
+                if (!unitCondition(receiver, acter))
                     return;
             }
 

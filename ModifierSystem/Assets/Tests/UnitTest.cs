@@ -1,6 +1,6 @@
 namespace ModifierSystem.Tests
 {
-    public class BeingTest
+    public class UnitTest
     {
         //Deal modifier damage?
         //Modifier applier?

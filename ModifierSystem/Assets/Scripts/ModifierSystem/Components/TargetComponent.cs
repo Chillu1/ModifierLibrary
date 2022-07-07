@@ -17,7 +17,7 @@ namespace ModifierSystem
         /// </summary>
         public Unit Owner { get; private set; }
         /// <summary>
-        ///     Unit that applied this modifier to current being
+        ///     Unit that applied this modifier to current unit
         /// </summary>
         [CanBeNull]
         public Unit ApplierOwner { get; private set; }
@@ -109,7 +109,7 @@ namespace ModifierSystem
             return true;
         }
 
-        public void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, BaseBeingEvent effect)
+        public void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, UnitEvent effect)
         {
             switch (ConditionEventTarget)
             {

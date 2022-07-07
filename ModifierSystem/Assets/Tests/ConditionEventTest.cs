@@ -120,12 +120,12 @@ namespace ModifierSystem.Tests
             Assert.Less(character.Stats.Health.CurrentHealth,
                 initialHealthCharacter - initialDamageEnemy); //Player should have hit himself at least once
             Assert.AreEqual(
-                initialHealthCharacter - initialDamageEnemy - initialDamageCharacter * 2 * BaseBeingEventController.MaxEventRecursions,
+                initialHealthCharacter - initialDamageEnemy - initialDamageCharacter * 2 * UnitEventController.MaxEventRecursions,
                 character.Stats.Health.CurrentHealth, Delta);
             character.Update(0.21f); //Interval
             enemy.Attack(character);
             Assert.AreEqual(
-                initialHealthCharacter - initialDamageEnemy * 2 - initialDamageCharacter * 4 * BaseBeingEventController.MaxEventRecursions,
+                initialHealthCharacter - initialDamageEnemy * 2 - initialDamageCharacter * 4 * UnitEventController.MaxEventRecursions,
                 character.Stats.Health.CurrentHealth, Delta);
         }
 

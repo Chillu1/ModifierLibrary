@@ -9,7 +9,7 @@ namespace ModifierSystem
     public class ConditionalApplyComponent : Component, IConditionalApplyComponent, ICleanUpComponent
     {
         private readonly ConditionEvent _conditionEvent;
-        private readonly ConditionBeingStatus _status;
+        private readonly ConditionUnitStatus _status;
 
         private IConditionEffectComponent ConditionEffectComponent { get; }
         private ITargetComponent TargetComponent { get; }
@@ -27,7 +27,7 @@ namespace ModifierSystem
 
         public void Apply()
         {
-            _conditionEvent.SetupBeingEvent(TargetComponent.Target, ConditionEffectCheck);
+            _conditionEvent.SetupUnitEvent(TargetComponent.Target, ConditionEffectCheck);
         }
 
         public void CleanUp()
@@ -41,7 +41,7 @@ namespace ModifierSystem
                 return;
             }
 
-            _conditionEvent.RemoveBeingEvent(TargetComponent.Target, ConditionEffectCheck);
+            _conditionEvent.RemoveUnitEvent(TargetComponent.Target, ConditionEffectCheck);
         }
 
         private bool Validate()

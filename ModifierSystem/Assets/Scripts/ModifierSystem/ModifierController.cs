@@ -66,7 +66,7 @@ namespace ModifierSystem
         {
             bool modifierAdded;
 
-            //Log.Info("ModifierId: " + modifier.Id + ". BeingId: " + _owner.Id + " Parameters: " + parameters);
+            //Log.Info("ModifierId: " + modifier.Id + ". UnitId: " + _owner.Id + " Parameters: " + parameters);
             modifier.SetupOwner(_owner);
             modifier.SetupApplierOwner(modifier.IsApplierModifier ? _owner : sourceUnit);
             HandleTarget(modifier, parameters);

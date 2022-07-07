@@ -17,7 +17,7 @@ namespace ModifierSystem
             var modifier = new Modifier("FullTest", null, AddModifierParameters.OwnerIsTarget);
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
-            var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
+            var target = new TargetComponent(LegalTarget.Units, conditionData.conditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.StackEffectType.Add);
             effect.Setup(target);
             var check = new CheckComponent(new IEffectComponent[] { effect });
@@ -66,7 +66,7 @@ namespace ModifierSystem
         private void ConditionModifier()
         {
             var damageData = new[] { new DamageData(double.MaxValue, DamageType.Magical) };
-            var properties = new ModifierGenerationProperties("DamageOnDeathTest", null, LegalTarget.Beings);
+            var properties = new ModifierGenerationProperties("DamageOnDeathTest", null, LegalTarget.Units);
             properties.AddEffect(new DamageComponent(damageData), damageData);
             properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
 
@@ -80,7 +80,7 @@ namespace ModifierSystem
         {
             //If enemy is on fire, deal damage to him, on hit
             var damageData = new[] { new DamageData(10000, DamageType.Physical) };
-            var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", null, LegalTarget.Beings);
+            var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", null, LegalTarget.Units);
             properties.AddEffect(new DamageComponent(damageData,
                 conditionCheckData: new ConditionCheckData(ElementType.Fire, ComparisonCheck.GreaterOrEqual,
                     BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);

@@ -13,9 +13,9 @@ namespace ModifierSystem
         /// <summary>
         ///     On getting a combo
         /// </summary>
-        public event BaseBeingEvent ComboEvent;
+        public event UnitEvent ComboEvent;
 
-        public Unit(BeingProperties beingProperties) : base(beingProperties)
+        public Unit(UnitProperties unitProperties) : base(unitProperties)
         {
             ModifierController = new ModifierController(this, ElementController);
             CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);

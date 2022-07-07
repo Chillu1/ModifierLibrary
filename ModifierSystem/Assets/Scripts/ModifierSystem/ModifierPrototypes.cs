@@ -278,7 +278,7 @@ namespace ModifierSystem
             }
             {
                 //Damage on kill
-                var properties = new ModifierGenerationProperties("DamageOnKillTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DamageOnKillTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageStatComponent(new[] { new DamageData(2, DamageType.Physical) }));
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.KillEvent);
 
@@ -295,7 +295,7 @@ namespace ModifierSystem
             {
                 //Damage on death
                 var damageData = new[] { new DamageData(double.MaxValue, DamageType.Magical) };
-                var properties = new ModifierGenerationProperties("DamageOnDeathTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DamageOnDeathTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnDeathEvent);
 
@@ -314,7 +314,7 @@ namespace ModifierSystem
             {
                 //Thorns on hit
                 var damageData = new[] { new DamageData(5, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("ThornsOnHitTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("ThornsOnHitTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
 
@@ -337,7 +337,7 @@ namespace ModifierSystem
                 //Heal on death, once
                 var modifier = new Modifier("HealOnDeathTest", null, AddModifierParameters.OwnerIsTarget);
                 var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
-                var target = new TargetComponent(LegalTarget.Beings, conditionData.conditionEventTarget);
+                var target = new TargetComponent(LegalTarget.Units, conditionData.conditionEventTarget);
                 var effect = new HealComponent(10);
                 effect.Setup(target);
                 var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
@@ -352,7 +352,7 @@ namespace ModifierSystem
             }
             {
                 //Heal stat based
-                var properties = new ModifierGenerationProperties("HealStatBasedTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("HealStatBasedTest", null, LegalTarget.Units);
                 properties.AddEffect(new HealStatBasedComponent());
                 properties.SetEffectOnInit();
 
@@ -385,7 +385,7 @@ namespace ModifierSystem
             {
                 //Refresh duration DoT
                 var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
-                var properties = new ModifierGenerationProperties("DoTRefreshTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DoTRefreshTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData, DamageComponent.StackEffectType.Add), damageData);
                 properties.SetEffectOnInit();
                 properties.SetEffectOnTime(2, true);
@@ -400,7 +400,7 @@ namespace ModifierSystem
             }
             {
                 //Silence on 4 stacks
-                var properties = new ModifierGenerationProperties("SilenceXStacksTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("SilenceXStacksTest", null, LegalTarget.Units);
                 properties.AddEffect(new StatusComponent(StatusEffect.Silence, 4, StatusComponent.StackEffectType.Effect));
                 properties.SetEffectOnInit();
                 properties.SetEffectOnStack(new StackComponentProperties()
@@ -438,9 +438,9 @@ namespace ModifierSystem
             {
                 //Damage on low health
                 var damageData = new[] { new DamageData(50, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("DamageOnLowHealthTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DamageOnLowHealthTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageStatComponent(damageData,
-                    new ConditionCheckData(ConditionBeingStatus.HealthIsLow)), damageData);
+                    new ConditionCheckData(ConditionUnitStatus.HealthIsLow)), damageData);
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent);
 
                 AddModifier(properties);
@@ -448,7 +448,7 @@ namespace ModifierSystem
             {
                 //Flag
                 var flagDamageData = new[] { new DamageData(1, DamageType.Physical) };
-                var flagProperties = new ModifierGenerationProperties("FlagTest", null, LegalTarget.Beings);
+                var flagProperties = new ModifierGenerationProperties("FlagTest", null, LegalTarget.Units);
                 flagProperties.AddEffect(new DamageStatComponent(flagDamageData), flagDamageData);
                 flagProperties.SetEffectOnInit();
 
@@ -456,7 +456,7 @@ namespace ModifierSystem
 
                 //Damage on modifier id (flag)
                 var damageData = new[] { new DamageData(double.MaxValue, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("DamageOnModifierIdTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DamageOnModifierIdTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData("FlagTest")), damageData);
                 properties.SetEffectOnInit();
 
@@ -465,7 +465,7 @@ namespace ModifierSystem
             {
                 //If enemy is on fire, deal damage to him, on hit
                 var damageData = new[] { new DamageData(10000, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("DealDamageOnElementalIntensityTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData,
                     conditionCheckData: new ConditionCheckData(ElementType.Fire, ComparisonCheck.GreaterOrEqual,
                         BaseProject.Curves.ElementIntensity.Evaluate(900))), damageData);
@@ -477,8 +477,8 @@ namespace ModifierSystem
                 //TODO CleanUp? Unit test isnt up
                 //If health on IsLow, add 50 physical damage, if not, remove 50 physical damage
                 var damageData = new[] { new DamageData(50, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("DamageOnLowHealthRemoveTest", null, LegalTarget.Beings);
-                properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData(ConditionBeingStatus.HealthIsLow)),
+                var properties = new ModifierGenerationProperties("DamageOnLowHealthRemoveTest", null, LegalTarget.Units);
+                properties.AddEffect(new DamageStatComponent(damageData, new ConditionCheckData(ConditionUnitStatus.HealthIsLow)),
                     damageData);
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.OnHitEvent);
 
@@ -517,8 +517,8 @@ namespace ModifierSystem
                 AddModifier(properties);
             }
             {
-                //More fixed damage per stack (on target being, probably it's own debuff modifier?) (Ursa E)
-                //Workings: Attack enemy being, add timed (10s) modifier with 1 stack to enemy being.
+                //More fixed damage per stack (on target unit, probably it's own debuff modifier?) (Ursa E)
+                //Workings: Attack enemy unit, add timed (10s) modifier with 1 stack to enemy unit.
                 //  Next time we attack, we check for that modifier, call it's effect, add +1 stack, deal X damage * Y stacks
 
                 //Stack flag modifier
@@ -535,7 +535,7 @@ namespace ModifierSystem
 
                 var flagModifier = AddModifier(flagProperties);
 
-                var properties = new ApplierModifierGenerationProperties(flagModifier, null, LegalTarget.Beings);
+                var properties = new ApplierModifierGenerationProperties(flagModifier, null, LegalTarget.Units);
                 properties.SetApplier(ApplierType.Attack);
 
                 AddModifier(properties);
@@ -544,8 +544,8 @@ namespace ModifierSystem
             /*{
                 //Applier onDeath (lowers health), copies itself, infinite loop possible?
                 var modifier = new Modifier("DeathHealthTestApplier", true);
-                var conditionData = new ConditionData(ConditionTarget.Acter, BeingConditionEvent.DeathEvent);
-                var target = new TargetComponent(LegalTarget.Beings, conditionData, true);
+                var conditionData = new ConditionData(ConditionTarget.Acter, UnitConditionEvent.DeathEvent);
+                var target = new TargetComponent(LegalTarget.Units, conditionData, true);
                 var effect = new StatComponent(new[] { new Stat(StatType.Health, -15) }, target);
                 var applierEffect = new ApplierComponent(modifier, target);
                 var apply = new ApplyComponent(applierEffect, target, conditionData);
@@ -640,7 +640,7 @@ namespace ModifierSystem
             {
                 //ThornsOnHit 0% Chance
                 var damageData = new[] { new DamageData(1, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("ThornsOnHitChanceZeroTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("ThornsOnHitChanceZeroTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.AddConditionData(ConditionEventTarget.ActerSelf, ConditionEvent.OnHitEvent);
                 properties.SetChance(0);
@@ -650,7 +650,7 @@ namespace ModifierSystem
             {
                 //IncreaseDmgOnHit 50% Chance
                 var damageData = new[] { new DamageData(1, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("IncreaseDmgHitHalfTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("IncreaseDmgHitHalfTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageStatComponent(damageData), damageData);
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.HitEvent);
                 properties.SetChance(0.5);
@@ -669,7 +669,7 @@ namespace ModifierSystem
             {
                 //IncreaseDmgOnHit 100% Chance
                 var damageData = new[] { new DamageData(1, DamageType.Physical) };
-                var properties = new ModifierGenerationProperties("IncreaseDmgHitFullTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("IncreaseDmgHitFullTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageStatComponent(damageData), damageData);
                 properties.AddConditionData(ConditionEventTarget.SelfActer, ConditionEvent.HitEvent);
                 properties.SetChance(1);
@@ -679,7 +679,7 @@ namespace ModifierSystem
             {
                 //FireAttack 50% chance to apply, 50% chance to "hit"
                 var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireAttackChanceToHitHalfTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitHalfTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
@@ -696,7 +696,7 @@ namespace ModifierSystem
             {
                 //FireAttack 0% chance to apply, 100% chance to "hit"
                 var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullZeroTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullZeroTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
@@ -713,7 +713,7 @@ namespace ModifierSystem
             {
                 //FireAttack 100% chance to apply, 0% chance to "hit"
                 var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireAttackChanceToHitZeroFullTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitZeroFullTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
@@ -730,7 +730,7 @@ namespace ModifierSystem
             {
                 //FireAttack 100% chance to apply, 100% chance to "hit"
                 var damageData = new[] { new DamageData(1, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullFullTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireAttackChanceToHitFullFullTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(damageData), damageData);
                 properties.SetEffectOnInit();
                 properties.SetRemovable();
@@ -749,7 +749,7 @@ namespace ModifierSystem
                 //FireBall with init dmg and DoT
                 var initDamageData = new[] { new DamageData(10, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var timeDamageData = new[] { new DamageData(3, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireBallTwoEffectTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireBallTwoEffectTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(initDamageData), initDamageData); //Init
                 properties.SetEffectOnInit();
                 properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData); //DoT
@@ -766,7 +766,7 @@ namespace ModifierSystem
                 //FireBall with init dmg and init DoT
                 var initDamageData = new[] { new DamageData(10, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
                 var timeDamageData = new[] { new DamageData(3, DamageType.Magical, new ElementData(ElementType.Fire, 20, 10)) };
-                var properties = new ModifierGenerationProperties("FireBallTwoEffectInitTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("FireBallTwoEffectInitTest", null, LegalTarget.Units);
                 properties.AddEffect(new DamageComponent(initDamageData), initDamageData); //Init
                 properties.SetEffectOnInit();
                 properties.AddEffect(new DamageComponent(timeDamageData), timeDamageData); //DoT
@@ -800,7 +800,7 @@ namespace ModifierSystem
 
             {
                 //Separate silence & disarm
-                var properties = new ModifierGenerationProperties("SilenceDisarmTwoEffectTest", null, LegalTarget.Beings);
+                var properties = new ModifierGenerationProperties("SilenceDisarmTwoEffectTest", null, LegalTarget.Units);
                 properties.AddEffect(new StatusComponent(StatusEffect.Disarm, 1f));
                 properties.SetEffectOnInit();
                 properties.AddEffect(new StatusComponent(StatusEffect.Silence, 2f));
@@ -891,7 +891,7 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
                 applierProperties.SetApplier(ApplierType.Aura);
                 AddModifier(applierProperties);
             }
@@ -913,7 +913,7 @@ namespace ModifierSystem
             
             {
                 //Percent mana burn init, Time flat mana burn
-                var properties = new ModifierGenerationProperties("TimePercentFlatManaBurnBeingsTest", null);
+                var properties = new ModifierGenerationProperties("TimePercentFlatManaBurnUnitsTest", null);
                 properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 10, StatBurnType.Percent));
                 properties.SetEffectOnInit();
                 properties.AddEffect(new StatBurnComponent(PoolStatType.Mana, 2));
@@ -923,7 +923,7 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
                 applierProperties.SetApplier(ApplierType.Attack);
                 applierProperties.SetCooldown(5);
                 AddModifier(applierProperties);
@@ -955,7 +955,7 @@ namespace ModifierSystem
 
                 var modifier = AddModifier(properties);
 
-                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Beings);
+                var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
                 applierProperties.SetApplier(ApplierType.Cast);
                 AddModifier(applierProperties);
             }

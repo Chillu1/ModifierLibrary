@@ -24,7 +24,7 @@ namespace ModifierSystem
         public double Chance { get; private set; } = -1;
 
         public ApplierModifierGenerationProperties(Modifier appliedModifier, ModifierInfo info,
-            LegalTarget legalTarget = LegalTarget.Beings)
+            LegalTarget legalTarget = LegalTarget.Units)
         {
             Info = info;
             AppliedModifier = appliedModifier;
@@ -46,7 +46,7 @@ namespace ModifierSystem
             if (conditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
             if (conditionEvent == ConditionEvent.None)
-                Log.Error("Wrong BeingConditionEvent, None");
+                Log.Error("Wrong UnitConditionEvent, None");
 
             HasConditionData = true;
             ConditionEventTarget = conditionEventTarget;

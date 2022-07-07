@@ -18,7 +18,7 @@ namespace ModifierSystem.Tests
         [Test]
         public void ChanceHalfIncDmg()
         {
-            BaseBeingEventController.MaxEventRecursions = 100;
+            UnitEventController.MaxEventRecursions = 100;
             character.ChangeStat(StatType.Health, 200);
             var dmgHitModifier = modifierPrototypes.Get("IncreaseDmgHitHalfTest");
             enemy.AddModifier(dmgHitModifier);
@@ -32,13 +32,13 @@ namespace ModifierSystem.Tests
             Assert.Greater(enemy.Stats.Damage.DamageSum(), initialDamageEnemy);
             Assert.Less(enemy.Stats.Damage.DamageSum(), initialDamageEnemy + 100);
 
-            BaseBeingEventController.MaxEventRecursions = BaseBeingEventController.MaxEventRecursionsDefault;
+            UnitEventController.MaxEventRecursions = UnitEventController.MaxEventRecursionsDefault;
         }
 
         [Test]
         public void ChanceHalfHeal()
         {
-            BaseBeingEventController.MaxEventRecursions = 100;
+            UnitEventController.MaxEventRecursions = 100;
 
             var healthCostModifier = modifierPrototypes.Get("HealOnHitHalfChanceTest");
             character.AddModifier(healthCostModifier);
@@ -53,13 +53,13 @@ namespace ModifierSystem.Tests
 
             Assert.Greater(character.Stats.Health.CurrentHealth, initialHealthCharacter-initialDamageEnemy*10);
 
-            BaseBeingEventController.MaxEventRecursions = BaseBeingEventController.MaxEventRecursionsDefault;
+            UnitEventController.MaxEventRecursions = UnitEventController.MaxEventRecursionsDefault;
         }
 
         [Test]
         public void ChanceFullIncDmg()
         {
-            BaseBeingEventController.MaxEventRecursions = 100;
+            UnitEventController.MaxEventRecursions = 100;
             character.ChangeStat(StatType.Health, 200);
             var dmgHitModifier = modifierPrototypes.Get("IncreaseDmgHitFullTest");
             enemy.AddModifier(dmgHitModifier);
@@ -69,7 +69,7 @@ namespace ModifierSystem.Tests
 
             Assert.AreEqual(initialDamageEnemy+100, enemy.Stats.Damage.DamageSum(), Delta);
 
-            BaseBeingEventController.MaxEventRecursions = BaseBeingEventController.MaxEventRecursionsDefault;
+            UnitEventController.MaxEventRecursions = UnitEventController.MaxEventRecursionsDefault;
         }
 
         [Test]
