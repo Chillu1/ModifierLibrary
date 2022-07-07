@@ -794,8 +794,7 @@ namespace ModifierSystem
                 //var properties = new ModifierGenerationProperties("DamagePhysicalResistanceTest", null);
                 //properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 1000));
                 var properties = new ModifierGenerationProperties("DamagePhysicalResistanceTest", null);
-                properties.AddEffect(new DamageResistanceComponent(new DamageResistanceComponent.Properties(DamageType.Physical, 1000),
-                    new EffectComponent.BaseProperties()));
+                properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 1000));
                 properties.SetEffectOnInit();
 
                 AddModifier(properties);
