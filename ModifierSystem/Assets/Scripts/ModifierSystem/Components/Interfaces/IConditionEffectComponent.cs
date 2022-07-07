@@ -4,6 +4,6 @@ namespace ModifierSystem
 {
     public interface IConditionEffectComponent
     {
-        void ConditionEffect(BaseProject.Unit receiver, BaseProject.Unit acter);
+        void ConditionEffect(Unit receiver, Unit acter);
     }
 }

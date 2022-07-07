@@ -10,6 +10,6 @@ namespace ModifierSystem
         Unit Owner { get; }
         Unit ApplierOwner { get; }
         bool SetTarget(Unit target);
-        void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, UnitEvent effect);
+        void HandleTarget(Unit receiver, Unit acter, UnitEvent effect);
     }
 }

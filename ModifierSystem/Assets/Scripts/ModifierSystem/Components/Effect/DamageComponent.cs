@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using BaseProject;
-using UnityEngine;
 
 namespace ModifierSystem
 {
@@ -19,7 +17,7 @@ namespace ModifierSystem
             Info = "Damage: " + string.Join<DamageData>(" ", Damage) + "\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
             receiver.DealDamage(Damage, acter);
         }

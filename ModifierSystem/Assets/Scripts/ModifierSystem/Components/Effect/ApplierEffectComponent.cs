@@ -1,5 +1,3 @@
-using BaseProject;
-
 namespace ModifierSystem
 {
     public sealed class ApplierEffectComponent : EffectComponent, IStackEffectComponent
@@ -16,9 +14,9 @@ namespace ModifierSystem
             Info = $"Applies: {Modifier}\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            ((Unit)receiver).AddModifier((Modifier)Modifier.Clone(), (Unit)acter);
+            receiver.AddModifier((Modifier)Modifier.Clone(), acter);
         }
 
         public void StackEffect(int stacks, double value)

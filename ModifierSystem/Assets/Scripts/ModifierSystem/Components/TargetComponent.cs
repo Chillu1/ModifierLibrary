@@ -109,7 +109,7 @@ namespace ModifierSystem
             return true;
         }
 
-        public void HandleTarget(BaseProject.Unit receiver, BaseProject.Unit acter, UnitEvent effect)
+        public void HandleTarget(Unit receiver, Unit acter, UnitEvent effect)
         {
             switch (ConditionEventTarget)
             {

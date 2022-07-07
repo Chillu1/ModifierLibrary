@@ -71,7 +71,7 @@ namespace ModifierSystem
         {
             if (CheckComponent == null || CheckComponent.Check())
             {
-                ConditionEffectComponent.ConditionEffect(receiver, acter);
+                ConditionEffectComponent.ConditionEffect((Unit)receiver, (Unit)acter);
                 CheckComponent?.Apply();
             }
         }

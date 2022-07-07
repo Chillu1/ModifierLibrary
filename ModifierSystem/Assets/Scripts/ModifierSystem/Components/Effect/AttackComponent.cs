@@ -1,5 +1,3 @@
-using BaseProject;
-
 namespace ModifierSystem
 {
     public sealed class AttackComponent : EffectComponent
@@ -9,9 +7,9 @@ namespace ModifierSystem
             Info = "Attack\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            Unit.Attack((Unit)receiver, (Unit)acter); //TODO Not sure about this
+            acter.Attack(receiver); //TODO Not sure about this
         }
     }
 }

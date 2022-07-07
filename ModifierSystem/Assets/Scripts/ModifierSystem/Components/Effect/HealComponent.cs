@@ -1,5 +1,3 @@
-using BaseProject;
-
 namespace ModifierSystem
 {
     public sealed class HealComponent : EffectComponent
@@ -14,14 +12,14 @@ namespace ModifierSystem
             Info = $"Heal: {Heal}\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            receiver.Stats.Health.Heal(Heal);
+            receiver.Heal(Heal, acter);
         }
 
-        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void RevertEffect(Unit receiver, Unit acter)
         {
-            receiver.Stats.Health.Heal(-Heal);
+            receiver.Heal(-Heal, acter);
         }
     }
 }

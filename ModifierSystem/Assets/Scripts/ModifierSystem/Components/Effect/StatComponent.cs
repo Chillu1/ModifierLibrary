@@ -21,9 +21,9 @@ namespace ModifierSystem
             Info = $"Stats: {string.Join(", ", Stats.Select(t => $"{t.type} {t.value}"))}";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            ((Unit)receiver).ChangeStat(Stats);
+            receiver.ChangeStat(Stats);
         }
 
         //protected override void RevertEffect(Unit receiver, Unit acter)

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using BaseProject;
 
@@ -20,14 +19,14 @@ namespace ModifierSystem
             Info = $"StatusResistance: {string.Join<StatusTag>(", ", StatusTags)}{string.Join(", ", Values)}\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            ((Unit)receiver).StatusResistances.ChangeValue(StatusTags, Values);
+            receiver.StatusResistances.ChangeValue(StatusTags, Values);
         }
 
-        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void RevertEffect(Unit receiver, Unit acter)
         {
-            ((Unit)receiver).StatusResistances.ChangeValue(StatusTags, Values.Select(v => -v).ToArray());
+            receiver.StatusResistances.ChangeValue(StatusTags, Values.Select(v => -v).ToArray());
         }
     }
 }

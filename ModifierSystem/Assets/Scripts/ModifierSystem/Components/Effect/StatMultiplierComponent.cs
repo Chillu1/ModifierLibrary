@@ -21,14 +21,20 @@ namespace ModifierSystem
             Info = $"Stats: {string.Join(", ", Stats.Select(t => $"{t.type} {t.multiplier}"))}";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            ((Unit)receiver).ChangeStatMultiplier(Stats);
+            receiver.ChangeStatMultiplier(Stats);
         }
 
-        //protected override void RevertEffect(Unit receiver, Unit acter)
-        //{
-        //    ((Unit)receiver).ChangeStat(Stats.Select(t => t.value = -t.value).Cast<(StatType type, double value)>().ToArray());
-        //}
+        protected override void RevertEffect(Unit receiver, Unit acter)
+        {
+            var negativeStats = new (StatType type, double multiplier)[Stats.Length];
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                var damageData = Stats[i];
+                negativeStats[i] = (damageData.type, -damageData.multiplier);
+            }
+            receiver.ChangeStat(negativeStats);
+        }
     }
 }

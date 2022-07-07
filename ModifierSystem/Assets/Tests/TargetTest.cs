@@ -170,12 +170,11 @@ namespace ModifierSystem.Tests
             character.AddModifier(applier);
 
             Assert.True(character.Stats.Mana.IsFull);
-
             character.TargetingSystem.SetTarget(TargetType.Attack, character);
+            LogAssert.Expect(LogType.Error, new Regex("Targeting ourselves*"));
             character.Update((float)character.Stats.AttackSpeed);
             
             Assert.False(character.Stats.Health.IsFull);
-            LogAssert.Expect(LogType.Error, new Regex("Targeting ourselves*"));
             Assert.True(character.Stats.Mana.IsFull);//Applier doesn't work on self
         }
     }

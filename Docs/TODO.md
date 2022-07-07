@@ -1,8 +1,8 @@
 # TODO:
 
+* >**OverHeal mechanic**
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
-* >**Health DamageTaken as Mana**
-* Remove/CleanUp doesn't revert ConditionEvents? (ConditionTimedDamageOnKill) 
+* >**Health DamageTaken as Mana** 
 * More Templates for basic modifiers
 * Improved GenerateModifier, multi effects, etc.
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc

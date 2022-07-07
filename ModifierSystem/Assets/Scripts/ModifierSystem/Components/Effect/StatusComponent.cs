@@ -19,18 +19,18 @@ namespace ModifierSystem
             Info = $"Status: {StatusEffect}, duration: {Duration}\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
             if (StatusEffect == StatusEffect.Taunt)
             {
-                BaseProject.Unit tauntTarget = receiver == acter ? ApplierOwner : acter;
+                Unit tauntTarget = receiver == acter ? ApplierOwner : acter;
                 receiver.StatusEffects.ChangeTauntEffect(Duration, tauntTarget);
             }
             else
                 receiver.StatusEffects.ChangeStatusEffect(StatusEffect, Duration);
         }
 
-        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void RevertEffect(Unit receiver, Unit acter)
         {
             if (StatusEffect == StatusEffect.Taunt)
                 receiver.StatusEffects.DecreaseTauntEffect(Duration);

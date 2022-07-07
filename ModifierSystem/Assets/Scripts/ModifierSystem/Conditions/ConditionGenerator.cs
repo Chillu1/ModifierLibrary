@@ -2,7 +2,7 @@ using BaseProject;
 
 namespace ModifierSystem
 {
-    public delegate bool UnitCondition(BaseProject.Unit receiver, BaseProject.Unit acter);
+    public delegate bool UnitCondition(Unit receiver, Unit acter);
 
     public static class ConditionGenerator
     {
@@ -30,7 +30,7 @@ namespace ModifierSystem
                     => receiver.Stats.HasStat(checkData.StatType, checkData.Value, checkData.ComparisonCheck);
 
             if(!string.IsNullOrEmpty(checkData.ModifierId))
-                return (receiver, acter) => ((Unit)receiver).ContainsModifier(checkData.ModifierId);
+                return (receiver, acter) => receiver.ContainsModifier(checkData.ModifierId);
 
             if(checkData.ElementType != ElementType.None)
             {

@@ -33,7 +33,7 @@ namespace ModifierSystem
             _targetComponent = targetComponent;
         }
 
-        protected abstract void Effect(BaseProject.Unit receiver, BaseProject.Unit acter);
+        protected abstract void Effect(Unit receiver, Unit acter);
 
         /// <summary>
         ///     No conditions, just effect
@@ -46,7 +46,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Main effect helper, checks for CheckCondition
         /// </summary>
-        private void TryEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        private void TryEffect(Unit receiver, Unit acter)
         {
             if (ConditionCheckData != null)
             {
@@ -61,7 +61,7 @@ namespace ModifierSystem
         /// <summary>
         ///     Unit Event based condition effect
         /// </summary>
-        public void ConditionEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        public void ConditionEffect(Unit receiver, Unit acter)
         {
             _targetComponent.HandleTarget(receiver, acter, TryEffect);
         }
@@ -72,7 +72,7 @@ namespace ModifierSystem
                 RevertEffect(_targetComponent.Target, _targetComponent.Owner);
         }
 
-        protected virtual void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected virtual void RevertEffect(Unit receiver, Unit acter)
         {
             Log.Error("RevertEffect not overridden, but we're trying to use IsRevertible logic");
         }

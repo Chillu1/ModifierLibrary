@@ -1,10 +1,13 @@
 using System.Linq;
 using BaseProject;
 using Force.DeepCloner;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace ModifierSystem
 {
+    public delegate void UnitEvent(Unit owner, Unit acter);
+    
     public class Unit : BaseProject.Unit
     {
         private ModifierController ModifierController { get; }
@@ -107,26 +110,31 @@ namespace ModifierSystem
             ModifierController.Update(deltaTime);
             CastingController.Update(deltaTime);
         }
+        
+        [CanBeNull]
+        public DamageData[] Attack(Unit target)
+        {
+            if (!ValidAttack(target))
+                return null;
+
+            return InternalAttack(target);
+        }
 
         public override DamageData[] Attack(BaseProject.Unit target)
         {
-            //Debug.Log("Attack");
-            return Attack((Unit)target, this);
+            return Attack((Unit)target);
         }
 
         /// <summary>
         ///     Manual attack, NOT a modifier attack
         /// </summary>
-        public static DamageData[] Attack(Unit target, Unit attacker)
+        private DamageData[] InternalAttack(Unit target)
         {
-            if (!attacker.StatusEffects.LegalActions.HasFlag(LegalAction.Act)) //Can't attack
-                return null;
-
-            attacker.ApplyAttackModifiers(target);
-            var damageData = BaseProject.Unit.Attack(target, attacker);
+            ApplyAttackModifiers(target);
+            var damageData = base.InternalAttack(target);
 
             //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
-            attacker.ModifierController
+            ModifierController
                 .CheckForComboRecipes(); //Not redundant? Might lead to performance issues in super high combo counts?
             return damageData;
         }

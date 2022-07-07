@@ -18,12 +18,12 @@ namespace ModifierSystem
             Info = $"StatusEffect, Confuse: {duration}s, {TargetType} target, confuse type: {ConfuseType}";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
             receiver.StatusEffects.ChangeConfuseEffect(Duration, TargetType, ConfuseType);
         }
 
-        protected override void RevertEffect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void RevertEffect(Unit receiver, Unit acter)
         {
             receiver.StatusEffects.DecreaseConfuseEffect(Duration, TargetType);
         }

@@ -23,9 +23,9 @@ namespace ModifierSystem
             Info = $"LifeSteal: {SummedDamage} damage, {Percentage*100d}%\n";
         }
 
-        protected override void Effect(BaseProject.Unit receiver, BaseProject.Unit acter)
+        protected override void Effect(Unit receiver, Unit acter)
         {
-            receiver.Stats.Health.Heal(SummedDamage * Percentage);
+            receiver.Heal(SummedDamage * Percentage, acter);
         }
     }
 }
