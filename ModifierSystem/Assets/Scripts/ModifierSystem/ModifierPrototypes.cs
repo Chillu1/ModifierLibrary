@@ -11,9 +11,10 @@ namespace ModifierSystem
         public ModifierPrototypes(bool includeTest = false)
         {
             if (includeTest)
+            {
                 SetupTestModifiers();
-
-            Log.Verbose($"Loaded {Count} modifiers", "modifiers");
+                Log.Verbose($"Loaded {Count} test modifiers", "modifiers");
+            }
         }
 
         public void AddModifier(TModifier modifier)

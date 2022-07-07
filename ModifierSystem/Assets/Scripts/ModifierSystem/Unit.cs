@@ -172,6 +172,12 @@ namespace ModifierSystem
             Stats.ChangeStatMultiplier(statType, multiplier);
             ModifierController.CheckForComboRecipes();
         }
+        
+        public void SetGlobalRegenMultiplier(PoolStatType statType, double multiplier)
+        {
+            Stats.SetGlobalRegenMultiplier(statType, multiplier);
+            ModifierController.CheckForComboRecipes();
+        }
 
         public void ChangeDamageStat(DamageData[] damageData)
         {

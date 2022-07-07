@@ -7,14 +7,16 @@ namespace ModifierSystem
     {
         private (StatType type, double multiplier)[] Stats { get; }
 
-        public StatMultiplierComponent(StatType type, double multiplier, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public StatMultiplierComponent(StatType type, double multiplier, ConditionCheckData conditionCheckData = null,
+            bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             Stats = new[] { (type, multiplier) };
 
             Info = $"Stat: {Stats[0].type} {Stats[0].multiplier}";
         }
 
-        public StatMultiplierComponent((StatType type, double multiplier)[] stats, ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public StatMultiplierComponent((StatType type, double multiplier)[] stats, ConditionCheckData conditionCheckData = null,
+            bool isRevertible = false) : base(conditionCheckData, isRevertible)
         {
             Stats = stats;
 
