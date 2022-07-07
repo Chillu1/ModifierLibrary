@@ -11,6 +11,18 @@ namespace ModifierSystem
         {
         }
 
+        public new void AddEffect(IEffectProperties effectProperties, IBaseEffectProperties baseProperties = null,
+            DamageData[] damageData = null)
+        {
+            currentEffectPropertyInfo = new EffectPropertyInfo(effectProperties, baseProperties);
+            EffectPropertyInfo.Add(currentEffectPropertyInfo);
+            SetEffectOnInit();
+            SetRemovable(AuraRemoveTime);
+            SetRefreshable();
+            if (damageData != null)
+                DamageData = damageData;
+        }
+
         public new void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
         {
             currentEffectPropertyInfo = new EffectPropertyInfo(effectComponent);

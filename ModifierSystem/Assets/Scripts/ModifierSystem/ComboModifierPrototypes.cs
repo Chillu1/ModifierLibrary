@@ -13,7 +13,7 @@ namespace ModifierSystem
         public ComboModifierPrototypes(bool includeTest = false)
         {
             _instance = this;
-            if (includeTest)
+            if (includeTest && false)//TODOPRIO
                 SetupTestComboModifiers();
         }
 

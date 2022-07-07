@@ -1,5 +1,8 @@
 # TODO:
 
+* >**Modifier properties**
+  * Unit test that uses the notify function if we're using a type-only expression when the effect has properties
+  * Two dicts, one for type & baseProperties only, one for additional properties
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Health DamageTaken as Mana**
 * Remove/CleanUp doesn't revert ConditionEvents? (ConditionTimedDamageOnKill) 

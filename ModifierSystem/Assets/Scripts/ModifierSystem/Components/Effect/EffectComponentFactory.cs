@@ -15,7 +15,7 @@ namespace ModifierSystem
         public static EffectComponent CreateEffectComponent<TEffectProperties>(TEffectProperties properties, IBaseEffectProperties baseProperties)
             where TEffectProperties : IEffectProperties
         {
-            var propertyType = typeof(TEffectProperties);
+            Type propertyType = properties.GetType();
 
             if (cachedFuncs.ContainsKey(propertyType))
             {
@@ -28,18 +28,22 @@ namespace ModifierSystem
                 Log.Error("Properties aren't nested, or this isn't an effectComponent", "modifiers");
                 return null;
             }
+
+            //Log.Info(propertyType+"_"+effectType);
             
-            var ctorInfo1 = effectType.GetConstructor(new[]
+            var constructorInfo = effectType.GetConstructor(new[]
             {
                 propertyType, typeof(IBaseEffectProperties)
             });
+            if (constructorInfo == null)
+                Log.Error("Couldn't find constructor info for " + effectType, "modifiers");
 
             ParameterExpression paramA = Expression.Parameter(propertyType);
             ParameterExpression paramB = Expression.Parameter(typeof(IBaseEffectProperties));
 
             var newEffectGenerator =
-                Expression.Lambda<Func<TEffectProperties, IBaseEffectProperties, EffectComponent>>(
-                    Expression.New(ctorInfo1, new[]
+                Expression.Lambda<Func<TEffectProperties, IBaseEffectProperties, EffectComponent>>(//TODOPRIO Problem here, we get the right type before, but can we set the Func to also use the non-interface property type?
+                    Expression.New(constructorInfo, new[]
                     {
                         paramA, paramB
                     }), paramA, paramB).Compile();

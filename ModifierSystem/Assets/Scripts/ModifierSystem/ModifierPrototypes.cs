@@ -105,6 +105,30 @@ namespace ModifierSystem
         private void SetupTestModifiers()
         {
             {
+                var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
+                var properties = new ModifierGenerationProperties("IceBoltTest", null);
+                properties.AddEffect(new DamageComponent.Properties(damageData), new EffectComponent.BaseProperties(), damageData);
+                properties.SetEffectOnInit();
+                properties.SetRemovable();
+
+                var modifier = AddModifier(properties);
+                
+                ////IceboltDebuff
+                 // var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
+                 // var properties = new ModifierGenerationProperties("IceBoltTest", null);
+                 // properties.AddEffect(new DamageComponent.Properties(damageData), new EffectComponent.BaseProperties(), damageData);
+                 // properties.SetEffectOnInit();
+                 // properties.SetRemovable();
+                 //
+                 // var modifier = AddModifier(properties);
+                 //
+                 // var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+                 // applierProperties.SetApplier(ApplierType.Attack);
+                 // AddModifier(applierProperties);
+            }
+            //TODOPRIO
+            return;
+            {
                 //IceboltDebuff
                 var damageData = new[] { new DamageData(15, DamageType.Magical, new ElementData(ElementType.Cold, 20, 10)) };
                 var properties = new ModifierGenerationProperties("IceBoltTest", null);

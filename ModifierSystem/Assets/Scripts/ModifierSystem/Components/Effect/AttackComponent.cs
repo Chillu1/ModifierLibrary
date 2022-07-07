@@ -4,7 +4,7 @@ namespace ModifierSystem
 {
     public sealed class AttackComponent : EffectComponent
     {
-        public AttackComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+        public AttackComponent(IBaseEffectProperties baseProperties = null) : base(baseProperties)
         {
             Info = "Attack\n";
         }

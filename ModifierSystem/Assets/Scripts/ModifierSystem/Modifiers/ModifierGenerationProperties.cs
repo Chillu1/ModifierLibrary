@@ -74,6 +74,15 @@ namespace ModifierSystem
             ApplierType = applierType;
         }
 
+        public void AddEffect(IEffectProperties effectProperties, IBaseEffectProperties baseProperties = null,
+            DamageData[] damageData = null)
+        {
+            currentEffectPropertyInfo = new EffectPropertyInfo(effectProperties, baseProperties);
+            EffectPropertyInfo.Add(currentEffectPropertyInfo);
+            if (damageData != null)
+                DamageData = damageData;
+        }
+
         public void AddEffect(EffectComponent effectComponent, DamageData[] damageData = null)
         {
             currentEffectPropertyInfo = new EffectPropertyInfo(effectComponent);
