@@ -87,6 +87,14 @@ namespace ModifierSystem
         /// <summary>
         ///     Manual Cast
         /// </summary>
+        public bool CastModifier(Modifier modifier)
+        {
+            return CastModifier((Unit)TargetingSystem.CastTarget, modifier);
+        }
+
+        /// <summary>
+        ///     Manual Cast
+        /// </summary>
         public bool CastModifier(Unit target, string modifierId)
         {
             bool valid = ValidateCast(modifierId, out var modifier);
@@ -94,7 +102,19 @@ namespace ModifierSystem
                 return false;
 
             modifier.TryCast(target);
+            return true;
+        }
 
+        /// <summary>
+        ///     Manual Cast
+        /// </summary>
+        public bool CastModifier(Unit target, Modifier modifier)
+        {
+            bool valid = ValidateCast(modifier.Id, out _);
+            if (!valid)
+                return false;
+
+            modifier.TryCast(target);
             return true;
         }
 
@@ -118,7 +138,7 @@ namespace ModifierSystem
             _enemyAuraCastModifiers.Remove(modifier);
         }
 
-        public void SetAutomaticCastAll(bool automaticCast = true)
+        public void SetGlobalAutomaticCast(bool automaticCast = true)
         {
             _globalAutomaticCast = automaticCast;
         }

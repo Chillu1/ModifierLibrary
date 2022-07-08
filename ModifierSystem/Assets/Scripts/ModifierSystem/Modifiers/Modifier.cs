@@ -139,8 +139,7 @@ namespace ModifierSystem
 
         public void AddComponent(ITimeComponent timeComponent)
         {
-            if (TimeComponents == null)
-                TimeComponents = new List<ITimeComponent>(2);
+            TimeComponents ??= new List<ITimeComponent>(2);
 
             TimeComponents.Add(timeComponent);
         }

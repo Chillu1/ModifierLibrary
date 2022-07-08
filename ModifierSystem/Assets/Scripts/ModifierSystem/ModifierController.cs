@@ -179,9 +179,9 @@ namespace ModifierSystem
                 modifier.SetAutomaticCast(automaticCast);
         }
 
-        public Modifier[] GetModifiersInfo()
+        public Modifier[] GetModifiersUIOrder()
         {
-            return Modifiers.Values.ToArray();
+            return Modifiers.Values.OrderByDescending(m => m.ApplierType).ToArray();
         }
 
         public void ListModifiers()

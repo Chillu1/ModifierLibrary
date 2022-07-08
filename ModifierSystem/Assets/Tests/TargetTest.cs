@@ -17,7 +17,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
-            character.SetAutomaticCastAll();
+            character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
@@ -35,7 +35,7 @@ namespace ModifierSystem.Tests
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
-            enemy.SetAutomaticCastAll();
+            enemy.SetGlobalAutomaticCast();
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
@@ -55,7 +55,7 @@ namespace ModifierSystem.Tests
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
-            enemy.SetAutomaticCastAll();
+            enemy.SetGlobalAutomaticCast();
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
@@ -75,7 +75,7 @@ namespace ModifierSystem.Tests
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
-            enemy.SetAutomaticCastAll();
+            enemy.SetGlobalAutomaticCast();
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
@@ -93,7 +93,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
-            character.SetAutomaticCastAll();
+            character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
@@ -113,7 +113,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
-            character.SetAutomaticCastAll();
+            character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
@@ -136,7 +136,7 @@ namespace ModifierSystem.Tests
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
-            character.SetAutomaticCastAll();
+            character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
             Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));

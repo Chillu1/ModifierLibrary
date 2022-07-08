@@ -24,6 +24,11 @@ namespace ModifierSystem
             CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
         }
 
+        public bool CastModifier(Modifier modifier)
+        {
+            return CastingController.CastModifier(modifier);
+        }
+        
         public bool CastModifier(Unit target, string modifierId)
         {
             return CastingController.CastModifier(target, modifierId);
@@ -80,15 +85,15 @@ namespace ModifierSystem
                 CastingController.RemoveCastModifier(modifier);
         }
 
-        public void SetAutomaticCastAll(bool automaticCast = true)
+        public void SetGlobalAutomaticCast(bool automaticCast = true)
         {
             ModifierController.SetAutomaticCastAll(automaticCast);
-            CastingController.SetAutomaticCastAll(automaticCast);
+            CastingController.SetGlobalAutomaticCast(automaticCast);
         }
 
-        public Modifier[] GetModifiersInfo()
+        public Modifier[] GetModifiersUIOrder()
         {
-            return ModifierController.GetModifiersInfo();
+            return ModifierController.GetModifiersUIOrder();
         }
 
         public void CopyEvents(Unit prototype)
