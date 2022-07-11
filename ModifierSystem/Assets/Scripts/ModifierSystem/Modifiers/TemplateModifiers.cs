@@ -17,15 +17,15 @@ namespace ModifierSystem
             var modifier = new Modifier("FullTest", null, AddModifierParameters.OwnerIsTarget);
             var damageData = new[] { new DamageData(1, DamageType.Physical, new ElementData(ElementType.Poison, 10, 20)) };
             var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.AttackEvent);
-            var target = new TargetComponent(LegalTarget.Units, conditionData.conditionEventTarget);
+            var target = new TargetComponent(LegalTarget.Units, conditionData.ConditionEventTarget);
             var effect = new DamageComponent(damageData, DamageComponent.StackEffectType.Add);
             effect.Setup(target);
             var check = new CheckComponent(new IEffectComponent[] { effect });
-            var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
+            var apply = new ConditionalApplyComponent(effect, target, conditionData.ConditionEvent);
             var cleanUp = new CleanUpComponent(apply);
             var remove = new RemoveComponent(modifier, cleanUp);
             var timeRemove = new TimeComponent(remove, 10);
-            var applyRemoval = new ConditionalApplyComponent(remove, target, conditionData.conditionEvent);
+            var applyRemoval = new ConditionalApplyComponent(remove, target, conditionData.ConditionEvent);
             modifier.AddComponent(target);
             modifier.AddComponent(timeRemove);
             modifier.AddComponent(new InitComponent(apply, applyRemoval));

@@ -1,6 +1,6 @@
 namespace ModifierSystem
 {
-    public interface ICostComponent : IDisplay
+    public interface ICostComponent : IDisplayable
     {
         bool ContainsCost();
         void ApplyCost();

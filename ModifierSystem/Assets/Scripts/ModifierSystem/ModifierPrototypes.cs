@@ -338,13 +338,13 @@ namespace ModifierSystem
                 //Heal on death, once
                 var modifier = new Modifier("HealOnDeathTest", null, AddModifierParameters.OwnerIsTarget);
                 var conditionData = new ConditionEventData(ConditionEventTarget.SelfActer, ConditionEvent.OnDeathEvent);
-                var target = new TargetComponent(LegalTarget.Units, conditionData.conditionEventTarget);
+                var target = new TargetComponent(LegalTarget.Units, conditionData.ConditionEventTarget);
                 var effect = new HealComponent(10);
                 effect.Setup(target);
-                var apply = new ConditionalApplyComponent(effect, target, conditionData.conditionEvent);
+                var apply = new ConditionalApplyComponent(effect, target, conditionData.ConditionEvent);
                 var cleanUp = new CleanUpComponent(apply);
                 var removeEffect = new RemoveComponent(modifier, cleanUp);
-                var applyRemoval = new ConditionalApplyComponent(removeEffect, target, conditionData.conditionEvent);
+                var applyRemoval = new ConditionalApplyComponent(removeEffect, target, conditionData.ConditionEvent);
                 modifier.AddComponent(target);
                 modifier.AddComponent(new InitComponent(apply,
                     applyRemoval)); //TODO Separate data for each apply & effect? SetEffectOnApply(index 1)?
@@ -634,7 +634,7 @@ namespace ModifierSystem
                 var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
                 applierProperties.SetApplier(ApplierType.Cast);
                 applierProperties.SetCooldown(1);
-                applierProperties.SetAutomaticCast();
+                applierProperties.SetAutomaticAct();
                 AddModifier(applierProperties);
             }
 

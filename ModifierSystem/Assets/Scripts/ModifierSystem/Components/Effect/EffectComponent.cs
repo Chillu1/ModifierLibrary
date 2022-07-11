@@ -5,7 +5,6 @@ namespace ModifierSystem
 {
     public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent
     {
-        private BaseProperties Properties { get; }
         [CanBeNull] private ConditionCheckData ConditionCheckData { get; }
         private bool IsRevertible { get; }
         private ITargetComponent _targetComponent;
@@ -13,19 +12,12 @@ namespace ModifierSystem
 
         public string Info { get; protected set; }
 
-        public EffectComponent(IBaseEffectProperties baseProperties)
-        {
-            Properties = (BaseProperties)baseProperties;
-            
-            Info = "Unset effect data " + "\n";
-        }
-        
         protected EffectComponent(ConditionCheckData conditionCheckData = null, bool isRevertible = false)
         {
             ConditionCheckData = conditionCheckData;
             IsRevertible = isRevertible;
 
-            Info = "Unset effect data " + "\n";
+            Info = "Unset effect data\n";
         }
 
         public void Setup(ITargetComponent targetComponent)
@@ -76,21 +68,5 @@ namespace ModifierSystem
         {
             Log.Error("RevertEffect not overridden, but we're trying to use IsRevertible logic");
         }
-        
-        public struct BaseProperties : IBaseEffectProperties
-        {
-            [CanBeNull] public ConditionCheckData ConditionCheckData { get; }
-            public bool IsRevertible { get; }
-
-            public BaseProperties(ConditionCheckData conditionCheckData = null, bool isRevertible = false)
-            {
-                ConditionCheckData = conditionCheckData;
-                IsRevertible = isRevertible;
-            }
-        }
-    }
-
-    public interface IBaseEffectProperties
-    {
     }
 }

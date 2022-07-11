@@ -99,10 +99,10 @@ namespace ModifierSystem
             return tempStatusTags;
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
             //TODO Temp if
-            return IsRemove ? InfoRemove + $"{(Duration - _timer).ToString("F2")}\n" : InfoEffect + $"{(Duration - _timer).ToString("F2")}\n";
+            return IsRemove ? InfoRemove + $"{Duration - _timer:F2}\n" : InfoEffect + $"{Duration - _timer:F2}\n";
         }
 
         private bool EffectComponentIsOfType<T>(bool checkResetOnFinished = true) where T : IEffectComponent

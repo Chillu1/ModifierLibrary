@@ -9,11 +9,11 @@ namespace ModifierSystem
     public class ComboRecipe
     {
         [CanBeNull]
-        public string[] Id;
+        public readonly string[] Id;
         [CanBeNull]
-        public ElementalRecipe[] ElementalRecipe;
+        public readonly ElementalRecipe[] ElementalRecipe;
         [CanBeNull]
-        public Stat[] Stat;
+        public readonly Stat[] Stat;
 
         public ComboRecipe()
         {

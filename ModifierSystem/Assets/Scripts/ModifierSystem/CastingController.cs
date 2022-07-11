@@ -50,7 +50,7 @@ namespace ModifierSystem
 
                 foreach (var castModifier in _castModifiers)
                 {
-                    if (castModifier.IsAutomaticCasting || _globalAutomaticCast)
+                    if (castModifier.IsAutomaticActing || _globalAutomaticCast)
                         castModifier.TryCast((Unit)TargetingSystem.CastTarget, true);
                 }
             }
@@ -67,7 +67,7 @@ namespace ModifierSystem
             {
                 foreach (var castModifier in modifiers)
                 {
-                    if (!castModifier.IsAutomaticCasting && !_globalAutomaticCast)
+                    if (!castModifier.IsAutomaticActing && !_globalAutomaticCast)
                         continue;
 
                     foreach (var target in targets)

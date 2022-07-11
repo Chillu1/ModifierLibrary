@@ -58,7 +58,7 @@ namespace ModifierSystem
             }
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
             return Info + $"{Amount} {Type}\n";
         }

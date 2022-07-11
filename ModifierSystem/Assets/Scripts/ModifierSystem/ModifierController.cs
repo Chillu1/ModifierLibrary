@@ -74,10 +74,9 @@ namespace ModifierSystem
 
             if (ContainsModifier(modifier, out Modifier internalModifier))
             {
-                bool stacked, refreshed;
                 //Run stack & refresh in case it has those components
-                stacked = internalModifier.Stack();
-                refreshed = internalModifier.Refresh();
+                bool stacked = internalModifier.Stack();
+                bool refreshed = internalModifier.Refresh();
                 //If we didnt stack or refresh, then apply internal modifier effect again? Any issues? We could limit this with a flag/component
                 if (!stacked && !refreshed/* && internalModifier.RepeatInitEffect*/) //Aura effects shouldn't be applied multiple times, if we didn't make a cast applier refreshable, this will trigger again, needs to be fixed//TODO
                     internalModifier.Init(); //Problem comes here, since the effect might not actually be in Init()
@@ -87,8 +86,8 @@ namespace ModifierSystem
             }
             else
             {
-                if (modifier is ComboModifier && !ComboModifierCooldowns.ContainsKey(modifier.Id))
-                    ComboModifierCooldowns.Add(modifier.Id, ((ComboModifier)modifier).Cooldown);
+                if (modifier is ComboModifier comboModifier && !ComboModifierCooldowns.ContainsKey(comboModifier.Id))
+                    ComboModifierCooldowns.Add(comboModifier.Id, comboModifier.Cooldown);
                 AddModifier(modifier);
                 modifierAdded = true;
             }
@@ -167,16 +166,10 @@ namespace ModifierSystem
             return Modifiers.TryGetValue(modifier.Id, out internalModifier);
         }
 
-        public void SetAutomaticCast(string modifierId, bool automaticCast = true)
-        {
-            if (ContainsModifier(modifierId, out var modifier))
-                modifier.SetAutomaticCast(automaticCast);
-        }
-
         public void SetAutomaticCastAll(bool automaticCast = true)
         {
             foreach (var modifier in Modifiers.Values.Where(m => m.ApplierType == ApplierType.Cast))
-                modifier.SetAutomaticCast(automaticCast);
+                modifier.SetAutomaticAct(automaticCast);
         }
 
         public Modifier[] GetModifiersUIOrder()
@@ -231,8 +224,7 @@ namespace ModifierSystem
 
         public IEnumerable<Modifier> GetModifierAttackAppliers()
         {
-            //Invalid target on appliers with self, so no need for extra checks rn
-            return Modifiers.Values.Where(m => m.ApplierType == ApplierType.Attack && !m.IsConditionModifier);
+            return Modifiers.Values.Where(m => m.ApplierType == ApplierType.Attack && m.IsAutomaticActing && !m.IsConditionModifier);
         }
 
         public override string ToString()

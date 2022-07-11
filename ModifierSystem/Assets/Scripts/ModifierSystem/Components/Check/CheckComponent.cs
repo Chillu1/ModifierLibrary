@@ -26,11 +26,26 @@ namespace ModifierSystem
             CooldownComponent = cooldownComponent;
             ChanceComponent = chanceComponent;
 
+            bool multipleEffectTypes = effectComponents.Length > 0 && effectTimeComponents is { Length: > 0 };
+            
             string text = "";
+            int i = 0;
             foreach (var effectComponent in EffectComponents.EmptyIfNull())
+            {
+                if (multipleEffectTypes && i == 0)
+                    text += "Initial: ";
                 text += effectComponent.Info;
+                i++;
+            }
+            
+            i = 0;
             foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
+            {
+                if (multipleEffectTypes && i == 0)
+                    text += "Time: ";
                 text += effectComponent.Info;
+                i++;
+            }
 
             Info = text;
         }
@@ -88,7 +103,7 @@ namespace ModifierSystem
             CooldownComponent?.ResetTimer();
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
             string text = "";
             //foreach (var effectComponent in EffectComponents.EmptyIfNull())
@@ -96,7 +111,24 @@ namespace ModifierSystem
             //foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
             //    text += effectComponent.Info;
 
-            text += CostComponent?.DisplayText() + CooldownComponent?.DisplayText() + ChanceComponent?.DisplayText();
+            text += CostComponent?.GetBasicInfo();
+            text += CooldownComponent?.GetBasicInfo();
+            text += ChanceComponent?.GetBasicInfo();
+
+            return text;
+        }
+        
+        public string GetBattleInfo()
+        {
+            string text = "";
+            //foreach (var effectComponent in EffectComponents.EmptyIfNull())
+            //    text += effectComponent.Info;
+            //foreach (var effectComponent in TimeEffectComponents.EmptyIfNull())
+            //    text += effectComponent.Info;
+
+            text += CostComponent?.GetBattleInfo();
+            text += CooldownComponent?.GetBattleInfo();
+            text += ChanceComponent?.GetBattleInfo();
 
             return text;
         }

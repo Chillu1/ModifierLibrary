@@ -20,7 +20,7 @@ namespace ModifierSystem
         public (PoolStatType Type, double Value) Cost { get; private set; }
 
         public float Cooldown { get; private set; } = -1;
-        public bool AutomaticCast { get; private set; }
+        public bool AutomaticAct { get; private set; }
         public double Chance { get; private set; } = -1;
 
         public ApplierModifierGenerationProperties(Modifier appliedModifier, ModifierInfo info,
@@ -37,6 +37,8 @@ namespace ModifierSystem
                 Log.Error("Cannot set applier type together with condition data");
 
             ApplierType = applierType;
+            if (applierType.HasFlag(ApplierType.Attack)) 
+                SetAutomaticAct();
         }
 
         public void SetCondition(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
@@ -64,9 +66,9 @@ namespace ModifierSystem
             Cooldown = cooldown;
         }
 
-        public void SetAutomaticCast()
+        public void SetAutomaticAct()
         {
-            AutomaticCast = true;
+            AutomaticAct = true;
         }
 
         public void SetChance(double chance)

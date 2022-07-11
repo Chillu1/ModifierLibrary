@@ -3,15 +3,18 @@ namespace ModifierSystem
     public sealed class ApplierEffectComponent : EffectComponent, IStackEffectComponent
     {
         private Modifier Modifier { get; }
-        public bool IsStackEffect { get; }
+        private bool IsStackEffect { get; }
 
-        public ApplierEffectComponent(Modifier modifier, bool isStackEffect = false, ConditionCheckData conditionCheckData = null) : base(
-            conditionCheckData)
+        public ApplierEffectComponent(Modifier modifier, bool isStackEffect = false, ConditionCheckData conditionCheckData = null) :
+            base(conditionCheckData)
         {
             Modifier = modifier;
             IsStackEffect = isStackEffect;
 
-            Info = $"Applies: {Modifier}\n";
+            string info = Modifier.Info != null
+                ? $"Applies: {Modifier.Info.DisplayName}\n{Modifier.Info.EffectInfo}{Modifier.Info.BasicCheckInfo}"
+                : "Applies: " + modifier;
+            Info = info;
         }
 
         protected override void Effect(Unit receiver, Unit acter)

@@ -150,8 +150,8 @@ namespace ModifierSystem
             modifier.AddComponent(check);
             modifier.AddComponent(applier);
 
-            if (properties.AutomaticCast)
-                modifier.SetAutomaticCast();
+            if (properties.AutomaticAct)
+                modifier.SetAutomaticAct();
 
             modifier.FinishSetup(); //"No tags", for now?
             modifier.AddProperties(properties);

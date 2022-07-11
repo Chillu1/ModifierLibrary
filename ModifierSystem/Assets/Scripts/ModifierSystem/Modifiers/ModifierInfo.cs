@@ -3,12 +3,14 @@ namespace ModifierSystem
     public class ModifierInfo
     {
         public string DisplayName { get; }
-        private string Description { get; }
+        public string Description { get; }
         public string ModifierTextureId { get; }
 
-        private string BaseInfo { get; set; }
-        private string EffectInfo { get; set; } = "";
-        public string CheckInfo { get; set; } = "";
+        private string BaseInfo { get; }
+        public string EffectInfo { get; set; } = "";
+        public string BasicCheckInfo { get; set; } = "";
+        public string BattleCheckInfo { get; set; } = "";
+        
 
         private ICheckComponent _checkComponent;
 
@@ -18,13 +20,15 @@ namespace ModifierSystem
             Description = description;
             ModifierTextureId = modifierTextureId;
 
-            BaseInfo = $"{DisplayName}\n{Description}\n";
+            BaseInfo = $"{DisplayName}\n";
         }
 
         public void Setup(ICheckComponent checkComponent)
         {
             _checkComponent = checkComponent;
+
             EffectInfo = _checkComponent.Info;
+            UpdateInfo();
         }
 
         public void Update(float dt)
@@ -32,10 +36,9 @@ namespace ModifierSystem
             UpdateInfo();
         }
 
-        public string GetInfo()
+        public string GetFullInfo()
         {
-            //TODO EffectInfo, Damage, etc
-            return BaseInfo+EffectInfo+CheckInfo;
+            return BaseInfo+EffectInfo+BasicCheckInfo;
         }
 
         public void UpdateInfo()
@@ -43,12 +46,13 @@ namespace ModifierSystem
             if(_checkComponent == null)
                 return;
 
-            CheckInfo = _checkComponent.DisplayText();
+            BasicCheckInfo = _checkComponent.GetBasicInfo();
+            BattleCheckInfo = _checkComponent.GetBattleInfo();
         }
 
         public override string ToString()
         {
-            return GetInfo();
+            return GetFullInfo();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ModifierSystem
         ///     Possible recipes
         /// </summary>
         [NotNull]
-        public ComboRecipe[] Recipes;
+        public readonly ComboRecipe[] Recipes;
 
         public ComboRecipes([NotNull] ComboRecipe recipe)
         {

@@ -41,9 +41,19 @@ namespace ModifierSystem
             _timer = _cooldown;
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
-            return Info + $"{_timer.ToString("F2")}/{_cooldown.ToString("F2")}\n";
+            return $"{Info}{_cooldown:F2}\n";
+        }
+        
+        public string GetBattleInfo()
+        {
+            return $"{Info}{_timer:F2}/{_cooldown:F2}\n";
+        }
+        
+        public override string ToString()
+        {
+            return GetBattleInfo();
         }
     }
 }

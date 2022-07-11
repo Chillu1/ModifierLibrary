@@ -2,7 +2,7 @@ using System;
 
 namespace ModifierSystem
 {
-    public interface IChanceComponent : IDisplay
+    public interface IChanceComponent : IDisplayable
     {
         bool Roll();
         bool Roll(Random random);

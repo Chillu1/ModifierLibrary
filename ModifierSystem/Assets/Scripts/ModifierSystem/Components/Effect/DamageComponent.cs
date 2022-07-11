@@ -14,7 +14,15 @@ namespace ModifierSystem
             Damage = damage;
             StackType = stackType;
 
-            Info = "Damage: " + string.Join<DamageData>(" ", Damage) + "\n";
+            string textDamage = "";
+            foreach (var data in Damage)
+            {
+                textDamage += $"{data.DamageType}: {data.Damage}";
+                if(data.ElementData != null)
+                    textDamage += $"\n{data.ElementData.ToolTipInfo()}";
+            }
+            textDamage += "\n";
+            Info = "Damage: " + textDamage;
         }
 
         protected override void Effect(Unit receiver, Unit acter)
@@ -24,21 +32,23 @@ namespace ModifierSystem
 
         public void StackEffect(int stacks, double value)
         {
-            //Debug.Log("StackEffect");
-            if (StackType.HasFlag(StackEffectType.Add))
-                Damage[0].BaseDamage += value;
-            if (StackType.HasFlag(StackEffectType.AddStacksBased))
-                Damage[0].BaseDamage += value * stacks;
-            if (StackType.HasFlag(StackEffectType.Multiply))
-                Damage[0].Multiplier += value;
-            if (StackType.HasFlag(StackEffectType.SetMultiplierStacksBased))
-                Damage[0].Multiplier = stacks;
-            if (StackType.HasFlag(StackEffectType.MultiplyStacksBased))
-                Damage[0].Multiplier += value * stacks;
-            if (StackType.HasFlag(StackEffectType.OnXStacksAddElemental))
+            foreach (var damageData in Damage)
             {
-                //TODO
-                //Damage[0].ElementData.?
+                if (StackType.HasFlag(StackEffectType.Add))
+                    damageData.BaseDamage += value;
+                if (StackType.HasFlag(StackEffectType.AddStacksBased))
+                    damageData.BaseDamage += value * stacks;
+                if (StackType.HasFlag(StackEffectType.Multiply))
+                    damageData.Multiplier += value;
+                if (StackType.HasFlag(StackEffectType.SetMultiplierStacksBased))
+                    damageData.Multiplier = stacks;
+                if (StackType.HasFlag(StackEffectType.MultiplyStacksBased))
+                    damageData.Multiplier += value * stacks;
+                if (StackType.HasFlag(StackEffectType.OnXStacksAddElemental))
+                {
+                    //TODO
+                    //damageData.ElementData.?
+                }
             }
 
             //Effect at the end, after all the other possible calcs

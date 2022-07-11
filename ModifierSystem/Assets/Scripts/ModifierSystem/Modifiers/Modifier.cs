@@ -12,19 +12,25 @@ namespace ModifierSystem
     /// <summary>
     ///     Buff/Debuff on units, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
     /// </summary>
-    public class Modifier : IEntity<string>, ICloneable, IFullDisplay
+    public class Modifier : IEntity<string>, ICloneable, IChoosable
     {
         public string Id { get; }
         [CanBeNull] public ModifierInfo Info { get; }
         public AddModifierParameters Parameters { get; }
         public bool IsApplierModifier => ApplierType != ApplierType.None;
         public ApplierType ApplierType { get; }
+
         public bool IsConditionModifier { get; }
+
         //public bool IsComboPart { get; private set; }
         public bool ToRemove { get; private set; }
         public TargetComponent TargetComponent { get; private set; }
         public StatusTag[] StatusTags { get; private set; }
-        public bool IsAutomaticCasting { get; private set; }
+
+        /// <summary>
+        ///     Is automatically casting or applying on unit attacks
+        /// </summary>
+        public bool IsAutomaticActing { get; private set; }
 
         [CanBeNull] private IInitComponent InitComponent { get; set; }
         [CanBeNull] private IApplyComponent ApplyComponent { get; set; }
@@ -190,9 +196,9 @@ namespace ModifierSystem
             TargetComponent.SetupApplierOwner(owner);
         }
 
-        public void SetAutomaticCast(bool automaticCast = true)
+        public void SetAutomaticAct(bool automaticAct = true)
         {
-            IsAutomaticCasting = automaticCast;
+            IsAutomaticActing = automaticAct;
         }
 
         public bool TryCast(Unit target, bool automaticCast = false)
@@ -222,6 +228,7 @@ namespace ModifierSystem
                 validApply = false;
                 //Log.Error(Id + " can't apply to " + target.Id, "modifiers");
             }
+
             if (CheckComponent != null && !CheckComponent.Check())
             {
                 validApply = false;
@@ -278,7 +285,7 @@ namespace ModifierSystem
 
             if (TargetComponent == null)
             {
-                Log.Error("Modifier needs a target component", "modifiers");
+                Log.Error(Id + " Modifier needs a target component", "modifiers");
                 valid = false;
             }
 
@@ -286,75 +293,85 @@ namespace ModifierSystem
             {
                 if (ApplyComponent == null && StackComponent == null && !IsConditionModifier)
                 {
-                    Log.Info(Id+"_"+IsConditionModifier);
-                    Log.Error("ModifierApplier needs an ApplyComponent, StackComponent or has to be condition based", "modifiers");
+                    Log.Error(Id + " ModifierApplier needs an ApplyComponent, StackComponent or has to be condition based", "modifiers");
                     valid = false;
                 }
             }
             //Not applier, check for other components
             else if ((TimeComponents == null || TimeComponents.Count == 0) && InitComponent == null)
             {
-                Log.Error("Modifier needs either an init or time component to work (unless maybe its a flag modifier?)", "modifiers");
+                Log.Error(Id + " Modifier needs either an init or time component to work (unless maybe its a flag modifier?)", "modifiers");
                 valid = false;
             }
 
             if (Id.EndsWith("Applier") && !IsApplierModifier && !IsConditionModifier)
             {
-                Log.Error("Id contains applier, but the flag isn't set, and it's not a condition modifier", "modifiers");
+                Log.Error(Id + " contains applier, but the flag isn't set, and it's not a condition modifier", "modifiers");
                 valid = false;
             }
 
             if (!Id.EndsWith("Applier") && IsApplierModifier)
             {
-                Log.Error("Id doesn't contain applier, and the applier flag is set", "modifiers");
+                Log.Error(Id + " doesn't contain applier, and the applier flag is set", "modifiers");
                 valid = false;
             }
 
             if (!Id.Contains("Test") && Info == null)
             {
-                Log.Error("Non-test modifier need info", "modifiers");
+                Log.Error(Id + " Non-test modifier need info", "modifiers");
                 valid = false;
             }
 
             if (!_setupFinished || StatusTags == null)
             {
                 Log.Error("Setup has not been properly finished", "modifiers");
-                StatusTags = new StatusTag[0];
+                StatusTags = Array.Empty<StatusTag>();
                 valid = false;
             }
 
             return valid;
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
             string info = Info == null ? ToString() : Info.DisplayName;
             info += "\n";
-            info += Info?.CheckInfo;
+            info += Info?.BasicCheckInfo;
 
-            if (TimeComponents != null && TimeComponents.Count > 0)
-            {
-                info += TimeComponents[0].DisplayText();
-
-                if (TimeComponents.Count > 1)
-                    info += TimeComponents[1].DisplayText();
-            }
+            foreach (var timeComponent in TimeComponents.EmptyIfNull())
+                info += timeComponent.GetBasicInfo();
 
             return info;
         }
 
-        public string FullText()
+        public string GetBattleInfo()
         {
-            string info = Info == null ? ToString() : Info.GetInfo();
-            info += Info?.CheckInfo;
+            string info = Info == null ? ToString() : Info.DisplayName;
+            info += "\n";
+            info += Info?.BattleCheckInfo;
 
-            if (TimeComponents != null && TimeComponents.Count > 0)
+            foreach (var timeComponent in TimeComponents.EmptyIfNull())
+                info += timeComponent.GetBattleInfo();
+
+            return info;
+        }
+
+        public string GetFullInfo()
+        {
+            string info;
+            if (Info == null)
+                info = ToString();
+            else
             {
-                info += TimeComponents[0].DisplayText();
-
-                if (TimeComponents.Count > 1)
-                    info += TimeComponents[1].DisplayText();
+                info = IsApplierModifier
+                    ? Info.DisplayName + "\n" + Info.EffectInfo
+                    : Info.DisplayName + "\n" + Info.Description + "\n" + Info.EffectInfo;
             }
+
+            info += Info?.BattleCheckInfo;
+
+            foreach (var timeComponent in TimeComponents.EmptyIfNull())
+                info += timeComponent.GetFullInfo();
 
             return info;
         }

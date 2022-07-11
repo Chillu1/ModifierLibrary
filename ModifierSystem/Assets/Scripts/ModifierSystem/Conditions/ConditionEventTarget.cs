@@ -23,17 +23,17 @@ namespace ModifierSystem
     [Obsolete]
     public struct ConditionEventData
     {
-        public ConditionEventTarget conditionEventTarget;
-        public ConditionEvent conditionEvent;
+        public readonly ConditionEventTarget ConditionEventTarget;
+        public readonly ConditionEvent ConditionEvent;
 
         public ConditionEventData(ConditionEventTarget conditionEventTarget, ConditionEvent conditionEvent)
         {
-            this.conditionEventTarget = conditionEventTarget;
-            this.conditionEvent = conditionEvent;
+            ConditionEventTarget = conditionEventTarget;
+            ConditionEvent = conditionEvent;
 
-            if(this.conditionEventTarget == ConditionEventTarget.None)
+            if(ConditionEventTarget == ConditionEventTarget.None)
                 Log.Error("Wrong ConditionTarget, None");
-            if(this.conditionEvent == ConditionEvent.None)
+            if(ConditionEvent == ConditionEvent.None)
                 Log.Error("Wrong UnitConditionEvent, None");
         }
     }

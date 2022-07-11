@@ -42,14 +42,14 @@ namespace ModifierSystem
             return valid;
         }
 
-        public string DisplayText()
+        public string GetBasicInfo()
         {
-            return Info + $"{Chance*100d}%\n";
+            return $"{Info}{Chance * 100d}%\n";
         }
 
         public override string ToString()
         {
-            return $"Chance: {Chance}";
+            return GetBasicInfo();
         }
     }
 }
