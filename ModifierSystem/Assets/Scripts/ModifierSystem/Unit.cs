@@ -2,6 +2,8 @@ using System.Linq;
 using BaseProject;
 using Force.DeepCloner;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace ModifierSystem
@@ -19,6 +21,15 @@ namespace ModifierSystem
         public event UnitEvent ComboEvent;
 
         public Unit(UnitProperties unitProperties) : base(unitProperties)
+        {
+            ModifierController = new ModifierController(this, ElementController);
+            CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
+        }
+
+        /// <summary>
+        ///     For loading in from a save file.
+        /// </summary>
+        public Unit(JObject properties) : base(properties)
         {
             ModifierController = new ModifierController(this, ElementController);
             CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
@@ -196,6 +207,11 @@ namespace ModifierSystem
             ModifierController.CheckForComboRecipes();
         }
 
+        protected override void SaveExtra(JsonTextWriter writer)
+        {
+            ModifierController.Save(writer);
+        }
+        
         public override object Clone()
         {
             var clone = this.DeepClone();

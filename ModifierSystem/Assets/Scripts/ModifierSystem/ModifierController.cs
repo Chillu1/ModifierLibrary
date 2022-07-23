@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseProject;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace ModifierSystem
 {
-    public class ModifierController
+    public class ModifierController : ISavable
     {
         private readonly Unit _owner;
         private ElementController ElementController { get; }
@@ -225,6 +226,25 @@ namespace ModifierSystem
         public IEnumerable<Modifier> GetModifierAttackAppliers()
         {
             return Modifiers.Values.Where(m => m.ApplierType == ApplierType.Attack && m.IsAutomaticActing && !m.IsConditionModifier);
+        }
+
+        public void Save(JsonTextWriter writer)
+        {
+            writer.WritePropertyName(nameof(Modifiers));
+            writer.WriteStartArray();
+            foreach (var modifierPair in Modifiers)
+            {
+                //modifier.Save(writer);
+                writer.WriteStartObject();
+                writer.WritePropertyName(nameof(Modifier.Id));
+                writer.WriteValue(modifierPair.Key);
+                writer.WriteEndObject();
+            }
+            writer.WriteEndArray();
+        }
+
+        public void Load(JsonTextReader reader)
+        {
         }
 
         public override string ToString()

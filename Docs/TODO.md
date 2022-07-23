@@ -1,8 +1,6 @@
 # TODO:
 
 * >**OverHeal mechanic**
-* Global damage multipliers (All, Magical, Physical, Pure) (So we don't have to update all new multipliers every time we add a new oneand
-  temp effects, very useful for multiplier = 0 w/e)
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Health DamageTaken as Mana** 
 * More Templates for basic modifiers
