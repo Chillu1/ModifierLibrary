@@ -243,10 +243,6 @@ namespace ModifierLibrary
             writer.WriteEndArray();
         }
 
-        public void Load(JsonTextReader reader)
-        {
-        }
-
         public override string ToString()
         {
             return "Modifiers: " + string.Join(", ", Modifiers.Values);

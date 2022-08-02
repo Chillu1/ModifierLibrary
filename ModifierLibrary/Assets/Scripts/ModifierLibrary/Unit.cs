@@ -26,15 +26,6 @@ namespace ModifierLibrary
             CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
         }
 
-        /// <summary>
-        ///     For loading in from a save file.
-        /// </summary>
-        public Unit(JObject properties) : base(properties)
-        {
-            ModifierController = new ModifierController(this, ElementController);
-            CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
-        }
-
         public bool CastModifier(Modifier modifier)
         {
             return CastingController.CastModifier(modifier);

@@ -2,11 +2,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using UnitLibrary;
 using Force.DeepCloner;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
 
@@ -366,7 +369,7 @@ namespace ModifierLibrary.Tests.Performance
                 })
                 .WarmupCount(10)
                 .MeasurementCount(5)
-                .IterationsPerMeasurement(100)
+                .IterationsPerMeasurement(Iterations/4)
                 .GC()
                 .Run()
                 ;
@@ -408,6 +411,35 @@ namespace ModifierLibrary.Tests.Performance
                 .MeasurementCount(20)
                 .IterationsPerMeasurement(200)
                 .GC()
+                .Run()
+                ;
+        }
+
+        [Test, Performance]
+        public void BenchUnitSaveJson()
+        {
+            JsonTextWriter writer = null;
+            var unit = new Unit(new UnitProperties
+            {
+                Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+                Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
+            });
+            Measure.Method(() =>
+                {
+                    unit.Save(writer);
+                })
+                .WarmupCount(10)
+                .MeasurementCount(20)
+                .IterationsPerMeasurement(Iterations)
+                .GC()
+                .SetUp(() =>
+                {
+                    writer = new JsonTextWriter(new StringWriter(new StringBuilder()));
+                })
+                .CleanUp(() =>
+                {
+                    writer = null;
+                })
                 .Run()
                 ;
         }

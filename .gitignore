@@ -435,3 +435,8 @@ InitTestScene*.unity
 
 ModifierSystem/Library/*
 /.idea/
+/ModifierLibrary/Library/
+/ModifierLibrary/ProjectSettings/
+/ModifierLibrary/Temp/
+/ModifierLibrary/UserSettings/
+/ModifierLibrary/.idea/.idea.ModifierLibrary/.idea/
