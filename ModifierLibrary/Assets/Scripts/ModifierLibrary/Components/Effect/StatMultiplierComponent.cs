@@ -36,7 +36,7 @@ namespace ModifierLibrary
                 var damageData = Stats[i];
                 negativeStats[i] = (damageData.type, -damageData.multiplier);
             }
-            receiver.ChangeStat(negativeStats);
+            receiver.ChangeStatMultiplier(negativeStats);
         }
     }
 }
