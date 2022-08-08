@@ -78,7 +78,6 @@ Applier
 * In EffectComponent, should be pass _targetComponent.Owner as acter instead of null? We might want to check owner, when its a normal non-condition effect? At some point.
 * CleanUpComponent only needed when we have remove? Automated with apply otherwise?
 * What more mechanics can refreshComponent have?
-* Do something with Being not being accepted in Heal, etc
 * Single/X use condition modifiers, how? RemoveComponent can hold X stacks, lowering down to 0, then actual effect is triggered
 * Should CleanUp remove buffs/upgrades, ex. on kill. We would need to record the amount, or store it in a different way
 * Order of BaseBeing.Update() and ModifierController.Update() matters for StatusEffect

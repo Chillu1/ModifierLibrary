@@ -1,12 +1,13 @@
 # TODO:
 
 * >**OverHeal mechanic**
+  * Types: Flat, Percent Max, PercentCurrent,  
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Health DamageTaken as Mana** 
 * More Templates for basic modifiers
 * Improved GenerateModifier, multi effects, etc.
 * Better ApplierModifierGenerationProperties setup with ConditionDatam, etc
-* **Have StatusResistances & ElementResistances use the same logic**
+* **Have StatusResistances & ElementResistances use the same logic?**
 * Status Res for combo element types
 * Event naming convention for Conditional Modifiers
 * Temporary extra damage on cast, with cooldown. & cleanup (of the dmg)
@@ -15,10 +16,6 @@
   * New target = reset cast timer
 * StatusTags refactor
 * More ComboModifiers values based on *in* values?
-* **DamageData refactor**
-* ElementalDamage refactor
-* Resource Refactor
-* **Damage Resistance not using "resource"**
 * ElementData Value making element damage be stronger 
 * Bench, what?
 
