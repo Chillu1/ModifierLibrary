@@ -14,14 +14,14 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("FriendlyPhysicalDamageResistanceAuraTest");
             character.AddModifier(applier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
             character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
 
         [Test]
@@ -30,8 +30,8 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("FriendlyPhysicalDamageResistanceAuraTest");
             enemy.AddModifier(applier);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
@@ -39,9 +39,9 @@ namespace ModifierLibrary.Tests
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(enemyAlly.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
         }
 
         [Test]
@@ -50,8 +50,8 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("OppositePhysicalDamageResistanceAuraTest");
             enemy.AddModifier(applier);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
@@ -59,9 +59,9 @@ namespace ModifierLibrary.Tests
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
-            Assert.True(enemyAlly.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+            Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
 
         [Test]
@@ -70,8 +70,8 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("EveryonePhysicalDamageResistanceAuraTest");
             enemy.AddModifier(applier);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.TargetingSystem.AddAllyAuraTarget(enemyAlly);
             enemy.TargetingSystem.AddEnemyAuraTarget(character);
@@ -79,9 +79,9 @@ namespace ModifierLibrary.Tests
 
             enemy.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(enemy.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(enemyAlly.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
 
         [Test]
@@ -90,18 +90,18 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("FriendlyPhysicalDamageResistanceAuraTest");
             character.AddModifier(applier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
             character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             ally.Update((float)AuraEffectModifierGenerationProperties.AuraRemoveTime);
 
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
         }
 
         [Test]
@@ -110,21 +110,21 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("FriendlyPhysicalDamageResistanceAuraTest");
             character.AddModifier(applier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
             character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             ally.Update((float)AuraEffectModifierGenerationProperties.AuraRemoveTime * 2);
 
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
 
         [Test]
@@ -133,19 +133,19 @@ namespace ModifierLibrary.Tests
             var applier = modifierPrototypes.GetApplier("FriendlyPhysicalDamageResistanceAuraTest");
             character.AddModifier(applier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             character.TargetingSystem.AddAllyAuraTarget(ally);
             character.SetGlobalAutomaticCast();
             character.Update(CastingController.AutomaticAuraCastCooldown);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
             
             character.Update(CastingController.AutomaticAuraCastCooldown * 2);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
-            Assert.True(ally.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+            Assert.True(ally.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
 
         [Test]

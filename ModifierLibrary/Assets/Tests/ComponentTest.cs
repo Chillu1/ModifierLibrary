@@ -188,16 +188,16 @@ namespace ModifierLibrary.Tests
         [Test]
         public void TemporaryDamageResistance()
         {
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             var modifier = modifierPrototypes.Get("TemporaryPhysicalResistanceTest");
             character.AddModifier(modifier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             character.Update(1.1f);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
         }
 
         [Test]
@@ -218,7 +218,7 @@ namespace ModifierLibrary.Tests
         [Test]
         public void RevertibleDamageResistanceBuff()
         {
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             var modifierApplier = modifierPrototypes.GetApplier("TemporaryAlliedDamageResistanceBuffTest");
             ally.AddModifier(modifierApplier);
@@ -226,16 +226,16 @@ namespace ModifierLibrary.Tests
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             character.Update(11f);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
             
             ally.CastModifier(character, "TemporaryAlliedDamageResistanceBuffTestApplier");
             character.Update(8f);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
     }
 }

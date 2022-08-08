@@ -16,7 +16,7 @@ namespace ModifierLibrary
 
         protected override void Effect(Unit receiver, Unit acter)
         {
-            var reflectDamage = receiver.Stats.Damage.ToDamageData().ToArray();
+            DamageData[] reflectDamage = receiver.Stats.Damage;
             foreach (var data in reflectDamage)
                 data.BaseDamage *= Percentage;
             receiver.DealDamage(reflectDamage, acter, AttackType.Reflect);

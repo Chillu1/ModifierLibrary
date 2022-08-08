@@ -18,12 +18,12 @@ namespace ModifierLibrary
 
         protected override void Effect(Unit receiver, Unit acter)
         {
-            receiver.ElementalDamageResistances.ChangeValue(ElementType, Value);
+            receiver.ElementalDamageResistances.Change(ElementType, Value);
         }
 
         protected override void RevertEffect(Unit receiver, Unit acter)
         {
-            receiver.ElementalDamageResistances.ChangeValue(ElementType, -Value);
+            receiver.ElementalDamageResistances.Change(ElementType, -Value);
         }
     }
 }

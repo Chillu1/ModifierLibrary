@@ -175,17 +175,17 @@ namespace ModifierLibrary.Tests
             var modifier = modifierPrototypes.Get("ConditionRemoveTest");
             character.AddModifier(modifier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.Attack(character);
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             character.Update(5.1f);
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.Attack(character);
             //We should have cleaned up the condition after the 5.1s duration
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
         }
 
         [Test]
@@ -194,17 +194,17 @@ namespace ModifierLibrary.Tests
             var modifierApplier = modifierPrototypes.GetApplier("ConditionRemoveApplierTest");
             character.AddModifier(modifierApplier);
 
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.Attack(character);
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 
             character.Update(5.1f);
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 0));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
 
             enemy.Attack(character);
             //We should not have cleaned up the condition after the 5.1s duration
-            Assert.True(character.DamageTypeDamageResistances.IsValue(DamageType.Physical, 100));
+            Assert.True(character.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
         }
     }
 }
