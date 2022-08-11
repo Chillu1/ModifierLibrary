@@ -2,6 +2,7 @@
 
 * >**OverHeal mechanic**
   * Types: Flat, Percent Max, PercentCurrent,  
+* Custom AttackType support (DamageComponent)
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Health DamageTaken as Mana** 
 * More Templates for basic modifiers

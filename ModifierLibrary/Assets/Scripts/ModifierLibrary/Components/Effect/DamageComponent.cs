@@ -27,7 +27,8 @@ namespace ModifierLibrary
 
         protected override void Effect(Unit receiver, Unit acter)
         {
-            receiver.DealDamage(Damage, acter);
+            //TODO Custom AttackType support
+            receiver.DealDamage(Damage, acter, AttackType.Internal);
         }
 
         public void StackEffect(int stacks, double value)
