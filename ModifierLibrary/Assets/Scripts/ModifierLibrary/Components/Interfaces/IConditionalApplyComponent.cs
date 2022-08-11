@@ -1,6 +1,6 @@
 namespace ModifierLibrary
 {
-    public interface IConditionalApplyComponent : IApplyComponent
-    {
-    }
+	public interface IConditionalApplyComponent : IApplyComponent
+	{
+	}
 }

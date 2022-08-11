@@ -1,7 +1,7 @@
 namespace ModifierLibrary
 {
-    public interface IRefreshComponent
-    {
-        void Refresh();
-    }
+	public interface IRefreshComponent
+	{
+		void Refresh();
+	}
 }

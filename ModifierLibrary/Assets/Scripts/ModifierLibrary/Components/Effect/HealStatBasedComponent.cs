@@ -1,15 +1,15 @@
 namespace ModifierLibrary
 {
-    public sealed class HealStatBasedComponent : EffectComponent
-    {
-        public HealStatBasedComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
-        {
-            Info = $"HealAct\n";
-        }
+	public sealed class HealStatBasedComponent : EffectComponent
+	{
+		public HealStatBasedComponent(ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
+		{
+			Info = $"HealAct\n";
+		}
 
-        protected override void Effect(Unit receiver, Unit acter)
-        {
-            acter.Heal(receiver);
-        }
-    }
+		protected override void Effect(Unit receiver, Unit acter)
+		{
+			acter.Heal(receiver);
+		}
+	}
 }

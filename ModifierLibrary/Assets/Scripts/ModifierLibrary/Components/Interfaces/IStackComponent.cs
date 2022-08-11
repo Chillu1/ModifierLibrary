@@ -1,7 +1,7 @@
 namespace ModifierLibrary
 {
-    public interface IStackComponent
-    {
-        void Stack();
-    }
+	public interface IStackComponent
+	{
+		void Stack();
+	}
 }

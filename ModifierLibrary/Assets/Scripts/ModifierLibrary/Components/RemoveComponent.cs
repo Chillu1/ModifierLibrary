@@ -3,30 +3,32 @@ using JetBrains.Annotations;
 
 namespace ModifierLibrary
 {
-    public class RemoveComponent : IEffectComponent, IConditionEffectComponent
-    {
-        private readonly Modifier _modifier;
-        [CanBeNull] private readonly CleanUpComponent _cleanUpComponent;
+	public class RemoveComponent : IEffectComponent, IConditionEffectComponent
+	{
+		private readonly Modifier _modifier;
 
-        public string Info { get; }
+		[CanBeNull]
+		private readonly CleanUpComponent _cleanUpComponent;
 
-        public RemoveComponent(Modifier modifier, CleanUpComponent cleanUpComponent = null)
-        {
-            _modifier = modifier;
-            _cleanUpComponent = cleanUpComponent;
+		public string Info { get; }
 
-            Info = $"Remove: {modifier}\n";
-        }
+		public RemoveComponent(Modifier modifier, CleanUpComponent cleanUpComponent = null)
+		{
+			_modifier = modifier;
+			_cleanUpComponent = cleanUpComponent;
 
-        public void SimpleEffect()
-        {
-            _cleanUpComponent?.CleanUp();
-            _modifier.SetForRemoval();
-        }
+			Info = $"Remove: {modifier}\n";
+		}
 
-        public void ConditionEffect(Unit receiver, Unit acter)
-        {
-            SimpleEffect();
-        }
-    }
+		public void SimpleEffect()
+		{
+			_cleanUpComponent?.CleanUp();
+			_modifier.SetForRemoval();
+		}
+
+		public void ConditionEffect(Unit receiver, Unit acter)
+		{
+			SimpleEffect();
+		}
+	}
 }

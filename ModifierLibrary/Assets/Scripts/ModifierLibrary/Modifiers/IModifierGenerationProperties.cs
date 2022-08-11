@@ -1,6 +1,6 @@
 namespace ModifierLibrary
 {
-    public interface IModifierGenerationProperties
-    {
-    }
+	public interface IModifierGenerationProperties
+	{
+	}
 }

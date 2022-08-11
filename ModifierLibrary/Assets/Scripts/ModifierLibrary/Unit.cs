@@ -8,209 +8,210 @@ using UnityEngine;
 
 namespace ModifierLibrary
 {
-    public delegate void UnitEvent(Unit owner, Unit acter);
-    
-    public class Unit : UnitLibrary.Unit
-    {
-        private ModifierController ModifierController { get; }
-        private CastingController CastingController { get; }
+	public delegate void UnitEvent(Unit owner, Unit acter);
 
-        /// <summary>
-        ///     On getting a combo
-        /// </summary>
-        public event UnitEvent ComboEvent;
+	public class Unit : UnitLibrary.Unit
+	{
+		private ModifierController ModifierController { get; }
+		private CastingController CastingController { get; }
 
-        public Unit(UnitProperties unitProperties) : base(unitProperties)
-        {
-            ModifierController = new ModifierController(this, ElementController);
-            CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
-        }
+		/// <summary>
+		///     On getting a combo
+		/// </summary>
+		public event UnitEvent ComboEvent;
 
-        public bool CastModifier(Modifier modifier)
-        {
-            return CastingController.CastModifier(modifier);
-        }
-        
-        public bool CastModifier(Unit target, string modifierId)
-        {
-            return CastingController.CastModifier(target, modifierId);
-        }
+		public Unit(UnitProperties unitProperties) : base(unitProperties)
+		{
+			ModifierController = new ModifierController(this, ElementController);
+			CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
+		}
 
-        /// <summary>
-        ///     Apply modifier appliers to target
-        /// </summary>
-        private void ApplyAttackModifiers(Unit target)
-        {
-            //TODO To array because the list might be modified during iteration, might be smart to have a separate hashset of keys of AttackAppliers,
-            foreach (var modifierApplier in ModifierController.GetModifierAttackAppliers().ToArray())
-            {
-                //Debug.Log("Applying: " + modifierApplier);
-                modifierApplier.TryApply(target);
-            }
-        }
-        
-        /// <summary>
-        ///     Only set sourceUnit when modifier has a taunt effect (not ideal obvs)
-        /// </summary>
-        public void AddModifier(Modifier modifier, Unit sourceUnit = null)
-        {
-            AddModifier(modifier, modifier.Parameters, sourceUnit);
-        }
+		public bool CastModifier(Modifier modifier)
+		{
+			return CastingController.CastModifier(modifier);
+		}
 
-        public void AddModifierWithParameters(Modifier modifier, AddModifierParameters parameters, Unit sourceUnit = null)
-        {
-            AddModifier(modifier, parameters, sourceUnit);
-        }
+		public bool CastModifier(Unit target, string modifierId)
+		{
+			return CastingController.CastModifier(target, modifierId);
+		}
 
-        private void AddModifier(Modifier modifier, AddModifierParameters parameters, Unit sourceUnit = null)
-        {
-            bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters, sourceUnit);
+		/// <summary>
+		///     Apply modifier appliers to target
+		/// </summary>
+		private void ApplyAttackModifiers(Unit target)
+		{
+			//TODO To array because the list might be modified during iteration, might be smart to have a separate hashset of keys of AttackAppliers,
+			foreach (var modifierApplier in ModifierController.GetModifierAttackAppliers().ToArray())
+			{
+				//Debug.Log("Applying: " + modifierApplier);
+				modifierApplier.TryApply(target);
+			}
+		}
 
-            if (modifierAdded && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
-                CastingController.AddCastModifier(modifier);
-        }
+		/// <summary>
+		///     Only set sourceUnit when modifier has a taunt effect (not ideal obvs)
+		/// </summary>
+		public void AddModifier(Modifier modifier, Unit sourceUnit = null)
+		{
+			AddModifier(modifier, modifier.Parameters, sourceUnit);
+		}
 
-        public bool ContainsModifier(string id)
-        {
-            return ModifierController.ContainsModifier(id);
-        }
+		public void AddModifierWithParameters(Modifier modifier, AddModifierParameters parameters, Unit sourceUnit = null)
+		{
+			AddModifier(modifier, parameters, sourceUnit);
+		}
 
-        public bool ContainsModifier(Modifier modifier)
-        {
-            return ModifierController.ContainsModifier(modifier);
-        }
+		private void AddModifier(Modifier modifier, AddModifierParameters parameters, Unit sourceUnit = null)
+		{
+			bool modifierAdded = ModifierController.TryAddModifier(modifier, parameters, sourceUnit);
 
-        public void RemoveModifier(Modifier modifier)
-        {
-            bool modifierRemoved = ModifierController.RemoveModifier(modifier);
-            if (modifierRemoved && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
-                CastingController.RemoveCastModifier(modifier);
-        }
+			if (modifierAdded && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
+				CastingController.AddCastModifier(modifier);
+		}
 
-        public void SetGlobalAutomaticCast(bool automaticCast = true)
-        {
-            ModifierController.SetAutomaticCastAll(automaticCast);
-            CastingController.SetGlobalAutomaticCast(automaticCast);
-        }
+		public bool ContainsModifier(string id)
+		{
+			return ModifierController.ContainsModifier(id);
+		}
 
-        public Modifier[] GetModifiersUIOrder()
-        {
-            return ModifierController.GetModifiersUIOrder();
-        }
+		public bool ContainsModifier(Modifier modifier)
+		{
+			return ModifierController.ContainsModifier(modifier);
+		}
 
-        public void CopyEvents(Unit prototype)
-        {
-            base.CopyEvents(prototype);
-            ComboEvent = prototype.ComboEvent;
-        }
+		public void RemoveModifier(Modifier modifier)
+		{
+			bool modifierRemoved = ModifierController.RemoveModifier(modifier);
+			if (modifierRemoved && (modifier.ApplierType.HasFlag(ApplierType.Cast) || modifier.ApplierType.HasFlag(ApplierType.Aura)))
+				CastingController.RemoveCastModifier(modifier);
+		}
 
-        public override string ToString()
-        {
-            return base.ToString() + ModifierController;
-        }
+		public void SetGlobalAutomaticCast(bool automaticCast = true)
+		{
+			ModifierController.SetAutomaticCastAll(automaticCast);
+			CastingController.SetGlobalAutomaticCast(automaticCast);
+		}
 
-        #region Unit Methods
+		public Modifier[] GetModifiersUIOrder()
+		{
+			return ModifierController.GetModifiersUIOrder();
+		}
 
-        public override void Update(float deltaTime)
-        {
-            base.Update(deltaTime);
-            ModifierController.Update(deltaTime);
-            CastingController.Update(deltaTime);
-        }
-        
-        [CanBeNull]
-        public DamageData[] Attack(Unit target)
-        {
-            if (!ValidAttack(target))
-                return null;
+		public void CopyEvents(Unit prototype)
+		{
+			base.CopyEvents(prototype);
+			ComboEvent = prototype.ComboEvent;
+		}
 
-            return InternalAttack(target);
-        }
+		public override string ToString()
+		{
+			return base.ToString() + ModifierController;
+		}
 
-        public override DamageData[] Attack(UnitLibrary.Unit target)
-        {
-            return Attack((Unit)target);
-        }
+		#region Unit Methods
 
-        /// <summary>
-        ///     Manual attack, NOT a modifier attack
-        /// </summary>
-        private DamageData[] InternalAttack(Unit target)
-        {
-            ApplyAttackModifiers(target);
-            var damageData = base.InternalAttack(target);
+		public override void Update(float deltaTime)
+		{
+			base.Update(deltaTime);
+			ModifierController.Update(deltaTime);
+			CastingController.Update(deltaTime);
+		}
 
-            //TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
-            ModifierController
-                .CheckForComboRecipes(); //Not redundant? Might lead to performance issues in super high combo counts?
-            return damageData;
-        }
+		[CanBeNull]
+		public DamageData[] Attack(Unit target)
+		{
+			if (!ValidAttack(target))
+				return null;
 
-        /// <summary>
-        ///     Used for dealing damage with modifiers
-        /// </summary>
-        public override DamageData[] DealDamage(DamageData[] data, UnitLibrary.Unit attacker, AttackType attackType = AttackType.DefaultAttack)
-        {
-            var damageData = base.DealDamage(data, attacker, attackType);
-            ModifierController.CheckForComboRecipes(); //Elemental, so we check for combos
-            return damageData;
-        }
-        
-        public void ChangeStat((StatType type, double value)[] stats)
-        {
-            Stats.ChangeStat(stats);
-            ModifierController.CheckForComboRecipes();
-        }
+			return InternalAttack(target);
+		}
 
-        public void ChangeStat(StatType statType, double value)
-        {
-            Stats.ChangeStat(statType, value);
-            ModifierController.CheckForComboRecipes();
-        }
-        
-        public void ChangeStatMultiplier((StatType type, double multiplier)[] stats)
-        {
-            Stats.ChangeStatMultiplier(stats);
-            ModifierController.CheckForComboRecipes();
-        }
+		public override DamageData[] Attack(UnitLibrary.Unit target)
+		{
+			return Attack((Unit)target);
+		}
 
-        public void ChangeStatMultiplier(StatType statType, double multiplier)
-        {
-            Stats.ChangeStatMultiplier(statType, multiplier);
-            ModifierController.CheckForComboRecipes();
-        }
-        
-        public void SetGlobalRegenMultiplier(PoolStatType statType, double multiplier)
-        {
-            Stats.SetGlobalRegenMultiplier(statType, multiplier);
-            ModifierController.CheckForComboRecipes();
-        }
+		/// <summary>
+		///     Manual attack, NOT a modifier attack
+		/// </summary>
+		private DamageData[] InternalAttack(Unit target)
+		{
+			ApplyAttackModifiers(target);
+			var damageData = base.InternalAttack(target);
 
-        public void ChangeDamageStat(DamageData[] damageData)
-        {
-            Stats.ChangeDamageStat(damageData);
-            ModifierController.CheckForComboRecipes();
-        }
+			//TODO we first Apply mods then attack. That way we add debuffs first, but we dont check for comboModifiers after attacking again, is that a problem?
+			ModifierController
+				.CheckForComboRecipes(); //Not redundant? Might lead to performance issues in super high combo counts?
+			return damageData;
+		}
 
-        public void ChangeDamageStat(DamageData damageData)
-        {
-            Stats.ChangeDamageStat(damageData);
-            ModifierController.CheckForComboRecipes();
-        }
+		/// <summary>
+		///     Used for dealing damage with modifiers
+		/// </summary>
+		public override DamageData[] DealDamage(DamageData[] data, UnitLibrary.Unit attacker,
+			AttackType attackType = AttackType.DefaultAttack)
+		{
+			var damageData = base.DealDamage(data, attacker, attackType);
+			ModifierController.CheckForComboRecipes(); //Elemental, so we check for combos
+			return damageData;
+		}
 
-        protected override void SaveExtra(JsonTextWriter writer)
-        {
-            ModifierController.Save(writer);
-        }
-        
-        public override object Clone()
-        {
-            var clone = this.DeepClone();
-            //clone.CopyEvents(this);//Doesn't work? + DeepClone does it instead?
+		public void ChangeStat((StatType type, double value)[] stats)
+		{
+			Stats.ChangeStat(stats);
+			ModifierController.CheckForComboRecipes();
+		}
 
-            return clone;
-        }
+		public void ChangeStat(StatType statType, double value)
+		{
+			Stats.ChangeStat(statType, value);
+			ModifierController.CheckForComboRecipes();
+		}
 
-        #endregion
-    }
+		public void ChangeStatMultiplier((StatType type, double multiplier)[] stats)
+		{
+			Stats.ChangeStatMultiplier(stats);
+			ModifierController.CheckForComboRecipes();
+		}
+
+		public void ChangeStatMultiplier(StatType statType, double multiplier)
+		{
+			Stats.ChangeStatMultiplier(statType, multiplier);
+			ModifierController.CheckForComboRecipes();
+		}
+
+		public void SetGlobalRegenMultiplier(PoolStatType statType, double multiplier)
+		{
+			Stats.SetGlobalRegenMultiplier(statType, multiplier);
+			ModifierController.CheckForComboRecipes();
+		}
+
+		public void ChangeDamageStat(DamageData[] damageData)
+		{
+			Stats.ChangeDamageStat(damageData);
+			ModifierController.CheckForComboRecipes();
+		}
+
+		public void ChangeDamageStat(DamageData damageData)
+		{
+			Stats.ChangeDamageStat(damageData);
+			ModifierController.CheckForComboRecipes();
+		}
+
+		protected override void SaveExtra(JsonTextWriter writer)
+		{
+			ModifierController.Save(writer);
+		}
+
+		public override object Clone()
+		{
+			var clone = this.DeepClone();
+			//clone.CopyEvents(this);//Doesn't work? + DeepClone does it instead?
+
+			return clone;
+		}
+
+		#endregion
+	}
 }

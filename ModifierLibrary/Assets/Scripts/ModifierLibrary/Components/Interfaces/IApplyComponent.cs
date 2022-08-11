@@ -1,7 +1,7 @@
 namespace ModifierLibrary
 {
-    public interface IApplyComponent
-    {
-        void Apply();
-    }
+	public interface IApplyComponent
+	{
+		void Apply();
+	}
 }

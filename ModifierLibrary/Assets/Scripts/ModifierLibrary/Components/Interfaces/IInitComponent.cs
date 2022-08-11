@@ -2,8 +2,8 @@ using UnitLibrary;
 
 namespace ModifierLibrary
 {
-    public interface IInitComponent : IStatusTagsHolder
-    {
-        void Init();
-    }
+	public interface IInitComponent : IStatusTagsHolder
+	{
+		void Init();
+	}
 }

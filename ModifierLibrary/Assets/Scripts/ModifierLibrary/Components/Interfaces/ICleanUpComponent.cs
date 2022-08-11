@@ -1,7 +1,7 @@
 namespace ModifierLibrary
 {
-    public interface ICleanUpComponent
-    {
-        public void CleanUp();
-    }
+	public interface ICleanUpComponent
+	{
+		public void CleanUp();
+	}
 }
