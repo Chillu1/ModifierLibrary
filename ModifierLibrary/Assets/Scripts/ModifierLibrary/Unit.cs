@@ -4,6 +4,7 @@ using Force.DeepCloner;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnitLibrary.Utils;
 using UnityEngine;
 
 namespace ModifierLibrary
@@ -20,10 +21,21 @@ namespace ModifierLibrary
 		/// </summary>
 		public event UnitEvent ComboEvent;
 
+		private static ModifierPrototypes<Modifier> _modifierPrototypes;
+
 		public Unit(UnitProperties unitProperties) : base(unitProperties)
 		{
 			ModifierController = new ModifierController(this, ElementController);
 			CastingController = new CastingController(ModifierController, StatusEffects, TargetingSystem);
+
+			// TODO Not sure about this, id array is in properties, but doesn't feel right...
+			foreach (string modifierId in unitProperties.Modifiers.EmptyIfNull())
+				AddModifier(_modifierPrototypes.Get(modifierId));
+		}
+
+		public static void Setup(ModifierPrototypes<Modifier> modifierPrototypes)
+		{
+			_modifierPrototypes = modifierPrototypes;
 		}
 
 		public bool CastModifier(Modifier modifier)
