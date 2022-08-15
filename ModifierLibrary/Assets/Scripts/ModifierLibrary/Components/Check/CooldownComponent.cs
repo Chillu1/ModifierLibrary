@@ -1,5 +1,3 @@
-using UnitLibrary;
-
 namespace ModifierLibrary
 {
 	public class CooldownComponent : ICooldownComponent

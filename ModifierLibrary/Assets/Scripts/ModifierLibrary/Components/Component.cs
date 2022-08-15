@@ -1,6 +1,3 @@
-using System;
-using UnitLibrary;
-
 namespace ModifierLibrary
 {
 	//Maybe have some internal ID system, or smth

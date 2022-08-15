@@ -3,9 +3,7 @@ using UnitLibrary;
 using Force.DeepCloner;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnitLibrary.Utils;
-using UnityEngine;
 
 namespace ModifierLibrary
 {

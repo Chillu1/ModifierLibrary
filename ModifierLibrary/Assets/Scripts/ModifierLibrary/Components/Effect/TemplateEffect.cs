@@ -1,5 +1,3 @@
-using UnitLibrary;
-
 namespace ModifierLibrary
 {
 	public sealed class TemplateEffect : EffectComponent

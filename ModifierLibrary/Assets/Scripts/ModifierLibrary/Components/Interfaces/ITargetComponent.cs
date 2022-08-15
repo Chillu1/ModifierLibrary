@@ -1,6 +1,3 @@
-using System;
-using UnitLibrary;
-
 namespace ModifierLibrary
 {
 	public interface ITargetComponent

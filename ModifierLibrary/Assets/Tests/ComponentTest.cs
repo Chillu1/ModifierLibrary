@@ -1,9 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
 using UnitLibrary;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace ModifierLibrary.Tests
 {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnitLibrary;
 using JetBrains.Annotations;
 using Random = System.Random;
