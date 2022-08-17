@@ -6,6 +6,16 @@ namespace ModifierLibrary
 	{
 		public (PoolStatType Type, double Value) Cost;
 		public float Cooldown;
+
+		public CheckProperties()
+		{
+		}
+
+		public CheckProperties((PoolStatType Type, double Value) cost, float cooldown)
+		{
+			Cost = cost;
+			Cooldown = cooldown;
+		}
 	}
 
 	public class CheckChanceProperties : CheckProperties //TODO Rename
@@ -83,6 +93,28 @@ namespace ModifierLibrary
 			return ModifierGenerator.GenerateModifier(properties);
 		}
 
+		public static (Modifier modifier, Modifier applier) PermanentHealApplier(string id, double healValue, CheckProperties check)
+		{
+			var properties = new ModifierGenerationProperties(id, new ModifierInfo("Ally Heal effect", "Healed by an ally", "Heal"));
+			properties.AddEffect(new HealComponent(healValue));
+			properties.SetEffectOnInit();
+			properties.SetRemovable();
+
+			var modifier = ModifierGenerator.GenerateModifier(properties);
+
+			var applierProperties = new ApplierModifierGenerationProperties(modifier,
+				new ModifierInfo("Ally Heal", "Heal an ally", "HealApplier"), LegalTarget.Same);
+			applierProperties.SetApplier(ApplierType.Cast);
+			if (check.Cost.Type != PoolStatType.None)
+				applierProperties.SetCost(check.Cost.Type, check.Cost.Value);
+			if (check.Cooldown != 0)
+				applierProperties.SetCooldown(check.Cooldown);
+
+			var applierModifier = ModifierGenerator.GenerateApplierModifier(applierProperties);
+
+			return (modifier, applierModifier);
+		}
+		
 		/// <summary>
 		///     IceBolt, FireAttack, etc
 		/// </summary>

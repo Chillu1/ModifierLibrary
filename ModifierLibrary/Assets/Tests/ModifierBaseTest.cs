@@ -42,22 +42,22 @@ namespace ModifierLibrary.Tests
 		{
 			character = new Unit(new UnitProperties
 			{
-				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
+				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), AttackSpeed = 1, MovementSpeed = 3,
 				Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 			});
 			ally = new Unit(new UnitProperties
 			{
-				Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 3,
+				Id = "ally", Health = 25, Damage = new DamageData(1, DamageType.Physical), AttackSpeed = 1, MovementSpeed = 3,
 				Mana = 50, ManaRegen = 1, UnitType = UnitType.Ally
 			});
 			enemy = new Unit(new UnitProperties
 			{
-				Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
+				Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical), AttackSpeed = 1, MovementSpeed = 2,
 				Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
 			});
 			enemyAlly = new Unit(new UnitProperties
 			{
-				Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), AttackSpeed = 1, MovementSpeed = 2,
+				Id = "enemyAlly", Health = 30, Damage = new DamageData(1, DamageType.Physical), AttackSpeed = 1, MovementSpeed = 2,
 				Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
 			});
 			initialHealthCharacter = character.Stats.Health.CurrentHealth;
@@ -74,7 +74,7 @@ namespace ModifierLibrary.Tests
 			{
 				enemyDummies[0] = new Unit(new UnitProperties()
 				{
-					Id = "enemy", Health = 1, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 1,
+					Id = "enemy", Health = 1, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 1,
 					Mana = 50, ManaRegen = 100, UnitType = UnitType.Enemy
 				});
 			}

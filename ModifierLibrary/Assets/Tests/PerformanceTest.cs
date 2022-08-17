@@ -180,7 +180,7 @@ namespace ModifierLibrary.Tests.Performance
 				{
 					var character = new Unit(new UnitProperties
 					{
-						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 						Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 					});
 				})
@@ -197,7 +197,7 @@ namespace ModifierLibrary.Tests.Performance
 		{
 			var character = new Unit(new UnitProperties
 			{
-				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 				Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 			});
 
@@ -228,12 +228,12 @@ namespace ModifierLibrary.Tests.Performance
 				{
 					character = new Unit(new UnitProperties
 					{
-						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 						Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 					});
 					enemy = new Unit(new UnitProperties
 					{
-						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 2,
 						Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
 					});
 				})
@@ -270,7 +270,7 @@ namespace ModifierLibrary.Tests.Performance
 					});
 					enemy = new Unit(new UnitProperties
 					{
-						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 2,
 						Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
 					});
 				})
@@ -300,14 +300,14 @@ namespace ModifierLibrary.Tests.Performance
 				{
 					character = new Unit(new UnitProperties
 					{
-						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 						Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 					});
 					character.AddModifier(_modifierPrototypesTest.GetApplier("DoTStackTest"));
 					character.AddModifier(_modifierPrototypesTest.GetApplier("SilenceXStacksTest"));
 					enemy = new Unit(new UnitProperties
 					{
-						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 2,
+						Id = "enemy", Health = 30, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 2,
 						Mana = 20, ManaRegen = 1, UnitType = UnitType.Enemy
 					});
 				})
@@ -339,7 +339,7 @@ namespace ModifierLibrary.Tests.Performance
 					modifier = _modifierPrototypesTest.GetApplier("DoTStackTest");
 					character = new Unit(new UnitProperties
 					{
-						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+						Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 						Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 					});
 				})
@@ -417,7 +417,7 @@ namespace ModifierLibrary.Tests.Performance
 			JsonTextWriter writer = null;
 			var unit = new Unit(new UnitProperties
 			{
-				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical, null), MovementSpeed = 3,
+				Id = "player", Health = 50, Damage = new DamageData(1, DamageType.Physical), MovementSpeed = 3,
 				Mana = 100, ManaRegen = 1, UnitType = UnitType.Ally
 			});
 			Measure.Method(() => { unit.Save(writer); })

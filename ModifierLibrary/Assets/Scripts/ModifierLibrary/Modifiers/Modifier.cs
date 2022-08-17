@@ -16,7 +16,7 @@ namespace ModifierLibrary
 		public string Id { get; }
 		[CanBeNull] public ModifierInfo Info { get; }
 		public AddModifierParameters Parameters { get; }
-		public bool IsApplierModifier => ApplierType != ApplierType.None;
+		public bool IsApplierModifier => ApplierType != ApplierType.None; //Applier modifiers don't use an ApplierType, ex Condition based... But always end with "Applier"
 		public ApplierType ApplierType { get; }
 
 		public bool IsConditionModifier { get; }

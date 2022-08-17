@@ -1,14 +1,22 @@
+using System.Collections.Generic;
 using UnitLibrary;
 using JetBrains.Annotations;
 using Random = System.Random;
 
 namespace ModifierLibrary
 {
-	public partial class ModifierPrototypes<TModifier> : BasePrototypeController<string, TModifier>
+	public class ModifierPrototypes<TModifier> : BasePrototypeController<string, TModifier>
 		where TModifier : Modifier
 	{
+		/// <summary>
+		///		Modifiers that are a part of an applier modifier (shouldn't be applied directly)
+		/// </summary>
+		private readonly HashSet<string> _modifierChildrenOfAppliers;
+
 		public ModifierPrototypes(bool includeTest = false)
 		{
+			_modifierChildrenOfAppliers = new HashSet<string>();
+
 			if (includeTest)
 			{
 				SetupTestModifiers();
@@ -26,6 +34,9 @@ namespace ModifierLibrary
 				Log.Error("A modifier with id: " + modifier.Id + " already exists", "modifiers");
 				return;
 			}
+
+			if (modifier.IsApplierModifier || modifier.Id.EndsWith("Applier"))
+				_modifierChildrenOfAppliers.Add(modifier.Id.Replace("Applier", ""));
 
 			Add(modifier.Id, modifier);
 		}
@@ -48,6 +59,11 @@ namespace ModifierLibrary
 		{
 			var modifier = base.Get(key);
 			ValidateModifier(modifier);
+			if (_modifierChildrenOfAppliers.Contains(key))
+			{
+				//Trying to get a child modifier, of an applier
+				Log.Warning("Trying to get a child modifier of an applier, id: " + key + ". Most likely not intended", "modifiers");
+			}
 
 			return modifier;
 		}
@@ -989,7 +1005,7 @@ namespace ModifierLibrary
 			}
 		}
 
-		private bool ValidateModifier(Modifier modifier)
+		private static bool ValidateModifier(Modifier modifier)
 		{
 			if (modifier.TargetComponent.Target != null || modifier.TargetComponent.Owner != null)
 			{

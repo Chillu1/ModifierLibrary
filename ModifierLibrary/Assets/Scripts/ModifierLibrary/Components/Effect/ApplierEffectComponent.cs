@@ -5,8 +5,8 @@ namespace ModifierLibrary
 		private Modifier Modifier { get; }
 		private bool IsStackEffect { get; }
 
-		public ApplierEffectComponent(Modifier modifier, bool isStackEffect = false, ConditionCheckData conditionCheckData = null) :
-			base(conditionCheckData)
+		public ApplierEffectComponent(Modifier modifier, bool isStackEffect = false, ConditionCheckData conditionCheckData = null,
+			bool isRevertible = false) : base(conditionCheckData, isRevertible)
 		{
 			Modifier = modifier;
 			IsStackEffect = isStackEffect;
@@ -20,6 +20,11 @@ namespace ModifierLibrary
 		protected override void Effect(Unit receiver, Unit acter)
 		{
 			receiver.AddModifier((Modifier)Modifier.Clone(), acter);
+		}
+
+		protected override void RevertEffect(Unit receiver, Unit acter)
+		{
+			receiver.RemoveModifier(Modifier);
 		}
 
 		public void StackEffect(int stacks, double value)
