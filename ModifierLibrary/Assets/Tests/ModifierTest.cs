@@ -105,5 +105,24 @@ namespace ModifierLibrary.Tests
 
 			character.Update(1f);
 		}
+
+		[TestCase("IceBoltTest")]
+		[TestCase("DisarmModifierTest")]
+		[TestCase("DamagePerStackTest")]
+		[TestCase("ApplyStunModifierXStacksTest")]
+		[TestCase("ApplyStunModifierXStacksTestApplier")]
+		public void IsModifierAChildOfApplier(string id)
+		{
+			Assert.True(modifierPrototypes.IsModifierAChild(id));
+		}
+		
+		[TestCase("IceBoltTestApplier")]
+		[TestCase("ApplyStunModifierXStacksTestApplierApplier")]
+		[TestCase("DamageOnLowHealthTest")]
+		[TestCase("ReflectOnDamagedTest")]
+		public void IsModifierNotAChildOfApplier(string id)
+		{
+			Assert.False(modifierPrototypes.IsModifierAChild(id));
+		}
 	}
 }

@@ -1,5 +1,11 @@
 # TODO:
 
+* Unit tests:
+    * ModifierPrototypes GetRandomApplier
+    * ComboModifier CheckRecipeId
+    * StackComponent Stack.OnXStacks, RemoveStack, Validate
+    * StatMultiplierComponent
+    * TargetComponent ValidateTarget.NullOwner, ValidateTarget.SetTarget
 * >**OverHeal mechanic**
   * Types: Flat, Percent Max, PercentCurrent,  
 * Custom AttackType support (DamageComponent)

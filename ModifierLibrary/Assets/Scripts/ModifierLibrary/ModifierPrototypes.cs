@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnitLibrary;
 using JetBrains.Annotations;
@@ -36,7 +37,7 @@ namespace ModifierLibrary
 			}
 
 			if (modifier.IsApplierModifier || modifier.Id.EndsWith("Applier"))
-				_modifierChildrenOfAppliers.Add(modifier.Id.Replace("Applier", ""));
+				_modifierChildrenOfAppliers.Add(modifier.Id.Remove(modifier.Id.LastIndexOf("Applier", StringComparison.Ordinal)));
 
 			Add(modifier.Id, modifier);
 		}
@@ -118,6 +119,11 @@ namespace ModifierLibrary
 			return modifier;
 		}
 
+		public bool IsModifierAChild(string id)
+		{
+			return _modifierChildrenOfAppliers.Contains(id);
+		}
+		
 		private void SetupTestModifiers()
 		{
 			{
@@ -432,7 +438,7 @@ namespace ModifierLibrary
 			}
 			{
 				//Apply a new buff modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
-				var stunProperties = new ModifierGenerationProperties("GenericStunModifierTest", null);
+				var stunProperties = new ModifierGenerationProperties("ApplyStunModifierXStacksTest", null);
 				stunProperties.AddEffect(new StatusComponent(StatusEffect.Stun, 2));
 				stunProperties.SetEffectOnInit();
 				stunProperties.SetRemovable();

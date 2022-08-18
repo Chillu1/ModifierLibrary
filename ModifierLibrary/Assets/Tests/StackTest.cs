@@ -43,7 +43,7 @@ namespace ModifierLibrary.Tests
 		{
 			var applyStunModifierApplier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplierApplier");
 			var applyStunModifier = modifierPrototypes.Get("ApplyStunModifierXStacksTestApplier");
-			var stunModifier = modifierPrototypes.Get("GenericStunModifierTest");
+			var stunModifier = modifierPrototypes.Get("ApplyStunModifierXStacksTest");
 			character.AddModifier(applyStunModifierApplier);
 			Assert.True(enemy.StatusEffects.LegalActions.HasFlag(LegalAction.Act));
 			character.Attack(enemy); //1

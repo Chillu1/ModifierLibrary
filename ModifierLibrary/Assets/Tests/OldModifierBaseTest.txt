@@ -315,7 +315,7 @@
                 }
                 {
                     //Apply a new modifier that Stuns, on 3 stacks (effect is an example, it can be much more nuanced than that)
-                    var stunModifier = new Modifier("GenericStunModifierTest");
+                    var stunModifier = new Modifier("ApplyStunModifierXStacksTest");
                     var stunTarget = new TargetComponent();
                     var stunEffect = new StatusComponent(StatusEffect.Stun, 2, stunTarget);
                     stunModifier.AddComponent(stunTarget);
