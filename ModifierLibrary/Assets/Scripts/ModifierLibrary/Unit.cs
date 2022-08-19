@@ -1,6 +1,5 @@
 using System.Linq;
 using UnitLibrary;
-using Force.DeepCloner;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnitLibrary.Utils;
@@ -29,6 +28,14 @@ namespace ModifierLibrary
 			// TODO Not sure about this, id array is in properties, but doesn't feel right...
 			foreach (string modifierId in unitProperties.Modifiers.EmptyIfNull())
 				AddModifier(_modifierPrototypes.Get(modifierId));
+		}
+		
+		private Unit(Unit originalUnit) : this((UnitProperties)originalUnit.savedProperties)
+		{
+			CopyEvents(originalUnit);
+			//TODO Copy rest of the possible data, like new modifiers,
+			//But do we ever clone after property changes?
+			//Possible to add up the missing data if that's the case
 		}
 
 		public static void Setup(ModifierPrototypes<Modifier> modifierPrototypes)
@@ -108,9 +115,8 @@ namespace ModifierLibrary
 			return ModifierController.GetModifiersUIOrder();
 		}
 
-		public void CopyEvents(Unit prototype)
+		private void CopyEvents(Unit prototype)
 		{
-			base.CopyEvents(prototype);
 			ComboEvent = prototype.ComboEvent;
 		}
 
@@ -214,12 +220,9 @@ namespace ModifierLibrary
 			ModifierController.Save(writer);
 		}
 
-		public override object Clone()
+		public override UnitLibrary.Unit DeepClone() // Redundant?
 		{
-			var clone = this.DeepClone();
-			//clone.CopyEvents(this);//Doesn't work? + DeepClone does it instead?
-
-			return clone;
+			return new Unit(this);
 		}
 
 		#endregion

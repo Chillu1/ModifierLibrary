@@ -35,12 +35,6 @@ namespace ModifierLibrary
 
 		private void Update()
 		{
-			for (int i = 0; i < 100; i++)
-			{
-				var modifier = (Modifier)_test.Clone();
-			}
-
-			return;
 			_timer += Time.deltaTime;
 			if (_timer >= 1)
 			{

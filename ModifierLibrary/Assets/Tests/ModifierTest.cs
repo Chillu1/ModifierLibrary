@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using UnitLibrary;
 using NUnit.Framework;
+using UnitLibrary;
 
 namespace ModifierLibrary.Tests
 {
@@ -115,7 +115,7 @@ namespace ModifierLibrary.Tests
 		{
 			Assert.True(modifierPrototypes.IsModifierAChild(id));
 		}
-		
+
 		[TestCase("IceBoltTestApplier")]
 		[TestCase("ApplyStunModifierXStacksTestApplierApplier")]
 		[TestCase("DamageOnLowHealthTest")]
@@ -123,6 +123,34 @@ namespace ModifierLibrary.Tests
 		public void IsModifierNotAChildOfApplier(string id)
 		{
 			Assert.False(modifierPrototypes.IsModifierAChild(id));
+		}
+
+		[Test]
+		public void MultiTargetCastResistanceRevert()
+		{
+			character.AddModifier(modifierPrototypes.GetApplier("TemporaryAllDamageResistanceBuffTest"));
+
+			Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+			Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+
+			character.CastModifier(enemy, "TemporaryAllDamageResistanceBuffTestApplier");
+			character.CastModifier(enemyAlly, "TemporaryAllDamageResistanceBuffTestApplier");
+
+			Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+			Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+
+			enemyAlly.Update(2.1f);
+
+			Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+			Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 0));
+
+			enemy.Update(1.9f);
+			character.CastModifier(enemy, "TemporaryAllDamageResistanceBuffTestApplier");
+			character.CastModifier(enemyAlly, "TemporaryAllDamageResistanceBuffTestApplier");
+			enemy.Update(1f);
+
+			Assert.True(enemy.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
+			Assert.True(enemyAlly.DamageTypeDamageResistances.ValueEquals(DamageType.Physical, 100));
 		}
 	}
 }

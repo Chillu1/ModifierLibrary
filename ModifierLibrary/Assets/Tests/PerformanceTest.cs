@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using UnitLibrary;
-using Force.DeepCloner;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
@@ -57,25 +56,6 @@ namespace ModifierLibrary.Tests.Performance
 			Measure.Method(() =>
 				{
 					var clonedModifier = modifier!.ShallowClone();
-				})
-				.WarmupCount(10)
-				.MeasurementCount(20)
-				.IterationsPerMeasurement(Iterations)
-				.GC()
-				.SetUp(() => { modifier = _modifierPrototypesTest.GetApplier("IceBoltTest"); })
-				.CleanUp(() => { modifier = null; })
-				.Run()
-				;
-		}
-
-		[Test, Performance]
-		public void BenchNewModifierCloneDeep()
-		{
-			Modifier modifier = null;
-
-			Measure.Method(() =>
-				{
-					var clonedModifier = modifier!.DeepClone();
 				})
 				.WarmupCount(10)
 				.MeasurementCount(20)
@@ -203,7 +183,7 @@ namespace ModifierLibrary.Tests.Performance
 
 			Measure.Method(() =>
 				{
-					var clonedUnit = (Unit)character.Clone();
+					var clonedUnit = (Unit)character.DeepClone();
 				})
 				.WarmupCount(10)
 				.MeasurementCount(10)

@@ -1,6 +1,7 @@
 # TODO:
 
 * Unit tests:
+    * Correct Clone checks 
     * ModifierPrototypes GetRandomApplier
     * ComboModifier CheckRecipeId
     * StackComponent Stack.OnXStacks, RemoveStack, Validate

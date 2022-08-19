@@ -1,11 +1,9 @@
-using System;
 using UnitLibrary;
-using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierLibrary
 {
-	public class TargetComponent : Component, IValidatorComponent<Unit>, ITargetComponent, ICloneable
+	public class TargetComponent : Component, IValidatorComponent<Unit>, ITargetComponent
 	{
 		public ConditionEventTarget ConditionEventTarget { get; private set; }
 		[CanBeNull] public Unit Target { get; private set; }
@@ -127,11 +125,6 @@ namespace ModifierLibrary
 					effect(acter, acter);
 					break;
 			}
-		}
-
-		public object Clone()
-		{
-			return this.DeepClone();
 		}
 
 		public override string ToString()

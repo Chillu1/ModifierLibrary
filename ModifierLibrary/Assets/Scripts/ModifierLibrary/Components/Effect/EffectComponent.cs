@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace ModifierLibrary
 {
-	public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent
+	public abstract class EffectComponent : IEffectComponent, IConditionEffectComponent, IShallowClone<EffectComponent>
 	{
 		[CanBeNull] private ConditionCheckData ConditionCheckData { get; }
 		private bool IsRevertible { get; }
@@ -67,6 +67,12 @@ namespace ModifierLibrary
 		protected virtual void RevertEffect(Unit receiver, Unit acter)
 		{
 			Log.Error("RevertEffect not overridden, but we're trying to use IsRevertible logic");
+		}
+
+		public EffectComponent ShallowClone()
+		{
+			//Only IsRevertible needs to be cloned
+			return (EffectComponent)MemberwiseClone();
 		}
 	}
 }

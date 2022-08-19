@@ -6,7 +6,7 @@ namespace ModifierLibrary
 	/// <summary>
 	///     Special Modifier that is activated on specific conditions (recipes), these can be: specific modifiers (ID), ElementalData or Stats
 	/// </summary>
-	public sealed class ComboModifier : Modifier
+	public sealed class ComboModifier : Modifier, IDeepClone<ComboModifier>
 	{
 		private ComboRecipes ComboRecipes { get; }
 
@@ -111,7 +111,7 @@ namespace ModifierLibrary
 			return (true, multiplier);
 		}
 
-		private bool CheckForIdConditions(ComboRecipe recipe, HashSet<string> ids)
+		private static bool CheckForIdConditions(ComboRecipe recipe, HashSet<string> ids)
 		{
 			foreach (string idCondition in recipe.Id!)
 			{
@@ -122,7 +122,7 @@ namespace ModifierLibrary
 			return true;
 		}
 
-		private (bool exists, double multiplier) CheckForElementalConditions(ComboRecipe recipe, ElementController elementController)
+		private static (bool exists, double multiplier) CheckForElementalConditions(ComboRecipe recipe, ElementController elementController)
 		{
 			double minElemental = double.MaxValue;
 
@@ -139,7 +139,7 @@ namespace ModifierLibrary
 			return (true, Curves.ComboElementMultiplier.Evaluate(minElemental));
 		}
 
-		private bool CheckForStatConditions(ComboRecipe recipe, Stats stats)
+		private static bool CheckForStatConditions(ComboRecipe recipe, Stats stats)
 		{
 			foreach (var stat in recipe.Stat!)
 			{
@@ -149,6 +149,11 @@ namespace ModifierLibrary
 			}
 
 			return true;
+		}
+
+		public new ComboModifier DeepClone()
+		{
+			return (ComboModifier)base.DeepClone();
 		}
 	}
 }

@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using UnitLibrary;
 using JetBrains.Annotations;
-using Random = System.Random;
+using UnitLibrary;
 
 namespace ModifierLibrary
 {
 	public class ModifierPrototypes<TModifier> : BasePrototypeController<string, TModifier>
-		where TModifier : Modifier
+		where TModifier : Modifier, IDeepClone<TModifier>
 	{
 		/// <summary>
-		///		Modifiers that are a part of an applier modifier (shouldn't be applied directly)
+		///     Modifiers that are a part of an applier modifier (shouldn't be applied directly)
 		/// </summary>
 		private readonly HashSet<string> _modifierChildrenOfAppliers;
 
@@ -123,7 +122,7 @@ namespace ModifierLibrary
 		{
 			return _modifierChildrenOfAppliers.Contains(id);
 		}
-		
+
 		private void SetupTestModifiers()
 		{
 			{
@@ -284,7 +283,7 @@ namespace ModifierLibrary
 				{
 					new DamageData(1, DamageType.Magical, new ElementData(ElementType.Acid, 10, 20)),
 					new DamageData(1, DamageType.Pure, new ElementData(ElementType.Bleed, 10, 20)),
-					new DamageData(1, DamageType.Physical, new ElementData(ElementType.Cold, 10, 20)),
+					new DamageData(1, DamageType.Physical, new ElementData(ElementType.Cold, 10, 20))
 				};
 				var properties = new ModifierGenerationProperties("ManyTagsTest", null);
 				properties.AddEffect(new DamageComponent(damageData), damageData);
@@ -411,7 +410,7 @@ namespace ModifierLibrary
 				properties.AddEffect(new DamageComponent(damageData, DamageComponent.StackEffectType.Add), damageData);
 				properties.SetEffectOnInit();
 				properties.SetEffectOnTime(2, true);
-				properties.SetRefreshable(RefreshEffectType.RefreshDuration);
+				properties.SetRefreshable();
 				properties.SetRemovable(10);
 
 				var modifier = AddModifier(properties);
@@ -427,7 +426,7 @@ namespace ModifierLibrary
 				properties.SetEffectOnInit();
 				properties.SetEffectOnStack(new StackComponentProperties()
 					{ WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 4 });
-				properties.SetRefreshable(RefreshEffectType.RefreshDuration);
+				properties.SetRefreshable();
 				properties.SetRemovable(10);
 
 				var modifier = AddModifier(properties);
@@ -447,7 +446,7 @@ namespace ModifierLibrary
 
 				var properties = new ModifierGenerationProperties("ApplyStunModifierXStacksTestApplier", null);
 				properties.SetApplier(ApplierType.Attack);
-				properties.AddEffect(new ApplierEffectComponent(stunModifier, isStackEffect: true));
+				properties.AddEffect(new ApplierEffectComponent(stunModifier, true));
 				properties.SetEffectOnStack(new StackComponentProperties()
 					{ WhenStackEffect = WhenStackEffect.EveryXStacks, OnXStacks = 3 });
 
@@ -552,12 +551,12 @@ namespace ModifierLibrary
 						DamageComponent.StackEffectType.SetMultiplierStacksBased), damageData);
 				flagProperties.SetEffectOnStack(new StackComponentProperties()
 					{ WhenStackEffect = WhenStackEffect.Always, MaxStacks = 100 });
-				flagProperties.SetRefreshable(RefreshEffectType.RefreshDuration);
+				flagProperties.SetRefreshable();
 				flagProperties.SetRemovable(10);
 
 				var flagModifier = AddModifier(flagProperties);
 
-				var properties = new ApplierModifierGenerationProperties(flagModifier, null, LegalTarget.Units);
+				var properties = new ApplierModifierGenerationProperties(flagModifier, null);
 				properties.SetApplier(ApplierType.Attack);
 
 				AddModifier(properties);
@@ -840,7 +839,7 @@ namespace ModifierLibrary
 
 			{
 				//Temporary resistance buff
-				var properties = new ModifierGenerationProperties("TemporaryPhysicalResistanceTest", null, LegalTarget.Self);
+				var properties = new ModifierGenerationProperties("TemporaryPhysicalResistanceTest", null);
 				properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
 				properties.SetEffectOnInit();
 				properties.SetRemovable(1d);
@@ -850,7 +849,7 @@ namespace ModifierLibrary
 			{
 				//Temporary damage buff
 				var damageData = new[] { new DamageData(10, DamageType.Physical) };
-				var properties = new ModifierGenerationProperties("TemporaryDamageBuffTest", null, LegalTarget.Self);
+				var properties = new ModifierGenerationProperties("TemporaryDamageBuffTest", null);
 				properties.AddEffect(new DamageStatComponent(damageData, isRevertible: true), damageData);
 				properties.SetEffectOnInit();
 				properties.SetRemovable(10d);
@@ -915,14 +914,14 @@ namespace ModifierLibrary
 
 				var modifier = AddModifier(properties);
 
-				var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
+				var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
 				applierProperties.SetApplier(ApplierType.Aura);
 				AddModifier(applierProperties);
 			}
 
 			{
 				//Temporary allied damage resistance buff
-				var properties = new ModifierGenerationProperties("TemporaryAlliedDamageResistanceBuffTest", null, LegalTarget.Self);
+				var properties = new ModifierGenerationProperties("TemporaryAlliedDamageResistanceBuffTest", null);
 				properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
 				properties.SetEffectOnInit();
 				properties.SetRefreshable();
@@ -947,7 +946,7 @@ namespace ModifierLibrary
 
 				var modifier = AddModifier(properties);
 
-				var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
+				var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
 				applierProperties.SetApplier(ApplierType.Attack);
 				applierProperties.SetCooldown(5);
 				AddModifier(applierProperties);
@@ -979,7 +978,7 @@ namespace ModifierLibrary
 
 				var modifier = AddModifier(properties);
 
-				var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Units);
+				var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
 				applierProperties.SetApplier(ApplierType.Cast);
 				AddModifier(applierProperties);
 			}
@@ -1007,6 +1006,21 @@ namespace ModifierLibrary
 				var applierProperties = new ApplierModifierGenerationProperties(modifier, null, LegalTarget.Self);
 				applierProperties.SetCondition(ConditionEventTarget.SelfActer, ConditionEvent.OnAttackedEvent);
 				applierProperties.SetAddModifierParameters(AddModifierParameters.OwnerIsTarget);
+				AddModifier(applierProperties);
+			}
+
+			{
+				//Temporary all damage resistance buff
+				var properties = new ModifierGenerationProperties("TemporaryAllDamageResistanceBuffTest", null);
+				properties.AddEffect(new DamageResistanceComponent(DamageType.Physical, 100, isRevertible: true));
+				properties.SetEffectOnInit();
+				properties.SetRefreshable();
+				properties.SetRemovable(2d);
+
+				var modifier = AddModifier(properties);
+
+				var applierProperties = new ApplierModifierGenerationProperties(modifier, null);
+				applierProperties.SetApplier(ApplierType.Cast);
 				AddModifier(applierProperties);
 			}
 		}

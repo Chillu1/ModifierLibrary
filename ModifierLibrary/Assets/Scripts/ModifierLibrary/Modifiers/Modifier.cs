@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnitLibrary;
 using UnitLibrary.Utils;
-using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierLibrary
@@ -11,7 +10,7 @@ namespace ModifierLibrary
 	/// <summary>
 	///     Buff/Debuff on units, can do anything, slow, over time/delayed stun, change stats, deal damage, resurrect
 	/// </summary>
-	public class Modifier : IEntity<string>, ICloneable, IChoosable
+	public class Modifier : IEntity<string>, IChoosable, IDeepClone<Modifier>, IShallowClone<Modifier>
 	{
 		public string Id { get; }
 		[CanBeNull] public ModifierInfo Info { get; }
@@ -379,8 +378,8 @@ namespace ModifierLibrary
 		{
 			if (Properties == null)
 			{
-				Log.Error($"{Id} has no properties, falling back to deep clone", "modifiers");
-				return this.DeepClone();
+				Log.Error($"{Id} has no properties, falling back to shallow clone (bad)", "modifiers");
+				return (Modifier)MemberwiseClone();
 			}
 
 			if (Properties is ComboModifierGenerationProperties comboProperties)
@@ -392,13 +391,21 @@ namespace ModifierLibrary
 			if (Properties is ApplierModifierGenerationProperties applierProperties)
 				return ModifierGenerator.GenerateApplierModifier(applierProperties);
 
-			Log.Error($"{Id} has unknown properties kind, falling back to deep clone", "modifiers");
-			return this.DeepClone();
+			Log.Error($"{Id} has unknown properties kind, falling back to shallow clone (bad)", "modifiers");
+			return (Modifier)MemberwiseClone();
 		}
 
-		public virtual object Clone()
+		public virtual Modifier DeepClone()
 		{
 			return PropertyClone();
+		}
+
+		/// <summary>
+		///		Only used for performance testing right now
+		/// </summary>
+		public Modifier ShallowClone()
+		{
+			return (Modifier)MemberwiseClone();
 		}
 
 		public override string ToString()

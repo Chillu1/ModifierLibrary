@@ -1,10 +1,8 @@
-using System;
-using Force.DeepCloner;
 using JetBrains.Annotations;
 
 namespace ModifierLibrary
 {
-	public class ComboRecipes : ICloneable
+	public class ComboRecipes
 	{
 		/// <summary>
 		///     Possible recipes
@@ -20,11 +18,6 @@ namespace ModifierLibrary
 		public ComboRecipes([NotNull] ComboRecipe[] recipes)
 		{
 			Recipes = recipes;
-		}
-
-		public object Clone()
-		{
-			return this.DeepClone();
 		}
 	}
 }

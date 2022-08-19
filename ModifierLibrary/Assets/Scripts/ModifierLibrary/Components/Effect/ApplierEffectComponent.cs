@@ -19,7 +19,7 @@ namespace ModifierLibrary
 
 		protected override void Effect(Unit receiver, Unit acter)
 		{
-			receiver.AddModifier((Modifier)Modifier.Clone(), acter);
+			receiver.AddModifier(Modifier.PropertyClone(), acter);
 		}
 
 		protected override void RevertEffect(Unit receiver, Unit acter)

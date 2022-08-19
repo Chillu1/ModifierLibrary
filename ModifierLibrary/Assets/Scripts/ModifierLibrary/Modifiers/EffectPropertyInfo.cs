@@ -1,8 +1,10 @@
+using UnitLibrary;
+
 namespace ModifierLibrary
 {
-	public class EffectPropertyInfo
+	public class EffectPropertyInfo : IDeepClone<EffectPropertyInfo>
 	{
-		public EffectComponent EffectComponent { get; private set; }
+		public EffectComponent EffectComponent { get; }
 
 		public EffectOn EffectOn { get; private set; }
 
@@ -32,6 +34,15 @@ namespace ModifierLibrary
 		public void SetEffectOnApply()
 		{
 			EffectOn |= EffectOn.Apply;
+		}
+
+		public EffectPropertyInfo DeepClone()
+		{
+			var clone = new EffectPropertyInfo(EffectComponent.ShallowClone());
+			clone.EffectOn = EffectOn;
+			clone.RepeatOnFinished = RepeatOnFinished;
+			clone.EffectDuration = EffectDuration;
+			return clone;
 		}
 	}
 }
