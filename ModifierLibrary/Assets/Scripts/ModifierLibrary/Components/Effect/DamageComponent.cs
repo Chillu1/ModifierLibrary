@@ -7,11 +7,13 @@ namespace ModifierLibrary
 	{
 		private DamageData[] Damage { get; }
 		private StackEffectType StackType { get; }
+		//private AttackType AttackType { get; }
 
-		public DamageComponent(DamageData[] damage, StackEffectType stackType = StackEffectType.None,
+		public DamageComponent(DamageData[] damage, /*AttackType attackType, */StackEffectType stackType = StackEffectType.None,
 			ConditionCheckData conditionCheckData = null) : base(conditionCheckData)
 		{
 			Damage = damage;
+			//AttackType = attackType;
 			StackType = stackType;
 
 			string textDamage = "";
@@ -29,7 +31,7 @@ namespace ModifierLibrary
 		protected override void Effect(Unit receiver, Unit acter)
 		{
 			//TODO Custom AttackType support
-			receiver.DealDamage(Damage, acter, AttackType.Internal);
+			receiver.DealDamage(Damage, acter, AttackType.Reflect);
 		}
 
 		public void StackEffect(int stacks, double value)

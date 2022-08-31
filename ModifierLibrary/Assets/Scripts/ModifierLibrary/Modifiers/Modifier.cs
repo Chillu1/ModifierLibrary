@@ -210,6 +210,8 @@ namespace ModifierLibrary
 				Log.Error("Can't cast a modifier on a null target", "modifiers");
 				return false;
 			}
+			
+			//TargetComponent.Owner.CastEvent?.Invoke(this, target);
 
 			return TryApply(target);
 		}

@@ -73,9 +73,8 @@ namespace ModifierLibrary
 					{ new ElementalRecipe(ElementType.Poison, 5), new ElementalRecipe(ElementType.Bleed, 5) })));
 				properties.SetCooldown(1);
 
-				properties.AddEffect(
-					new DamageComponent(
-						damageData) /*, damageData*/); //TODO What to do with infection & such combined status res enums?
+				//TODO What to do with infection & such combined status res enums?
+				properties.AddEffect(new DamageComponent(damageData) /*, damageData*/);
 				properties.SetEffectOnInit();
 				properties.SetEffectOnTime(2, true);
 				properties.SetRemovable(10);

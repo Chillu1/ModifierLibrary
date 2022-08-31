@@ -9,8 +9,8 @@ namespace ModifierLibrary
 	public class CastingController
 	{
 		private ModifierController ModifierController { get; }
-		private StatusEffects StatusEffects { get; }
-		private TargetingSystem TargetingSystem { get; }
+		private IStatusEffects StatusEffects { get; }
+		private ITargetingSystem TargetingSystem { get; }
 
 		private readonly List<Modifier> _castModifiers;
 		private readonly List<Modifier> _allyAuraCastModifiers;
@@ -23,7 +23,7 @@ namespace ModifierLibrary
 
 		private bool _globalAutomaticCast;
 
-		public CastingController(ModifierController modifierController, StatusEffects statusEffects, TargetingSystem targetingSystem)
+		public CastingController(ModifierController modifierController, IStatusEffects statusEffects, ITargetingSystem targetingSystem)
 		{
 			ModifierController = modifierController;
 			StatusEffects = statusEffects;

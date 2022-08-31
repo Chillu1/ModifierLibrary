@@ -67,7 +67,7 @@ namespace ModifierLibrary.Tests
 			initialDamageCharacter = character.Stats.Damage.DamageSum();
 			initialDamageAlly = ally.Stats.Damage.DamageSum();
 			initialDamageEnemy = enemy.Stats.Damage.DamageSum();
-			initialManaCharacter = character.Stats.Mana.CurrentMana;
+			initialManaCharacter = character.Stats.Mana.Value;
 
 			enemyDummies = new Unit[5];
 			for (int i = 0; i < 5; i++)

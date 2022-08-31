@@ -7,9 +7,8 @@
     * StackComponent Stack.OnXStacks, RemoveStack, Validate
     * StatMultiplierComponent
     * TargetComponent ValidateTarget.NullOwner, ValidateTarget.SetTarget
-* >**OverHeal mechanic**
   * Types: Flat, Percent Max, PercentCurrent,  
-* Custom AttackType support (DamageComponent)
+* Custom AttackType support (DamageComponent) (not so easy)
 * **Effect should be gated by Cost,CD, Chance. Not Apply**
 * >**Health DamageTaken as Mana** 
 * More Templates for basic modifiers

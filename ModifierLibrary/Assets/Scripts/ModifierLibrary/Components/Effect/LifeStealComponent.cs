@@ -23,8 +23,9 @@ namespace ModifierLibrary
 			Info = $"LifeSteal: {SummedDamage} damage, {Percentage * 100d}%\n";
 		}
 
-		protected override void Effect(Unit receiver, Unit acter)
+		protected override void Effect(Unit receiver, Unit acter/*, object data*/)
 		{
+			//if data = struct DamageDealtData, receiver.Heal(data * Percentage), acter). But tbh prob just better to implement this in UnitLibrary.Unit class
 			receiver.Heal(SummedDamage * Percentage, acter);
 		}
 	}

@@ -50,7 +50,7 @@ namespace ModifierLibrary
 				case PoolStatType.Health:
 					//TODO TEMP DamageData
 					//Log.Verbose("Applying health cost: " + Amount, "modifiers");
-					_owner.DealDamage(new[] { new DamageData(Amount, DamageType.Physical) }, _owner, AttackType.Internal);
+					_owner.DealDamage(new[] { new DamageData(Amount, DamageType.Physical) }, _owner, AttackType.Reflect);
 					break;
 				default:
 					Log.Error($"CostComponent: {Type} is not a valid CostType", "modifiers");

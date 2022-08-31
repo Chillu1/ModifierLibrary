@@ -107,7 +107,7 @@ namespace ModifierLibrary.Tests
 			Assert.True(character.Stats.Mana.IsFull);
 			character.CastModifier(enemy, "IceBoltCastManaCostTestApplier");
 
-			Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
+			Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.Value, Delta); //cost component used up 10 mana
 			Assert.False(character.Stats.Mana.IsFull);
 		}
 
@@ -120,7 +120,7 @@ namespace ModifierLibrary.Tests
 			Assert.True(character.Stats.Mana.IsFull);
 			character.Attack(enemy);
 
-			Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.CurrentMana, Delta); //cost component used up 10 mana
+			Assert.AreEqual(initialManaCharacter - 10, character.Stats.Mana.Value, Delta); //cost component used up 10 mana
 			Assert.False(character.Stats.Mana.IsFull);
 		}
 
