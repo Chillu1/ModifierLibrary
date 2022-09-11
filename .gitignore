@@ -432,10 +432,15 @@ InitTestScene*.unity
 # Custom
 *.vscode
 
-ModifierSystem/Library/*
 /.idea/
 /ModifierLibrary/Library/
 /ModifierLibrary/ProjectSettings/
 /ModifierLibrary/Temp/
 /ModifierLibrary/UserSettings/
 /ModifierLibrary/.idea/.idea.ModifierLibrary/.idea/
+
+/ModifierLibraryLite/Library/
+/ModifierLibraryLite/ProjectSettings/
+/ModifierLibraryLite/Temp/
+/ModifierLibraryLite/UserSettings/
+/ModifierLibraryLite/.idea/.idea.ModifierLibraryLite/.idea/
